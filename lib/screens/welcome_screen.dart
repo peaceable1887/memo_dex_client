@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:memo_dex_prototyp/screens/login_screen.dart';
+import 'package:memo_dex_prototyp/screens/sign_up_screen.dart';
 
 import '../widgets/button.dart';
 import '../widgets/headline.dart';
@@ -58,11 +60,13 @@ class WelcomeScreen extends StatelessWidget {
                         text: "Sign up",
                         backgroundColor: "FFFFFF",
                         textColor: "E59113",
+                        onPressed: SignUpScreen(),
                       ),
                       Button(
                         text: "Login",
                         backgroundColor: "E59113",
                         textColor: "FFFFFF",
+                        onPressed: LoginScreen(),
                       ),
                     ],
                   ),
