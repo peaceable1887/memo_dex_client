@@ -4,11 +4,18 @@ class Button extends StatelessWidget {
 
   final String text;
   final String backgroundColor;
+  final String borderColor;
   final String textColor;
   final Widget onPressed;
   final String? iconPath;
 
-  const Button({Key? key, required this.backgroundColor, required this.textColor, required this.text, required this.onPressed, this.iconPath}) : super(key: key);
+  const Button({Key? key,
+    required this.backgroundColor,
+    required this.textColor,
+    required this.text,
+    required this.onPressed,
+    this.iconPath,
+    required this.borderColor}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,11 +25,16 @@ class Button extends StatelessWidget {
         children: [
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-              primary: Color(int.parse("0xFF$backgroundColor")),
-              minimumSize: Size(double.infinity, 50),
+              backgroundColor: Color(int.parse("0xFF$backgroundColor")),
+              minimumSize: Size(double.infinity, 55),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10)),
               ),
+              side: BorderSide(
+                color: Color(int.parse("0xFF$borderColor")),
+                width: 2.0,
+              ),
+              elevation: 0,
             ),
             onPressed: () {
               Navigator.push(

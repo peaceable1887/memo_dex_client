@@ -13,26 +13,18 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
+    return Scaffold(
         body: Stack(
           children: [
             Container(
-              decoration: BoxDecoration(
-                color: Color(0xFF0784CB),
-                image: DecorationImage(
-                  image: AssetImage("assets/images/waves_background.png"),
-                  fit: BoxFit.cover,
-                ),
-              ),
+              color: Color(0xFF00324E),
               child: ListView(
                 children: [
                   Container(
-                    height: 350,
+                    height: 150,
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Headline(
                             text: "Login"
@@ -44,7 +36,7 @@ class LoginScreen extends StatelessWidget {
                     child: LoginForm(),
                   ),// Container LoginForm
                   Container(
-                    padding: EdgeInsets.all(20),
+                    padding: EdgeInsets.fromLTRB(20, 10, 20, 30),
                     width: double.infinity,
                     child: Text(
                         "Forgot password?",
@@ -63,7 +55,8 @@ class LoginScreen extends StatelessWidget {
                         Button(
                           text: "Login",
                           backgroundColor: "E59113",
-                          textColor: "FFFFFF",
+                          borderColor: "E59113",
+                          textColor: "00324E",
                           onPressed: WelcomeScreen(),
                         ),
                         Container(
@@ -97,6 +90,7 @@ class LoginScreen extends StatelessWidget {
                         Button(
                           text: "Continue with Google",
                           backgroundColor: "FFFFFF",
+                          borderColor: "FFFFFF",
                           textColor: "8597A1",
                           onPressed: WelcomeScreen(),
                           iconPath: "assets/images/google_icon.png",
@@ -112,7 +106,6 @@ class LoginScreen extends StatelessWidget {
            ),
           ],
         ),
-      ),
     );
   }
 }

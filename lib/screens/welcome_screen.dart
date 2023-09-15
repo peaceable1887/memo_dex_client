@@ -11,16 +11,9 @@ class WelcomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    return SafeArea(
-        child: Scaffold(
+    return Scaffold(
           body: Container(
-            decoration: BoxDecoration(
-              color: Color(0xFF0784CB),
-              image: DecorationImage(
-                image: AssetImage("assets/images/waves_background.png"),
-                fit: BoxFit.cover,
-              )
-            ),
+            color: Color(0xFF00324E),
             child: Column(
               children: [
                 Container(
@@ -29,53 +22,49 @@ class WelcomeScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Image(
-                        image: AssetImage("assets/images/logo.png"),
+                        image: AssetImage("assets/images/logo_alternative.png"),
                         ),
                     ],
                   ),
                 ),
                 Container(
-                  child: Row(
+                  child: Column(
                     children: [
-                      Headline(
-                        text: "Welcome",
+                      Button(
+                        text: "Login",
+                        backgroundColor: "E59113",
+                        borderColor: "E59113",
+                        textColor: "00324E",
+                        onPressed: LoginScreen(),
+                      ),
+                      Button(
+                        text: "Sign up",
+                        backgroundColor: "00324E",
+                        borderColor: "E59113",
+                        textColor: "E59113",
+                        onPressed: SignUpScreen(),
                       ),
                     ],
                   ),
                 ),
                 Container(
                   padding: EdgeInsets.fromLTRB(20, 30, 20, 30),
-                    child: Text("Create flashcards and organize folders "
-                      "for maximum efficiency and effectiveness.",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
+                  height: 240,
+                    child: Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Text(
+                        "Indem Sie fortfahren, stimmen Sie den Nutzerbedinungen und der Datenschutzrichtlinie zu.",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 13,
+                        ),
+                        textAlign: TextAlign.center,
                       ),
                     ),
                   ),
-                Container(
-                  child: Column(
-                    children: [
-                      Button(
-                        text: "Sign up",
-                        backgroundColor: "FFFFFF",
-                        textColor: "E59113",
-                        onPressed: SignUpScreen(),
-                      ),
-                      Button(
-                        text: "Login",
-                        backgroundColor: "E59113",
-                        textColor: "FFFFFF",
-                        onPressed: LoginScreen(),
-                      ),
-                    ],
-                  ),
-                )
-
               ],
             ),
           ),
-        ),
     );
   }
 }
