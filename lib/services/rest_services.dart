@@ -38,7 +38,6 @@ class RestServices{
     );
 
     if (response.statusCode == 200) {
-      // If the server did return a 201 CREATED response,
       // then parse the JSON.
       print("Erfolgreich eingeloggt");
       final Map<String, dynamic> data = json.decode(response.body); //nochmal genau ansehen was dieser teil macht

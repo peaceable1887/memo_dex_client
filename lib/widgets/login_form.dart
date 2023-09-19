@@ -15,14 +15,15 @@ class LoginForm extends StatefulWidget {
 
 class _LoginFormState extends State<LoginForm> {
 
-  late TextEditingController _email;
+  late TextEditingController _eMail;
   late TextEditingController _password;
+  bool _isPasswordVisible = false;
 
   //nochmal genau ansehen was der teil macht
   @override
   void initState() {
-    _email = TextEditingController();
-    _email.addListener(() {
+    _eMail = TextEditingController();
+    _eMail.addListener(() {
       setState(() {
           //wenn statusänderungen vorgenommen werden sollen
       });
@@ -38,9 +39,19 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   void dispose() {
-    _email.dispose();
+    _eMail.dispose();
     _password.dispose();
     super.dispose();
+  }
+
+  void validateForm(String email, String password)
+  {
+      if(email.isNotEmpty || password.isNotEmpty)
+      {
+        RestServices().loginUser(_eMail.text, _password.text);
+      }else{
+        print("E-Mail oder Passwort fehlt!");
+      }
   }
 
   @override
@@ -52,7 +63,7 @@ class _LoginFormState extends State<LoginForm> {
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 0, 0, 8),
               child: TextFormField(
-                controller: _email,
+                controller: _eMail,
                 decoration: InputDecoration(
                   labelText: "E-Mail",
                   labelStyle: TextStyle(
@@ -64,10 +75,12 @@ class _LoginFormState extends State<LoginForm> {
                   prefixIcon: Icon(Icons.email, color: Colors.white, size: 30,),
                   suffixIcon: GestureDetector(
                     onTap: () {
-                      // Toggle the password visibility here
+                      setState(() {
+                        _eMail.text = "";
+                      });
                     },
                     child: Icon(
-                      Icons.cancel,
+                      _eMail.text.isNotEmpty ? Icons.cancel : null,
                       color: Colors.white.withOpacity(0.50),
                     ),
                   ),// Icon hinzufügen
@@ -100,7 +113,7 @@ class _LoginFormState extends State<LoginForm> {
               padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
               child: TextFormField(
                 controller: _password,
-                obscureText: true, // Passwort verschleiern
+                obscureText: !_isPasswordVisible, // Passwort verschleiern
                   decoration: InputDecoration(
                     labelText: "Password",
                     labelStyle: TextStyle(
@@ -112,10 +125,12 @@ class _LoginFormState extends State<LoginForm> {
                     prefixIcon: Icon(Icons.lock, color: Colors.white,size: 30),
                     suffixIcon: GestureDetector(
                       onTap: () {
-                        // Toggle the password visibility here
+                        setState(() {
+                          _isPasswordVisible = !_isPasswordVisible;
+                        });
                       },
                       child: Icon(
-                        Icons.visibility_off,
+                        _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
                         color: Colors.white.withOpacity(0.50),
                       ),
                     ),// Icon hinzufügen
@@ -176,7 +191,7 @@ class _LoginFormState extends State<LoginForm> {
                     ),
                     onPressed: () {
                       setState(() {
-                        RestServices().loginUser(_email.text, _password.text);
+                        validateForm(_eMail.text, _password.text);
                       });
                     },
                     child: Row(

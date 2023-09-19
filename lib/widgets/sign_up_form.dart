@@ -17,6 +17,8 @@ class _SignUpFormState extends State<SignUpForm> {
   late TextEditingController _eMail;
   late TextEditingController _password;
   late TextEditingController _repeatPassword;
+  bool _isPasswordVisible = false;
+  bool _isChecked = false;
 
   @override
   void initState() {
@@ -49,14 +51,27 @@ class _SignUpFormState extends State<SignUpForm> {
     super.dispose();
   }
 
-  void validatePassword(String password, String repeatPassword)
+  void validateForm(String email, String password, String repeatPassword)
   {
-    if(password == repeatPassword){
-      RestServices().createUser(_eMail.text, _password.text);
-    }else{
-      print("Passwörter sind nicht identisch!");
-    }
+    final emailRegExp = RegExp(r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$');
 
+    if(emailRegExp.hasMatch(email))
+    {
+      if(password == repeatPassword && password.isNotEmpty)
+      {
+        if(_isChecked){
+          RestServices().createUser(_eMail.text, _password.text);
+        }else{
+          print("Bitte zustimmen!");
+        }
+      }else
+      {
+        print("Passwörter sind nicht identisch oder fehlen!");
+      }
+    }else
+    {
+      print("Bitte eine E-Mail Adresse angeben!");
+    }
   }
 
   @override
@@ -80,13 +95,15 @@ class _SignUpFormState extends State<SignUpForm> {
                 prefixIcon: Icon(Icons.email, color: Colors.white,size: 30),
                 suffixIcon: GestureDetector(
                   onTap: () {
-                    // Toggle the password visibility here
+                    setState(() {
+                      _eMail.text = "";
+                    });
                   },
                   child: Icon(
-                    Icons.cancel,
+                    _eMail.text.isNotEmpty ? Icons.cancel : null,
                     color: Colors.white.withOpacity(0.50),
                   ),
-                ),// Icon hinzufügen
+                ),
                 enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(
                     color: Color(0xFF8597A1),
@@ -116,7 +133,7 @@ class _SignUpFormState extends State<SignUpForm> {
             padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
             child: TextFormField(
               controller: _password,
-              obscureText: true, // Passwort verschleiern
+              obscureText: !_isPasswordVisible, // Passwort verschleiern
               decoration: InputDecoration(
                 labelText: "Password",
                 labelStyle: TextStyle(
@@ -128,10 +145,12 @@ class _SignUpFormState extends State<SignUpForm> {
                 prefixIcon: Icon(Icons.lock, color: Colors.white,size: 30),
                 suffixIcon: GestureDetector(
                   onTap: () {
-                    // Toggle the password visibility here
+                    setState(() {
+                      _isPasswordVisible = !_isPasswordVisible;
+                    });
                   },
                   child: Icon(
-                    Icons.visibility_off,
+                    _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
                     color: Colors.white.withOpacity(0.50),
                   ),
                 ),// Icon hinzufügen
@@ -164,7 +183,7 @@ class _SignUpFormState extends State<SignUpForm> {
             padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
             child: TextFormField(
               controller: _repeatPassword,
-              obscureText: true, // Passwort verschleiern
+              obscureText: !_isPasswordVisible, // Passwort verschleiern
               decoration: InputDecoration(
                 labelText: "repeat Password",
                 labelStyle: TextStyle(
@@ -176,10 +195,12 @@ class _SignUpFormState extends State<SignUpForm> {
                 prefixIcon: Icon(Icons.safety_check, color: Colors.white,size: 30),
                 suffixIcon: GestureDetector(
                   onTap: () {
-                    // Toggle the password visibility here
+                    setState(() {
+                      _isPasswordVisible = !_isPasswordVisible;
+                    });
                   },
                   child: Icon(
-                    Icons.visibility_off,
+                    _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
                     color: Colors.white.withOpacity(0.50),
                   ),
                 ),// Icon hinzufügen
@@ -217,8 +238,16 @@ class _SignUpFormState extends State<SignUpForm> {
                 children: [
                   Checkbox(
                     side: BorderSide(color: Colors.white, width: 2),
-                    value: false,
-                    onChanged: null,
+                    activeColor: Color(int.parse("0xFFE59113")),
+                    checkColor: Color(int.parse("0xFF00324E")),
+                    value: _isChecked,
+                    onChanged: (bool? value)
+                    {
+                      setState(() {
+                        _isChecked = value!;
+                        print(_isChecked);
+                      });
+                    },
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(3),
                     ),
@@ -258,7 +287,7 @@ class _SignUpFormState extends State<SignUpForm> {
                     ),
                     onPressed: () {
                       setState(() {
-                        validatePassword(_password.text, _repeatPassword.text);
+                        validateForm(_eMail.text, _password.text, _repeatPassword.text);
                       });
                     },
                     child: Row(
