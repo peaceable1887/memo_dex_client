@@ -27,24 +27,27 @@ class WelcomeScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                Container(
-                  child: Column(
-                    children: [
-                      Button(
-                        text: "Login",
-                        backgroundColor: "E59113",
-                        borderColor: "E59113",
-                        textColor: "00324E",
-                        onPressed: LoginScreen(),
-                      ),
-                      Button(
-                        text: "Sign up",
-                        backgroundColor: "00324E",
-                        borderColor: "E59113",
-                        textColor: "E59113",
-                        onPressed: SignUpScreen(),
-                      ),
-                    ],
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20,0,20,0),
+                  child: Container(
+                    child: Column(
+                      children: [
+                        Button(
+                          text: "Login",
+                          backgroundColor: "E59113",
+                          borderColor: "E59113",
+                          textColor: "00324E",
+                          onPressed: LoginScreen(),
+                        ),
+                        Button(
+                          text: "Sign up",
+                          backgroundColor: "00324E",
+                          borderColor: "E59113",
+                          textColor: "E59113",
+                          onPressed: SignUpScreen(),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 Container(
