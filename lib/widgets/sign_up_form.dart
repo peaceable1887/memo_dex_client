@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:memo_dex_prototyp/widgets/validation_message_box.dart';
 
 import '../screens/welcome_screen.dart';
 import '../services/rest_services.dart';
@@ -55,15 +56,14 @@ class _SignUpFormState extends State<SignUpForm> {
 
     if (emailRegExp.hasMatch(email)) {
       if (password == repeatPassword && password.isNotEmpty) {
-
           RestServices().createUser(_eMail.text, _password.text);
       } else {
-        print("Passwörter sind nicht identisch oder fehlen!");
+        ValidationMessageBox.show(context, "Passwörter sind nicht identisch oder fehlen!");
       }
     } else {
-      print("Bitte eine E-Mail Adresse angeben!");
+      ValidationMessageBox.show(context, "Bitte eine E-Mail Adresse angeben!");
     }
-  } //
+  } 
 
   @override
   Widget build(BuildContext context) {

@@ -53,7 +53,7 @@ class _LoginFormState extends State<LoginForm> {
         //TODO Fehler abfangen: falls der Server nicht erreichbar ist, soll die navigateScreen() nicht ausgeführt werden
         //navigateScreen(HomeScreen());
       }else{
-        print("E-Mail oder Passwort fehlt!");
+        print("E-Mail oder Passwort feh");
       }
   }
 
