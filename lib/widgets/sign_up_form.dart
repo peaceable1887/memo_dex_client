@@ -19,27 +19,16 @@ class _SignUpFormState extends State<SignUpForm> {
   late TextEditingController _repeatPassword;
   bool _isPasswordVisible = false;
   bool _isChecked = false;
+  bool _isEnabled = false;
 
   @override
   void initState() {
     _eMail = TextEditingController();
-    _eMail.addListener(() {
-      setState(() {
-
-      });
-    });
+    _eMail.addListener(updateButtonState);
     _password = TextEditingController();
-    _password.addListener(() {
-      setState(() {
-
-      });
-    });
+    _password.addListener(updateButtonState);
     _repeatPassword = TextEditingController();
-    _repeatPassword.addListener(() {
-      setState(() {
-
-      });
-    });
+    _repeatPassword.addListener(updateButtonState);
     super.initState();
   }
 
@@ -51,28 +40,30 @@ class _SignUpFormState extends State<SignUpForm> {
     super.dispose();
   }
 
-  void validateForm(String email, String password, String repeatPassword)
-  {
+  void updateButtonState() {
+    setState(() {
+      if (_eMail.text.isNotEmpty && _password.text.isNotEmpty && _repeatPassword.text.isNotEmpty && _isChecked) {
+        _isEnabled = true;
+      } else {
+        _isEnabled = false;
+      }
+    });
+  }
+
+  void validateForm(String email, String password, String repeatPassword) {
     final emailRegExp = RegExp(r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$');
 
-    if(emailRegExp.hasMatch(email))
-    {
-      if(password == repeatPassword && password.isNotEmpty)
-      {
-        if(_isChecked){
+    if (emailRegExp.hasMatch(email)) {
+      if (password == repeatPassword && password.isNotEmpty) {
+
           RestServices().createUser(_eMail.text, _password.text);
-        }else{
-          print("Bitte zustimmen!");
-        }
-      }else
-      {
+      } else {
         print("Passwörter sind nicht identisch oder fehlen!");
       }
-    }else
-    {
+    } else {
       print("Bitte eine E-Mail Adresse angeben!");
     }
-  }
+  } //
 
   @override
   Widget build(BuildContext context) {
@@ -241,11 +232,10 @@ class _SignUpFormState extends State<SignUpForm> {
                     activeColor: Color(int.parse("0xFFE59113")),
                     checkColor: Color(int.parse("0xFF00324E")),
                     value: _isChecked,
-                    onChanged: (bool? value)
-                    {
+                    onChanged: (bool? value) {
                       setState(() {
                         _isChecked = value!;
-                        print(_isChecked);
+                        updateButtonState(); // Hier rufe die updateButtonState-Methode auf
                       });
                     },
                     shape: RoundedRectangleBorder(
@@ -274,29 +264,37 @@ class _SignUpFormState extends State<SignUpForm> {
                 children: [
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(int.parse("0xFFE59113")),
+                      backgroundColor: _isEnabled
+                          ? Color(int.parse("0xFFE59113"))
+                          : Color(0xFF8597A1),
                       minimumSize: Size(double.infinity, 55),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(10)),
                       ),
                       side: BorderSide(
-                        color: Color(int.parse("0xFFE59113")),
+                        color: _isEnabled
+                            ? Color(int.parse("0xFFE59113"))
+                            : Color(0xFF8597A1), // Button-Rahmenfarbe ändern, wenn nicht aktiviert
                         width: 2.0,
                       ),
                       elevation: 0,
                     ),
-                    onPressed: () {
+                    onPressed: _isEnabled
+                        ? () {
                       setState(() {
                         validateForm(_eMail.text, _password.text, _repeatPassword.text);
                       });
-                    },
+                    }
+                        : null, // Deaktivieren Sie den Button, wenn nicht aktiviert
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          "Sign up",
+                          "Login",
                           style: TextStyle(
-                            color: Color(int.parse("0xFF00324E")),
+                            color: _isEnabled
+                                ? Color(int.parse("0xFF00324E"))
+                                : Color(0xFF8597A1), // Textfarbe ändern, wenn nicht aktiviert
                             fontSize: 20,
                             fontFamily: "Inter",
                             fontWeight: FontWeight.w600,
@@ -346,7 +344,6 @@ class _SignUpFormState extends State<SignUpForm> {
             ),
         ],
       ),
-
     );
   }
 }

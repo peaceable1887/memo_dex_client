@@ -18,22 +18,15 @@ class _LoginFormState extends State<LoginForm> {
   late TextEditingController _eMail;
   late TextEditingController _password;
   bool _isPasswordVisible = false;
+  bool _isButtonEnabled = false;
 
   //nochmal genau ansehen was der teil macht
   @override
   void initState() {
     _eMail = TextEditingController();
-    _eMail.addListener(() {
-      setState(() {
-          //wenn statusänderungen vorgenommen werden sollen
-      });
-    });
+    _eMail.addListener(updateButtonState);
     _password = TextEditingController();
-    _password.addListener(() {
-      setState(() {
-          //wenn statusänderungen vorgenommen werden sollen
-      });
-    });
+    _password.addListener(updateButtonState);
     super.initState();
   }
 
@@ -43,15 +36,32 @@ class _LoginFormState extends State<LoginForm> {
     _password.dispose();
     super.dispose();
   }
-
+  void updateButtonState() {
+    setState(() {
+      if(_eMail.text.isNotEmpty && _password.text.isNotEmpty){
+        _isButtonEnabled = true;
+      }else{
+        _isButtonEnabled = false;
+      }
+    });
+  }
   void validateForm(String email, String password)
   {
-      if(email.isNotEmpty || password.isNotEmpty)
+    if(email.isNotEmpty && password.isNotEmpty)
       {
         RestServices().loginUser(_eMail.text, _password.text);
+        //TODO Fehler abfangen: falls der Server nicht erreichbar ist, soll die navigateScreen() nicht ausgeführt werden
+        //navigateScreen(HomeScreen());
       }else{
         print("E-Mail oder Passwort fehlt!");
       }
+  }
+
+  void navigateScreen(Widget screen){
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => screen),
+    );
   }
 
   @override
@@ -178,29 +188,37 @@ class _LoginFormState extends State<LoginForm> {
                 children: [
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(int.parse("0xFFE59113")),
+                      backgroundColor: _isButtonEnabled
+                          ? Color(int.parse("0xFFE59113"))
+                          : Color(0xFF8597A1),
                       minimumSize: Size(double.infinity, 55),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(10)),
                       ),
                       side: BorderSide(
-                        color: Color(int.parse("0xFFE59113")),
+                        color: _isButtonEnabled
+                            ? Color(int.parse("0xFFE59113"))
+                            : Color(0xFF8597A1), // Button-Rahmenfarbe ändern, wenn nicht aktiviert
                         width: 2.0,
                       ),
                       elevation: 0,
                     ),
-                    onPressed: () {
-                      setState(() {
-                        validateForm(_eMail.text, _password.text);
-                      });
-                    },
+                    onPressed: _isButtonEnabled
+                        ? () {
+                          setState(() {
+                            validateForm(_eMail.text, _password.text);
+                          });
+                        }
+                      : null, // Deaktivieren Sie den Button, wenn nicht aktiviert
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
                           "Login",
                           style: TextStyle(
-                            color: Color(int.parse("0xFF00324E")),
+                            color: _isButtonEnabled
+                                ? Color(int.parse("0xFF00324E"))
+                                : Color(0xFF8597A1), // Textfarbe ändern, wenn nicht aktiviert
                             fontSize: 20,
                             fontFamily: "Inter",
                             fontWeight: FontWeight.w600,
