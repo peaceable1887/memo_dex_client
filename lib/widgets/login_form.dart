@@ -2,7 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:memo_dex_prototyp/services/rest_services.dart';
 import 'package:memo_dex_prototyp/widgets/divide_painter.dart';
+import 'package:memo_dex_prototyp/widgets/validation_message_box.dart';
 
+import '../screens/home_screen.dart';
 import '../screens/welcome_screen.dart';
 import 'button.dart';
 
@@ -47,21 +49,7 @@ class _LoginFormState extends State<LoginForm> {
   }
   void validateForm(String email, String password)
   {
-    if(email.isNotEmpty && password.isNotEmpty)
-      {
-        RestServices().loginUser(_eMail.text, _password.text);
-        //TODO Fehler abfangen: falls der Server nicht erreichbar ist, soll die navigateScreen() nicht ausgeführt werden
-        //navigateScreen(HomeScreen());
-      }else{
-        print("E-Mail oder Passwort feh");
-      }
-  }
-
-  void navigateScreen(Widget screen){
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => screen),
-    );
+      RestServices(context).loginUser(_eMail.text, _password.text);
   }
 
   @override

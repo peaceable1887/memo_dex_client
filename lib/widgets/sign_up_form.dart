@@ -56,14 +56,24 @@ class _SignUpFormState extends State<SignUpForm> {
 
     if (emailRegExp.hasMatch(email)) {
       if (password == repeatPassword && password.isNotEmpty) {
-          RestServices().createUser(_eMail.text, _password.text);
+          RestServices(context).createUser(_eMail.text, _password.text);
       } else {
-        ValidationMessageBox.show(context, "Passwörter sind nicht identisch oder fehlen!");
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return ValidationMessageBox(message: "Passwörter sind nicht identisch.");
+          },
+        );
       }
     } else {
-      ValidationMessageBox.show(context, "Bitte eine E-Mail Adresse angeben!");
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return ValidationMessageBox(message: "Bitte eine gültige E-Mail angeben.");
+        },
+      );
     }
-  } 
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -174,7 +184,7 @@ class _SignUpFormState extends State<SignUpForm> {
             padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
             child: TextFormField(
               controller: _repeatPassword,
-              obscureText: !_isPasswordVisible, // Passwort verschleiern
+              obscureText: !_isPasswordVisible,
               decoration: InputDecoration(
                 labelText: "repeat Password",
                 labelStyle: TextStyle(

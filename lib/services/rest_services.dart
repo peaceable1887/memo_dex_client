@@ -1,7 +1,14 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:flutter/material.dart';
+import '../screens/home_screen.dart';
+import '../widgets/validation_message_box.dart';
 
 class RestServices{
+  final BuildContext context;
+
+  RestServices(this.context);
+
   Future<void> createUser(String eMail, String password) async {
     final response = await http.post(
       Uri.parse('http://10.0.2.2:4000/register'),
@@ -21,6 +28,7 @@ class RestServices{
     } else {
       // If the server did not return a 201 CREATED response,
       // then throw an exception.
+
       throw Exception('Failed to create user.');
     }
   }
@@ -43,11 +51,22 @@ class RestServices{
       final Map<String, dynamic> data = json.decode(response.body); //nochmal genau ansehen was dieser teil macht
       print(data["accessToken"]);
       print(data["refreshToken"]);
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => HomeScreen()),
+      );
 
     } else {
       // If the server did not return a 201 CREATED response,
       // then throw an exception.
-      throw Exception('Failed to login1.');
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return ValidationMessageBox(message: "E-Mail und/oder Passwort sind falsch.");
+        },
+      );
+      throw http.ClientException('Failed to login1.');
+
     }
   }
 }
