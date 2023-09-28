@@ -49,7 +49,18 @@ class _LoginFormState extends State<LoginForm> {
   }
   void validateForm(String email, String password)
   {
-      RestServices(context).loginUser(_eMail.text, _password.text);
+    final emailRegExp = RegExp(r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$');
+
+    if (emailRegExp.hasMatch(email)) {
+        RestServices(context).loginUser(_eMail.text, _password.text);
+    }else {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return ValidationMessageBox(message: "Bitte eine gültige E-Mail angeben.");
+        },
+      );
+    }
   }
 
   @override
