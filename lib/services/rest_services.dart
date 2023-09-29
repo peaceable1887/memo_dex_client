@@ -2,6 +2,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:memo_dex_prototyp/screens/bottom_navigation_screen.dart';
 import '../screens/home_screen.dart';
 import '../widgets/validation_message_box.dart';
 
@@ -30,7 +31,12 @@ class RestServices{
     } else {
       // If the server did not return a 201 CREATED response,
       // then throw an exception.
-
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return ValidationMessageBox(message: "Die E-Mail Adresse existiert bereits.");
+        },
+      );
       throw Exception('Failed to create user.');
     }
   }
@@ -56,7 +62,7 @@ class RestServices{
       print(data["refreshToken"]);
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => HomeScreen()),
+        MaterialPageRoute(builder: (context) => BottomNavigationScreen()),
       );
 
     } else {
