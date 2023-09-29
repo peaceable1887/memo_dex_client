@@ -25,6 +25,7 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
 
   @override
   void initState() {
+    printTest();
     super.initState();
   }
 

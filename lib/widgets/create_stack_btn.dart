@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:memo_dex_prototyp/screens/create_stack_screen.dart';
 
 class CreateStackBtn extends StatelessWidget {
   const CreateStackBtn({Key? key}) : super(key: key);
@@ -6,7 +7,14 @@ class CreateStackBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-        onPressed: (){},
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => CreateStackScreen(),
+            ),
+          );
+        },
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.white,
           shape: RoundedRectangleBorder(
