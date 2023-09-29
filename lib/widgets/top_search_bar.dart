@@ -8,26 +8,23 @@ class TopSearchBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Positioned(
-      top: 0,
-      left: 0,
-      right: 0,
-      child: AppBar(
-        leading: PreferredSize(
-          preferredSize: Size(0, 0), // sorgt dafür das der Pfeil nicht dargestellt wird
-          child: Container(),
-        ),
-        actions: [
-          IconButton(
-            icon: Icon(
-              Icons.search,
-            ),
+    return AppBar(
+      leading: PreferredSize(
+        preferredSize: Size(0, 0),
+        child: Container(),
+      ),
+      actions: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(15,0,15,0),
+          child: IconButton(
+            icon: Icon(Icons.search, size: 32.0,),
             onPressed: onPressed,
           ),
-        ],
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-      ),
+        ),
+      ],
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      automaticallyImplyLeading: false, // Damit der Zurück-Pfeil nicht erscheint
     );
   }
 }

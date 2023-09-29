@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:memo_dex_prototyp/screens/setting_screen.dart';
 import 'package:memo_dex_prototyp/screens/statistic_screen.dart';
+import 'package:memo_dex_prototyp/widgets/stack_view_grid.dart';
 
 import '../services/rest_services.dart';
 import '../widgets/headline.dart';
@@ -17,28 +18,51 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
+    return Column(
       children: [
-        Container(
-          child: ListView(
-            children: [
-              Container(
-                height: 150,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Headline(text: "Home"),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
         TopSearchBar(
           onPressed: () {},
         ),
+        Container(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Headline(text: "Home"),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(20, 50, 20, 0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "ALL STACKS",
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 21,
+                    fontFamily: "Inter",
+                    fontWeight: FontWeight.w600
+                ),
+              ),
+              InkWell(
+                onTap: () {
+                  // Aktion, die bei einem Klick auf das Icon ausgeführt wird
+                },
+                child: Icon(
+                  Icons.filter_alt,
+                  size: 32.0,
+                  color: Colors.white,
+                ), // Icon als klickbares Element
+              )
+            ],
+          ),
+        ),
+        Flexible(
+          child: StackViewGrid(),
+        ),
       ],
     );
+
   }
 }
