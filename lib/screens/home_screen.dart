@@ -18,50 +18,53 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        TopSearchBar(
-          onPressed: () {},
-        ),
-        Container(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Headline(text: "Home"),
-            ],
+    return Scaffold(
+      backgroundColor: Color(0xFF00324E),
+      body: Column(
+        children: [
+          TopSearchBar(
+            onPressed: () {},
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(20, 50, 20, 0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                "ALL STACKS",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 21,
-                    fontFamily: "Inter",
-                    fontWeight: FontWeight.w600
+          Container(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Headline(text: "Home"),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 50, 20, 0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "ALL STACKS",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 21,
+                      fontFamily: "Inter",
+                      fontWeight: FontWeight.w600
+                  ),
                 ),
-              ),
-              InkWell(
-                onTap: () {
-                  // Aktion, die bei einem Klick auf das Icon ausgeführt wird
-                },
-                child: Icon(
-                  Icons.filter_alt,
-                  size: 32.0,
-                  color: Colors.white,
-                ), // Icon als klickbares Element
-              )
-            ],
+                InkWell(
+                  onTap: () {
+                    // Aktion, die bei einem Klick auf das Icon ausgeführt wird
+                  },
+                  child: Icon(
+                    Icons.filter_alt,
+                    size: 32.0,
+                    color: Colors.white,
+                  ), // Icon als klickbares Element
+                )
+              ],
+            ),
           ),
-        ),
-        Flexible(
-          child: StackViewGrid(),
-        ),
-      ],
+          Flexible(
+            child: StackViewGrid(),
+          ),
+        ],
+      ),
     );
 
   }

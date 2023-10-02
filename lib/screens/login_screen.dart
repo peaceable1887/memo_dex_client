@@ -39,8 +39,15 @@ class LoginScreen extends StatelessWidget {
               ),
             ),
             TopNavigationBar(
-              onPressed: WelcomeScreen(),
-           ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => WelcomeScreen(),
+                  ),
+                );
+              },
+            ),
           ],
         ),
     );
