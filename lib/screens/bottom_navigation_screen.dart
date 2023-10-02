@@ -31,6 +31,8 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
 
   void printTest() {
     RestServices(context).getPosts();
+    RestServices(context).getStacks();
+
   }
 
   @override

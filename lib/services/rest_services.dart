@@ -117,5 +117,71 @@ class RestServices{
       // Wenn accessToken null ist, behandeln Sie diesen Fall.
     }
   }
+
+  Future<void> createStack(String stackname, String color) async {
+
+    String? accessToken = await storage.read(key: 'accessToken');
+
+    if (accessToken != null) {
+      final response = await http.post(
+        Uri.parse('http://10.0.2.2:3000/createStack'),
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization': "Bearer " + accessToken,
+        },
+        body: jsonEncode(<String, String>{
+          'stackname': stackname,
+          'color': color,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        // If the server did return a 201 CREATED response,
+        // then parse the JSON.
+        print("Stack wurde erstellt");
+      } else {
+        // If the server did not return a 201 CREATED response,
+        // then throw an exception.
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return ValidationMessageBox(message: "Stack konnte nicht erstellt werden");
+          },
+        );
+        throw Exception('Failed to create stack.');
+      }
+    }else {
+      // Wenn accessToken null ist, behandeln Sie diesen Fall.
+    }
+  }
+
+  Future<dynamic> getStacks() async {
+
+    String? accessToken = await storage.read(key: 'accessToken');
+
+    if (accessToken != null) {
+      final response = await http.get(
+        Uri.parse('http://10.0.2.2:3000/getStacks'),
+        headers: <String, String>{
+          'Authorization': "Bearer " + accessToken,
+        },
+      );
+
+      if (response.statusCode == 200)
+      {
+        dynamic jsonResponse = json.decode(response.body);
+
+        return jsonResponse;
+
+      }else
+      {
+        // Wenn der Statuscode nicht 200 ist, ist etwas schiefgegangen.
+        throw http.ClientException('hat nicht geklappt. Statuscode: ${response.statusCode}');
+      }
+    }else
+    {
+      // Wenn accessToken null ist, behandeln Sie diesen Fall.
+    }
+  }
 }
 
