@@ -60,6 +60,12 @@ class RestServices{
       print(data["accessToken"]);
       await storage.write(key: 'accessToken', value: data["accessToken"]);
       print(data["refreshToken"]);
+      print(data["id"]);
+      if (data["id"] != null) {
+        await storage.write(key: 'user_id', value: data["id"].toString());
+      } else {
+        // Handle the case where data["id"] is null
+      }
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => BottomNavigationScreen()),
@@ -89,6 +95,7 @@ class RestServices{
         headers: <String, String>{
           'Authorization': "Bearer " + accessToken,
         },
+
       );
 
       if (response.statusCode == 200) {
@@ -121,6 +128,7 @@ class RestServices{
   Future<void> createStack(String stackname, String color) async {
 
     String? accessToken = await storage.read(key: 'accessToken');
+    String? userId = await storage.read(key: 'user_id');
 
     if (accessToken != null) {
       final response = await http.post(
@@ -129,9 +137,11 @@ class RestServices{
           'Content-Type': 'application/json',
           'Authorization': "Bearer " + accessToken,
         },
-        body: jsonEncode(<String, String>{
+        body: jsonEncode(<String, dynamic>{
           'stackname': stackname,
           'color': color,
+          "is_deleted": 0,
+          "user_user_id": userId
         }),
       );
 
@@ -158,19 +168,23 @@ class RestServices{
   Future<dynamic> getStacks() async {
 
     String? accessToken = await storage.read(key: 'accessToken');
+    String? userId = await storage.read(key: 'user_id');
 
     if (accessToken != null) {
-      final response = await http.get(
+      final response = await http.post(
         Uri.parse('http://10.0.2.2:3000/getStacks'),
         headers: <String, String>{
+          'Content-Type': 'application/json',
           'Authorization': "Bearer " + accessToken,
         },
+        body: jsonEncode(<String, dynamic>{
+          "user_id": userId
+        }),
       );
 
       if (response.statusCode == 200)
       {
         dynamic jsonResponse = json.decode(response.body);
-
         return jsonResponse;
 
       }else

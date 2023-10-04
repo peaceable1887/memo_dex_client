@@ -26,9 +26,9 @@ class ValidationMessageBox extends StatelessWidget {
                   Icon(
                     Icons.error_outline_rounded,
                     color: Colors.white,
-                    size: 100,
+                    size: 95,
                   ),
-                  SizedBox(height: 5),
+                  SizedBox(height: 0),
                   Text(
                     "Fehler!",
                     style: TextStyle(
@@ -42,15 +42,18 @@ class ValidationMessageBox extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(height: 35),
-            Text(
-              message,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 15,
-                fontFamily: "Inter",
+            SizedBox(height: 30),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(8,0,8,0),
+              child: Text(
+                message,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 15,
+                  fontFamily: "Inter",
+                ),
+                textAlign: TextAlign.center,
               ),
-              textAlign: TextAlign.center,
             ),
             Spacer(),
             TextButton(
