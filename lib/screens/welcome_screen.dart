@@ -11,6 +11,7 @@ class WelcomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
           body: Container(
             color: Color(0xFF00324E),
             child: Column(

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-import 'package:memo_dex_prototyp/widgets/validation_message_box.dart';
-
 import '../services/rest_services.dart';
 
 class CreateStackForm extends StatefulWidget {
@@ -17,7 +15,6 @@ class _CreateStackFormState extends State<CreateStackForm> {
   late TextEditingController _stackname;
   bool _isButtonEnabled = false;
 
-  //nochmal genau ansehen was der teil macht
   @override
   void initState() {
     _stackname = TextEditingController();
@@ -51,7 +48,22 @@ class _CreateStackFormState extends State<CreateStackForm> {
     showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: Text("Pick Your Color"),
+          shape: RoundedRectangleBorder(
+              borderRadius:
+              BorderRadius.circular(10.0)),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                  "Select your Color",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontFamily: "Inter",
+                    fontWeight: FontWeight.w600,
+                  ),
+              ),
+            ],
+          ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -59,7 +71,12 @@ class _CreateStackFormState extends State<CreateStackForm> {
               TextButton(
                 child: Text(
                   "SELECT",
-                  style: TextStyle(fontSize: 20),
+                  style: TextStyle(
+                    color: Color(0xFF00324E),
+                    fontSize: 20,
+                    fontFamily: "Inter",
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
                 onPressed: () => Navigator.of(context).pop(),
               ),

@@ -57,7 +57,7 @@ class _LoginFormState extends State<LoginForm> {
       showDialog(
         context: context,
         builder: (BuildContext context) {
-          return ValidationMessageBox(message: "Bitte eine gültige E-Mail angeben.");
+          return ValidationMessageBox(message: "Bitte eine gültige E-Mail Adresse angeben.");
         },
       );
     }
