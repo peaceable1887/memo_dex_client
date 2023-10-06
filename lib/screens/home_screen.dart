@@ -42,7 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   "ALL STACKS",
                   style: TextStyle(
                       color: Colors.white,
-                      fontSize: 21,
+                      fontSize: 20,
                       fontFamily: "Inter",
                       fontWeight: FontWeight.w600
                   ),

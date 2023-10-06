@@ -1,34 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:memo_dex_prototyp/screens/stack_content_screen.dart';
 
-class StackBtn extends StatefulWidget {
+class StackContentBtn extends StatefulWidget {
 
   final String iconColor;
-  final String stackName;
+  final String backgroundColor;
+  final String btnText;
 
-  const StackBtn({Key? key, required this.iconColor, required this.stackName}) : super(key: key);
+  const StackContentBtn({Key? key, required this.iconColor, required this.btnText, required this.backgroundColor}) : super(key: key);
 
   @override
-  State<StackBtn> createState() => _StackBtnState();
+  State<StackContentBtn> createState() => _StackContentBtnState();
 }
 
-class _StackBtnState extends State<StackBtn> {
-
-  void pushToStackContent(){
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => StackContentScreen(),
-      ),
-    );
-  }
+class _StackContentBtnState extends State<StackContentBtn> {
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: pushToStackContent,
+      onPressed: (){},
       style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.white,
+        backgroundColor: Color(int.parse("0xFF${widget.backgroundColor}")),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
@@ -42,13 +33,12 @@ class _StackBtnState extends State<StackBtn> {
             color: Color(int.parse("0xFF${widget.iconColor}")),
           ),
           Text(
-            widget.stackName,
+            widget.btnText,
             style: TextStyle(
-                color: Colors.black,
+              color: Colors.white,
               fontSize: 16,
               fontFamily: "Inter",
-              fontWeight: FontWeight.w700,
-
+              fontWeight: FontWeight.w600,
             ),
           ),
         ],
@@ -56,3 +46,4 @@ class _StackBtnState extends State<StackBtn> {
     );
   }
 }
+

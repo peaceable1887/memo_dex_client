@@ -48,6 +48,8 @@ class _StackViewGridState extends State<StackViewGrid> {
         mainAxisSpacing: 20.0,
         crossAxisSpacing: 20.0,
         crossAxisCount: 2,
+        childAspectRatio: MediaQuery.of(context).size.width /
+            (MediaQuery.of(context).size.height / 2.3),
       ),
       itemBuilder: (context, index) {
         return stackButtons[index];
