@@ -217,5 +217,73 @@ class RestServices{
 
     }
   }
+
+  Future<void> addCard(String question, String answer, stackId) async {
+
+    String? accessToken = await storage.read(key: 'accessToken');
+
+    if (accessToken != null) {
+      final response = await http.post(
+        Uri.parse('http://10.0.2.2:3000/addCard'),
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization': "Bearer " + accessToken,
+        },
+        body: jsonEncode(<String, dynamic>{
+          "question": question,
+          "answer": answer,
+          "is_deleted": 0,
+          "remember": 0,
+          "stack_stack_id": stackId
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        print("Karte wurde erstellt");
+      } else {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return ValidationMessageBox(message: "Karte konnte nicht erstellt werden");
+          },
+        );
+        throw Exception('Failed to create stack.');
+      }
+    }else {
+    }
+  }
+
+  Future<dynamic> getAllCards(stackId) async {
+
+    String? accessToken = await storage.read(key: 'accessToken');
+
+    if (accessToken != null) {
+      final response = await http.post(
+        Uri.parse('http://10.0.2.2:3000/getAllCards'),
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization': "Bearer " + accessToken,
+        },
+        body: jsonEncode(<String, dynamic>{
+          "stack_id": stackId
+        }),
+      );
+
+      if (response.statusCode == 200)
+      {
+        dynamic jsonResponse = json.decode(response.body);
+        print(jsonResponse);
+        return jsonResponse;
+
+      }else
+      {
+        throw http.ClientException('hat nicht geklappt. Statuscode: ${response.statusCode}');
+      }
+    }else
+    {
+
+    }
+  }
+
 }
 

@@ -22,12 +22,11 @@ class StackContentScreen extends StatefulWidget {
 
 class _StackContentScreenState extends State<StackContentScreen> {
 
-
-
   @override
   void initState() {
     super.initState();
     loadStack();
+    loadCards();
   }
 
   String stackname = "";
@@ -38,23 +37,35 @@ class _StackContentScreenState extends State<StackContentScreen> {
     StackContentBtn(iconColor: "FFFFFF", btnText: "Mixed", backgroundColor: "E57435")
   ];
 
-  final List<Widget> cards = [
-    CardBtn(btnText: "Capital of Germany?"),
-    CardBtn(btnText: "Capital of Germany?"),
-    CardBtn(btnText: "Capital of Germany?"),
-    CardBtn(btnText: "Capital of Germany?"),
-    CardBtn(btnText: "Capital of Germany?"),
-    CardBtn(btnText: "Capital of Germany?"),
-    CardBtn(btnText: "Capital of Germany?"),
-    CardBtn(btnText: "Capital of Germany?"),
-  ];
+  final List<Widget> cards = [];
+
+  Future<void> loadCards() async {
+    try {
+
+      final cardsData = await RestServices(context).getAllCards(widget.stackId);
+
+      for (var card in cardsData) {
+        cards.add(CardBtn(btnText: card["question"]));
+      }
+
+      // Widget wird aktualisiert nnach dem Laden der Daten.
+      if (mounted) {
+        setState(() {});
+      }
+    } catch (error) {
+      print('Fehler beim Laden der Daten: $error');
+    }
+  }
 
   Future<void> loadStack() async {
 
     try {
+
       final stack  = await RestServices(context).getStack(widget.stackId);
       print("Ausgabe:");
       print(stack[0]["stackname"]);
+      print(stack[0]["stack_id"]);
+
 
       setState(() {
         stackname = stack[0]["stackname"];
@@ -71,7 +82,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => AddCardScreen(),
+        builder: (context) => AddCardScreen(stackId: widget.stackId),
       ),
     );
   }
@@ -206,19 +217,12 @@ class _StackContentScreenState extends State<StackContentScreen> {
             ),
           ),
           Expanded(
-            child: GridView.builder(
+            child: ListView.builder(
               padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                mainAxisSpacing: 15.0,
-                crossAxisSpacing: 20.0,
-                crossAxisCount: 1,
-                childAspectRatio: MediaQuery.of(context).size.width /
-                    (MediaQuery.of(context).size.height / 14),
-              ),
+              itemCount: cards.length,
               itemBuilder: (context, index) {
                 return cards[index];
               },
-              itemCount: cards.length,
             ),
           ),
 

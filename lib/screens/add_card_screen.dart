@@ -1,17 +1,53 @@
 import 'package:flutter/material.dart';
 import 'package:memo_dex_prototyp/screens/stack_content_screen.dart';
 
+import '../services/rest_services.dart';
 import '../widgets/headline.dart';
 import '../widgets/top_navigation_bar.dart';
 
 class AddCardScreen extends StatefulWidget {
-  const AddCardScreen({Key? key}) : super(key: key);
+
+  final dynamic stackId;
+
+  const AddCardScreen({Key? key, this.stackId}) : super(key: key);
 
   @override
   State<AddCardScreen> createState() => _AddCardScreenState();
 }
 
 class _AddCardScreenState extends State<AddCardScreen> {
+
+  late TextEditingController _question;
+  late TextEditingController _answer;
+  bool _isButtonEnabled = false;
+
+  @override
+  void initState() {
+    _question = TextEditingController();
+    _answer = TextEditingController();
+    _question.addListener(updateButtonState);
+    _answer.addListener(updateButtonState);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _question.dispose();
+    _answer.dispose();
+    super.dispose();
+  }
+
+
+  void updateButtonState() {
+    setState(() {
+      if(_question.text.isNotEmpty && _answer.text.isNotEmpty){
+        _isButtonEnabled = true;
+      }else{
+        _isButtonEnabled = false;
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,7 +69,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => StackContentScreen(),
+                          builder: (context) => StackContentScreen(stackId: widget.stackId),
                         ),
                       );
                     },
@@ -70,6 +106,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(20,10,20,0),
                 child: TextFormField(
+                  controller: _question,
                   keyboardType: TextInputType.multiline,
                   minLines: 8,//Normal textInputField will be displayed
                   maxLines: 8,
@@ -118,6 +155,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(20,10,20,0),
                 child: TextFormField(
+                  controller: _answer,
                   keyboardType: TextInputType.multiline,
                   minLines: 8,//Normal textInputField will be displayed
                   maxLines: 8,
@@ -158,7 +196,13 @@ class _AddCardScreenState extends State<AddCardScreen> {
                 ),
                 elevation: 0,
               ),
-              onPressed: () {},
+              onPressed: _isButtonEnabled
+                  ? () {
+                    setState(() {
+                      RestServices(context).addCard(_question.text, _answer.text, widget.stackId);
+                    });
+                  }
+                  : null,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
