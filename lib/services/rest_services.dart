@@ -25,12 +25,8 @@ class RestServices{
     );
 
     if (response.statusCode == 201) {
-      // If the server did return a 201 CREATED response,
-      // then parse the JSON.
         print("User wurde erstellt");
     } else {
-      // If the server did not return a 201 CREATED response,
-      // then throw an exception.
       showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -72,8 +68,6 @@ class RestServices{
       );
 
     } else {
-      // If the server did not return a 201 CREATED response,
-      // then throw an exception.
       showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -146,12 +140,8 @@ class RestServices{
       );
 
       if (response.statusCode == 200) {
-        // If the server did return a 201 CREATED response,
-        // then parse the JSON.
         print("Stack wurde erstellt");
       } else {
-        // If the server did not return a 201 CREATED response,
-        // then throw an exception.
         showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -161,18 +151,17 @@ class RestServices{
         throw Exception('Failed to create stack.');
       }
     }else {
-      // Wenn accessToken null ist, behandeln Sie diesen Fall.
     }
   }
 
-  Future<dynamic> getStacks() async {
+  Future<dynamic> getAllStacks() async {
 
     String? accessToken = await storage.read(key: 'accessToken');
     String? userId = await storage.read(key: 'user_id');
 
     if (accessToken != null) {
       final response = await http.post(
-        Uri.parse('http://10.0.2.2:3000/getStacks'),
+        Uri.parse('http://10.0.2.2:3000/getAllStacks'),
         headers: <String, String>{
           'Content-Type': 'application/json',
           'Authorization': "Bearer " + accessToken,
@@ -185,16 +174,47 @@ class RestServices{
       if (response.statusCode == 200)
       {
         dynamic jsonResponse = json.decode(response.body);
+        print(jsonResponse);
         return jsonResponse;
 
       }else
       {
-        // Wenn der Statuscode nicht 200 ist, ist etwas schiefgegangen.
         throw http.ClientException('hat nicht geklappt. Statuscode: ${response.statusCode}');
       }
     }else
     {
-      // Wenn accessToken null ist, behandeln Sie diesen Fall.
+
+    }
+  }
+
+  Future<dynamic> getStack(stackId) async {
+
+    String? accessToken = await storage.read(key: 'accessToken');
+
+    if (accessToken != null) {
+      final response = await http.post(
+        Uri.parse('http://10.0.2.2:3000/getStack'),
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization': "Bearer " + accessToken,
+        },
+        body: jsonEncode(<String, dynamic>{
+          "stack_id": stackId
+        }),
+      );
+
+      if (response.statusCode == 200)
+      {
+        dynamic jsonResponse = json.decode(response.body);
+        return jsonResponse;
+
+      }else
+      {
+        throw http.ClientException('hat nicht geklappt. Statuscode: ${response.statusCode}');
+      }
+    }else
+    {
+
     }
   }
 }

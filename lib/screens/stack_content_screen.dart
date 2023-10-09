@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:memo_dex_prototyp/screens/add_card_screen.dart';
 import 'package:memo_dex_prototyp/screens/bottom_navigation_screen.dart';
+import 'package:memo_dex_prototyp/services/rest_services.dart';
 import 'package:memo_dex_prototyp/widgets/stack_content_btn.dart';
 
 import '../widgets/card_btn.dart';
@@ -7,13 +11,27 @@ import '../widgets/headline.dart';
 import '../widgets/top_navigation_bar.dart';
 
 class StackContentScreen extends StatefulWidget {
-  const StackContentScreen({Key? key}) : super(key: key);
+
+  final dynamic stackId;
+
+  const StackContentScreen({Key? key, this.stackId}) : super(key: key);
 
   @override
   State<StackContentScreen> createState() => _StackContentScreenState();
 }
 
 class _StackContentScreenState extends State<StackContentScreen> {
+
+
+
+  @override
+  void initState() {
+    super.initState();
+    loadStack();
+  }
+
+  String stackname = "";
+  String color = "";
 
   final List<Widget> startLearningButtons = [
     StackContentBtn(iconColor: "FFFFFF", btnText: "Chronologic", backgroundColor: "34A853"),
@@ -30,6 +48,33 @@ class _StackContentScreenState extends State<StackContentScreen> {
     CardBtn(btnText: "Capital of Germany?"),
     CardBtn(btnText: "Capital of Germany?"),
   ];
+
+  Future<void> loadStack() async {
+
+    try {
+      final stack  = await RestServices(context).getStack(widget.stackId);
+      print("Ausgabe:");
+      print(stack[0]["stackname"]);
+
+      setState(() {
+        stackname = stack[0]["stackname"];
+        color = stack[0]["color"];
+      });
+
+    } catch (error) {
+      print('Fehler beim Laden der Daten: $error');
+    }
+
+  }
+
+  void pushToAddCard(){
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => AddCardScreen(),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,9 +113,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           InkWell(
-                            onTap: () {
-                              // Aktion, die bei einem Klick auf das Icon ausgeführt wird
-                            },
+                            onTap: pushToAddCard,
                             child: Icon(
                               Icons.add_rounded,
                               size: 38.0,
@@ -98,7 +141,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
           Padding(
             padding: const EdgeInsets.fromLTRB(0.0 ,10,0,0),
             child: Headline(
-                text: "Computer Science"
+                text: stackname
             ),
           ),
           Padding(

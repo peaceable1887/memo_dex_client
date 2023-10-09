@@ -23,10 +23,10 @@ class _StackViewGridState extends State<StackViewGrid> {
   Future<void> loadStacks() async {
     try {
 
-      final stacksData = await RestServices(context).getStacks();
+      final stacksData = await RestServices(context).getAllStacks();
 
       for (var stack in stacksData) {
-        stackButtons.add(StackBtn(iconColor: stack['color'], stackName: stack['stackname']));
+        stackButtons.add(StackBtn(stackId: stack['stack_id'],iconColor: stack['color'], stackName: stack['stackname']));
       }
 
       stackButtons.add(CreateStackBtn());

@@ -3,10 +3,11 @@ import 'package:memo_dex_prototyp/screens/stack_content_screen.dart';
 
 class StackBtn extends StatefulWidget {
 
+  final dynamic stackId;
   final String iconColor;
   final String stackName;
 
-  const StackBtn({Key? key, required this.iconColor, required this.stackName}) : super(key: key);
+  const StackBtn({Key? key, required this.iconColor, required this.stackName, this.stackId}) : super(key: key);
 
   @override
   State<StackBtn> createState() => _StackBtnState();
@@ -18,7 +19,7 @@ class _StackBtnState extends State<StackBtn> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => StackContentScreen(),
+        builder: (context) => StackContentScreen(stackId: widget.stackId),
       ),
     );
   }
