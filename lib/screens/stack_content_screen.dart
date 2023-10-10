@@ -86,7 +86,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => EditStackScreen(stackId: widget.stackId),
+        builder: (context) => EditStackScreen(stackId: widget.stackId, stackname: stackname, color: color),
       ),
     );
   }

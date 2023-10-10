@@ -26,14 +26,14 @@ class ValidationMessageBox extends StatelessWidget {
                   Icon(
                     Icons.error_outline_rounded,
                     color: Colors.white,
-                    size: 95,
+                    size: 90,
                   ),
                   SizedBox(height: 0),
                   Text(
                     "Fehler!",
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 24,
+                      fontSize: 22,
                       fontFamily: "Inter",
                       fontWeight: FontWeight.w700,
                     ),

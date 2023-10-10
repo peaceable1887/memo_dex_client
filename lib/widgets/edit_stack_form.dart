@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:memo_dex_prototyp/screens/stack_content_screen.dart';
-import '../screens/bottom_navigation_screen.dart';
 import '../services/rest_services.dart';
 
 class EditStackForm extends StatefulWidget {
 
   final dynamic stackId;
+  final dynamic stackname;
+  final dynamic color;
 
-  const EditStackForm({Key? key, this.stackId}) : super(key: key);
+  const EditStackForm({Key? key, this.stackId, this.stackname, this.color}) : super(key: key);
 
   @override
   State<EditStackForm> createState() => _EditStackFormState();
@@ -16,14 +17,17 @@ class EditStackForm extends StatefulWidget {
 
 class _EditStackFormState extends State<EditStackForm> {
 
-  Color color = Colors.red;
+  late Color newColor;
   late TextEditingController _stackname;
   bool _isButtonEnabled = false;
 
   @override
   void initState() {
-    _stackname = TextEditingController();
+
+    _stackname = TextEditingController(text: widget.stackname);
     _stackname.addListener(updateButtonState);
+    newColor = Color(int.parse("0xFF${widget.color}"));
+    updateButtonState();
     super.initState();
   }
 
@@ -44,8 +48,8 @@ class _EditStackFormState extends State<EditStackForm> {
 
   Widget buildColorPicker(){
     return ColorPicker(
-      pickerColor: color,
-      onColorChanged: (color) => setState(() => this.color = color),
+      pickerColor: newColor,
+      onColorChanged: (color) => setState(() => this.newColor = color),
     );
   }
 
@@ -123,7 +127,7 @@ class _EditStackFormState extends State<EditStackForm> {
                 ),// Icon hinzufügen
                 enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(
-                    color: Color(0xFF8597A1),
+                    color: Colors.white,
                     width: 2.0,
                   ),
                   borderRadius: BorderRadius.all(Radius.circular(10.0)),
@@ -176,7 +180,7 @@ class _EditStackFormState extends State<EditStackForm> {
                         ),
                         SizedBox(width: 8),
                         Text(
-                          "#${color.value.toRadixString(16).substring(2)}",
+                          "#${newColor.value.toRadixString(16).substring(2)}",
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 16,
@@ -191,7 +195,7 @@ class _EditStackFormState extends State<EditStackForm> {
                       width: 22, // Ändern Sie die Breite nach Bedarf
                       height: 22, // Ändern Sie die Höhe nach Bedarf
                       decoration: BoxDecoration(
-                        color: color,
+                        color: newColor,
                         shape: BoxShape.circle,
                       ),
                     ),
@@ -225,7 +229,7 @@ class _EditStackFormState extends State<EditStackForm> {
                 onPressed: _isButtonEnabled
                     ? () {
                   setState(() {
-                    RestServices(context).updateStack(_stackname.text, "${color.value.toRadixString(16).substring(2)}", 0, widget.stackId);
+                    RestServices(context).updateStack(_stackname.text, "${newColor.value.toRadixString(16).substring(2)}", 0, widget.stackId);
                     Navigator.push(
                       context,
                       MaterialPageRoute(

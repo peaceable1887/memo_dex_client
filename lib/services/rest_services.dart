@@ -174,6 +174,7 @@ class RestServices{
       if (response.statusCode == 200)
       {
         dynamic jsonResponse = json.decode(response.body);
+        print("Alle Stacks");
         print(jsonResponse);
         return jsonResponse;
 
@@ -247,6 +248,38 @@ class RestServices{
           },
         );
         throw Exception('Failed to edit stack.');
+      }
+    }else {
+    }
+  }
+
+  Future<void> deleteStack(is_deleted, stackId) async {
+
+    String? accessToken = await storage.read(key: 'accessToken');
+
+    if (accessToken != null) {
+      final response = await http.post(
+        Uri.parse('http://10.0.2.2:3000/deleteStack'),
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization': "Bearer " + accessToken,
+        },
+        body: jsonEncode(<String, dynamic>{
+          "stack_id": stackId,
+          "is_deleted": is_deleted
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        print("Stack wurde gelöscht");
+      } else {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return ValidationMessageBox(message: "Stack konnte nicht gelöscht werden");
+          },
+        );
+        throw Exception('Failed to delete stack.');
       }
     }else {
     }
