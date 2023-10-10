@@ -218,6 +218,41 @@ class RestServices{
     }
   }
 
+  Future<void> updateStack(String stackname, String color, is_deleted, stackId) async {
+
+    String? accessToken = await storage.read(key: 'accessToken');
+
+    if (accessToken != null) {
+      final response = await http.post(
+        Uri.parse('http://10.0.2.2:3000/updateStack'),
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization': "Bearer " + accessToken,
+        },
+        body: jsonEncode(<String, dynamic>{
+          'stackname': stackname,
+          'color': color,
+          "is_deleted": is_deleted,
+          "stack_id": stackId
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        print("Stack wurde bearbeitet");
+      } else {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return ValidationMessageBox(message: "Stack konnte nicht bearbeitet werden");
+          },
+        );
+        throw Exception('Failed to edit stack.');
+      }
+    }else {
+    }
+  }
+
+
   Future<void> addCard(String question, String answer, stackId) async {
 
     String? accessToken = await storage.read(key: 'accessToken');

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:memo_dex_prototyp/screens/add_card_screen.dart';
 import 'package:memo_dex_prototyp/screens/bottom_navigation_screen.dart';
+import 'package:memo_dex_prototyp/screens/edit_stack_screen.dart';
 import 'package:memo_dex_prototyp/services/rest_services.dart';
 import 'package:memo_dex_prototyp/widgets/stack_content_btn.dart';
 
@@ -47,7 +48,6 @@ class _StackContentScreenState extends State<StackContentScreen> {
       for (var card in cardsData) {
         cards.add(CardBtn(btnText: card["question"]));
       }
-
       // Widget wird aktualisiert nnach dem Laden der Daten.
       if (mounted) {
         setState(() {});
@@ -62,10 +62,6 @@ class _StackContentScreenState extends State<StackContentScreen> {
     try {
 
       final stack  = await RestServices(context).getStack(widget.stackId);
-      print("Ausgabe:");
-      print(stack[0]["stackname"]);
-      print(stack[0]["stack_id"]);
-
 
       setState(() {
         stackname = stack[0]["stackname"];
@@ -77,12 +73,20 @@ class _StackContentScreenState extends State<StackContentScreen> {
     }
 
   }
-
   void pushToAddCard(){
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => AddCardScreen(stackId: widget.stackId),
+      ),
+    );
+  }
+
+  void pushToEditStack(){
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditStackScreen(stackId: widget.stackId),
       ),
     );
   }
@@ -132,9 +136,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
                             ), // Icon als klickbares Element
                           ),
                           InkWell(
-                            onTap: () {
-                              // Aktion, die bei einem Klick auf das Icon ausgeführt wird
-                            },
+                            onTap: pushToEditStack,
                             child: Icon(
                               Icons.edit_outlined,
                               size: 30.0,

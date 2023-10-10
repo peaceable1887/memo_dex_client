@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:memo_dex_prototyp/screens/stack_content_screen.dart';
 import '../screens/bottom_navigation_screen.dart';
 import '../services/rest_services.dart';
 
-class CreateStackForm extends StatefulWidget {
-  const CreateStackForm({Key? key}) : super(key: key);
+class EditStackForm extends StatefulWidget {
+
+  final dynamic stackId;
+
+  const EditStackForm({Key? key, this.stackId}) : super(key: key);
 
   @override
-  State<CreateStackForm> createState() => _CreateStackFormState();
+  State<EditStackForm> createState() => _EditStackFormState();
 }
 
-class _CreateStackFormState extends State<CreateStackForm> {
+class _EditStackFormState extends State<EditStackForm> {
 
   Color color = Colors.red;
   late TextEditingController _stackname;
@@ -56,12 +60,12 @@ class _CreateStackFormState extends State<CreateStackForm> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                  "Select your Color",
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontFamily: "Inter",
-                    fontWeight: FontWeight.w600,
-                  ),
+                "Select your Color",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontFamily: "Inter",
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ],
           ),
@@ -201,53 +205,53 @@ class _CreateStackFormState extends State<CreateStackForm> {
             padding: const EdgeInsets.fromLTRB(0, 25, 0, 0),
             child: Container(
               child:
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: _isButtonEnabled
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: _isButtonEnabled
+                      ? Color(int.parse("0xFFE59113"))
+                      : Color(0xFF8597A1),
+                  minimumSize: Size(double.infinity, 55),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                  ),
+                  side: BorderSide(
+                    color: _isButtonEnabled
                         ? Color(int.parse("0xFFE59113"))
-                        : Color(0xFF8597A1),
-                    minimumSize: Size(double.infinity, 55),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                    ),
-                    side: BorderSide(
-                      color: _isButtonEnabled
-                          ? Color(int.parse("0xFFE59113"))
-                          : Color(0xFF8597A1), // Button-Rahmenfarbe ändern, wenn nicht aktiviert
-                      width: 2.0,
-                    ),
-                    elevation: 0,
+                        : Color(0xFF8597A1), // Button-Rahmenfarbe ändern, wenn nicht aktiviert
+                    width: 2.0,
                   ),
-                  onPressed: _isButtonEnabled
-                      ? () {
-                    setState(() {
-                      RestServices(context).createStack(_stackname.text, "${color.value.toRadixString(16).substring(2)}");
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => BottomNavigationScreen(),
-                        ),
-                      );
-                    });
-                  }
-                      : null, // deaktivert den Button, wenn nicht aktiviert
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Create Stack",
-                        style: TextStyle(
-                          color: _isButtonEnabled
-                              ? Color(int.parse("0xFF00324E"))
-                              : Color(0xFF8597A1), // Textfarbe ändern, wenn nicht aktiviert
-                          fontSize: 20,
-                          fontFamily: "Inter",
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ],
-                  ),
+                  elevation: 0,
                 ),
+                onPressed: _isButtonEnabled
+                    ? () {
+                  setState(() {
+                    RestServices(context).updateStack(_stackname.text, "${color.value.toRadixString(16).substring(2)}", 0, widget.stackId);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => StackContentScreen(stackId: widget.stackId),
+                      ),
+                    );
+                  });
+                }
+                    : null, // deaktivert den Button, wenn nicht aktiviert
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Update Stack",
+                      style: TextStyle(
+                        color: _isButtonEnabled
+                            ? Color(int.parse("0xFF00324E"))
+                            : Color(0xFF8597A1), // Textfarbe ändern, wenn nicht aktiviert
+                        fontSize: 20,
+                        fontFamily: "Inter",
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),// Container Login or Google Login
         ],
