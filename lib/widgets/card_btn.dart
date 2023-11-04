@@ -11,6 +11,15 @@ class CardBtn extends StatefulWidget {
 }
 
 class _CardBtnState extends State<CardBtn> {
+
+  String trimText(String text, int maxLength) {
+    if (text.length <= maxLength) {
+      return text;
+    } else {
+      return text.substring(0, maxLength) + "...";
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -37,7 +46,7 @@ class _CardBtnState extends State<CardBtn> {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(8.0,0,0,0),
                   child: Text(
-                    widget.btnText,
+                    trimText(widget.btnText, 25),
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 18,

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:memo_dex_prototyp/screens/add_card_screen.dart';
 import 'package:memo_dex_prototyp/screens/bottom_navigation_screen.dart';
+import 'package:memo_dex_prototyp/screens/card_learning_screen.dart';
 import 'package:memo_dex_prototyp/screens/edit_stack_screen.dart';
 import 'package:memo_dex_prototyp/services/rest_services.dart';
 import 'package:memo_dex_prototyp/widgets/stack_content_btn.dart';
@@ -28,15 +29,30 @@ class _StackContentScreenState extends State<StackContentScreen> {
     super.initState();
     loadStack();
     loadCards();
+    showButtons();
+  }
+
+  @override
+  void dispose() {
+    super.initState();
+    loadStack();
+    loadCards();
+    showButtons();
   }
 
   String stackname = "";
   String color = "";
 
-  final List<Widget> startLearningButtons = [
-    StackContentBtn(iconColor: "FFFFFF", btnText: "Chronologic", backgroundColor: "34A853"),
-    StackContentBtn(iconColor: "FFFFFF", btnText: "Mixed", backgroundColor: "E57435")
-  ];
+  List<Widget> showButtons()
+  {
+    List<Widget> startLearningButtons = [
+      StackContentBtn(iconColor: "FFFFFF", btnText: "Chronologic", backgroundColor: "34A853", onPressed: CardLearningScreen(stackId: widget.stackId)),
+      StackContentBtn(iconColor: "FFFFFF", btnText: "Mixed", backgroundColor: "E57435", onPressed: CardLearningScreen(stackId: widget.stackId))
+    ];
+
+    return startLearningButtons;
+  }
+
 
   final List<Widget> cards = [];
 
@@ -186,9 +202,9 @@ class _StackContentScreenState extends State<StackContentScreen> {
                     (MediaQuery.of(context).size.height / 2.3),
               ),
               itemBuilder: (context, index) {
-                return startLearningButtons[index];
+                return showButtons()[index];
               },
-              itemCount: startLearningButtons.length,
+              itemCount: showButtons().length,
             ),
           ),
           Padding(
@@ -223,11 +239,10 @@ class _StackContentScreenState extends State<StackContentScreen> {
               padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
               itemCount: cards.length,
               itemBuilder: (context, index) {
-                return cards[index];
+                  return cards[index];
               },
             ),
           ),
-
         ],
       ),
     );

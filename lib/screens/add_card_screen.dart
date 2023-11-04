@@ -83,164 +83,163 @@ class _AddCardScreenState extends State<AddCardScreen> {
                 text: "Add Card"
             ),
           ),
-          Flexible(
-            child: Container(
-              height: 650,
-              child: ListView(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(20,0,0,0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(
-                          "QUESTION",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontFamily: "Inter",
-                              fontWeight: FontWeight.w600
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 50, 20,0),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 0, 0, 8),
+                      child: TextFormField(
+                        controller: _question,
+                        maxLines: 3,
+                        minLines: 1,
+                        decoration: InputDecoration(
+                          labelText: "Question",
+                          labelStyle: TextStyle(
+                            color: Colors.white.withOpacity(0.50),
+                            fontSize: 16,
+                            fontFamily: "Inter",
+                            fontWeight: FontWeight.w600,
                           ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(20,10,20,0),
-                    child: TextFormField(
-                      controller: _question,
-                      keyboardType: TextInputType.multiline,
-                      minLines: 8,//Normal textInputField will be displayed
-                      maxLines: 8,
-                      decoration: InputDecoration(
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Color(0xFF8597A1),
-                            width: 2.0,
-                          ),
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Colors.white, // Ändern Sie hier die Farbe des Rahmens im Fokus
-                            width: 2.0,
-                          ),
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        ),
-                        filled: true,
-                        fillColor: Color(0xFF33363F),
-                      ),
-                      style: TextStyle(
-                        color: Colors.white, // Ändern Sie die Textfarbe auf Weiß
-                        fontSize: 16,
-                        fontFamily: "Inter",
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(20,20,0,0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(
-                          "ANSWER",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontFamily: "Inter",
-                              fontWeight: FontWeight.w600
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(20,10,20,20),
-                    child: TextFormField(
-                      controller: _answer,
-                      keyboardType: TextInputType.multiline,
-                      minLines: 8,//Normal textInputField will be displayed
-                      maxLines: 8,
-                      decoration: InputDecoration(
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Color(0xFF8597A1),
-                            width: 2.0,
-                          ),
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Colors.white, // Ändern Sie hier die Farbe des Rahmens im Fokus
-                            width: 2.0,
-                          ),
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        ),
-                        filled: true,
-                        fillColor: Color(0xFF33363F),
-                      ),
-                      style: TextStyle(
-                        color: Colors.white, // Ändern Sie die Textfarbe auf Weiß
-                        fontSize: 16,
-                        fontFamily: "Inter",
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(20,25,20,0),
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(int.parse("0xFFE59113")),
-                        minimumSize: Size(double.infinity, 55),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                        ),
-                        side: BorderSide(
-                          color:  _isButtonEnabled
-                              ? Color(int.parse("0xFF00324E"))
-                              : Color(0xFF8597A1),
-                          width: 2.0,
-                        ),
-                        elevation: 0,
-                      ),
-                      onPressed: _isButtonEnabled
-                          ? () {
-                        setState(() {
-                          RestServices(context).addCard(_question.text, _answer.text, widget.stackId);
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => StackContentScreen(stackId: widget.stackId),
+                          prefixIcon: Icon(Icons.question_mark_rounded, color: Colors.white, size: 28,),
+                          suffixIcon: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _question.text = "";
+                              });
+                            },
+                            child: Icon(
+                              _question.text.isNotEmpty ? Icons.cancel : null,
+                              color: Colors.white.withOpacity(0.50),
                             ),
-                          );
-                        });
-                      }
-                          : null,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Add Card",
-                            style: TextStyle(
+                          ),// Icon hinzufügen
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Color(0xFF8597A1),
+                              width: 2.0,
+                            ),
+                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.white, // Ändern Sie hier die Farbe des Rahmens im Fokus
+                              width: 2.0,
+                            ),
+                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          ),
+                          filled: true,
+                          fillColor: Color(0xFF33363F),
+                        ),
+                        style: TextStyle(
+                          color: Colors.white, // Ändern Sie die Textfarbe auf Weiß
+                          fontSize: 16,
+                          fontFamily: "Inter",
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+                      child: TextFormField(
+                        controller: _answer,
+                        maxLines: 3,
+                        minLines: 1,
+                        decoration: InputDecoration(
+                          labelText: "Answer",
+                          labelStyle: TextStyle(
+                            color: Colors.white.withOpacity(0.50),
+                            fontSize: 16,
+                            fontFamily: "Inter",
+                            fontWeight: FontWeight.w600,
+                          ),
+                          prefixIcon: Icon(Icons.question_answer_outlined, color: Colors.white, size: 30,),
+                          suffixIcon: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _answer.text = "";
+                              });
+                            },
+                            child: Icon(
+                              _answer.text.isNotEmpty ? Icons.cancel : null,
+                              color: Colors.white.withOpacity(0.50),
+                            ),
+                          ),// Icon hinzufügen
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Color(0xFF8597A1),
+                              width: 2.0,
+                            ),
+                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.white, // Ändern Sie hier die Farbe des Rahmens im Fokus
+                              width: 2.0,
+                            ),
+                            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          ),
+                          filled: true,
+                          fillColor: Color(0xFF33363F),
+                        ),
+                        style: TextStyle(
+                          color: Colors.white, // Ändern Sie die Textfarbe auf Weiß
+                          fontSize: 16,
+                          fontFamily: "Inter",
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 25, 0, 0),
+                      child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Color(int.parse("0xFFE59113")),
+                            minimumSize: Size(double.infinity, 55),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(10)),
+                            ),
+                            side: BorderSide(
                               color:  _isButtonEnabled
                                   ? Color(int.parse("0xFF00324E"))
                                   : Color(0xFF8597A1),
-                              fontSize: 20,
-                              fontFamily: "Inter",
-                              fontWeight: FontWeight.w600,
+                              width: 2.0,
                             ),
+                            elevation: 0,
                           ),
-                        ],
-                      ),
+                          onPressed: _isButtonEnabled
+                              ? () {
+                            setState(() {
+                              RestServices(context).addCard(_question.text, _answer.text, widget.stackId);
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => StackContentScreen(stackId: widget.stackId),
+                                ),
+                              );
+                            });
+                          }
+                              : null,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Add Card",
+                                style: TextStyle(
+                                  color:  _isButtonEnabled
+                                      ? Color(int.parse("0xFF00324E"))
+                                      : Color(0xFF8597A1),
+                                  fontSize: 20,
+                                  fontFamily: "Inter",
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ),
-
         ],
       ),
     );
