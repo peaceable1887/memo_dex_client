@@ -40,6 +40,7 @@ class LoginScreen extends StatelessWidget {
               ),
             ),
             TopNavigationBar(
+              btnText: "",
               onPressed: () {
                 Navigator.push(
                   context,

@@ -27,8 +27,11 @@ class _CreateStackScreenState extends State<CreateStackScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Headline(
-                          text: "Create Stack"
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0,10,0,0),
+                        child: Headline(
+                            text: "Create Stack"
+                        ),
                       ),
                     ],
                   ),
@@ -40,6 +43,7 @@ class _CreateStackScreenState extends State<CreateStackScreen> {
             ),
           ),
           TopNavigationBar(
+            btnText: "Home",
             onPressed: () {
               Navigator.push(
                 context,

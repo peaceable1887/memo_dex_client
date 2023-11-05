@@ -52,6 +52,7 @@ class SignUpScreen extends StatelessWidget {
               ),
             ),
             TopNavigationBar(
+              btnText: "",
               onPressed: () {
                 Navigator.push(
                   context,

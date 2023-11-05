@@ -93,7 +93,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => AddCardScreen(stackId: widget.stackId),
+        builder: (context) => AddCardScreen(stackId: widget.stackId, stackname: stackname),
       ),
     );
   }
@@ -120,19 +120,19 @@ class _StackContentScreenState extends State<StackContentScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Container(
-                  width: 100,
-                  child: TopNavigationBar(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => BottomNavigationScreen(),
-                        ),
-                      );
-                    },
+                  Container(
+                    child: TopNavigationBar(
+                      btnText: "Home",
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => BottomNavigationScreen(),
+                          ),
+                        );
+                      },
+                    ),
                   ),
-                ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0,0,20,0),
                   child: Container(
@@ -168,7 +168,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(0.0 ,10,0,0),
+            padding: const EdgeInsets.fromLTRB(0,10,0,0),
             child: Headline(
                 text: stackname
             ),

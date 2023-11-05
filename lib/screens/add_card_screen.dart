@@ -8,8 +8,9 @@ import '../widgets/top_navigation_bar.dart';
 class AddCardScreen extends StatefulWidget {
 
   final dynamic stackId;
+  final String stackname;
 
-  const AddCardScreen({Key? key, this.stackId}) : super(key: key);
+  const AddCardScreen({Key? key, this.stackId, required this.stackname}) : super(key: key);
 
   @override
   State<AddCardScreen> createState() => _AddCardScreenState();
@@ -62,8 +63,8 @@ class _AddCardScreenState extends State<AddCardScreen> {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Container(
-                  width: 100,
                   child: TopNavigationBar(
+                    btnText: widget.stackname,
                     onPressed: () {
                       Navigator.push(
                         context,

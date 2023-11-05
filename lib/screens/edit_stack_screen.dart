@@ -41,8 +41,8 @@ class _EditStackScreenState extends State<EditStackScreen> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Container(
-                width: 100,
                 child: TopNavigationBar(
+                  btnText: widget.stackname,
                   onPressed: () {
                     Navigator.push(
                       context,

@@ -73,8 +73,8 @@ class _CardLearningScreenState extends State<CardLearningScreen> with TickerProv
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Container(
-                    width: 100,
                     child: TopNavigationBar(
+                      btnText: stackname,
                       onPressed: () {
                         Navigator.push(
                           context,

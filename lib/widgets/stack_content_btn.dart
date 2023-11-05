@@ -37,7 +37,7 @@ class _StackContentBtnState extends State<StackContentBtn> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(
-            Icons.folder_outlined,
+            Icons.play_arrow_rounded,
             size: 95.0,
             color: Color(int.parse("0xFF${widget.iconColor}")),
           ),
