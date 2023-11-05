@@ -40,7 +40,7 @@ class _TopNavigationBarState extends State<TopNavigationBar> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
+      padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
       child: InkWell(
         onTap: widget.onPressed, // Füge hier die gewünschte Funktion hinzu
         child: Container(

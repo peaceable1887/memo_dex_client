@@ -134,7 +134,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
                     ),
                   ),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(0,0,20,0),
+                  padding: const EdgeInsets.fromLTRB(0,0,15,0),
                   child: Container(
                     width: 80,
                     child: Padding(

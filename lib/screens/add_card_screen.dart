@@ -64,7 +64,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
               children: [
                 Container(
                   child: TopNavigationBar(
-                    btnText: widget.stackname,
+                    btnText: "Back",
                     onPressed: () {
                       Navigator.push(
                         context,

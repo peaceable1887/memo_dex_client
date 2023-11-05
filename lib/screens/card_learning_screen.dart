@@ -74,7 +74,7 @@ class _CardLearningScreenState extends State<CardLearningScreen> with TickerProv
                 children: [
                   Container(
                     child: TopNavigationBar(
-                      btnText: stackname,
+                      btnText: "Back",
                       onPressed: () {
                         Navigator.push(
                           context,
