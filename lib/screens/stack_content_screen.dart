@@ -47,7 +47,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
   {
     List<Widget> startLearningButtons = [
       StackContentBtn(iconColor: "FFFFFF", btnText: "Chronologic", backgroundColor: "34A853", onPressed: CardLearningScreen(stackId: widget.stackId)),
-      StackContentBtn(iconColor: "FFFFFF", btnText: "Mixed", backgroundColor: "E57435", onPressed: CardLearningScreen(stackId: widget.stackId))
+      StackContentBtn(iconColor: "FFFFFF", btnText: "Mixed", backgroundColor: "E57435", onPressed: CardLearningScreen(stackId: widget.stackId, isMixed: true))
     ];
 
     return startLearningButtons;

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:memo_dex_prototyp/screens/stack_content_screen.dart';
 import 'package:carousel_slider/carousel_slider.dart'; // https://pub.dev/packages/carousel_slider
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../services/rest_services.dart';
 import '../widgets/headline.dart';
@@ -11,8 +10,9 @@ import '../widgets/top_navigation_bar.dart';
 class CardLearningScreen extends StatefulWidget {
 
   final dynamic stackId;
+  final bool? isMixed;
 
-  const CardLearningScreen({Key? key, this.stackId}) : super(key: key);
+  const CardLearningScreen({Key? key, this.stackId, this.isMixed}) : super(key: key);
 
   @override
   State<CardLearningScreen> createState() => _CardLearningScreenState();
@@ -22,8 +22,7 @@ class _CardLearningScreenState extends State<CardLearningScreen> with TickerProv
 
   late AnimationController controller;
   int activeIndex = 0;
-  final indexCards = [
-  ];
+  final List<dynamic> indexCards = [];
 
   @override
   void initState() {
@@ -61,6 +60,10 @@ class _CardLearningScreenState extends State<CardLearningScreen> with TickerProv
       for (var card in cardsData) {
         indexCards.add(LearningCard(question: card["question"], answer: card["answer"],));
       }
+      if(widget.isMixed == true)
+      {
+        indexCards.shuffle();
+      }else{}
       // Widget wird aktualisiert nnach dem Laden der Daten.
       if (mounted) {
         setState(() {});
@@ -199,7 +202,7 @@ class _CardLearningScreenState extends State<CardLearningScreen> with TickerProv
               ),
             ),
             CarouselSlider.builder(
-                itemCount: indexCards.length,
+              itemCount: indexCards.length,
                 itemBuilder: (context, index, realIndex){
                   final indexCard = indexCards[index];
 
