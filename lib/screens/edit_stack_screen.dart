@@ -40,17 +40,20 @@ class _EditStackScreenState extends State<EditStackScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Container(
-                child: TopNavigationBar(
-                  btnText: "Back",
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => StackContentScreen(stackId: widget.stackId),
-                      ),
-                    );
-                  },
+              WillPopScope(
+                onWillPop: () async => false,
+                child: Container(
+                  child: TopNavigationBar(
+                    btnText: "Back",
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => StackContentScreen(stackId: widget.stackId),
+                        ),
+                      );
+                    },
+                  ),
                 ),
               ),
               Padding(

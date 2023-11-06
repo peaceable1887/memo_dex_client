@@ -42,16 +42,19 @@ class _CreateStackScreenState extends State<CreateStackScreen> {
               ],
             ),
           ),
-          TopNavigationBar(
-            btnText: "Home",
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => BottomNavigationScreen(),
-                ),
-              );
-            },
+          WillPopScope(
+          onWillPop: () async => false,
+          child:TopNavigationBar(
+              btnText: "Home",
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => BottomNavigationScreen(),
+                  ),
+                );
+              },
+            ),
           ),
         ],
       ),

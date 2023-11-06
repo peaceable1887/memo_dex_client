@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:memo_dex_prototyp/screens/stack_content_screen.dart';
 import 'package:carousel_slider/carousel_slider.dart'; // https://pub.dev/packages/carousel_slider
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../services/rest_services.dart';
 import '../widgets/headline.dart';
@@ -20,27 +21,21 @@ class CardLearningScreen extends StatefulWidget {
 class _CardLearningScreenState extends State<CardLearningScreen> with TickerProviderStateMixin{
 
   late AnimationController controller;
+  int activeIndex = 0;
+  final indexCards = [
+  ];
 
   @override
   void initState() {
     loadStack();
-    controller = AnimationController(
-      /// [AnimationController]s can be created with `vsync: this` because of
-      /// [TickerProviderStateMixin].
-      vsync: this,
-      duration: const Duration(seconds: 5),
-    )..addListener(() {
-      setState(() {});
-    });
-    controller.forward();
-    /*controller.repeat();*/
+    loadCards();
     super.initState();
   }
 
   @override
   void dispose() {
     loadStack();
-    controller.dispose();
+    loadCards();
     super.dispose();
   }
 
@@ -59,6 +54,27 @@ class _CardLearningScreenState extends State<CardLearningScreen> with TickerProv
     }
   }
 
+  Future<void> loadCards() async {
+    try {
+      final cardsData = await RestServices(context).getAllCards(widget.stackId);
+
+      for (var card in cardsData) {
+        indexCards.add(LearningCard(question: card["question"], answer: card["answer"],));
+      }
+      // Widget wird aktualisiert nnach dem Laden der Daten.
+      if (mounted) {
+        setState(() {});
+      }
+    } catch (error) {
+      print('Fehler beim Laden der Daten: $error');
+    }
+  }
+
+  Widget buildIndexCard(Widget indexCard, int index) => Container(
+    margin: EdgeInsets.symmetric(horizontal: 12),
+    child: indexCard,
+  );
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -72,17 +88,20 @@ class _CardLearningScreenState extends State<CardLearningScreen> with TickerProv
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Container(
-                    child: TopNavigationBar(
-                      btnText: "Back",
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => StackContentScreen(stackId: widget.stackId),
-                          ),
-                        );
-                      },
+                  WillPopScope(
+                    onWillPop: () async => false,
+                    child: Container(
+                      child: TopNavigationBar(
+                        btnText: "Back",
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => StackContentScreen(stackId: widget.stackId),
+                            ),
+                          );
+                        },
+                      ),
                     ),
                   ),
                   Padding(
@@ -92,8 +111,7 @@ class _CardLearningScreenState extends State<CardLearningScreen> with TickerProv
                       child: Padding(
                         padding: const EdgeInsets.fromLTRB(0,0,0,10),
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             InkWell(
                               onTap: () => {
@@ -101,14 +119,6 @@ class _CardLearningScreenState extends State<CardLearningScreen> with TickerProv
                               child: Icon(
                                 Icons.lightbulb_outline_rounded,
                                 size: 32.0,
-                                color: Colors.white,
-                              ), // Icon als klickbares Element
-                            ),
-                            InkWell(
-                              onTap: (){},
-                              child: Icon(
-                                Icons.edit_outlined,
-                                size: 30.0,
                                 color: Colors.white,
                               ), // Icon als klickbares Element
                             ),
@@ -138,8 +148,13 @@ class _CardLearningScreenState extends State<CardLearningScreen> with TickerProv
                         minHeight: 10,
                         backgroundColor: Colors.white,
                         color: Color(0xFFE59113),
-                        value: controller.value,
-                        semanticsLabel: 'Linear progress indicator',
+                        value: (() {
+                          double progressValue = (activeIndex + 1) / indexCards.length;
+                          if (progressValue.isNaN || progressValue.isInfinite) {
+                            progressValue = 0.0;
+                          }
+                          return progressValue;
+                        })(),
                       ),
                     ),
                   ),
@@ -150,7 +165,7 @@ class _CardLearningScreenState extends State<CardLearningScreen> with TickerProv
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           Text(
-                              "12",
+                            "${activeIndex + 1}",
                             style: TextStyle(
                               color: Color(0xFFE59113),
                               fontSize: 14,
@@ -168,7 +183,7 @@ class _CardLearningScreenState extends State<CardLearningScreen> with TickerProv
                             ),
                           ),
                           Text(
-                              "30",
+                              "${indexCards.length}",
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 14,
@@ -183,9 +198,23 @@ class _CardLearningScreenState extends State<CardLearningScreen> with TickerProv
                 ],
               ),
             ),
-            LearningCard(),
+            CarouselSlider.builder(
+                itemCount: indexCards.length,
+                itemBuilder: (context, index, realIndex){
+                  final indexCard = indexCards[index];
+
+                  return buildIndexCard(indexCard, index);
+                },
+                options: CarouselOptions( //hier kann man die eigenschaften des slider manipulieren
+                  height: 500,
+                  enableInfiniteScroll: false,
+                  autoPlayInterval: Duration(seconds: 1),
+                  onPageChanged: (index, reason) => setState(() => activeIndex = index),
+                ),
+            ),
           ],
         ),
     );
+
   }
 }

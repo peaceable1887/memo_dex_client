@@ -3,7 +3,11 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 class LearningCard extends StatefulWidget {
-  const LearningCard({Key? key}) : super(key: key);
+
+  final String question;
+  final String answer;
+
+  const LearningCard({Key? key, required this.question, required this.answer}) : super(key: key);
 
   @override
   State<LearningCard> createState() => _LearningCardState();
@@ -42,7 +46,7 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
           Transform(
             alignment: FractionalOffset.center, //flip in der mitte der karte
             transform: Matrix4.identity()
-              ..setEntry(3, 2, 0.0015)
+              ..setEntry(3, 2, 0.0010)
               ..rotateY((animation.value < 0.5) ? pi * animation.value : (pi * ( 1+ animation.value))), //nochmal ansehen wie genau der Teil funktioniert
             child: Card(
               color: Colors.transparent,
@@ -82,7 +86,7 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
                             child: Padding(
                               padding: EdgeInsets.fromLTRB(25, 0, 25, 0),
                               child: Text(
-                                "Fundamentals on Computer Science ?",
+                                widget.question,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   color: Colors.black,
@@ -144,7 +148,7 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
                           child: Padding(
                             padding: EdgeInsets.fromLTRB(25, 0, 25, 0),
                             child: Text(
-                              "Theory and algorithms, hardware systems, and software systems",
+                              widget.answer,
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: Colors.black,

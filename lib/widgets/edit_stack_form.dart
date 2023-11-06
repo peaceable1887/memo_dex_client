@@ -45,11 +45,17 @@ class _EditStackFormState extends State<EditStackForm> {
       }
     });
   }
-
   Widget buildColorPicker(){
-    return ColorPicker(
-      pickerColor: newColor,
-      onColorChanged: (color) => setState(() => this.newColor = color),
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: Colors.white,
+      ),
+      padding: EdgeInsets.all(10),
+      child: BlockPicker(
+        pickerColor: newColor,
+        onColorChanged: (color) => setState(() => this.newColor = color),
+      ),
     );
   }
 
@@ -57,18 +63,23 @@ class _EditStackFormState extends State<EditStackForm> {
     showDialog(
         context: context,
         builder: (context) => AlertDialog(
+          backgroundColor: Color(0xFF00324E),
           shape: RoundedRectangleBorder(
-              borderRadius:
-              BorderRadius.circular(10.0)),
+              side: BorderSide(color: Colors.white, width: 2),
+              borderRadius: BorderRadius.circular(10.0)),
           title: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                "Select your Color",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontFamily: "Inter",
-                  fontWeight: FontWeight.w600,
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                child: Text(
+                  "Select a Color",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 26,
+                    fontFamily: "Inter",
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
             ],
@@ -76,18 +87,32 @@ class _EditStackFormState extends State<EditStackForm> {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+
               buildColorPicker(),
-              TextButton(
-                child: Text(
-                  "SELECT",
-                  style: TextStyle(
-                    color: Color(0xFF00324E),
-                    fontSize: 20,
-                    fontFamily: "Inter",
-                    fontWeight: FontWeight.w600,
+
+              Container(
+                padding: EdgeInsets.fromLTRB(0, 30, 0, 0),
+                child: TextButton(
+                  style: TextButton.styleFrom(
+                    fixedSize: const Size(300, 50),
+                    backgroundColor: Color(0xFFE59113),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(10),
+                      ),
+                    ),
                   ),
+                  child: Text(
+                    "Select",
+                    style: TextStyle(
+                      color: Color(0xFF00324E),
+                      fontSize: 20,
+                      fontFamily: "Inter",
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  onPressed: () => Navigator.of(context).pop(),
                 ),
-                onPressed: () => Navigator.of(context).pop(),
               ),
             ],
           ),

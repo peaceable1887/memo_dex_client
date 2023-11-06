@@ -120,7 +120,9 @@ class _StackContentScreenState extends State<StackContentScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                  Container(
+                WillPopScope(
+                onWillPop: () async => false,
+                child: Container(
                     child: TopNavigationBar(
                       btnText: "Home",
                       onPressed: () {
@@ -133,6 +135,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
                       },
                     ),
                   ),
+                ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0,0,15,0),
                   child: Container(
