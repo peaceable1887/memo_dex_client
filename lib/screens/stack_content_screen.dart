@@ -24,70 +24,60 @@ class StackContentScreen extends StatefulWidget {
 
 class _StackContentScreenState extends State<StackContentScreen> {
 
-  @override
-  void initState() {
-    super.initState();
-    loadStack();
-    loadCards();
-    showButtons();
-  }
-
-  @override
-  void dispose() {
-    super.initState();
-    loadStack();
-    loadCards();
-    showButtons();
-  }
-
   String stackname = "";
   String color = "";
+  final List<Widget> cards = [];
 
   List<Widget> showButtons()
   {
     List<Widget> startLearningButtons = [
-      StackContentBtn(iconColor: "FFFFFF", btnText: "Chronologic", backgroundColor: "34A853", onPressed: CardLearningScreen(stackId: widget.stackId)),
-      StackContentBtn(iconColor: "FFFFFF", btnText: "Mixed", backgroundColor: "E57435", onPressed: CardLearningScreen(stackId: widget.stackId, isMixed: true))
+      StackContentBtn(
+          iconColor: "FFFFFF",
+          btnText: "Chronological",
+          backgroundColor: "34A853",
+          onPressed: CardLearningScreen(stackId: widget.stackId),
+          icon: Icons.play_arrow_rounded
+      ),
+      StackContentBtn(
+          iconColor: "FFFFFF",
+          btnText: "Shuffled",
+          backgroundColor: "E57435",
+          onPressed: CardLearningScreen(stackId: widget.stackId, isMixed: true),
+          icon: Icons.shuffle_rounded
+      )
     ];
 
     return startLearningButtons;
   }
 
-
-  final List<Widget> cards = [];
-
-  Future<void> loadCards() async {
-    try {
-
+  Future<void> loadCards() async{
+    try{
       final cardsData = await RestServices(context).getAllCards(widget.stackId);
 
-      for (var card in cardsData) {
+      for(var card in cardsData){
         cards.add(CardBtn(btnText: card["question"]));
       }
       // Widget wird aktualisiert nnach dem Laden der Daten.
-      if (mounted) {
+      if(mounted){
         setState(() {});
       }
-    } catch (error) {
+    }catch(error){
       print('Fehler beim Laden der Daten: $error');
     }
   }
 
-  Future<void> loadStack() async {
-
-    try {
-
+  Future<void> loadStack() async{
+    try{
       final stack  = await RestServices(context).getStack(widget.stackId);
 
-      setState(() {
+      setState((){
         stackname = stack[0]["stackname"];
         color = stack[0]["color"];
       });
 
-    } catch (error) {
+    }catch (error){
       print('Fehler beim Laden der Daten: $error');
     }
-
   }
   void pushToAddCard(){
     Navigator.push(
@@ -105,6 +95,22 @@ class _StackContentScreenState extends State<StackContentScreen> {
         builder: (context) => EditStackScreen(stackId: widget.stackId, stackname: stackname, color: color),
       ),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    loadStack();
+    loadCards();
+    showButtons();
+  }
+
+  @override
+  void dispose() {
+    super.initState();
+    loadStack();
+    loadCards();
+    showButtons();
   }
 
   @override

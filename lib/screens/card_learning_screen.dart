@@ -23,6 +23,7 @@ class _CardLearningScreenState extends State<CardLearningScreen> with TickerProv
   late AnimationController controller;
   int activeIndex = 0;
   final List<dynamic> indexCards = [];
+  bool emptyCards = false;
 
   @override
   void initState() {
@@ -155,6 +156,7 @@ class _CardLearningScreenState extends State<CardLearningScreen> with TickerProv
                           double progressValue = (activeIndex + 1) / indexCards.length;
                           if (progressValue.isNaN || progressValue.isInfinite) {
                             progressValue = 0.0;
+                            emptyCards = true;
                           }
                           return progressValue;
                         })(),

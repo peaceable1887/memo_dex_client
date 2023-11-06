@@ -120,9 +120,11 @@ class _CreateStackFormState extends State<CreateStackForm> {
           Padding(
             padding: const EdgeInsets.fromLTRB(0, 0, 0, 8),
             child: TextFormField(
+              maxLength: 100,
               controller: _stackname,
               decoration: InputDecoration(
                 labelText: "Stackname",
+                counterText: "",
                 labelStyle: TextStyle(
                   color: Colors.white.withOpacity(0.50),
                   fontSize: 16,

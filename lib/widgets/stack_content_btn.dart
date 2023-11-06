@@ -6,8 +6,9 @@ class StackContentBtn extends StatefulWidget {
   final String backgroundColor;
   final String btnText;
   final Widget onPressed;
+  final IconData icon;
 
-  const StackContentBtn({Key? key, required this.iconColor, required this.btnText, required this.backgroundColor, required this.onPressed}) : super(key: key);
+  const StackContentBtn({Key? key, required this.iconColor, required this.btnText, required this.backgroundColor, required this.onPressed, required this.icon}) : super(key: key);
 
   @override
   State<StackContentBtn> createState() => _StackContentBtnState();
@@ -37,7 +38,7 @@ class _StackContentBtnState extends State<StackContentBtn> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(
-            Icons.play_arrow_rounded,
+            widget.icon,
             size: 95.0,
             color: Color(int.parse("0xFF${widget.iconColor}")),
           ),
