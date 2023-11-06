@@ -34,6 +34,35 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
       });
   }
 
+  Widget showText(String text)
+  {
+    if(text.length >= 200)
+    {
+      return Text(
+        text,
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          color: Colors.black,
+          fontSize: 14,
+          fontFamily: "Inter",
+          fontWeight: FontWeight.w500,
+        ),
+      );
+    }
+    {
+      return Text(
+        text,
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          color: Colors.black,
+          fontSize: 17,
+          fontFamily: "Inter",
+          fontWeight: FontWeight.w500,
+          ),
+        );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -85,16 +114,7 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
                           child: Center(
                             child: Padding(
                               padding: EdgeInsets.fromLTRB(25, 0, 25, 0),
-                              child: Text(
-                                widget.question,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 17,
-                                  fontFamily: "Inter",
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
+                              child: showText(widget.question)
                             ),
                           ),
                         ),
@@ -147,16 +167,7 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
                         child: Center(
                           child: Padding(
                             padding: EdgeInsets.fromLTRB(25, 0, 25, 0),
-                            child: Text(
-                              widget.answer,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 17,
-                                fontFamily: "Inter",
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
+                            child: showText(widget.answer)
                           ),
                         ),
                       ),

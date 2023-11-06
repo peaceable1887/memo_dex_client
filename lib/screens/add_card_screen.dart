@@ -94,11 +94,13 @@ class _AddCardScreenState extends State<AddCardScreen> {
                     Padding(
                       padding: const EdgeInsets.fromLTRB(0, 0, 0, 8),
                       child: TextFormField(
+                        maxLength: 800,
                         controller: _question,
                         maxLines: 3,
                         minLines: 1,
                         decoration: InputDecoration(
                           labelText: "Question",
+                          counterText: "",
                           labelStyle: TextStyle(
                             color: Colors.white.withOpacity(0.50),
                             fontSize: 16,
@@ -145,11 +147,13 @@ class _AddCardScreenState extends State<AddCardScreen> {
                     Padding(
                       padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
                       child: TextFormField(
+                        maxLength: 800,
                         controller: _answer,
                         maxLines: 3,
                         minLines: 1,
                         decoration: InputDecoration(
                           labelText: "Answer",
+                          counterText: "",
                           labelStyle: TextStyle(
                             color: Colors.white.withOpacity(0.50),
                             fontSize: 16,
