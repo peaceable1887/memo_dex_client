@@ -353,5 +353,72 @@ class RestServices{
     }
   }
 
+  Future<dynamic> getCard(cardId) async {
+
+    String? accessToken = await storage.read(key: 'accessToken');
+
+    if (accessToken != null) {
+      final response = await http.post(
+        Uri.parse('http://10.0.2.2:3000/getCard'),
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization': "Bearer " + accessToken,
+        },
+        body: jsonEncode(<String, dynamic>{
+          "card_id": cardId
+        }),
+      );
+
+      if (response.statusCode == 200)
+      {
+        dynamic jsonResponse = json.decode(response.body);
+        print(jsonResponse);
+        return jsonResponse;
+
+      }else
+      {
+        throw http.ClientException('hat nicht geklappt. Statuscode: ${response.statusCode}');
+      }
+    }else
+    {
+
+    }
+  }
+
+  Future<void> updateCard(String question, String answer, is_deleted, remember, cardId) async {
+
+    String? accessToken = await storage.read(key: 'accessToken');
+
+    if (accessToken != null) {
+      final response = await http.post(
+        Uri.parse('http://10.0.2.2:3000/updateCard'),
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization': "Bearer " + accessToken,
+        },
+        body: jsonEncode(<String, dynamic>{
+          "card_id": cardId,
+          "question": question,
+          "answer": answer,
+          "is_deleted": is_deleted,
+          "remember": remember
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        print("Karte wurde bearbeitet");
+      } else {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return ValidationMessageBox(message: "Karte konnte nicht bearbeitet werden");
+          },
+        );
+        throw Exception('Failed to edit stack.');
+      }
+    }else {
+    }
+  }
+
 }
 

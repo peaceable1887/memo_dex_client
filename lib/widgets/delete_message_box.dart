@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:memo_dex_prototyp/services/rest_services.dart';
-
-import '../screens/bottom_navigation_screen.dart';
 
 class DeleteMessageBox extends StatefulWidget {
 
-  final dynamic stackId;
+  final Future<void> Function() onDelete;
+  final String boxMessage;
 
-  const DeleteMessageBox({Key? key, this.stackId}) : super(key: key);
+  const DeleteMessageBox({Key? key, required this.onDelete, required this.boxMessage}) : super(key: key);
 
   @override
   State<DeleteMessageBox> createState() => _DeleteMessageBoxState();
@@ -55,7 +53,7 @@ class _DeleteMessageBoxState extends State<DeleteMessageBox> {
             Padding(
               padding: const EdgeInsets.fromLTRB(8,0,8,0),
               child: Text(
-                "Möchtest du den Stapel wirklich löschen?",
+                widget.boxMessage,
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 15,
@@ -79,15 +77,8 @@ class _DeleteMessageBoxState extends State<DeleteMessageBox> {
                   Container(
                     width: 130,
                     child: TextButton(
-                      onPressed: () {
-                        RestServices(context).deleteStack(1, widget.stackId);
-                        Navigator.of(context).pop();
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => BottomNavigationScreen(),
-                          ),
-                        );
+                      onPressed: () async {
+                        await widget.onDelete();
                       },
                       style: TextButton.styleFrom(
                         backgroundColor: Colors.white,
@@ -107,11 +98,8 @@ class _DeleteMessageBoxState extends State<DeleteMessageBox> {
                     width: 130,
                     child: TextButton(
                       onPressed: () {
-                        Navigator.of(context).pop();
+                        Navigator.of(context).pop(); // Schließe das Dialogfenster
                       },
-                      style: TextButton.styleFrom(
-                        backgroundColor: Colors.white,
-                      ),
                       child: Text(
                         'ABBRECHEN',
                         style: TextStyle(

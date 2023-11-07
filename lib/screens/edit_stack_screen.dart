@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:memo_dex_prototyp/screens/bottom_navigation_screen.dart';
 import 'package:memo_dex_prototyp/screens/stack_content_screen.dart';
+import '../services/rest_services.dart';
 import '../widgets/create_stack_form.dart';
 import '../widgets/delete_message_box.dart';
 import '../widgets/edit_stack_form.dart';
@@ -21,12 +22,23 @@ class EditStackScreen extends StatefulWidget {
 
 class _EditStackScreenState extends State<EditStackScreen> {
 
-  void showDeleteMessageBox(){
-      showDialog(
-          context: context,
-          builder: (BuildContext context) {
-        return DeleteMessageBox(stackId: widget.stackId);
-      }
+  void showDeleteMessageBox() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return DeleteMessageBox(
+          onDelete: () async {
+            await RestServices(context).deleteStack(1, widget.stackId);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => BottomNavigationScreen(),
+              ),
+            );
+          },
+          boxMessage: "Möchtest du den Stapel wirklich löschen?",
+        );
+      },
     );
   }
 
@@ -90,7 +102,6 @@ class _EditStackScreenState extends State<EditStackScreen> {
               ],
             ),
           ),
-
         ],
       ),
     );

@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:memo_dex_prototyp/screens/single_card_screen.dart';
 
 class CardBtn extends StatefulWidget {
 
+  final dynamic stackId;
+  final dynamic cardId;
   final String btnText;
 
-  const CardBtn({Key? key, required this.btnText}) : super(key: key);
+  const CardBtn({Key? key, required this.btnText, this.stackId, this.cardId}) : super(key: key);
 
   @override
   State<CardBtn> createState() => _CardBtnState();
@@ -20,12 +23,23 @@ class _CardBtnState extends State<CardBtn> {
     }
   }
 
+
+  void pushToCardContent(){
+    print(widget.stackId);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => SingleCardScreen(stackId: widget.stackId, cardId: widget.cardId,),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0,0,0,15),
       child: ElevatedButton(
-        onPressed: (){},
+        onPressed: pushToCardContent,
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.white,
           shape: RoundedRectangleBorder(

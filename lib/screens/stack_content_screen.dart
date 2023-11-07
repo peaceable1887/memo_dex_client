@@ -26,6 +26,8 @@ class _StackContentScreenState extends State<StackContentScreen> {
 
   String stackname = "";
   String color = "";
+  dynamic cardId;
+
   final List<Widget> cards = [];
 
   List<Widget> showButtons()
@@ -50,22 +52,6 @@ class _StackContentScreenState extends State<StackContentScreen> {
     return startLearningButtons;
   }
 
-  Future<void> loadCards() async{
-    try{
-      final cardsData = await RestServices(context).getAllCards(widget.stackId);
-
-      for(var card in cardsData){
-        cards.add(CardBtn(btnText: card["question"]));
-      }
-      // Widget wird aktualisiert nnach dem Laden der Daten.
-      if(mounted){
-        setState(() {});
-      }
-    }catch(error){
-      print('Fehler beim Laden der Daten: $error');
-    }
-  }
-
   Future<void> loadStack() async{
     try{
       final stack  = await RestServices(context).getStack(widget.stackId);
@@ -79,6 +65,26 @@ class _StackContentScreenState extends State<StackContentScreen> {
       print('Fehler beim Laden der Daten: $error');
     }
   }
+
+  Future<void> loadCards() async{
+    try{
+      final cardsData = await RestServices(context).getAllCards(widget.stackId);
+
+      for(var card in cardsData){
+        if(card['is_deleted'] == 0) {
+          cards.add(CardBtn(btnText: card["question"], stackId: widget.stackId, cardId: card["card_id"],));
+        }
+      }
+      // Widget wird aktualisiert nnach dem Laden der Daten.
+      if(mounted){
+        setState((){
+        });
+      }
+    }catch(error){
+      print('Fehler beim Laden der Daten: $error');
+    }
+  }
+
   void pushToAddCard(){
     Navigator.push(
       context,
@@ -164,7 +170,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
                             onTap: pushToEditStack,
                             child: Icon(
                               Icons.edit_outlined,
-                              size: 30.0,
+                              size: 32.0,
                               color: Colors.white,
                             ), // Icon als klickbares Element
                           ),

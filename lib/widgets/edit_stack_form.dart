@@ -152,7 +152,7 @@ class _EditStackFormState extends State<EditStackForm> {
                 ),// Icon hinzufügen
                 enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(
-                    color: Colors.white,
+                    color: Color(0xFF8597A1),
                     width: 2.0,
                   ),
                   borderRadius: BorderRadius.all(Radius.circular(10.0)),
@@ -187,7 +187,7 @@ class _EditStackFormState extends State<EditStackForm> {
                     borderRadius: BorderRadius.all(Radius.circular(10)),
                   ),
                   side: BorderSide(
-                    color: Colors.white,
+                    color: Color(0xFF8597A1),
                     width: 2.0,
                   ),
                   elevation: 0,

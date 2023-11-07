@@ -59,7 +59,10 @@ class _CardLearningScreenState extends State<CardLearningScreen> with TickerProv
       final cardsData = await RestServices(context).getAllCards(widget.stackId);
 
       for (var card in cardsData) {
-        indexCards.add(LearningCard(question: card["question"], answer: card["answer"],));
+        if(card["remember"] == 0 && card["is_deleted"] == 0)
+        {
+          indexCards.add(LearningCard(question: card["question"], answer: card["answer"],));
+        }
       }
       if(widget.isMixed == true)
       {
