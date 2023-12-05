@@ -50,26 +50,27 @@ class _CardBtnState extends State<CardBtn> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Row(
-              children: [
-                Icon(
-                  Icons.folder_outlined,
-                  size: 32.0,
-                  color: Color(0xFFE59113),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(8.0,0,0,0),
-                  child: Text(
-                    trimText(widget.btnText, 25),
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 18,
-                      fontFamily: "Inter",
-                      fontWeight: FontWeight.w600,
+            Padding(
+              padding: const EdgeInsets.fromLTRB(4, 0, 0, 0),
+              child: Row(
+                children: [
+                  Image(
+                    image: AssetImage("assets/images/card_btn_icon.png"),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(10,0,0,0),
+                    child: Text(
+                      trimText(widget.btnText, 25),
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 18,
+                        fontFamily: "Inter",
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
             Icon(
               Icons.arrow_forward_ios_rounded,

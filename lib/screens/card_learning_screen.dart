@@ -61,7 +61,7 @@ class _CardLearningScreenState extends State<CardLearningScreen> with TickerProv
       for (var card in cardsData) {
         if(card["remember"] == 0 && card["is_deleted"] == 0)
         {
-          indexCards.add(LearningCard(question: card["question"], answer: card["answer"],));
+          indexCards.add(LearningCard(question: card["question"], answer: card["answer"], cardIndex: card["card_id"]));
         }
       }
       if(widget.isMixed == true)
@@ -70,7 +70,9 @@ class _CardLearningScreenState extends State<CardLearningScreen> with TickerProv
       }else{}
       // Widget wird aktualisiert nnach dem Laden der Daten.
       if (mounted) {
-        setState(() {});
+        setState(() {
+
+        });
       }
     } catch (error) {
       print('Fehler beim Laden der Daten: $error');

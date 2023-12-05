@@ -61,7 +61,7 @@ class _SingleCardScreenState extends State<SingleCardScreen> {
 
       for (var card in cardsData) {
         indexCards.add(
-            LearningCard(question: card["question"], answer: card["answer"],));
+            LearningCard(question: card["question"], answer: card["answer"],cardIndex: card["card_id"],));
       }
 
       // Widget wird aktualisiert nnach dem Laden der Daten.

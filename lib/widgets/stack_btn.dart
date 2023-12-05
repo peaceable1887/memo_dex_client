@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:memo_dex_prototyp/screens/stack_content_screen.dart';
 
 class StackBtn extends StatefulWidget {
@@ -47,10 +48,13 @@ class _StackBtnState extends State<StackBtn> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            Icons.folder_outlined,
-            size: 95.0,
-            color: Color(int.parse("0xFF${widget.iconColor}")),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Icon(
+              CupertinoIcons.square_stack_3d_up_fill,
+              size: 85.0,
+              color: Color(int.parse("0xFF${widget.iconColor}")), // Ändere diese Farbe nach deinen Wünschen
+            ),
           ),
           Container(
             width: 150,

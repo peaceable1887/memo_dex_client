@@ -38,7 +38,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
           btnText: "Chronological",
           backgroundColor: "34A853",
           onPressed: CardLearningScreen(stackId: widget.stackId),
-          icon: Icons.play_arrow_rounded
+          icon: Icons.play_circle_outline_rounded
       ),
       StackContentBtn(
           iconColor: "FFFFFF",

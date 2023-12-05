@@ -4,10 +4,11 @@ import 'package:flutter/material.dart';
 
 class LearningCard extends StatefulWidget {
 
+  final int cardIndex;
   final String question;
   final String answer;
 
-  const LearningCard({Key? key, required this.question, required this.answer}) : super(key: key);
+  const LearningCard({Key? key, required this.question, required this.answer, required this.cardIndex}) : super(key: key);
 
   @override
   State<LearningCard> createState() => _LearningCardState();
