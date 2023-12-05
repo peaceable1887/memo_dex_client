@@ -1,1 +1,1 @@
-![](assets/images/Flyer -App - MemoDex.jpg)
+![](assets/images/Flyer%20-App%20-MemoDex.jpg)
