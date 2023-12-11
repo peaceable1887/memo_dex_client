@@ -133,6 +133,7 @@ class RestServices{
           'stackname': stackname,
           'color': color,
           "is_deleted": 0,
+          "creation_date": DateTime.now().toIso8601String(),
           "user_user_id": userId
         }),
       );
@@ -293,41 +294,6 @@ class RestServices{
         throw Exception('Failed to delete stack.');
       }
     }else {
-    }
-  }
-
-  Future<dynamic> sortStacksAlphabetically(sort) async {
-
-    String? accessToken = await storage.read(key: 'accessToken');
-    String? userId = await storage.read(key: 'user_id');
-
-    if (accessToken != null) {
-      final response = await http.post(
-        Uri.parse('http://10.0.2.2:3000/sortStacksAlphabetically'),
-        headers: <String, String>{
-          'Content-Type': 'application/json',
-          'Authorization': "Bearer " + accessToken,
-        },
-        body: jsonEncode(<String, dynamic>{
-          "user_id": userId,
-          "sort": sort
-        }),
-      );
-
-      if (response.statusCode == 200)
-      {
-        dynamic jsonResponse = json.decode(response.body);
-        print("Alle Stacks");
-        print(jsonResponse);
-        return jsonResponse;
-
-      }else
-      {
-        throw http.ClientException('hat nicht geklappt. Statuscode: ${response.statusCode}');
-      }
-    }else
-    {
-
     }
   }
 

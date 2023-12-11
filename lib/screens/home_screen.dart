@@ -14,7 +14,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
 
   String selectedOption = "ALL STACKS";
-  String sortValue = "ASC";
+  bool asc = false;
+
 
   @override
   void initState() {
@@ -49,14 +50,36 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      selectedOption,
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontFamily: "Inter",
-                          fontWeight: FontWeight.w600
-                      ),
+                    Row(
+                      children: [
+                        Text(
+                          selectedOption,
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontFamily: "Inter",
+                              fontWeight: FontWeight.w600
+                          ),
+                        ),
+                        InkWell(
+                          onTap: ()
+                          {
+                            setState(()
+                            {
+                              asc =! asc;
+                            });
+                          },
+                          child: asc == false ? Icon(
+                            Icons.arrow_downward_rounded,
+                            size: selectedOption == "ALL STACKS" ? 0.0 : 28.0,
+                            color: Color(0xFFE59113),
+                          ) : Icon(
+                            Icons.arrow_upward_rounded,
+                            size: selectedOption == "ALL STACKS" ? 0.0 : 28.0,
+                            color: Color(0xFFE59113),
+                          ),
+                        ),
+                      ],
                     ),
                     InkWell(
                       onTap: () {
@@ -70,19 +93,19 @@ class _HomeScreenState extends State<HomeScreen> {
                             PopupMenuItem(
                               onTap: (){
                                 setState(() {
-                                  sortValue = "DESC";
+                                  selectedOption = "STACKNAME";
                                 });
                               },
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    "Name",
+                                    "Stackname",
                                     style: TextStyle(
-                                      color: selectedOption == "name"
+                                      color: selectedOption == "STACKNAME"
                                           ? Color(0xFFE59113)
                                           : Colors.black,
-                                      fontWeight: selectedOption == "name"
+                                      fontWeight: selectedOption == "STACKNAME"
                                           ?  FontWeight.w600
                                           :  FontWeight.w400,
                                     ),
@@ -90,13 +113,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                   Icon(
                                     Icons.sort_by_alpha_rounded,
                                     size: 20.0,
-                                    color: selectedOption == "name"
+                                    color: selectedOption == "STACKNAME"
                                         ? Color(0xFFE59113)
                                         : Colors.black,
                                   ),
                                 ],
                               ),
-                              value: "name",
+                              value: "STACKNAME",
                             ),
                             PopupMenuItem(
                               child: Row(
@@ -105,10 +128,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                   Text(
                                     "Creation Date",
                                     style: TextStyle(
-                                      color: selectedOption == "date"
+                                      color: selectedOption == "CREATION DATE"
                                           ? Color(0xFFE59113)
                                           : Colors.black,
-                                      fontWeight: selectedOption == "date"
+                                      fontWeight: selectedOption == "CREATION DATE"
                                           ?  FontWeight.w600
                                           :  FontWeight.w400,
                                     ),
@@ -116,19 +139,19 @@ class _HomeScreenState extends State<HomeScreen> {
                                   Icon(
                                     Icons.date_range_rounded,
                                     size: 20.0,
-                                    color: selectedOption == "date"
+                                    color: selectedOption == "CREATION DATE"
                                         ? Color(0xFFE59113)
                                         : Colors.black,
                                   ),
                                 ],
                               ),
-                              value: "date",
+                              value: "CREATION DATE",
                             ),
-                            if (selectedOption == "name" || selectedOption == "date")
+                            if (selectedOption == "STACKNAME" || selectedOption == "CREATION DATE")
                               PopupMenuItem(
                                 onTap: (){
                                   setState(() {
-                                    sortValue = "";
+                                    selectedOption = "";
                                   });
                                 },
                                 child: Row(
@@ -143,7 +166,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ),
                                     ),
                                     Icon(
-                                      Icons.cancel,
+                                      Icons.refresh_rounded,
                                       size: 20.0,
                                       color: Colors.grey,
                                     ),
@@ -154,23 +177,32 @@ class _HomeScreenState extends State<HomeScreen> {
                           ],
                         ).then((value) {
                           setState(() {
+                            print(selectedOption);
                             selectedOption = value!;
                           });
                         });
                       },
-                      child: Icon(
-                        Icons.filter_alt,
-                        size: 32.0,
-                        color: selectedOption == "name" || selectedOption == "date"
-                            ? Color(0xFFE59113)
-                            : Colors.white,
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.filter_alt,
+                            size: 32.0,
+                            color: selectedOption == "STACKNAME" || selectedOption == "CREATION DATE"
+                                ? Color(0xFFE59113)
+                                : Colors.white,
+                            /*selectedOption == "STACKNAME" || selectedOption == "CREATION DATE"
+                                ? Icons.filter_alt : Icons.filter_alt_outlined,
+                            size: 32.0,
+                            color: Colors.white,*/
+                          ),
+                        ],
                       ),
                     ),
                   ],
                 ),
               ),
               Flexible(
-                child: StackViewGrid(sortValue: sortValue),
+                child: StackViewGrid(selectedOption: selectedOption, sortValue: asc,),
               ),
             ],
           ),
