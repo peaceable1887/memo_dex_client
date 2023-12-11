@@ -9,6 +9,7 @@ import 'package:memo_dex_prototyp/services/rest_services.dart';
 import 'package:memo_dex_prototyp/widgets/stack_content_btn.dart';
 
 import '../widgets/card_btn.dart';
+import '../widgets/filters/filter_cards.dart';
 import '../widgets/headline.dart';
 import '../widgets/top_navigation_bar.dart';
 
@@ -222,33 +223,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
               itemCount: showButtons().length,
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(20, 5, 20, 0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "ALL CARDS",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontFamily: "Inter",
-                      fontWeight: FontWeight.w600
-                  ),
-                ),
-                InkWell(
-                  onTap: () {
-                    // Aktion, die bei einem Klick auf das Icon ausgeführt wird
-                  },
-                  child: Icon(
-                    Icons.filter_alt,
-                    size: 32.0,
-                    color: Colors.white,
-                  ), // Icon als klickbares Element
-                )
-              ],
-            ),
-          ),
+          FilterCards(),
           Expanded(
             child: ListView.builder(
               padding: EdgeInsets.fromLTRB(20, 20, 20, 20),

@@ -1,45 +1,84 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:memo_dex_prototyp/services/rest_services.dart';
 import 'package:memo_dex_prototyp/widgets/create_stack_btn.dart';
 import 'package:memo_dex_prototyp/widgets/stack_btn.dart';
+import '../services/file_handler.dart';
 
 class StackViewGrid extends StatefulWidget {
-  StackViewGrid({Key? key}) : super(key: key);
+  final String? sortValue;
+
+  StackViewGrid({Key? key, this.sortValue}) : super(key: key);
 
   @override
   State<StackViewGrid> createState() => _StackViewGridState();
 }
 
 class _StackViewGridState extends State<StackViewGrid> {
-
-  final List<Widget> stackButtons = [];
+  List<Widget> stackButtons = [];
+  FileHandler fileHandler = FileHandler();
 
   @override
   void initState() {
     super.initState();
-    loadStacks();
+    loadStacks(widget.sortValue);
   }
 
-  Future<void> loadStacks() async {
-    try {
+  @override
+  void didUpdateWidget(covariant StackViewGrid oldWidget) {
+    if (oldWidget.sortValue != widget.sortValue) {
+      loadStacks(widget.sortValue);
+    }
+    super.didUpdateWidget(oldWidget);
+  }
 
+  Future<void> loadStacks(String? sortValue) async {
+    try
+    {
       final stacksData = await RestServices(context).getAllStacks();
 
-      for (var stack in stacksData) {
-        if(stack['is_deleted'] == 0){
-          stackButtons.add(StackBtn(stackId: stack['stack_id'],iconColor: stack['color'], stackName: stack['stackname']));
+      if(stacksData == null)
+      {
+        String fileContent = await fileHandler.readJsonFromLocalFile("allStacks");
+        // Überprüfe ob der Inhalt eine Liste ist
+        if (fileContent.isNotEmpty)
+        {
+          List<dynamic> stackFileContent = jsonDecode(fileContent);
+          print("------------------lokale daten----------------:");
+          for (var stack in stackFileContent)
+          {
+            if (stack['is_deleted'] == 0)
+            {
+              stackButtons.add(StackBtn(stackId: stack['stack_id'], iconColor: stack['color'], stackName: stack['stackname']));
+            }
+          }
+          stackButtons.add(CreateStackBtn());
         }
+      }else
+      {
+        for (var stack in stacksData)
+        {
+          if (stack['is_deleted'] == 0)
+          {
+            stackButtons.add(StackBtn(stackId: stack['stack_id'], iconColor: stack['color'], stackName: stack['stackname']));
+          }
+        }
+        stackButtons.add(CreateStackBtn());
       }
-
-      stackButtons.add(CreateStackBtn());
-
-      // Widget wird aktualisiert nnach dem Laden der Daten.
+      // Widget wird aktualisiert nach dem Laden der Daten.
       if (mounted) {
-        setState(() {});
+        setState((){});
       }
-    } catch (error) {
+    }catch (error)
+    {
       print('Fehler beim Laden der Daten: $error');
     }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    loadStacks(widget.sortValue);
   }
 
   @override

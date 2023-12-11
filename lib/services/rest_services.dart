@@ -1,14 +1,19 @@
+import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:memo_dex_prototyp/screens/bottom_navigation_screen.dart';
-import '../screens/home_screen.dart';
+import 'package:memo_dex_prototyp/services/check_internet_connection.dart';
+import 'package:path_provider/path_provider.dart';
 import '../widgets/validation_message_box.dart';
+import 'file_handler.dart';
 
 class RestServices{
   final BuildContext context;
   final storage = FlutterSecureStorage();
+  FileHandler fileHandler = FileHandler();
 
   RestServices(this.context);
 
@@ -49,8 +54,8 @@ class RestServices{
         'password': password,
       }),
     );
-    print("test");
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200)
+    {
       print("Erfolgreich eingeloggt");
       final Map<String, dynamic> data = json.decode(response.body); //nochmal genau ansehen was dieser teil macht
       print(data["accessToken"]);
@@ -75,7 +80,6 @@ class RestServices{
         },
       );
       throw http.ClientException('Failed to login1.');
-
     }
   }
 
@@ -89,22 +93,16 @@ class RestServices{
         headers: <String, String>{
           'Authorization': "Bearer " + accessToken,
         },
-
       );
-
       if (response.statusCode == 200) {
         print("hat funktioniert");
         final List<dynamic> dataList = json.decode(response.body);
-
         // Überprüfe, ob dataList eine Liste ist
         if (dataList is List) {
           // Iterieren Sie durch die Liste der Beiträge (jeder Beitrag ist eine Map)
           print("Ist eine Liste");
           for (Map<String, dynamic> postData in dataList) {
-            print("Beitrag:");
-            postData.forEach((key, value) {
-              print("Daten: ");
-              print("$key: $value");
+              postData.forEach((key, value) {
             });
           }
         } else {
@@ -115,7 +113,7 @@ class RestServices{
         throw http.ClientException('hat nicht geklappt. Statuscode: ${response.statusCode}');
       }
     } else {
-      // Wenn accessToken null ist, behandeln Sie diesen Fall.
+      print("Token existiert nicht!");
     }
   }
 
@@ -148,43 +146,56 @@ class RestServices{
             return ValidationMessageBox(message: "Stack konnte nicht erstellt werden");
           },
         );
-        throw Exception('Failed to create stack.');
+        throw Exception('Stack konnte nicht erstellt werden.');
       }
     }else {
     }
   }
 
-  Future<dynamic> getAllStacks() async {
-
+  Future<dynamic> getAllStacks() async
+  {
     String? accessToken = await storage.read(key: 'accessToken');
     String? userId = await storage.read(key: 'user_id');
 
-    if (accessToken != null) {
-      final response = await http.post(
-        Uri.parse('http://10.0.2.2:3000/getAllStacks'),
-        headers: <String, String>{
-          'Content-Type': 'application/json',
-          'Authorization': "Bearer " + accessToken,
-        },
-        body: jsonEncode(<String, dynamic>{
-          "user_id": userId
-        }),
-      );
-
-      if (response.statusCode == 200)
+    try{
+      if (accessToken != null)
       {
-        dynamic jsonResponse = json.decode(response.body);
-        print("Alle Stacks");
-        print(jsonResponse);
-        return jsonResponse;
+        final response = await http.post(
+          Uri.parse('http://10.0.2.2:3000/getAllStacks'),
+          headers: <String, String>
+          {
+            'Content-Type': 'application/json',
+            'Authorization': "Bearer " + accessToken,
+          },
+          body: jsonEncode(<String, dynamic>{"user_id": userId}),
+        ).timeout(Duration(seconds: 10));
+        if (response.statusCode == 200)
+        {
+          dynamic jsonResponse = json.decode(response.body);
+          // Daten werden zusätzlich lokal abgespeichert
+          await fileHandler.saveJsonToLocalFile(jsonResponse, "allStacks");
 
+          return jsonResponse;
+        }else
+        {
+          throw http.ClientException('hat nicht geklappt. Statuscode: ${response.statusCode}');
+        }
       }else
       {
-        throw http.ClientException('hat nicht geklappt. Statuscode: ${response.statusCode}');
+        print("Token existiert nicht!");
       }
-    }else
-    {
-
+    } on TimeoutException catch (e) {
+      // Timeout: Der Server ist wahrscheinlich nicht erreichbar
+      print('Zeitüberschreitung: $e');
+      return null;
+    } on http.ClientException catch (e) {
+      // Andere Clientfehler
+      print('Clientfehler: $e');
+      return null;
+    } catch (e) {
+      // Allgemeine Fehler
+      print('Allgemeiner Fehler: $e');
+      return null;
     }
   }
 
@@ -285,6 +296,40 @@ class RestServices{
     }
   }
 
+  Future<dynamic> sortStacksAlphabetically(sort) async {
+
+    String? accessToken = await storage.read(key: 'accessToken');
+    String? userId = await storage.read(key: 'user_id');
+
+    if (accessToken != null) {
+      final response = await http.post(
+        Uri.parse('http://10.0.2.2:3000/sortStacksAlphabetically'),
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization': "Bearer " + accessToken,
+        },
+        body: jsonEncode(<String, dynamic>{
+          "user_id": userId,
+          "sort": sort
+        }),
+      );
+
+      if (response.statusCode == 200)
+      {
+        dynamic jsonResponse = json.decode(response.body);
+        print("Alle Stacks");
+        print(jsonResponse);
+        return jsonResponse;
+
+      }else
+      {
+        throw http.ClientException('hat nicht geklappt. Statuscode: ${response.statusCode}');
+      }
+    }else
+    {
+
+    }
+  }
 
   Future<void> addCard(String question, String answer, stackId) async {
 
