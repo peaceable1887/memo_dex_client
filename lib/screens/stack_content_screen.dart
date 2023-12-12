@@ -32,6 +32,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
   FileHandler fileHandler = FileHandler();
   String selectedOption = "ALL CARDS";
   bool sortValue = false;
+  bool showText = false;
 
   final List<Widget> cards = [];
 
@@ -57,16 +58,20 @@ class _StackContentScreenState extends State<StackContentScreen> {
     return startLearningButtons;
   }
 
-  Future<void> loadStack() async{
-    try{
+  Future<void> loadStack() async
+  {
+    try
+    {
       final stack  = await RestServices(context).getStack(widget.stackId);
 
-      setState((){
+      setState(()
+      {
         stackname = stack[0]["stackname"];
         color = stack[0]["color"];
       });
 
-    }catch (error){
+    }catch(error)
+    {
       print('Fehler beim Laden der Daten: $error');
     }
   }
@@ -77,6 +82,10 @@ class _StackContentScreenState extends State<StackContentScreen> {
     {
       final checkRequest = await RestServices(context).getAllCards(widget.stackId);
 
+      if(checkRequest.isEmpty)
+      {
+        showText = true;
+      }
       if(checkRequest == null)
       {
         String fileContent = await fileHandler.readJsonFromLocalFile("allCards");
@@ -121,9 +130,14 @@ class _StackContentScreenState extends State<StackContentScreen> {
 
           for (var card in cardFileContent)
           {
+            if(card['is_deleted'] == 1)
+            {
+              showText = true;
+            }
             if (card['is_deleted'] == 0)
             {
               cards.add(CardBtn(btnText: card["question"], stackId: widget.stackId, cardId: card["card_id"],));
+              showText = false;
             }
           }
           // Widget wird aktualisiert nnach dem Laden der Daten.
@@ -135,6 +149,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
       }else
       {
         String fileContent = await fileHandler.readJsonFromLocalFile("allCards");
+
         if (fileContent.isNotEmpty)
         {
           List<dynamic> cardFileContent = jsonDecode(fileContent);
@@ -176,9 +191,14 @@ class _StackContentScreenState extends State<StackContentScreen> {
 
           for (var card in cardFileContent)
           {
+            if(card['is_deleted'] == 1)
+            {
+              showText = true;
+            }
             if (card['is_deleted'] == 0)
             {
-              cards.add(CardBtn(btnText: card["question"], stackId: widget.stackId, cardId: card["card_id"],));
+              cards.add(CardBtn(btnText: card["question"], stackId: widget.stackId, cardId: card["card_id"], isNoticed: card["remember"]));
+              showText = false;
             }
           }
           // Widget wird aktualisiert nnach dem Laden der Daten.
@@ -519,6 +539,25 @@ class _StackContentScreenState extends State<StackContentScreen> {
               ],
             ),
           ),
+          showText == true ? Expanded(
+            child: Container(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Text(
+                    "No cards available.",
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.white,
+                      fontFamily: "Inter",
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ) :
           Expanded(
             child: ListView.builder(
               padding: EdgeInsets.fromLTRB(20, 20, 20, 20),

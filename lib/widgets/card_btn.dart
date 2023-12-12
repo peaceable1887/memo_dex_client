@@ -6,14 +6,37 @@ class CardBtn extends StatefulWidget {
   final dynamic stackId;
   final dynamic cardId;
   final String btnText;
+  final int? isNoticed;
 
-  const CardBtn({Key? key, required this.btnText, this.stackId, this.cardId}) : super(key: key);
+  const CardBtn({Key? key, required this.btnText, this.stackId, this.cardId, this.isNoticed}) : super(key: key);
 
   @override
   State<CardBtn> createState() => _CardBtnState();
 }
 
 class _CardBtnState extends State<CardBtn> {
+
+  bool showIcon = false;
+
+  @override
+  void initState() {
+    validateIsNoticed(widget.isNoticed);
+    super.initState();
+  }
+
+  @override
+  void didUpdateWidget(covariant CardBtn oldWidget) {
+    if (oldWidget.isNoticed != widget.isNoticed) {
+      validateIsNoticed(widget.isNoticed);
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
+  void dispose() {
+    validateIsNoticed(widget.isNoticed);
+    super.dispose();
+  }
 
   String trimText(String text, int maxLength) {
     if (text.length <= maxLength) {
@@ -23,6 +46,16 @@ class _CardBtnState extends State<CardBtn> {
     }
   }
 
+  void validateIsNoticed(int? isNoticed)
+  {
+    if(isNoticed == 1)
+    {
+      showIcon = true;
+    }else
+    {
+      showIcon = false;
+    }
+  }
 
   void pushToCardContent(){
     print(widget.stackId);
@@ -72,10 +105,19 @@ class _CardBtnState extends State<CardBtn> {
                 ],
               ),
             ),
-            Icon(
-              Icons.arrow_forward_ios_rounded,
-              size: 28.0,
-              color: Color(0xFF8597A1),
+            Row(
+              children: [
+                Icon(
+                  Icons.lightbulb,
+                  size: showIcon == true ? 28.0 : 0.0,
+                  color: Color(0xFF8597A1),
+                ),
+                Icon(
+                  Icons.arrow_forward_ios_rounded,
+                  size: 28.0,
+                  color: Color(0xFF8597A1),
+                ),
+              ],
             ),
           ],
         ),
