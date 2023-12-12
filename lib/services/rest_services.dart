@@ -168,7 +168,10 @@ class RestServices{
             'Content-Type': 'application/json',
             'Authorization': "Bearer " + accessToken,
           },
-          body: jsonEncode(<String, dynamic>{"user_id": userId}),
+          body: jsonEncode(<String, dynamic>
+          {
+            "user_id": userId
+          }),
         ).timeout(Duration(seconds: 10));
         if (response.statusCode == 200)
         {
@@ -185,16 +188,17 @@ class RestServices{
       {
         print("Token existiert nicht!");
       }
-    } on TimeoutException catch (e) {
-      // Timeout: Der Server ist wahrscheinlich nicht erreichbar
+    }on TimeoutException catch (e)
+    {
       print('Zeitüberschreitung: $e');
+      //var auf grad kein netz einbauen
       return null;
-    } on http.ClientException catch (e) {
-      // Andere Clientfehler
+    }on http.ClientException catch (e)
+    {
       print('Clientfehler: $e');
       return null;
-    } catch (e) {
-      // Allgemeine Fehler
+    }catch (e)
+    {
       print('Allgemeiner Fehler: $e');
       return null;
     }
@@ -203,31 +207,47 @@ class RestServices{
   Future<dynamic> getStack(stackId) async {
 
     String? accessToken = await storage.read(key: 'accessToken');
+    try{
+      if (accessToken != null) {
+        final response = await http.post(
+          Uri.parse('http://10.0.2.2:3000/getStack'),
+          headers: <String, String>{
+            'Content-Type': 'application/json',
+            'Authorization': "Bearer " + accessToken,
+          },
+          body: jsonEncode(<String, dynamic>{
+            "stack_id": stackId
+          }),
+        ).timeout(Duration(seconds: 10));
 
-    if (accessToken != null) {
-      final response = await http.post(
-        Uri.parse('http://10.0.2.2:3000/getStack'),
-        headers: <String, String>{
-          'Content-Type': 'application/json',
-          'Authorization': "Bearer " + accessToken,
-        },
-        body: jsonEncode(<String, dynamic>{
-          "stack_id": stackId
-        }),
-      );
+        if (response.statusCode == 200)
+        {
+          dynamic jsonResponse = json.decode(response.body);
+          await fileHandler.saveJsonToLocalFile(jsonResponse, "singleStack");
 
-      if (response.statusCode == 200)
-      {
-        dynamic jsonResponse = json.decode(response.body);
-        return jsonResponse;
+          return jsonResponse;
 
+        }else
+        {
+          throw http.ClientException('hat nicht geklappt. Statuscode: ${response.statusCode}');
+        }
       }else
       {
-        throw http.ClientException('hat nicht geklappt. Statuscode: ${response.statusCode}');
+        print("Zugangstoken existiert nicht!");
       }
-    }else
+    }on TimeoutException catch (e)
     {
-
+      print('Zeitüberschreitung: $e');
+      //var auf grad kein netz einbauen
+      return null;
+    }on http.ClientException catch (e)
+    {
+      print('Clientfehler: $e');
+      return null;
+    }catch (e)
+    {
+      print('Allgemeiner Fehler: $e');
+      return null;
     }
   }
 
@@ -293,8 +313,7 @@ class RestServices{
         );
         throw Exception('Failed to delete stack.');
       }
-    }else {
-    }
+    }else{}
   }
 
   Future<void> addCard(String question, String answer, stackId) async {
@@ -313,6 +332,7 @@ class RestServices{
           "answer": answer,
           "is_deleted": 0,
           "remember": 0,
+          "creation_date": DateTime.now().toIso8601String(),
           "stack_stack_id": stackId
         }),
       );
@@ -328,71 +348,106 @@ class RestServices{
         );
         throw Exception('Failed to create stack.');
       }
-    }else {
+    }else{}
+  }
+
+  Future<dynamic> getAllCards(stackId) async
+  {
+    String? accessToken = await storage.read(key: 'accessToken');
+    try
+    {
+      if (accessToken != null)
+      {
+        final response = await http.post(
+          Uri.parse('http://10.0.2.2:3000/getAllCards'),
+          headers: <String, String>
+          {
+            'Content-Type': 'application/json',
+            'Authorization': "Bearer " + accessToken,
+          },
+          body: jsonEncode(<String, dynamic>
+          {
+            "stack_id": stackId
+          }),
+        ).timeout(Duration(seconds: 10));
+
+        if (response.statusCode == 200)
+        {
+          dynamic jsonResponse = json.decode(response.body);
+          await fileHandler.saveJsonToLocalFile(jsonResponse, "allCards");
+
+          print(jsonResponse);
+
+          return jsonResponse;
+        }else
+        {
+          throw http.ClientException('hat nicht geklappt. Statuscode: ${response.statusCode}');
+        }
+      }else
+      {
+        print("Accesstoken not available!");
+      }
+    }on TimeoutException catch (e)
+    {
+      print('Zeitüberschreitung: $e');
+      //var auf grad kein netz einbauen
+      return null;
+    }on http.ClientException catch (e)
+    {
+      print('Clientfehler: $e');
+      return null;
+    }catch (e)
+    {
+      print('Allgemeiner Fehler: $e');
+      return null;
     }
   }
 
-  Future<dynamic> getAllCards(stackId) async {
-
+  Future<dynamic> getCard(cardId) async
+  {
     String? accessToken = await storage.read(key: 'accessToken');
+    try
+    {
+      if (accessToken != null) {
+        final response = await http.post(
+          Uri.parse('http://10.0.2.2:3000/getCard'),
+          headers: <String, String>{
+            'Content-Type': 'application/json',
+            'Authorization': "Bearer " + accessToken,
+          },
+          body: jsonEncode(<String, dynamic>{
+            "card_id": cardId
+          }),
+        ).timeout(Duration(seconds: 10));
 
-    if (accessToken != null) {
-      final response = await http.post(
-        Uri.parse('http://10.0.2.2:3000/getAllCards'),
-        headers: <String, String>{
-          'Content-Type': 'application/json',
-          'Authorization': "Bearer " + accessToken,
-        },
-        body: jsonEncode(<String, dynamic>{
-          "stack_id": stackId
-        }),
-      );
+        if (response.statusCode == 200)
+        {
+          dynamic jsonResponse = json.decode(response.body);
+          await fileHandler.saveJsonToLocalFile(jsonResponse, "singleCard");
 
-      if (response.statusCode == 200)
-      {
-        dynamic jsonResponse = json.decode(response.body);
-        print(jsonResponse);
-        return jsonResponse;
+          return jsonResponse;
 
+        }else
+        {
+          throw http.ClientException('hat nicht geklappt. Statuscode: ${response.statusCode}');
+        }
       }else
       {
-        throw http.ClientException('hat nicht geklappt. Statuscode: ${response.statusCode}');
+        print("Zugangstoken existiert nicht!");
       }
-    }else
+    }on TimeoutException catch (e)
     {
-
-    }
-  }
-
-  Future<dynamic> getCard(cardId) async {
-
-    String? accessToken = await storage.read(key: 'accessToken');
-
-    if (accessToken != null) {
-      final response = await http.post(
-        Uri.parse('http://10.0.2.2:3000/getCard'),
-        headers: <String, String>{
-          'Content-Type': 'application/json',
-          'Authorization': "Bearer " + accessToken,
-        },
-        body: jsonEncode(<String, dynamic>{
-          "card_id": cardId
-        }),
-      );
-
-      if (response.statusCode == 200)
-      {
-        dynamic jsonResponse = json.decode(response.body);
-        print(jsonResponse);
-        return jsonResponse;
-
-      }else
-      {
-        throw http.ClientException('hat nicht geklappt. Statuscode: ${response.statusCode}');
-      }
-    }else
+      print('Zeitüberschreitung: $e');
+      //var auf grad kein netz einbauen
+      return null;
+    }on http.ClientException catch (e)
     {
-
+      print('Clientfehler: $e');
+      return null;
+    }catch (e)
+    {
+      print('Allgemeiner Fehler: $e');
+      return null;
     }
   }
 

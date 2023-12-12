@@ -8,6 +8,7 @@ import 'package:memo_dex_prototyp/screens/edit_stack_screen.dart';
 import 'package:memo_dex_prototyp/services/rest_services.dart';
 import 'package:memo_dex_prototyp/widgets/stack_content_btn.dart';
 
+import '../services/file_handler.dart';
 import '../widgets/card_btn.dart';
 import '../widgets/filters/filter_cards.dart';
 import '../widgets/headline.dart';
@@ -28,6 +29,9 @@ class _StackContentScreenState extends State<StackContentScreen> {
   String stackname = "";
   String color = "";
   dynamic cardId;
+  FileHandler fileHandler = FileHandler();
+  String selectedOption = "ALL CARDS";
+  bool sortValue = false;
 
   final List<Widget> cards = [];
 
@@ -67,21 +71,125 @@ class _StackContentScreenState extends State<StackContentScreen> {
     }
   }
 
-  Future<void> loadCards() async{
-    try{
-      final cardsData = await RestServices(context).getAllCards(widget.stackId);
+  Future<void> loadCards() async
+  {
+    try
+    {
+      final checkRequest = await RestServices(context).getAllCards(widget.stackId);
 
-      for(var card in cardsData){
-        if(card['is_deleted'] == 0) {
-          cards.add(CardBtn(btnText: card["question"], stackId: widget.stackId, cardId: card["card_id"],));
+      if(checkRequest == null)
+      {
+        String fileContent = await fileHandler.readJsonFromLocalFile("allCards");
+        if (fileContent.isNotEmpty)
+        {
+          List<dynamic> cardFileContent = jsonDecode(fileContent);
+
+          if(selectedOption == "QUESTION" && sortValue == false)
+          {
+            cardFileContent.sort((a, b) => a['question'].compareTo(b['question']));
+            cards.clear();
+          }
+          if(selectedOption == "QUESTION" && sortValue == true)
+          {
+            cardFileContent.sort((a, b) => b['question'].compareTo(a['question']));
+            cards.clear();
+          }
+          if(selectedOption == "CREATION DATE" && sortValue == false)
+          {
+            cardFileContent.sort((a, b) => DateTime.parse(a['creation_date']).compareTo(DateTime.parse(b['creation_date'])));
+            cards.clear();
+          }
+          if(selectedOption == "CREATION DATE" && sortValue == true)
+          {
+            cardFileContent.sort((a, b) => DateTime.parse(b['creation_date']).compareTo(DateTime.parse(a['creation_date'])));
+            cards.clear();
+          }
+          if(selectedOption == "NOTICED" && sortValue == false)
+          {
+            cardFileContent.sort((a, b) => b['remember'].compareTo(a['remember']));
+            cards.clear();
+          }
+          if(selectedOption == "NOTICED" && sortValue == true)
+          {
+            cardFileContent.sort((a, b) => a['remember'].compareTo(b['remember']));
+            cards.clear();
+          }
+          else
+          {
+            cards.clear();
+          }
+
+          for (var card in cardFileContent)
+          {
+            if (card['is_deleted'] == 0)
+            {
+              cards.add(CardBtn(btnText: card["question"], stackId: widget.stackId, cardId: card["card_id"],));
+            }
+          }
+          // Widget wird aktualisiert nnach dem Laden der Daten.
+          if (mounted)
+          {
+            setState(() {});
+          }
+        }
+      }else
+      {
+        String fileContent = await fileHandler.readJsonFromLocalFile("allCards");
+        if (fileContent.isNotEmpty)
+        {
+          List<dynamic> cardFileContent = jsonDecode(fileContent);
+
+          if(selectedOption == "QUESTION" && sortValue == false)
+          {
+            cardFileContent.sort((a, b) => a['question'].compareTo(b['question']));
+            cards.clear();
+          }
+          if(selectedOption == "QUESTION" && sortValue == true)
+          {
+            cardFileContent.sort((a, b) => b['question'].compareTo(a['question']));
+            cards.clear();
+          }
+          if(selectedOption == "CREATION DATE" && sortValue == false)
+          {
+            cardFileContent.sort((a, b) => DateTime.parse(a['creation_date']).compareTo(DateTime.parse(b['creation_date'])));
+            cards.clear();
+          }
+          if(selectedOption == "CREATION DATE" && sortValue == true)
+          {
+            cardFileContent.sort((a, b) => DateTime.parse(b['creation_date']).compareTo(DateTime.parse(a['creation_date'])));
+            cards.clear();
+          }
+          if(selectedOption == "NOTICED" && sortValue == false)
+          {
+            cardFileContent.sort((a, b) => b['remember'].compareTo(a['remember']));
+            cards.clear();
+          }
+          if(selectedOption == "NOTICED" && sortValue == true)
+          {
+            cardFileContent.sort((a, b) => a['remember'].compareTo(b['remember']));
+            cards.clear();
+          }
+          else
+          {
+            cards.clear();
+          }
+
+          for (var card in cardFileContent)
+          {
+            if (card['is_deleted'] == 0)
+            {
+              cards.add(CardBtn(btnText: card["question"], stackId: widget.stackId, cardId: card["card_id"],));
+            }
+          }
+          // Widget wird aktualisiert nnach dem Laden der Daten.
+          if (mounted)
+          {
+            setState(() {});
+          }
         }
       }
-      // Widget wird aktualisiert nnach dem Laden der Daten.
-      if(mounted){
-        setState((){
-        });
-      }
-    }catch(error){
+    }catch(error)
+    {
       print('Fehler beim Laden der Daten: $error');
     }
   }
@@ -223,7 +331,194 @@ class _StackContentScreenState extends State<StackContentScreen> {
               itemCount: showButtons().length,
             ),
           ),
-          FilterCards(),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 5, 20, 0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    Text(
+                      selectedOption,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontFamily: "Inter",
+                          fontWeight: FontWeight.w600
+                      ),
+                    ),
+                    InkWell(
+                      onTap: ()
+                      {
+                        setState(()
+                        {
+                          sortValue =! sortValue;
+                          loadCards();
+                        });
+                      },
+                      child: sortValue == false ? Icon(
+                        Icons.arrow_downward_rounded,
+                        size: selectedOption == "ALL CARDS" ? 0.0 : 28.0,
+                        color: Color(0xFFE59113),
+                      ) : Icon(
+                        Icons.arrow_upward_rounded,
+                        size: selectedOption == "ALL CARDS" ? 0.0 : 28.0,
+                        color: Color(0xFFE59113),
+                      ),
+                    ),
+                  ],
+                ),
+                InkWell(
+                  onTap: () {
+                    showMenu(
+                      context: context,
+                      position: RelativeRect.fromLTRB(1, 475, 0, 0),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                      ),
+                      items: [
+                        PopupMenuItem(
+                          onTap: (){
+                            setState(() {
+                              selectedOption = "QUESTION";
+                              loadCards();
+                            });
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Question",
+                                style: TextStyle(
+                                  color: selectedOption == "QUESTION"
+                                      ? Color(0xFFE59113)
+                                      : Colors.black,
+                                  fontWeight: selectedOption == "QUESTION"
+                                      ?  FontWeight.w600
+                                      :  FontWeight.w400,
+                                ),
+                              ),
+                              Icon(
+                                Icons.sort_by_alpha_rounded,
+                                size: 20.0,
+                                color: selectedOption == "QUESTION"
+                                    ? Color(0xFFE59113)
+                                    : Colors.black,
+                              ),
+                            ],
+                          ),
+                          value: "QUESTION",
+                        ),
+                        PopupMenuItem(
+                          onTap: (){
+                            setState(() {
+                              selectedOption = "CREATION DATE";
+                              loadCards();
+                            });
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Creation Date",
+                                style: TextStyle(
+                                  color: selectedOption == "CREATION DATE"
+                                      ? Color(0xFFE59113)
+                                      : Colors.black,
+                                  fontWeight: selectedOption == "CREATION DATE"
+                                      ?  FontWeight.w600
+                                      :  FontWeight.w400,
+                                ),
+                              ),
+                              Icon(
+                                Icons.date_range_rounded,
+                                size: 20.0,
+                                color: selectedOption == "CREATION DATE"
+                                    ? Color(0xFFE59113)
+                                    : Colors.black,
+                              ),
+                            ],
+                          ),
+                          value: "CREATION DATE",
+                        ),
+                        PopupMenuItem(
+                          onTap: (){
+                            setState(() {
+                              selectedOption = "NOTICED";
+                              loadCards();
+                            });
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Noticed",
+                                style: TextStyle(
+                                  color: selectedOption == "NOTICED"
+                                      ? Color(0xFFE59113)
+                                      : Colors.black,
+                                  fontWeight: selectedOption == "NOTICED"
+                                      ?  FontWeight.w600
+                                      :  FontWeight.w400,
+                                ),
+                              ),
+                              Icon(
+                                Icons.lightbulb_outline,
+                                size: 20.0,
+                                color: selectedOption == "NOTICED"
+                                    ? Color(0xFFE59113)
+                                    : Colors.black,
+                              ),
+                            ],
+                          ),
+                          value: "NOTICED",
+                        ),
+                        if (selectedOption == "QUESTION" || selectedOption == "CREATION DATE" || selectedOption == "NOTICED")
+                          PopupMenuItem(
+                            onTap: (){
+                              setState(() {
+                                selectedOption = "ALL CARDS";
+                                loadCards();
+                              });
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "Reset",
+                                  style: TextStyle(
+                                    color: Colors.grey,
+                                    fontFamily: "Inter",
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                                Icon(
+                                  Icons.refresh_rounded,
+                                  size: 20.0,
+                                  color: Colors.grey,
+                                ),
+                              ],
+                            ),
+                            value: "ALL CARDS",
+                          ),
+                      ],
+                    ).then((value) {
+                      setState(() {
+                        selectedOption = value!;
+                      });
+                    });
+                  },
+                  child: Icon(
+                    Icons.filter_alt,
+                    size: 32.0,
+                    color: selectedOption == "QUESTION" || selectedOption == "CREATION DATE" || selectedOption == "NOTICED"
+                        ? Color(0xFFE59113)
+                        : Colors.white,
+                  ),
+                ),
+              ],
+            ),
+          ),
           Expanded(
             child: ListView.builder(
               padding: EdgeInsets.fromLTRB(20, 20, 20, 20),

@@ -38,6 +38,7 @@ class _StackViewGridState extends State<StackViewGrid> {
     {
       final checkRequest = await RestServices(context).getAllStacks();
 
+      // wird ausgeführt wenn keine Verbindung zum Server besteht
       if(checkRequest == null)
       {
         String fileContent = await fileHandler.readJsonFromLocalFile("allStacks");
@@ -71,7 +72,6 @@ class _StackViewGridState extends State<StackViewGrid> {
             stackButtons.clear();
           }
 
-          print("------------------lokale daten----------------:");
           for (var stack in stackFileContent)
           {
             if (stack['is_deleted'] == 0)
@@ -114,9 +114,6 @@ class _StackViewGridState extends State<StackViewGrid> {
             stackButtons.clear();
           }
 
-          print("------------------lokale daten----------------:");
-          print("sort value: $selectedOption");
-          print(stackFileContent);
           for (var stack in stackFileContent)
           {
             if (stack['is_deleted'] == 0)
