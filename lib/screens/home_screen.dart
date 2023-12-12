@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:memo_dex_prototyp/widgets/stack_view_grid.dart';
+import '../widgets/custom_search_delegate.dart';
 import '../widgets/headline.dart';
 import '../widgets/filters/filter_stacks.dart';
 import '../widgets/top_search_bar.dart';
@@ -35,6 +36,10 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               TopSearchBar(
                 onPressed: () {
+                  showSearch(
+                      context: context,
+                      delegate: CustomSearchDelegate(),
+                  );
                 },
               ),
               Container(
