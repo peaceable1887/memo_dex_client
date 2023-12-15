@@ -3,18 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:memo_dex_prototyp/widgets/stack_btn.dart';
 import '../services/file_handler.dart';
 
-class CustomSearchDelegate extends SearchDelegate{
+class CustomSearchDelegate extends SearchDelegate
+{
 
   List<Widget> stackButtons = [];
   FileHandler fileHandler = FileHandler();
 
-  CustomSearchDelegate() {
+  CustomSearchDelegate()
+  {
     loadStacks();
   }
 
   Future<void> loadStacks() async
   {
-
     String fileContent = await fileHandler.readJsonFromLocalFile("allStacks");
     List<dynamic> stackFileContent = jsonDecode(fileContent);
     // Überprüfe ob der Inhalt eine Liste ist
@@ -34,65 +35,85 @@ class CustomSearchDelegate extends SearchDelegate{
   ThemeData appBarTheme(BuildContext context) {
     return ThemeData(
       appBarTheme: AppBarTheme(
-        color: Color(0xFF00324E), // Hintergrundfarbe der gesamten AppBar ändern
-        elevation: 0, // BoxShadow entfernen
-
+        color: Color(0xFF00324E),
+        elevation: 0,
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: Color(0xFF00324E),
         hintStyle: TextStyle(
-          color: Colors.white, // Textfarbe des Placeholder "Search" ändern
+          color: Colors.white.withOpacity(0.50),
+          fontSize: 16,
+          fontFamily: "Inter",
+          fontWeight: FontWeight.w400,
         ),
-        focusedBorder: InputBorder.none,
-        // Hintergrundfarbe der Suchleiste ändern
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10.0),
+          borderSide: BorderSide.none,
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10.0),
+          borderSide: BorderSide.none,
+        ),
+        // Hier passt du das Padding an
+        contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
       ),
     );
   }
 
   @override
   TextStyle get queryStyle => TextStyle(
-    color: Colors.white, // Textfarbe der Suchleiste ändern
+    color: Colors.white,
+    fontSize: 16,
+    fontFamily: "Inter",
+    fontWeight: FontWeight.w400
   );
 
   @override
   TextStyle get searchFieldStyle => TextStyle(
-    color: Colors.white, // Textfarbe im Suchfeld ändern
+    color: Colors.white,
+    fontSize: 16,
+    fontFamily: "Inter",
+    fontWeight: FontWeight.w400, // Textfarbe im Suchfeld ändern
   );
 
   @override
   List<Widget>? buildActions(BuildContext context) {
-
     return[
-      IconButton(
-        icon: const Icon(Icons.clear),
-        onPressed: (){
-          query = "";
-        },
+      Padding(
+        padding: const EdgeInsets.fromLTRB(0,0,10,0),
+        child: IconButton(
+          icon: const Icon(Icons.clear_rounded),
+          onPressed: (){
+            query = "";
+          },
+        ),
       ),
     ];
-    throw UnimplementedError();
   }
 
   @override
   Widget? buildLeading(BuildContext context) {
-    return IconButton(
-        icon: const Icon(Icons.arrow_back),
-        onPressed: (){
-          close(context, null);
-        },
-      );
-
-    throw UnimplementedError();
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10,0,0,0),
+      child: IconButton(
+          icon: const Icon(Icons.arrow_back_ios),
+          onPressed: (){
+            close(context, null);
+          },
+        ),
+    );
   }
 
   @override
   Widget buildResults(BuildContext context) {
     List<Widget> matchQuery = [];
-    for (var stackBtn in stackButtons) {
+    for (var stackBtn in stackButtons)
+    {
       String stackName = (stackBtn as StackBtn).stackName;
-      if (stackName.toLowerCase().contains(query.toLowerCase())) {
-        matchQuery.add(stackBtn); // Füge das StackBtn-Widget hinzu, nicht nur den Namen
+      if (stackName.toLowerCase().contains(query.toLowerCase()))
+      {
+        matchQuery.add(stackBtn);
       }
     }
     return ListView(children: matchQuery);
@@ -101,10 +122,12 @@ class CustomSearchDelegate extends SearchDelegate{
   @override
   Widget buildSuggestions(BuildContext context) {
     List<Widget> matchQuery = [];
-    for (var stackBtn in stackButtons) {
+    for (var stackBtn in stackButtons)
+    {
       String stackName = (stackBtn as StackBtn).stackName;
-      if (stackName.toLowerCase().contains(query.toLowerCase())) {
-        matchQuery.add(stackBtn); // Füge das StackBtn-Widget hinzu, nicht nur den Namen
+      if (stackName.toLowerCase().contains(query.toLowerCase()))
+      {
+        matchQuery.add(stackBtn);
       }
     }
     return Scaffold(
@@ -118,7 +141,8 @@ class CustomSearchDelegate extends SearchDelegate{
           childAspectRatio: MediaQuery.of(context).size.width /
               (MediaQuery.of(context).size.height / 2.3),
         ),
-        itemBuilder: (context, index) {
+        itemBuilder: (context, index)
+        {
           return matchQuery[index];
         },
         itemCount: matchQuery.length,
