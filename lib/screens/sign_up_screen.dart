@@ -36,7 +36,7 @@ class SignUpScreen extends StatelessWidget {
                   ),
                   Container(
                     padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-                    height: 120,
+                    height: MediaQuery.of(context).size.height/6.5,
                     child: Align(
                       alignment: Alignment.bottomCenter,
                       child: Text(

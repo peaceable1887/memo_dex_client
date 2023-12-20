@@ -12,8 +12,10 @@ class WelcomeScreen extends StatelessWidget {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-          body: Container(
-            color: Color(0xFF00324E),
+        body: Container(
+          color: Color(0xFF00324E),
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(0, MediaQuery.of(context).size.height/8, 0, 0),
             child: Column(
               children: [
                 Expanded(
@@ -27,7 +29,7 @@ class WelcomeScreen extends StatelessWidget {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(20,0,20,0),
+                  padding: EdgeInsets.fromLTRB(20,MediaQuery.of(context).size.height/8,20,0),
                   child: Container(
                     child: Column(
                       children: [
@@ -49,24 +51,26 @@ class WelcomeScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                Container(
-                  padding: EdgeInsets.fromLTRB(20, 30, 20, 30),
-                  height: 240,
-                    child: Align(
-                      alignment: Alignment.bottomCenter,
-                      child: Text(
-                        "Indem Sie fortfahren, stimmen Sie den Nutzerbedinungen und der Datenschutzrichtlinie zu.",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 13,
+                Expanded(
+                  child: Container(
+                    padding: EdgeInsets.fromLTRB(20, 30, 20, 30),
+                      child: Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Text(
+                          "Indem Sie fortfahren, stimmen Sie den Nutzerbedinungen und der Datenschutzrichtlinie zu.",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 13,
+                          ),
+                          textAlign: TextAlign.center,
                         ),
-                        textAlign: TextAlign.center,
                       ),
                     ),
-                  ),
+                ),
               ],
             ),
           ),
+        ),
     );
   }
 }
