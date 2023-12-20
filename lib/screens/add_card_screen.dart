@@ -100,6 +100,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
                         minLines: 1,
                         decoration: InputDecoration(
                           labelText: "Question",
+                          contentPadding: EdgeInsets.symmetric(vertical: 17, horizontal: 20),
                           counterText: "",
                           labelStyle: TextStyle(
                             color: Colors.white.withOpacity(0.50),
@@ -153,6 +154,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
                         minLines: 1,
                         decoration: InputDecoration(
                           labelText: "Answer",
+                          contentPadding: EdgeInsets.symmetric(vertical: 17, horizontal: 20),
                           counterText: "",
                           labelStyle: TextStyle(
                             color: Colors.white.withOpacity(0.50),

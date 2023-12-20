@@ -20,6 +20,7 @@ class LoginScreen extends StatelessWidget {
             Container(
               color: Color(0xFF00324E),
               child: ListView(
+                physics: NeverScrollableScrollPhysics(),
                 children: [
                   Container(
                     height: 150,

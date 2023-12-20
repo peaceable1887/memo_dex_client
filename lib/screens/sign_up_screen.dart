@@ -17,6 +17,7 @@ class SignUpScreen extends StatelessWidget {
             Container(
               color: Color(0xFF00324E),
               child: ListView(
+                physics: NeverScrollableScrollPhysics(),
                 children: [
                   Container(
                     height: 150,
@@ -34,8 +35,8 @@ class SignUpScreen extends StatelessWidget {
                     child: SignUpForm(),
                   ),
                   Container(
-                    padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
-                    height: 140,
+                    padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                    height: 120,
                     child: Align(
                       alignment: Alignment.bottomCenter,
                       child: Text(

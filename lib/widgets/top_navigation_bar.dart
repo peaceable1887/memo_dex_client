@@ -45,7 +45,6 @@ class _TopNavigationBarState extends State<TopNavigationBar> {
         onTap: widget.onPressed, // Füge hier die gewünschte Funktion hinzu
         child: Container(
           width: countTextLength(widget.btnText),
-          height: 110,
           child: AppBar(
             leadingWidth: 15,
             title: Text(
@@ -58,6 +57,7 @@ class _TopNavigationBarState extends State<TopNavigationBar> {
               ),
             ),
             leading: IconButton(
+              color: Colors.white,
               icon: Icon(Icons.arrow_back_ios),
               onPressed: widget.onPressed,
             ),

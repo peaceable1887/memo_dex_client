@@ -132,6 +132,7 @@ class _EditStackFormState extends State<EditStackForm> {
               controller: _stackname,
               decoration: InputDecoration(
                 labelText: "Stackname",
+                contentPadding: EdgeInsets.symmetric(vertical: 17, horizontal: 20),
                 labelStyle: TextStyle(
                   color: Colors.white.withOpacity(0.50),
                   fontSize: 16,

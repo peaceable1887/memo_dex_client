@@ -20,7 +20,7 @@ class _DeleteMessageBoxState extends State<DeleteMessageBox> {
         borderRadius: BorderRadius.circular(10.0),
       ),
       child: Container(
-        width: 200.0,
+        width: MediaQuery.of(context).size.width/2,
         height: 300.0,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -75,7 +75,7 @@ class _DeleteMessageBoxState extends State<DeleteMessageBox> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   Container(
-                    width: 130,
+                    width: 140,
                     child: TextButton(
                       onPressed: () async {
                         await widget.onDelete();
@@ -95,7 +95,7 @@ class _DeleteMessageBoxState extends State<DeleteMessageBox> {
                     ),
                   ),
                   Container(
-                    width: 130,
+                    width: 140,
                     child: TextButton(
                       onPressed: () {
                         Navigator.of(context).pop(); // Schließe das Dialogfenster

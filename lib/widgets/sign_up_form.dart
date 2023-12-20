@@ -87,6 +87,7 @@ class _SignUpFormState extends State<SignUpForm> {
               controller: _eMail,
               decoration: InputDecoration(
                 labelText: "E-Mail",
+                contentPadding: EdgeInsets.symmetric(vertical: 17, horizontal: 20),
                 labelStyle: TextStyle(
                   color: Colors.white.withOpacity(0.50),
                   fontSize: 16,
@@ -137,6 +138,7 @@ class _SignUpFormState extends State<SignUpForm> {
               obscureText: !_isPasswordVisible, // Passwort verschleiern
               decoration: InputDecoration(
                 labelText: "Password",
+                contentPadding: EdgeInsets.symmetric(vertical: 17, horizontal: 20),
                 labelStyle: TextStyle(
                   color: Colors.white.withOpacity(0.50),
                   fontSize: 16,
@@ -187,6 +189,7 @@ class _SignUpFormState extends State<SignUpForm> {
               obscureText: !_isPasswordVisible,
               decoration: InputDecoration(
                 labelText: "repeat Password",
+                contentPadding: EdgeInsets.symmetric(vertical: 17, horizontal: 20),
                 labelStyle: TextStyle(
                   color: Colors.white.withOpacity(0.50),
                   fontSize: 16,
@@ -319,7 +322,7 @@ class _SignUpFormState extends State<SignUpForm> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         CustomPaint(
-                          size: Size(165, 2),
+                          size: Size(MediaQuery.of(context).size.width/2.75, 2),
                           painter: DividePainter(),
                         ),
                         Padding(
@@ -335,7 +338,7 @@ class _SignUpFormState extends State<SignUpForm> {
                           ),
                         ),
                         CustomPaint(
-                          size: Size(165, 2),
+                          size: Size(MediaQuery.of(context).size.width/2.75, 2),
                           painter: DividePainter(),
                         ),
                       ],

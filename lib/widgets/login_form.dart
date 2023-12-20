@@ -75,6 +75,7 @@ class _LoginFormState extends State<LoginForm> {
                 controller: _eMail,
                 decoration: InputDecoration(
                   labelText: "E-Mail",
+                  contentPadding: EdgeInsets.symmetric(vertical: 17, horizontal: 20),
                   labelStyle: TextStyle(
                     color: Colors.white.withOpacity(0.50),
                     fontSize: 16,
@@ -125,6 +126,7 @@ class _LoginFormState extends State<LoginForm> {
                 obscureText: !_isPasswordVisible, // Passwort verschleiern
                   decoration: InputDecoration(
                     labelText: "Password",
+                    contentPadding: EdgeInsets.symmetric(vertical: 17, horizontal: 20),
                     labelStyle: TextStyle(
                       color: Colors.white.withOpacity(0.50),
                       fontSize: 16,
@@ -232,7 +234,7 @@ class _LoginFormState extends State<LoginForm> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         CustomPaint(
-                          size: Size(165, 2),
+                          size: Size(MediaQuery.of(context).size.width/2.75, 2),
                           painter: DividePainter(),
                         ),
                         Padding(
@@ -248,7 +250,7 @@ class _LoginFormState extends State<LoginForm> {
                           ),
                         ),
                         CustomPaint(
-                          size: Size(165, 2),
+                          size: Size(MediaQuery.of(context).size.width/2.75, 2),
                           painter: DividePainter(),
                         ),
                       ],

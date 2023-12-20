@@ -20,15 +20,16 @@ class _CreateStackScreenState extends State<CreateStackScreen> {
           Container(
             color: Color(0xFF00324E),
             child: ListView(
+              physics: NeverScrollableScrollPhysics(),
               children: [
                 Container(
-                  height: 150,
+                  height: 170,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(0,10,0,0),
+                        padding: const EdgeInsets.fromLTRB(0,20,0,0),
                         child: Headline(
                             text: "Create Stack"
                         ),

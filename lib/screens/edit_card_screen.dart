@@ -139,6 +139,7 @@ class _EditCardScreenState extends State<EditCardScreen> {
                     minLines: 1,
                     decoration: InputDecoration(
                       labelText: "Question",
+                      contentPadding: EdgeInsets.symmetric(vertical: 17, horizontal: 20),
                       counterText: "",
                       labelStyle: TextStyle(
                         color: Colors.white.withOpacity(0.50),
@@ -192,6 +193,7 @@ class _EditCardScreenState extends State<EditCardScreen> {
                     minLines: 1,
                     decoration: InputDecoration(
                       labelText: "Answer",
+                      contentPadding: EdgeInsets.symmetric(vertical: 17, horizontal: 20),
                       counterText: "",
                       labelStyle: TextStyle(
                         color: Colors.white.withOpacity(0.50),

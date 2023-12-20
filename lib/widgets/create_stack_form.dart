@@ -124,6 +124,7 @@ class _CreateStackFormState extends State<CreateStackForm> {
               controller: _stackname,
               decoration: InputDecoration(
                 labelText: "Stackname",
+                contentPadding: EdgeInsets.symmetric(vertical: 17, horizontal: 20),
                 counterText: "",
                 labelStyle: TextStyle(
                   color: Colors.white.withOpacity(0.50),
