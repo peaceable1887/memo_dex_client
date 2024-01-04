@@ -1,12 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:memo_dex_prototyp/screens/bottom_navigation_screen.dart';
-import 'package:memo_dex_prototyp/services/check_internet_connection.dart';
-import 'package:path_provider/path_provider.dart';
 import '../widgets/validation_message_box.dart';
 import 'file_handler.dart';
 
@@ -503,7 +500,7 @@ class RestServices{
       );
 
       if (response.statusCode == 200) {
-        print("Karte wurde korrekt beantwortet");
+        print("Korrekte antwort wurde gepeichert.");
       } else {
         showDialog(
           context: context,
@@ -534,7 +531,7 @@ class RestServices{
       );
 
       if (response.statusCode == 200) {
-        print("Karte wurde falsch beantwortet");
+        print("Falsche antwort wurde gespeichert.");
       } else {
         showDialog(
           context: context,
@@ -547,6 +544,5 @@ class RestServices{
     }else {
     }
   }
-
 }
 

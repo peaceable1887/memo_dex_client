@@ -26,12 +26,10 @@ class _CardLearningScreenState extends State<CardLearningScreen> with TickerProv
   final List<dynamic> indexCards = [];
   bool emptyCards = false;
   String stackname = "";
-
-  late LearningCard learningCard;
+  late bool wasClicked = false;
 
   @override
   void initState() {
-
     loadStack();
     loadCards();
     super.initState();
@@ -64,9 +62,10 @@ class _CardLearningScreenState extends State<CardLearningScreen> with TickerProv
       for (var card in cardsData) {
         if(card["remember"] == 0 && card["is_deleted"] == 0)
         {
-          LearningCard lCard = LearningCard(question: card["question"], answer: card["answer"], cardIndex: card["card_id"]);
-          indexCards.add(lCard);
+          indexCards.add(LearningCard(question: card["question"],
+            answer: card["answer"], cardIndex: card["card_id"], onClicked: handleCardClick ));
         }
+
       }
       if(widget.isMixed == true)
       {
@@ -75,12 +74,23 @@ class _CardLearningScreenState extends State<CardLearningScreen> with TickerProv
       // Widget wird aktualisiert nnach dem Laden der Daten.
       if (mounted) {
         setState(() {
-
         });
       }
     } catch (error) {
       print('Fehler beim Laden der Daten: $error');
     }
+  }
+
+  void handleCardClick(bool val)
+  {
+    setState(()
+    {
+      wasClicked = val;
+      if(wasClicked == true && activeIndex == indexCards.length - 1)
+      {
+        print("hast durchgespielt");
+      }
+    });
   }
 
   Widget buildIndexCard(Widget indexCard, int index) => Container(
@@ -200,12 +210,12 @@ class _CardLearningScreenState extends State<CardLearningScreen> with TickerProv
                   options: CarouselOptions( //hier kann man die eigenschaften des slider manipulieren
                     height: 500,
                     enableInfiniteScroll: false,
-                    scrollPhysics: RightBlockedScrollPhysics(),
+                    scrollPhysics: wasClicked ? RightBlockedScrollPhysics() : NeverScrollableScrollPhysics(),
                     autoPlayInterval: Duration(seconds: 1),
                     onPageChanged: (index, reason) => setState(()
                     {
                       activeIndex = index;
-                      print(index);
+                      wasClicked = false;
                     }
                     ),
                   ),

@@ -8,8 +8,9 @@ class LearningCard extends StatefulWidget {
   final int cardIndex;
   final String question;
   final String answer;
+  final Function(bool) onClicked;
 
-  const LearningCard({Key? key, required this.question, required this.answer, required this.cardIndex}) : super(key: key);
+  const LearningCard({Key? key, required this.question, required this.answer, required this.cardIndex, required this.onClicked}) : super(key: key);
 
   @override
   State<LearningCard> createState() => _LearningCardState();
@@ -44,11 +45,9 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
     setState(() {
       if(isCardNoticed == false){
         RestServices(context).updateCard(widget.question, widget.answer, 0, 1, widget.cardIndex,);
-        print("gemerkt");
         isCardNoticed = true;
       }else{
         RestServices(context).updateCard(widget.question, widget.answer, 0, 0, widget.cardIndex,);
-        print("entmerkt");
         isCardNoticed = false;
       }
     });
@@ -59,10 +58,8 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
     setState(() {
       if(answeredCorrectly == false){
         RestServices(context).answeredIncorrectly(widget.cardIndex);
-        print("falsch beantwortet");
       }else{
         RestServices(context).answeredCorrectly(widget.cardIndex);
-        print("richtig beantwortet");
       }
     });
   }
@@ -98,13 +95,7 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onHorizontalDragStart: isCardTurned ? null : (DragStartDetails details)
-      {
-        print(details);
-        print("test");
-      },
-      child: Container(
+    return Container(
         color: Colors.transparent,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -255,6 +246,7 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
                           onPressed: ()
                           {
                             setState(() {
+                              widget.onClicked(true);
                               sendAnswer(true);
                               isCardTurned = true;
                               showAnswerBtns = false;
@@ -287,6 +279,7 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
                           onPressed: ()
                           {
                             setState(() {
+                              widget.onClicked(true);
                               sendAnswer(false);
                               isCardTurned = true;
                               showAnswerBtns = false;
@@ -301,7 +294,6 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
             ) : Container(),
           ],
         ),
-      ),
-    );
+      );
   }
 }
