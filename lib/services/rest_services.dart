@@ -486,5 +486,67 @@ class RestServices{
     }
   }
 
+  Future<void> answeredCorrectly(cardId) async {
+
+    String? accessToken = await storage.read(key: 'accessToken');
+
+    if (accessToken != null) {
+      final response = await http.post(
+        Uri.parse('http://10.0.2.2:3000/answeredCorrectly'),
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization': "Bearer " + accessToken,
+        },
+        body: jsonEncode(<String, dynamic>{
+          "card_id": cardId
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        print("Karte wurde korrekt beantwortet");
+      } else {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return ValidationMessageBox(message: "Karte konnte nicht bearbeitet werden");
+          },
+        );
+        throw Exception('Failed to insert data.');
+      }
+    }else {
+    }
+  }
+
+  Future<void> answeredIncorrectly(cardId) async {
+
+    String? accessToken = await storage.read(key: 'accessToken');
+
+    if (accessToken != null) {
+      final response = await http.post(
+        Uri.parse('http://10.0.2.2:3000/answeredIncorrectly'),
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization': "Bearer " + accessToken,
+        },
+        body: jsonEncode(<String, dynamic>{
+          "card_id": cardId
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        print("Karte wurde falsch beantwortet");
+      } else {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return ValidationMessageBox(message: "Karte konnte nicht bearbeitet werden");
+          },
+        );
+        throw Exception('Failed to insert data.');
+      }
+    }else {
+    }
+  }
+
 }
 

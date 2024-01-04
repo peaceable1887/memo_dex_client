@@ -1,6 +1,7 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
+
+import '../services/rest_services.dart';
 
 class LearningCard extends StatefulWidget {
 
@@ -12,6 +13,7 @@ class LearningCard extends StatefulWidget {
 
   @override
   State<LearningCard> createState() => _LearningCardState();
+
 }
 
 class _LearningCardState extends State<LearningCard> with TickerProviderStateMixin {
@@ -19,20 +21,50 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
   late AnimationController controller;
   late Animation animation;
   AnimationStatus animationStatus = AnimationStatus.dismissed;
+  bool isCardTurned = false;
+  bool showAnswerBtns = true;
+  bool isCardNoticed = false;
 
   @override
-  void initState() {
+  void initState()
+  {
     super.initState();
     controller = AnimationController(vsync: this, duration: const Duration(seconds: 1));
     animation = Tween(end: 1.0, begin: 0.0).animate(controller);
     animation.addListener(() {
-        setState(() {
-
-        });
+        setState(() {});
       });
     animation.addStatusListener((status) {
         animationStatus = status;
       });
+  }
+
+  void cardNoted()
+  {
+    setState(() {
+      if(isCardNoticed == false){
+        RestServices(context).updateCard(widget.question, widget.answer, 0, 1, widget.cardIndex,);
+        print("gemerkt");
+        isCardNoticed = true;
+      }else{
+        RestServices(context).updateCard(widget.question, widget.answer, 0, 0, widget.cardIndex,);
+        print("entmerkt");
+        isCardNoticed = false;
+      }
+    });
+  }
+
+  void sendAnswer(answeredCorrectly)
+  {
+    setState(() {
+      if(answeredCorrectly == false){
+        RestServices(context).answeredIncorrectly(widget.cardIndex);
+        print("falsch beantwortet");
+      }else{
+        RestServices(context).answeredCorrectly(widget.cardIndex);
+        print("richtig beantwortet");
+      }
+    });
   }
 
   Widget showText(String text)
@@ -66,133 +98,209 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          const SizedBox(
-            height: 30,
-          ),
-          Transform(
-            alignment: FractionalOffset.center, //flip in der mitte der karte
-            transform: Matrix4.identity()
-              ..setEntry(3, 2, 0.0010)
-              ..rotateY((animation.value < 0.5) ? pi * animation.value : (pi * ( 1+ animation.value))), //nochmal ansehen wie genau der Teil funktioniert
-            child: Card(
-              color: Colors.transparent,
-              child: animation.value <= 0.5
-                  ? ClipRRect(
-                    borderRadius: BorderRadius.circular(10.0),
-                    child: Container(
+    return GestureDetector(
+      onHorizontalDragStart: isCardTurned ? null : (DragStartDetails details)
+      {
+        print(details);
+        print("test");
+      },
+      child: Container(
+        color: Colors.transparent,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const SizedBox(
+              height: 30,
+            ),
+            Transform(
+              alignment: FractionalOffset.center, //flip in der mitte der karte
+              transform: Matrix4.identity()
+                ..setEntry(3, 2, 0.0010)
+                ..rotateY((animation.value < 0.5) ? pi * animation.value : (pi * ( 1+ animation.value))), //nochmal ansehen wie genau der Teil funktioniert
+              child: Card(
+                color: Colors.transparent,
+                child: animation.value <= 0.5
+                    ? ClipRRect(
+                      borderRadius: BorderRadius.circular(10.0),
+                      child: Container(
+                      color: Colors.white,
+                      width: MediaQuery.of(context).size.width/1.15,
+                      height: MediaQuery.of(context).size.height/2.085,
+                      child: Column(
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(10.0),
+                            child: Container(
+                              width: MediaQuery.of(context).size.width/1.35,
+                              height: 60,
+                              child: Container(),
+                            ),
+                          ),
+                          Container(
+                            color: Colors.white,
+                            width: MediaQuery.of(context).size.width/1.35,
+                            height: MediaQuery.of(context).size.height/2.8,
+                            child: Center(
+                              child: Padding(
+                                padding: EdgeInsets.fromLTRB(25, 0, 25, 0),
+                                child: showText(widget.question)
+                              ),
+                            ),
+                          ),
+                          ],
+                        ),
+                      ),
+                    )
+                    : ClipRRect(
+                  borderRadius: BorderRadius.circular(10.0),
+                  child: Container(
                     color: Colors.white,
-                    width: 330,
-                    height: 430,
+                    width: MediaQuery.of(context).size.width/1.35,
+                    height: MediaQuery.of(context).size.height/2.085,
                     child: Column(
                       children: [
                         ClipRRect(
                           borderRadius: BorderRadius.circular(10.0),
-                          child: Container(
-                            width: 330,
-                            height: 60,
-                            color: Colors.red,
-                            child: Center(
-                              child: Text(
-                                "Question",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 19,
-                                  fontFamily: "Inter",
-                                  fontWeight: FontWeight.w600,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(0, 15, 10, 0),
+                                child: InkWell(
+                                  onTap: cardNoted,
+                                  child: isCardNoticed ? Icon(
+                                    Icons.lightbulb_rounded,
+                                    size: 32.0,
+                                    color: Color(0xFFE59113),
+                                  ) : Icon(
+                                    Icons.lightbulb_outline_rounded,
+                                    size: 32.0,
+                                    color: Color(0xFFE59113),
+                                  ), // Icon als klickbares Element
                                 ),
                               ),
-                            ),
-                          ),
+                            ],
+                          )
                         ),
                         Container(
-                          width: 330,
-                          height: 300,
+                          width: MediaQuery.of(context).size.width/1.35,
+                          height: MediaQuery.of(context).size.height/2.8,
                           child: Center(
                             child: Padding(
                               padding: EdgeInsets.fromLTRB(25, 0, 25, 0),
-                              child: showText(widget.question)
+                              child: showText(widget.answer)
                             ),
                           ),
                         ),
-                        IconButton(
-                          icon: const Icon(Icons.redo_rounded),
-                          iconSize: 40,
-                          onPressed: (){
-                            if(animationStatus == AnimationStatus.dismissed){
-                              controller.forward();
-                            }else{
-                              controller.reverse();
-                            }
-                          },
-                          )
-                        ],
-                      ),
+                      ],
                     ),
-                  )
-                  : ClipRRect(
-                borderRadius: BorderRadius.circular(10.0),
-                child: Container(
-                  color: Colors.white,
-                  width: 330,
-                  height: 430,
-                  child: Column(
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(10.0),
-                        child: Container(
-                          width: 330,
-                          height: 60,
-                          color: Colors.red,
-                          child: Center(
-                            child: Text(
-                              "Answer",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 19,
-                                fontFamily: "Inter",
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: 330,
-                        height: 300,
-                        child: Center(
-                          child: Padding(
-                            padding: EdgeInsets.fromLTRB(25, 0, 25, 0),
-                            child: showText(widget.answer)
-                          ),
-                        ),
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.redo_rounded),
-                        iconSize: 40,
-                        onPressed: (){
-                          if(animationStatus == AnimationStatus.dismissed){
-                            controller.forward();
-                          }else{
-                            controller.reverse();
-                          }
-                        },
-                      )
-                    ],
                   ),
-                ),
-              )
-              )
+                )
+                )
+              ),
+            const SizedBox(
+              height: 30,
             ),
-          const SizedBox(
-            height: 30,
-          ),
-        ],
+            animation.value <= 0.5 ? //muss in eine eigene klasse ausgelagert werden !
+            Container(
+              width: 75,
+              decoration: BoxDecoration(
+                  color: Colors.grey,
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.15),
+                      blurRadius: 10,
+                      offset: Offset(1,5),
+                    ),
+                  ],
+              ),
+              child: IconButton(
+                icon: const Icon(Icons.redo_rounded),
+                color: Colors.white,
+                iconSize: 40,
+                onPressed: (){
+                  if(animationStatus == AnimationStatus.dismissed){
+                    controller.forward();
+                  }else{
+                    controller.reverse();
+                  }
+                },
+              ),
+            ) :
+            showAnswerBtns ? Container(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Container(
+                    width: 75,
+                    decoration: BoxDecoration(
+                        color: Colors.green,
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.15),
+                            blurRadius: 10,
+                            offset: Offset(1,5),
+                          ),
+                        ],
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.check_rounded),
+                          color: Colors.white,
+                          iconSize: 40,
+                          onPressed: ()
+                          {
+                            setState(() {
+                              sendAnswer(true);
+                              isCardTurned = true;
+                              showAnswerBtns = false;
+                            });
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    width: 75,
+                    decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.15),
+                            blurRadius: 10,
+                            offset: Offset(1,5),
+                          ),
+                        ],
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.cancel_outlined),
+                          color: Colors.white,
+                          iconSize: 40,
+                          onPressed: ()
+                          {
+                            setState(() {
+                              sendAnswer(false);
+                              isCardTurned = true;
+                              showAnswerBtns = false;
+                            });
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ) : Container(),
+          ],
+        ),
       ),
     );
   }

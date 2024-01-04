@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:horizontal_blocked_scroll_physics/horizontal_blocked_scroll_physics.dart';
 import 'package:memo_dex_prototyp/screens/stack_content_screen.dart';
 import 'package:carousel_slider/carousel_slider.dart'; // https://pub.dev/packages/carousel_slider
 
@@ -24,9 +25,13 @@ class _CardLearningScreenState extends State<CardLearningScreen> with TickerProv
   int activeIndex = 0;
   final List<dynamic> indexCards = [];
   bool emptyCards = false;
+  String stackname = "";
+
+  late LearningCard learningCard;
 
   @override
   void initState() {
+
     loadStack();
     loadCards();
     super.initState();
@@ -38,8 +43,6 @@ class _CardLearningScreenState extends State<CardLearningScreen> with TickerProv
     loadCards();
     super.dispose();
   }
-
-  String stackname = "";
 
   Future<void> loadStack() async {
     try {
@@ -61,7 +64,8 @@ class _CardLearningScreenState extends State<CardLearningScreen> with TickerProv
       for (var card in cardsData) {
         if(card["remember"] == 0 && card["is_deleted"] == 0)
         {
-          indexCards.add(LearningCard(question: card["question"], answer: card["answer"], cardIndex: card["card_id"]));
+          LearningCard lCard = LearningCard(question: card["question"], answer: card["answer"], cardIndex: card["card_id"]);
+          indexCards.add(lCard);
         }
       }
       if(widget.isMixed == true)
@@ -113,29 +117,6 @@ class _CardLearningScreenState extends State<CardLearningScreen> with TickerProv
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0,0,20,0),
-                    child: Container(
-                      width: 80,
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(0,0,0,10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            InkWell(
-                              onTap: () => {
-                              },
-                              child: Icon(
-                                Icons.lightbulb_outline_rounded,
-                                size: 32.0,
-                                color: Colors.white,
-                              ), // Icon als klickbares Element
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  )
                 ],
               ),
             ),
@@ -208,23 +189,30 @@ class _CardLearningScreenState extends State<CardLearningScreen> with TickerProv
                 ],
               ),
             ),
-            CarouselSlider.builder(
-              itemCount: indexCards.length,
-                itemBuilder: (context, index, realIndex){
-                  final indexCard = indexCards[index];
-
-                  return buildIndexCard(indexCard, index);
-                },
-                options: CarouselOptions( //hier kann man die eigenschaften des slider manipulieren
-                  height: 500,
-                  enableInfiniteScroll: false,
-                  autoPlayInterval: Duration(seconds: 1),
-                  onPageChanged: (index, reason) => setState(() => activeIndex = index),
-                ),
+            Container(
+              child: CarouselSlider.builder(
+                itemCount: indexCards.length,
+                  itemBuilder: (context, index, realIndex)
+                  {
+                    final indexCard = indexCards[index];
+                    return buildIndexCard(indexCard, index);
+                  },
+                  options: CarouselOptions( //hier kann man die eigenschaften des slider manipulieren
+                    height: 500,
+                    enableInfiniteScroll: false,
+                    scrollPhysics: RightBlockedScrollPhysics(),
+                    autoPlayInterval: Duration(seconds: 1),
+                    onPageChanged: (index, reason) => setState(()
+                    {
+                      activeIndex = index;
+                      print(index);
+                    }
+                    ),
+                  ),
+              ),
             ),
           ],
         ),
     );
-
   }
 }

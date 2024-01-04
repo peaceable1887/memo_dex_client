@@ -83,6 +83,7 @@ class CustomSearchDelegate extends SearchDelegate
       Padding(
         padding: const EdgeInsets.fromLTRB(0,0,10,0),
         child: IconButton(
+          color: Colors.white,
           icon: const Icon(Icons.clear_rounded),
           onPressed: (){
             query = "";
@@ -97,6 +98,7 @@ class CustomSearchDelegate extends SearchDelegate
     return Padding(
       padding: const EdgeInsets.fromLTRB(10,0,0,0),
       child: IconButton(
+          color: Colors.white,
           icon: const Icon(Icons.arrow_back_ios),
           onPressed: (){
             close(context, null);
