@@ -43,7 +43,7 @@ dependencies:
   shared_preferences: ^2.2.2
   path_provider: ^2.1.1
   connectivity_plus: ^5.0.2
-  intl: ^0.18.1
+  intl: ^0.19.0
   horizontal_blocked_scroll_physics: ^4.0.1
 
 dev_dependencies:

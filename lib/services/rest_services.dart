@@ -544,5 +544,36 @@ class RestServices{
     }else {
     }
   }
+  Future<void> updateStackStatistic(stackId, leadTime) async {
+
+    String? accessToken = await storage.read(key: 'accessToken');
+
+    if (accessToken != null) {
+      final response = await http.post(
+        Uri.parse('http://10.0.2.2:3000/updateStackStatistic'),
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization': "Bearer " + accessToken,
+        },
+        body: jsonEncode(<String, dynamic>{
+          "stack_id": stackId,
+          "lead_time": leadTime
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        print("Durchlauf wurde in die Datenbank gespeichert.");
+      } else {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return ValidationMessageBox(message: "Durchlauf konnte nicht gespeichert werden");
+          },
+        );
+        throw Exception('Failed to insert data.');
+      }
+    }else {
+    }
+  }
 }
 

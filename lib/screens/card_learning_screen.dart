@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:horizontal_blocked_scroll_physics/horizontal_blocked_scroll_physics.dart';
+import 'package:intl/intl.dart';
 import 'package:memo_dex_prototyp/screens/stack_content_screen.dart';
 import 'package:carousel_slider/carousel_slider.dart'; // https://pub.dev/packages/carousel_slider
 
@@ -27,26 +30,40 @@ class _CardLearningScreenState extends State<CardLearningScreen> with TickerProv
   bool emptyCards = false;
   String stackname = "";
   late bool wasClicked = false;
+  int seconds = 0;
+  late Timer timer;
 
   @override
   void initState() {
+    startTimer();
     loadStack();
     loadCards();
     super.initState();
   }
 
-  @override
-  void dispose() {
-    loadStack();
-    loadCards();
-    super.dispose();
+  void startTimer()
+  {
+    timer = Timer.periodic(Duration(seconds: 1), (Timer t) {
+      setState(()
+      {
+        seconds++;
+      });
+    });
+  }
+
+  String formatTime()
+  {
+    Duration duration = Duration(seconds: seconds);
+
+    return DateFormat('HH:mm:ss').format(DateTime(0, 1, 1).add(duration));
   }
 
   Future<void> loadStack() async {
-    try {
+    try{
       final stack  = await RestServices(context).getStack(widget.stackId);
 
-      setState(() {
+      setState(()
+      {
         stackname = stack[0]["stackname"];
       });
 
@@ -56,7 +73,7 @@ class _CardLearningScreenState extends State<CardLearningScreen> with TickerProv
   }
 
   Future<void> loadCards() async {
-    try {
+    try{
       final cardsData = await RestServices(context).getAllCards(widget.stackId);
 
       for (var card in cardsData) {
@@ -88,9 +105,17 @@ class _CardLearningScreenState extends State<CardLearningScreen> with TickerProv
       wasClicked = val;
       if(wasClicked == true && activeIndex == indexCards.length - 1)
       {
-        print("hast durchgespielt");
+        RestServices(context).updateStackStatistic(widget.stackId, formatTime());
       }
     });
+  }
+
+  @override
+  void dispose() {
+    loadStack();
+    loadCards();
+    timer.cancel();
+    super.dispose();
   }
 
   Widget buildIndexCard(Widget indexCard, int index) => Container(
