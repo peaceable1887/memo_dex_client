@@ -98,16 +98,42 @@ class _CardLearningScreenState extends State<CardLearningScreen> with TickerProv
     }
   }
 
-  void handleCardClick(bool val)
+  Future<void> handleCardClick(bool val) async {
+    try {
+      final time = await RestServices(context).getStackStatistic(widget.stackId);
+      final fastestTime = time[0]["fastest_time"];
+
+      setState(() {
+        wasClicked = val;
+        if (wasClicked == true && activeIndex == indexCards.length - 1) {
+
+          Duration fastestDuration = parseDuration(fastestTime);
+          Duration currentDuration = parseDuration(formatTime());
+
+          if(currentDuration.compareTo(fastestDuration) < 0)
+          {
+            print("Neue Bestzeit");
+            RestServices(context).updateStackStatistic(widget.stackId, formatTime(), formatTime());
+          }else
+          {
+            print("Schnellste Zeit bleibt");
+            RestServices(context).updateStackStatistic(widget.stackId, fastestTime, formatTime());
+          }
+        }
+      });
+    } catch (error) {
+      print('Fehler beim Laden der Daten: $error');
+    }
+  }
+
+  Duration parseDuration(String timeString)
   {
-    setState(()
-    {
-      wasClicked = val;
-      if(wasClicked == true && activeIndex == indexCards.length - 1)
-      {
-        RestServices(context).updateStackStatistic(widget.stackId, formatTime());
-      }
-    });
+    List<String> parts = timeString.split(':');
+    int hours = int.parse(parts[0]);
+    int minutes = int.parse(parts[1]);
+    int seconds = int.parse(parts[2]);
+
+    return Duration(hours: hours, minutes: minutes, seconds: seconds);
   }
 
   @override
@@ -115,6 +141,7 @@ class _CardLearningScreenState extends State<CardLearningScreen> with TickerProv
     loadStack();
     loadCards();
     timer.cancel();
+    startTimer();
     super.dispose();
   }
 

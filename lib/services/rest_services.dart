@@ -544,7 +544,7 @@ class RestServices{
     }else {
     }
   }
-  Future<void> updateStackStatistic(stackId, leadTime) async {
+  Future<void> updateStackStatistic(stackId, fastestTime, lastTime) async {
 
     String? accessToken = await storage.read(key: 'accessToken');
 
@@ -557,7 +557,8 @@ class RestServices{
         },
         body: jsonEncode(<String, dynamic>{
           "stack_id": stackId,
-          "lead_time": leadTime
+          "fastest_time": fastestTime,
+          "last_time": lastTime,
         }),
       );
 
@@ -575,5 +576,54 @@ class RestServices{
     }else {
     }
   }
+
+  Future<dynamic> getStackStatistic(stackId) async
+  {
+    String? accessToken = await storage.read(key: 'accessToken');
+    try
+    {
+      if (accessToken != null) {
+        final response = await http.post(
+          Uri.parse('http://10.0.2.2:3000/getStackStatistic'),
+          headers: <String, String>{
+            'Content-Type': 'application/json',
+            'Authorization': "Bearer " + accessToken,
+          },
+          body: jsonEncode(<String, dynamic>{
+            "stack_id": stackId
+          }),
+        ).timeout(Duration(seconds: 10));
+
+        if (response.statusCode == 200)
+        {
+          dynamic jsonResponse = json.decode(response.body);
+          await fileHandler.saveJsonToLocalFile(jsonResponse, "stackStatistic");
+
+          return jsonResponse;
+
+        }else
+        {
+          throw http.ClientException('hat nicht geklappt. Statuscode: ${response.statusCode}');
+        }
+      }else
+      {
+        print("Zugangstoken existiert nicht!");
+      }
+    }on TimeoutException catch (e)
+    {
+      print('Zeitüberschreitung: $e');
+      //var auf grad kein netz einbauen
+      return null;
+    }on http.ClientException catch (e)
+    {
+      print('Clientfehler: $e');
+      return null;
+    }catch (e)
+    {
+      print('Allgemeiner Fehler: $e');
+      return null;
+    }
+  }
+
 }
 
