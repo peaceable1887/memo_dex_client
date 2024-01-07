@@ -31,7 +31,7 @@ class _StatisticCardState extends State<StatisticCard> {
 
   void progressInPercent(noticed, notNoticed)
   {
-    if(notNoticed == 0)
+    if(notNoticed == 0 && widget.noticed == 0)
     {
       notNoticed = 1;
     }
@@ -41,17 +41,17 @@ class _StatisticCardState extends State<StatisticCard> {
     });
   }
 
-  List<GDPData> getChartData(isNotNoticed)
+  List<GDPData> getChartData(notNoticed)
   {
 
-    if(isNotNoticed == 0)
+    if(notNoticed == 0 && widget.noticed == 0)
     {
-      isNotNoticed = 1;
+      notNoticed = 1;
     }
 
     final List<GDPData> chartData = [
       GDPData("Noticed", widget.noticed, Colors.white),
-      GDPData("Noticed", isNotNoticed, Color(0xFFD1D1D1)),
+      GDPData("Noticed", notNoticed, Color(0xFFD1D1D1)),
     ];
 
     return chartData;
