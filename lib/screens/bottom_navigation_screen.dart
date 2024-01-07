@@ -24,15 +24,9 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
   ];
 
   @override
-  void initState() {
-    printTest();
+  void initState()
+  {
     super.initState();
-  }
-
-  void printTest() {
-    RestServices(context).getPosts();
-    RestServices(context).getAllStacks();
-
   }
 
   @override

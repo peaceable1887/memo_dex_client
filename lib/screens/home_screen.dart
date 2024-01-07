@@ -17,7 +17,6 @@ class _HomeScreenState extends State<HomeScreen> {
   String selectedOption = "ALL STACKS";
   bool asc = false;
 
-
   @override
   void initState() {
     super.initState();

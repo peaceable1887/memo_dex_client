@@ -105,6 +105,7 @@ class _CardLearningScreenState extends State<CardLearningScreen> with TickerProv
 
       setState(() {
         wasClicked = val;
+
         if (wasClicked == true && activeIndex == indexCards.length - 1) {
 
           Duration fastestDuration = parseDuration(fastestTime);
@@ -112,11 +113,11 @@ class _CardLearningScreenState extends State<CardLearningScreen> with TickerProv
 
           if(currentDuration.compareTo(fastestDuration) < 0)
           {
-            print("Neue Bestzeit");
+            print("Neue Bestzeit!");
             RestServices(context).updateStackStatistic(widget.stackId, formatTime(), formatTime());
           }else
           {
-            print("Schnellste Zeit bleibt");
+            print("Bestzeit bleibt.");
             RestServices(context).updateStackStatistic(widget.stackId, fastestTime, formatTime());
           }
         }
