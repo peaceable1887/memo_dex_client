@@ -29,6 +29,17 @@ class _StatisticCardState extends State<StatisticCard> {
     _chartData = getChartData(widget.notNoticed);
   }
 
+  @override
+  void didUpdateWidget(covariant StatisticCard oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    // Überprüfe, ob die Daten geändert wurden, bevor du sie aktualisierst
+    if (widget.noticed != oldWidget.noticed || widget.notNoticed != oldWidget.notNoticed) {
+      progressInPercent(widget.noticed, widget.notNoticed);
+      _chartData = getChartData(widget.notNoticed);
+    }
+  }
+
   void progressInPercent(noticed, notNoticed)
   {
     if(notNoticed == 0 && widget.noticed == 0)
@@ -130,7 +141,8 @@ class _StatisticCardState extends State<StatisticCard> {
                               pointColorMapper:(GDPData data,  _) => data.color,
                               xValueMapper: (GDPData data, _) => data.continent,
                               yValueMapper: (GDPData data, _) => data.gdp,
-                              innerRadius: '69%'
+                              innerRadius: '69%',
+                              animationDuration: 0,
                           )
                         ],
                       ),

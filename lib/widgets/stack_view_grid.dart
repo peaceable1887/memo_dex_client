@@ -88,7 +88,7 @@ class _StackViewGridState extends State<StackViewGrid> {
         if (fileContent.isNotEmpty)
         {
           List<dynamic> stackFileContent = jsonDecode(fileContent);
-          print("hier: $selectedOption");
+
           if(selectedOption == "STACKNAME" && sortValue == false)
           {
             stackFileContent.sort((a, b) => a['stackname'].compareTo(b['stackname']));
