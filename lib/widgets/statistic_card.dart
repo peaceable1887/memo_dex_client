@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:memo_dex_prototyp/helperClasses/trim_text.dart';
 import 'package:memo_dex_prototyp/screens/statistic_stack_screen.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
@@ -77,13 +78,26 @@ class _StatisticCardState extends State<StatisticCard> {
           borderRadius: BorderRadius.all(Radius.circular(10)),
           color: Color(int.parse("0xFF${widget.color}")),
             border: Border.all(color: Colors.white, width: 3),
+          boxShadow: [
+            BoxShadow(
+              color: Color.fromRGBO(0, 0, 0, 0.15),
+              blurRadius: 15.0,
+              offset: Offset(4, 10),
+            ),
+          ],
         ),
         child: InkWell(
           onTap: () {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => StatisticStackScreen(stackId: widget.stackId,),
+                builder: (context) => StatisticStackScreen(
+                  stackId: widget.stackId,
+                  stackname: widget.stackName,
+                  color: widget.color,
+                  noticed: widget.noticed,
+                  notNoticed: widget.notNoticed,
+                ),
               ),
             );
           },
@@ -159,7 +173,7 @@ class _StatisticCardState extends State<StatisticCard> {
                                   Padding(
                                     padding: const EdgeInsets.fromLTRB(10, 0, 0, 2),
                                     child: Text(
-                                      widget.stackName,
+                                      TrimText().trimText(widget.stackName, 20),
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 22,

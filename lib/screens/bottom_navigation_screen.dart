@@ -8,7 +8,10 @@ import '../widgets/top_search_bar.dart';
 import 'home_screen.dart';
 
 class BottomNavigationScreen extends StatefulWidget {
-  const BottomNavigationScreen({Key? key}) : super(key: key);
+
+  final int? index;
+
+  const BottomNavigationScreen({Key? key, this.index}) : super(key: key);
 
   @override
   State<BottomNavigationScreen> createState() => _BottomNavigationScreenState();
@@ -17,6 +20,7 @@ class BottomNavigationScreen extends StatefulWidget {
 class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
 
   int currentIndex = 0;
+
   final screens = [
     HomeScreen(),
     StatisticScreen(),
@@ -26,7 +30,27 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
   @override
   void initState()
   {
+    updateIndex();
     super.initState();
+  }
+
+  void updateIndex()
+  {
+    if(widget.index == 1)
+    {
+      currentIndex = 1;
+    }
+    if(widget.index == 2)
+    {
+      currentIndex = 2;
+    }
+  }
+
+  @override
+  void dispose()
+  {
+    updateIndex();
+    super.dispose();
   }
 
   @override

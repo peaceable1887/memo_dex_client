@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:memo_dex_prototyp/screens/stack_content_screen.dart';
 
+import '../helperClasses/trim_text.dart';
+
 class StackBtn extends StatefulWidget {
 
   final dynamic stackId;
@@ -25,14 +27,6 @@ class _StackBtnState extends State<StackBtn> {
         builder: (context) => StackContentScreen(stackId: widget.stackId),
       ),
     );
-  }
-
-  String trimText(String text, int maxLength) {
-    if (text.length <= maxLength) {
-      return text;
-    } else {
-      return text.substring(0, maxLength) + "...";
-    }
   }
 
   @override
@@ -60,7 +54,7 @@ class _StackBtnState extends State<StackBtn> {
             width: 150,
             child: Center(
               child: Text(
-                trimText(widget.stackName, 30),
+                TrimText().trimText(widget.stackName, 30),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     color: Colors.black,

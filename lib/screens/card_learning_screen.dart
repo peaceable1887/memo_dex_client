@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:horizontal_blocked_scroll_physics/horizontal_blocked_scroll_physics.dart';
 import 'package:intl/intl.dart';
@@ -101,6 +100,11 @@ class _CardLearningScreenState extends State<CardLearningScreen> with TickerProv
   Future<void> handleCardClick(bool val) async {
     try {
       final time = await RestServices(context).getStackStatistic(widget.stackId);
+      if(time[0]["fastest_time"] == null)
+      {
+        time[0]["fastest_time"] = "99:99:99";
+      }
+
       final fastestTime = time[0]["fastest_time"];
 
       setState(() {
@@ -123,7 +127,7 @@ class _CardLearningScreenState extends State<CardLearningScreen> with TickerProv
         }
       });
     } catch (error) {
-      print('Fehler beim Laden der Daten: $error');
+      print('Fehler beim Laden der --Daten: $error');
     }
   }
 

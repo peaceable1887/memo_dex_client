@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../helperClasses/trim_text.dart';
+
 class Headline extends StatefulWidget {
 
   final String text;
@@ -24,21 +26,13 @@ class _HeadlineState extends State<Headline> {
     super.dispose();
   }
 
-  String trimText(String text, int maxLength) {
-    if (text.length <= maxLength) {
-      return text;
-    } else {
-      return text.substring(0, maxLength) + "...";
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
       child: Container(
         child: Text(
-          trimText(widget.text,30),
+          TrimText().trimText(widget.text,30),
           textAlign: TextAlign.center,
           style: TextStyle(
               color: Colors.white,
