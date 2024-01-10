@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:memo_dex_prototyp/screens/login_screen.dart';
 import 'package:memo_dex_prototyp/widgets/validation_message_box.dart';
 
 import '../screens/welcome_screen.dart';
@@ -21,6 +23,7 @@ class _SignUpFormState extends State<SignUpForm> {
   bool _isPasswordVisible = false;
   bool _isChecked = false;
   bool _isEnabled = false;
+  final storage = FlutterSecureStorage();
 
   @override
   void initState() {
@@ -57,6 +60,13 @@ class _SignUpFormState extends State<SignUpForm> {
     if (emailRegExp.hasMatch(email)) {
       if (password == repeatPassword && password.isNotEmpty) {
           RestServices(context).createUser(_eMail.text, _password.text);
+          storage.write(key: 'addUser', value: "true");
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => LoginScreen(),
+            ),
+          );
       } else {
         showDialog(
           context: context,

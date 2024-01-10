@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:memo_dex_prototyp/screens/add_card_screen.dart';
 import 'package:memo_dex_prototyp/screens/bottom_navigation_screen.dart';
 import 'package:memo_dex_prototyp/screens/standard_learning_screen.dart';
@@ -10,6 +11,7 @@ import 'package:memo_dex_prototyp/widgets/stack_content_btn.dart';
 import '../services/file_handler.dart';
 import '../widgets/card_btn.dart';
 
+import '../widgets/components/custom_snackbar.dart';
 import '../widgets/headline.dart';
 import '../widgets/top_navigation_bar.dart';
 import 'individual_learning_screen.dart';
@@ -34,8 +36,46 @@ class _StackContentScreenState extends State<StackContentScreen> {
   bool sortValue = false;
   bool showText = false;
   bool isMixed = false;
-
   final List<Widget> cards = [];
+  final storage = FlutterSecureStorage();
+
+  @override
+  void initState()
+  {
+    super.initState();
+    showSnackbarInformation();
+    loadStack();
+    loadCards();
+    showButtons();
+  }
+
+  void showSnackbarInformation() async
+  {
+    String? stackCreated = await storage.read(key: 'stackUpdated');
+    String? addCard = await storage.read(key: 'addCard');
+    if(stackCreated == "true")
+    {
+      CustomSnackbar.showSnackbar(
+          context,
+          "Information",
+          "A stack was successfully edited.",
+          Colors.green,
+          Duration(milliseconds: 500)
+      );
+      await storage.write(key: 'stackUpdated', value: "false");
+    }
+    if(addCard == "true")
+    {
+      CustomSnackbar.showSnackbar(
+          context,
+          "Information",
+          "A card was successfully created.",
+          Colors.green,
+          Duration(milliseconds: 500)
+      );
+      await storage.write(key: 'addCard', value: "false");
+    }
+  }
 
   List<Widget> showButtons()
   {
@@ -131,10 +171,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
 
           for (var card in cardFileContent)
           {
-            if(card['is_deleted'] == 1)
-            {
-              showText = true;
-            }
+
             if (card['is_deleted'] == 0)
             {
               cards.add(CardBtn(btnText: card["question"], stackId: widget.stackId, cardId: card["card_id"],));
@@ -154,6 +191,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
         if (fileContent.isNotEmpty)
         {
           List<dynamic> cardFileContent = jsonDecode(fileContent);
+
 
           if(selectedOption == "QUESTION" && sortValue == false)
           {
@@ -192,16 +230,18 @@ class _StackContentScreenState extends State<StackContentScreen> {
 
           for (var card in cardFileContent)
           {
-            if(card['is_deleted'] == 1)
-            {
-              showText = true;
-            }
             if (card['is_deleted'] == 0)
             {
               cards.add(CardBtn(btnText: card["question"], stackId: widget.stackId, cardId: card["card_id"], isNoticed: card["remember"]));
               showText = false;
+            }else
+            {
+              //TODO BUG: wenn die karte an den letzten index-position gelöscht wird, wird der wert auch true gesetzt
+              showText = true;
             }
+
           }
+
           // Widget wird aktualisiert nnach dem Laden der Daten.
           if (mounted)
           {
@@ -234,16 +274,9 @@ class _StackContentScreenState extends State<StackContentScreen> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    loadStack();
-    loadCards();
-    showButtons();
-  }
-
-  @override
   void dispose() {
     super.initState();
+    showSnackbarInformation();
     loadStack();
     loadCards();
     showButtons();

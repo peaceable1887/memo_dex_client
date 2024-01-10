@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import '../screens/bottom_navigation_screen.dart';
 import '../services/rest_services.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class CreateStackForm extends StatefulWidget {
   const CreateStackForm({Key? key}) : super(key: key);
@@ -15,6 +16,7 @@ class _CreateStackFormState extends State<CreateStackForm> {
   Color color = Colors.red;
   late TextEditingController _stackname;
   bool _isButtonEnabled = false;
+  final storage = FlutterSecureStorage();
 
   @override
   void initState() {
@@ -250,6 +252,7 @@ class _CreateStackFormState extends State<CreateStackForm> {
                       ? () {
                     setState(() {
                       RestServices(context).createStack(_stackname.text, "${color.value.toRadixString(16).substring(2)}");
+                      storage.write(key: 'stackCreated', value: "true");
                       Navigator.push(
                         context,
                         MaterialPageRoute(

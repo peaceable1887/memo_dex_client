@@ -6,6 +6,7 @@ import 'package:memo_dex_prototyp/screens/stack_content_screen.dart';
 import 'package:carousel_slider/carousel_slider.dart'; // https://pub.dev/packages/carousel_slider
 
 import '../services/rest_services.dart';
+import '../widgets/components/custom_snackbar.dart';
 import '../widgets/headline.dart';
 import '../widgets/learning_card.dart';
 import '../widgets/top_navigation_bar.dart';
@@ -31,6 +32,7 @@ class _CardLearningScreenState extends State<StandardLearningScreen> with Ticker
   late bool wasClicked = false;
   int seconds = 0;
   late Timer timer;
+  bool snackbarShown = false;
 
   @override
   void initState() {
@@ -263,25 +265,42 @@ class _CardLearningScreenState extends State<StandardLearningScreen> with Ticker
               ),
             ),
             Container(
-              child: CarouselSlider.builder(
-                itemCount: indexCards.length,
-                  itemBuilder: (context, index, realIndex)
-                  {
-                    final indexCard = indexCards[index];
-                    return buildIndexCard(indexCard, index);
-                  },
-                  options: CarouselOptions( //hier kann man die eigenschaften des slider manipulieren
-                    height: 500,
-                    enableInfiniteScroll: false,
-                    scrollPhysics: wasClicked ? RightBlockedScrollPhysics() : NeverScrollableScrollPhysics(),
-                    autoPlayInterval: Duration(seconds: 1),
-                    onPageChanged: (index, reason) => setState(()
+              child: GestureDetector(
+                onPanUpdate: (details)
+                {
+                    if (!snackbarShown) {
+                    CustomSnackbar.showSnackbar(
+                        context,
+                        "Information",
+                        "Before you can swipe further, you need to answer the card.",
+                        Colors.red,
+                        Duration(seconds: 0)
+                    );
+                    setState(() {
+                      snackbarShown = true;
+                    });
+                  }
+                },
+                child: CarouselSlider.builder(
+                  itemCount: indexCards.length,
+                    itemBuilder: (context, index, realIndex)
                     {
-                      activeIndex = index;
-                      wasClicked = false;
-                    }
+                      final indexCard = indexCards[index];
+                      return buildIndexCard(indexCard, index);
+                    },
+                    options: CarouselOptions( //hier kann man die eigenschaften des slider manipulieren
+                      height: 500,
+                      enableInfiniteScroll: false,
+                      scrollPhysics: wasClicked ? RightBlockedScrollPhysics() : NeverScrollableScrollPhysics(),
+                      autoPlayInterval: Duration(seconds: 1),
+                      onPageChanged: (index, reason) => setState(()
+                      {
+                        activeIndex = index;
+                        wasClicked = false;
+                      }
+                      ),
                     ),
-                  ),
+                ),
               ),
             ),
           ],

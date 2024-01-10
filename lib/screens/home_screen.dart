@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:memo_dex_prototyp/widgets/stack_view_grid.dart';
+import '../widgets/components/custom_snackbar.dart';
 import '../widgets/custom_search_delegate.dart';
 import '../widgets/headline.dart';
 import '../widgets/filters/filter_stacks.dart';
@@ -16,13 +18,34 @@ class _HomeScreenState extends State<HomeScreen> {
 
   String selectedOption = "ALL STACKS";
   bool asc = false;
+  final storage = FlutterSecureStorage();
+
 
   @override
   void initState() {
+    showSnackbarInformation();
     super.initState();
   }
+
+  void showSnackbarInformation() async
+  {
+    String? stackCreated = await storage.read(key: 'stackCreated');
+    if(stackCreated == "true")
+    {
+      CustomSnackbar.showSnackbar(
+        context,
+        "Information",
+        "A stack was successfully created.",
+        Colors.green,
+        Duration(milliseconds: 500)
+      );
+      await storage.write(key: 'stackCreated', value: "false");
+    }
+  }
+
   @override
   void dispose() {
+    showSnackbarInformation();
     super.dispose();
   }
   @override

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:memo_dex_prototyp/screens/single_card_screen.dart';
 import 'package:memo_dex_prototyp/screens/stack_content_screen.dart';
 
@@ -27,6 +28,7 @@ class _EditCardScreenState extends State<EditCardScreen> {
   late TextEditingController _question;
   late TextEditingController _answer;
   bool _isButtonEnabled = false;
+  final storage = FlutterSecureStorage();
 
   @override
   void initState() {
@@ -259,6 +261,7 @@ class _EditCardScreenState extends State<EditCardScreen> {
                         ? () {
                       setState(() {
                         RestServices(context).updateCard(_question.text, _answer.text, 0, 0, widget.cardId);
+                        storage.write(key: 'editCard', value: "true");
                         Navigator.push(
                           context,
                           MaterialPageRoute(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:memo_dex_prototyp/screens/stack_content_screen.dart';
 
 import '../services/rest_services.dart';
@@ -21,6 +22,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
   late TextEditingController _question;
   late TextEditingController _answer;
   bool _isButtonEnabled = false;
+  final storage = FlutterSecureStorage();
 
   @override
   void initState() {
@@ -220,6 +222,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
                               ? () {
                             setState(() {
                               RestServices(context).addCard(_question.text, _answer.text, widget.stackId);
+                              storage.write(key: 'addCard', value: "true");
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(

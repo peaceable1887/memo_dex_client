@@ -1,8 +1,10 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:memo_dex_prototyp/screens/stack_content_screen.dart';
 
 import '../services/rest_services.dart';
+import '../widgets/components/custom_snackbar.dart';
 import '../widgets/headline.dart';
 import '../widgets/learning_card.dart';
 import '../widgets/top_navigation_bar.dart';
@@ -28,19 +30,32 @@ class _SingleCardScreenState extends State<SingleCardScreen> {
   bool isNoticed = false;
   String question = "";
   String answer = "";
+  final storage = FlutterSecureStorage();
 
   @override
-  void initState() {
+  void initState()
+  {
+    showSnackbarInformation();
     loadStack();
     loadCard();
     super.initState();
   }
 
-  @override
-  void dispose() {
-    loadStack();
-    loadCard();
-    super.dispose();
+
+  void showSnackbarInformation() async
+  {
+    String? stackCreated = await storage.read(key: 'editCard');
+    if(stackCreated == "true")
+    {
+      CustomSnackbar.showSnackbar(
+          context,
+          "Information",
+          "A card was successfully edited.",
+          Colors.green,
+          Duration(milliseconds: 500)
+      );
+      await storage.write(key: 'editCard', value: "false");
+    }
   }
 
   Future<void> loadStack() async {
@@ -102,6 +117,16 @@ class _SingleCardScreenState extends State<SingleCardScreen> {
         margin: EdgeInsets.symmetric(horizontal: 12),
         child: indexCard,
       );
+
+  @override
+  void dispose()
+  {
+    showSnackbarInformation();
+    loadStack();
+    loadCard();
+    super.dispose();
+  }
+
 
   @override
   Widget build(BuildContext context) {

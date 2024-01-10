@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:memo_dex_prototyp/screens/stack_content_screen.dart';
 import '../services/rest_services.dart';
 
@@ -20,6 +21,7 @@ class _EditStackFormState extends State<EditStackForm> {
   late Color newColor;
   late TextEditingController _stackname;
   bool _isButtonEnabled = false;
+  final storage = FlutterSecureStorage();
 
   @override
   void initState() {
@@ -257,6 +259,7 @@ class _EditStackFormState extends State<EditStackForm> {
                     ? () {
                   setState(() {
                     RestServices(context).updateStack(_stackname.text, "${newColor.value.toRadixString(16).substring(2)}", 0, widget.stackId);
+                    storage.write(key: 'stackUpdated', value: "true");
                     Navigator.push(
                       context,
                       MaterialPageRoute(
