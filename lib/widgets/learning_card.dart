@@ -9,8 +9,10 @@ class LearningCard extends StatefulWidget {
   final String question;
   final String answer;
   final Function(bool) onClicked;
+  final int isNoticed;
+  final bool isIndividual;
 
-  const LearningCard({Key? key, required this.question, required this.answer, required this.cardIndex, required this.onClicked}) : super(key: key);
+  const LearningCard({Key? key, required this.question, required this.answer, required this.cardIndex, required this.onClicked, required this.isIndividual, required this.isNoticed}) : super(key: key);
 
   @override
   State<LearningCard> createState() => _LearningCardState();
@@ -25,12 +27,12 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
   bool isCardTurned = false;
   bool showAnswerBtns = true;
   bool isCardNoticed = false;
-
   @override
   void initState()
   {
+    setLighIcon();
     super.initState();
-    controller = AnimationController(vsync: this, duration: const Duration(seconds: 1));
+    controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 700));
     animation = Tween(end: 1.0, begin: 0.0).animate(controller);
     animation.addListener(() {
         setState(() {});
@@ -40,10 +42,36 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
       });
   }
 
+  @override
+  void dispose()
+  {
+    setLighIcon();
+    controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 700));
+    animation = Tween(end: 1.0, begin: 0.0).animate(controller);
+    animation.addListener(() {
+      setState(() {});
+    });
+    animation.addStatusListener((status) {
+      animationStatus = status;
+    });
+    super.dispose();
+  }
+
+  void setLighIcon()
+  {
+    setState(() {
+      if(widget.isNoticed == 1){
+        isCardNoticed = true;
+      }else{
+        isCardNoticed = false;
+      }
+    });
+  }
+
   void cardNoted()
   {
     setState(() {
-      if(isCardNoticed == false){
+      if(widget.isNoticed == 0){
         RestServices(context).updateCard(widget.question, widget.answer, 0, 1, widget.cardIndex,);
         isCardNoticed = true;
       }else{
@@ -219,7 +247,7 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
                 },
               ),
             ) :
-            showAnswerBtns ? Container(
+            !widget.isIndividual ? showAnswerBtns ? Container(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -291,7 +319,33 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
                   ),
                 ],
               ),
-            ) : Container(),
+            ) : Container() :
+            Container(
+              width: 75,
+              decoration: BoxDecoration(
+                color: Colors.grey,
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.15),
+                    blurRadius: 10,
+                    offset: Offset(1,5),
+                  ),
+                ],
+              ),
+              child: IconButton(
+                icon: const Icon(Icons.redo_rounded),
+                color: Colors.white,
+                iconSize: 40,
+                onPressed: (){
+                  if(animationStatus == AnimationStatus.dismissed){
+                    controller.forward();
+                  }else{
+                    controller.reverse();
+                  }
+                },
+              ),
+            ),
           ],
         ),
       );

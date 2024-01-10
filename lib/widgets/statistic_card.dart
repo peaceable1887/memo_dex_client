@@ -72,12 +72,11 @@ class _StatisticCardState extends State<StatisticCard> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
+      padding: const EdgeInsets.fromLTRB(20, 0, 20, 15),
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(10)),
           color: Color(int.parse("0xFF${widget.color}")),
-            border: Border.all(color: Colors.white, width: 3),
           boxShadow: [
             BoxShadow(
               color: Color.fromRGBO(0, 0, 0, 0.15),

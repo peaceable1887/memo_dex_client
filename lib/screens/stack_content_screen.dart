@@ -3,16 +3,16 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:memo_dex_prototyp/screens/add_card_screen.dart';
 import 'package:memo_dex_prototyp/screens/bottom_navigation_screen.dart';
-import 'package:memo_dex_prototyp/screens/card_learning_screen.dart';
+import 'package:memo_dex_prototyp/screens/standard_learning_screen.dart';
 import 'package:memo_dex_prototyp/screens/edit_stack_screen.dart';
 import 'package:memo_dex_prototyp/services/rest_services.dart';
 import 'package:memo_dex_prototyp/widgets/stack_content_btn.dart';
-
 import '../services/file_handler.dart';
 import '../widgets/card_btn.dart';
-import '../widgets/filters/filter_cards.dart';
+
 import '../widgets/headline.dart';
 import '../widgets/top_navigation_bar.dart';
+import 'individual_learning_screen.dart';
 
 class StackContentScreen extends StatefulWidget {
 
@@ -33,6 +33,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
   String selectedOption = "ALL CARDS";
   bool sortValue = false;
   bool showText = false;
+  bool isMixed = false;
 
   final List<Widget> cards = [];
 
@@ -41,17 +42,17 @@ class _StackContentScreenState extends State<StackContentScreen> {
     List<Widget> startLearningButtons = [
       StackContentBtn(
           iconColor: "FFFFFF",
-          btnText: "Chronological",
+          btnText: "Standard",
           backgroundColor: "34A853",
-          onPressed: CardLearningScreen(stackId: widget.stackId),
-          icon: Icons.play_circle_outline_rounded
+          onPressed: StandardLearningScreen(stackId: widget.stackId, isMixed: isMixed),
+          icon: Icons.star_border_rounded
       ),
       StackContentBtn(
           iconColor: "FFFFFF",
-          btnText: "Shuffled",
+          btnText: "Individual",
           backgroundColor: "E57435",
-          onPressed: CardLearningScreen(stackId: widget.stackId, isMixed: true),
-          icon: Icons.shuffle_rounded
+          onPressed: IndividualLearningScreen(stackId: widget.stackId, isMixed: isMixed),
+          icon: Icons.my_library_books_rounded
       )
     ];
 
@@ -318,9 +319,9 @@ class _StackContentScreenState extends State<StackContentScreen> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(20,40,0,0),
+            padding: const EdgeInsets.fromLTRB(20,40,22,0),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   "START LEARNING",
@@ -331,11 +332,28 @@ class _StackContentScreenState extends State<StackContentScreen> {
                       fontWeight: FontWeight.w600
                   ),
                 ),
+                InkWell(
+                  onTap: (){
+                    setState(() {
+                      isMixed =! isMixed;
+                    });
+                    print(isMixed);
+                  },
+                  child: isMixed ? Icon(
+                    Icons.shuffle_rounded,
+                    size: 30.0,
+                    color: Color(0xFFE59113),
+                  ): Icon(
+                    Icons.shuffle_rounded,
+                    size: 30.0,
+                    color: Colors.white,// Icon als klickbares Element
+                  ),
+                ),
               ],
             ),
           ),
           Container(
-            height: 200, // Feste Höhe von 200
+            height: 185, // Feste Höhe von 200
             child: GridView.builder(
               padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

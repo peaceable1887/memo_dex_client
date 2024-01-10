@@ -119,9 +119,17 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
       notNoticed = 1;
     }
 
+    Color originalColor = Color(int.parse("0xFF${widget.color}"));
+    Color darkerColor = Color.fromARGB(
+      originalColor.alpha,
+      (originalColor.red * 0.7).round(),
+      (originalColor.green * 0.7).round(),
+      (originalColor.blue * 0.7).round(),
+    );
+
     final List<GDPData> chartData = [
-      GDPData("Noticed", widget.noticed, Color(int.parse("0xFF${widget.color}"))),
-      GDPData("Noticed", notNoticed, Colors.grey),
+      GDPData("Noticed", widget.noticed, originalColor),
+      GDPData("Noticed", notNoticed, darkerColor),
     ];
 
     return chartData;
@@ -237,7 +245,7 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
                           children: [
                             Icon(
                               Icons.insert_chart_outlined_rounded,
-                              size: 26.0,
+                              size: 24.0,
                               color: Colors.grey,
                             ),
                             Padding(
@@ -246,7 +254,7 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
                                 "PROGRESS",
                                 style: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 18,
+                                    fontSize: 16,
                                     fontFamily: "Inter",
                                     fontWeight: FontWeight.w600
                                 ),
@@ -255,7 +263,7 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
                           ],
                         ),
                         Container(
-                          height: 160,
+                          height: 165,
                           child: SfCircularChart(
                             annotations:  <CircularChartAnnotation>[
                               CircularChartAnnotation(
@@ -305,7 +313,7 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
+                          padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
@@ -315,7 +323,7 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Container(
-                                        height: 22,
+                                        height: 20,
                                         child: Image(
                                           image: AssetImage("assets/images/card_btn_icon.png"),
                                         ),
@@ -325,13 +333,16 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Text(
-                                        '${widget.noticed.toInt() + widget.notNoticed.toInt()}',
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 18,
-                                          fontFamily: "Inter",
-                                          fontWeight: FontWeight.w700,
+                                      Padding(
+                                        padding: const EdgeInsets.fromLTRB(0, 2, 0, 2),
+                                        child: Text(
+                                          '${widget.noticed.toInt() + widget.notNoticed.toInt()}',
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 20,
+                                            fontFamily: "Inter",
+                                            fontWeight: FontWeight.w700,
+                                          ),
                                         ),
                                       )
                                     ],
@@ -359,7 +370,7 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
                                     children: [
                                       Icon(
                                         Icons.lightbulb_rounded,
-                                        size: 24.0,
+                                        size: 22.0,
                                         color: Color(0xFFE59113),
                                       )
                                     ],
@@ -367,13 +378,16 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Text(
-                                        '${widget.noticed.toInt()}',
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 18,
-                                          fontFamily: "Inter",
-                                          fontWeight: FontWeight.w700,
+                                      Padding(
+                                        padding: const EdgeInsets.fromLTRB(0, 2, 0, 2),
+                                        child: Text(
+                                          '${widget.noticed.toInt()}',
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 20,
+                                            fontFamily: "Inter",
+                                            fontWeight: FontWeight.w700,
+                                          ),
                                         ),
                                       )
                                     ],
@@ -401,7 +415,7 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
                                     children: [
                                       Icon(
                                         Icons.lightbulb_outline_rounded,
-                                        size: 24.0,
+                                        size: 22.0,
                                         color: Color(0xFFE59113),
                                       )
                                     ],
@@ -409,13 +423,16 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Text(
-                                        '${widget.notNoticed.toInt()}',
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 18,
-                                          fontFamily: "Inter",
-                                          fontWeight: FontWeight.w700,
+                                      Padding(
+                                        padding: const EdgeInsets.fromLTRB(0, 2, 0, 2),
+                                        child: Text(
+                                          '${widget.notNoticed.toInt()}',
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 20,
+                                            fontFamily: "Inter",
+                                            fontWeight: FontWeight.w700,
+                                          ),
                                         ),
                                       )
                                     ],
@@ -474,7 +491,7 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
                                   children: [
                                     Icon(
                                       Icons.timelapse_rounded,
-                                      size: 24.0,
+                                      size: 22.0,
                                       color: Colors.green,
                                     )
                                   ],
@@ -544,7 +561,7 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
                                   children: [
                                     Icon(
                                       Icons.timelapse_rounded,
-                                      size: 24.0,
+                                      size: 22.0,
                                       color: Color(0xFFE59113),
                                     )
                                   ],
@@ -614,7 +631,7 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
                                   children: [
                                     Icon(
                                       Icons.difference_rounded,
-                                      size: 24.0,
+                                      size: 22.0,
                                       color: Colors.red,
                                     )
                                   ],
@@ -664,7 +681,7 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
                 Padding(
                   padding: EdgeInsets.fromLTRB(20, 5, 20, 20),
                   child: Container(
-                    padding:  const EdgeInsets.fromLTRB(15, 10, 15, 10),
+                    padding:  const EdgeInsets.fromLTRB(15, 10, 15, 15),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(10),
@@ -853,6 +870,7 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
   }
 }
 
+//TODO noch richtig benennen
 class GDPData{
   GDPData(this.continent, this.gdp, this.color);
   final String continent;

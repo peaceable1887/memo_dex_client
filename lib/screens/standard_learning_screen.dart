@@ -10,18 +10,18 @@ import '../widgets/headline.dart';
 import '../widgets/learning_card.dart';
 import '../widgets/top_navigation_bar.dart';
 
-class CardLearningScreen extends StatefulWidget {
+class StandardLearningScreen extends StatefulWidget {
 
   final dynamic stackId;
   final bool? isMixed;
 
-  const CardLearningScreen({Key? key, this.stackId, this.isMixed}) : super(key: key);
+  const StandardLearningScreen({Key? key, this.stackId, this.isMixed}) : super(key: key);
 
   @override
-  State<CardLearningScreen> createState() => _CardLearningScreenState();
+  State<StandardLearningScreen> createState() => _CardLearningScreenState();
 }
 
-class _CardLearningScreenState extends State<CardLearningScreen> with TickerProviderStateMixin{
+class _CardLearningScreenState extends State<StandardLearningScreen> with TickerProviderStateMixin{
 
   late AnimationController controller;
   int activeIndex = 0;
@@ -78,8 +78,14 @@ class _CardLearningScreenState extends State<CardLearningScreen> with TickerProv
       for (var card in cardsData) {
         if(card["remember"] == 0 && card["is_deleted"] == 0)
         {
-          indexCards.add(LearningCard(question: card["question"],
-            answer: card["answer"], cardIndex: card["card_id"], onClicked: handleCardClick ));
+          indexCards.add(LearningCard(
+            question: card["question"],
+            answer: card["answer"],
+            cardIndex: card["card_id"],
+            onClicked: handleCardClick,
+            isNoticed: card["remember"],
+            isIndividual: false,
+          ));
         }
 
       }

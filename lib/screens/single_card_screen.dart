@@ -61,7 +61,14 @@ class _SingleCardScreenState extends State<SingleCardScreen> {
 
       for (var card in cardsData) {
         indexCards.add(
-            LearningCard(question: card["question"], answer: card["answer"],cardIndex: card["card_id"], onClicked: (bool val){},));
+            LearningCard(
+              question: card["question"],
+              answer: card["answer"],
+              cardIndex: card["card_id"],
+              onClicked: (bool val){},
+              isNoticed: card["remember"],
+              isIndividual: true,
+            ));
       }
 
       // Widget wird aktualisiert nnach dem Laden der Daten.
@@ -88,21 +95,6 @@ class _SingleCardScreenState extends State<SingleCardScreen> {
         builder: (context) => EditCardScreen(stackId: widget.stackId, cardId: widget.cardId, stackname: stackname, question: question, answer: answer,),
       ),
     );
-  }
-
-  void cardNoted()
-  {
-    setState(() {
-      if(isNoticed == false){
-        RestServices(context).updateCard(question, answer, 0, 1, widget.cardId,);
-        print("gemerkt");
-        isNoticed = true;
-      }else{
-        RestServices(context).updateCard(question, answer, 0, 0, widget.cardId,);
-        print("entmerkt");
-        isNoticed = false;
-      }
-    });
   }
 
   Widget buildIndexCard(Widget indexCard, int index) =>
@@ -146,25 +138,11 @@ class _SingleCardScreenState extends State<SingleCardScreen> {
                   child: Container(
                     width: 80,
                     child: Padding(
-                      padding: const EdgeInsets.fromLTRB(0,0,0,10),
+                      padding: const EdgeInsets.fromLTRB(0,0,3,10),
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        mainAxisAlignment: MainAxisAlignment.end,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          InkWell(
-                            onTap: cardNoted,
-                            child: isNoticed ? Icon(
-                              Icons.lightbulb,
-                              size: 32.0,
-                              color: Colors.white,
-                            )
-                            :
-                            Icon(
-                              Icons.lightbulb_outline,
-                              size: 32.0,
-                              color: Colors.white,
-                            ),// Icon als klickbares Element
-                          ),
                           InkWell(
                             onTap: pushToEditCard,
                             child: Icon(

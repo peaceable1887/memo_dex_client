@@ -48,7 +48,7 @@ class _StackContentBtnState extends State<StackContentBtn> {
               color: Colors.white,
               fontSize: 16,
               fontFamily: "Inter",
-              fontWeight: FontWeight.w600,
+              fontWeight: FontWeight.w700,
             ),
           ),
         ],
