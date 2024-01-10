@@ -88,9 +88,12 @@ class _StatisticScreenState extends State<StatisticScreen>
 
                 for (var card in cardFileContent)
                 {
-                  if (card["remember"] == 1) {
+                  if (card["remember"] == 1 && card["is_deleted"] == 0)
+                  {
                     isNoticed.add(card["remember"]);
-                  } else {
+                  }
+                  if (card["remember"] == 0 && card["is_deleted"] == 0)
+                  {
                     isNotNoticed.add(card["remember"]);
                   }
                 }
@@ -133,9 +136,12 @@ class _StatisticScreenState extends State<StatisticScreen>
 
                 for (var card in cardFileContent)
                 {
-                  if (card["remember"] == 1) {
+                  if (card["remember"] == 1 && card["is_deleted"] == 0)
+                  {
                     isNoticed.add(card["remember"]);
-                  } else {
+                  }
+                  if (card["remember"] == 0 && card["is_deleted"] == 0)
+                  {
                     isNotNoticed.add(card["remember"]);
                   }
                 }

@@ -274,7 +274,8 @@ class _CardLearningScreenState extends State<StandardLearningScreen> with Ticker
                         "Information",
                         "Before you can swipe further, you need to answer the card.",
                         Colors.red,
-                        Duration(seconds: 0)
+                        Duration(seconds: 0),
+                        Duration(milliseconds: 2000)
                     );
                     setState(() {
                       snackbarShown = true;

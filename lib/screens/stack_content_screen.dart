@@ -60,7 +60,8 @@ class _StackContentScreenState extends State<StackContentScreen> {
           "Information",
           "A stack was successfully edited.",
           Colors.green,
-          Duration(milliseconds: 500)
+          Duration(milliseconds: 500),
+          Duration(milliseconds: 1500)
       );
       await storage.write(key: 'stackUpdated', value: "false");
     }
@@ -71,7 +72,8 @@ class _StackContentScreenState extends State<StackContentScreen> {
           "Information",
           "A card was successfully created.",
           Colors.green,
-          Duration(milliseconds: 500)
+          Duration(milliseconds: 500),
+          Duration(milliseconds: 1500)
       );
       await storage.write(key: 'addCard', value: "false");
     }

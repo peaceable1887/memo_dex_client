@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CustomSnackbar {
-  static void showSnackbar(BuildContext context, String headline, String message, Color backgroundColor, Duration delay) {
+  static void showSnackbar(BuildContext context, String headline, String message, Color backgroundColor, Duration delay, Duration duration) {
     Future.delayed(delay, () {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -47,6 +47,7 @@ class CustomSnackbar {
             ),
           ),
           backgroundColor: Colors.transparent,
+          duration: duration,
         ),
       );
     });

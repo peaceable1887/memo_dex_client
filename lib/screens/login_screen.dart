@@ -38,7 +38,8 @@ class _LoginScreenState extends State<LoginScreen> {
           "Information",
           "User was successfully created.",
           Colors.green,
-          Duration(milliseconds: 500)
+          Duration(milliseconds: 500),
+          Duration(milliseconds: 1500)
       );
       await storage.write(key: 'addUser', value: "false");
     }

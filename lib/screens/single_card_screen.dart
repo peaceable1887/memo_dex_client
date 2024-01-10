@@ -52,7 +52,8 @@ class _SingleCardScreenState extends State<SingleCardScreen> {
           "Information",
           "A card was successfully edited.",
           Colors.green,
-          Duration(milliseconds: 500)
+          Duration(milliseconds: 500),
+          Duration(milliseconds: 1500)
       );
       await storage.write(key: 'editCard', value: "false");
     }
