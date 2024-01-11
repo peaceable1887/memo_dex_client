@@ -4,7 +4,6 @@ import 'package:memo_dex_prototyp/widgets/stack_view_grid.dart';
 import '../widgets/components/custom_snackbar.dart';
 import '../widgets/custom_search_delegate.dart';
 import '../widgets/headline.dart';
-import '../widgets/filters/filter_stacks.dart';
 import '../widgets/top_search_bar.dart';
 
 class HomeScreen extends StatefulWidget {

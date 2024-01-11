@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:memo_dex_prototyp/widgets/statistic_card.dart';
+import '../helperClasses/filters.dart';
 import '../services/file_handler.dart';
 import '../services/rest_services.dart';
 import '../widgets/headline.dart';
@@ -22,40 +23,13 @@ class _StatisticScreenState extends State<StatisticScreen>
   FileHandler fileHandler = FileHandler();
   String selectedOption = "ALL STACKS";
   bool sortValue = false;
+  final filter = Filters();
 
   @override
   void initState()
   {
     loadStatisticCards();
     super.initState();
-  }
-
-  void sortItems(selected, sort, List<dynamic> fileContent, listItems)
-  {
-    if(selected == "STACKNAME" && sort == false)
-    {
-      fileContent.sort((a, b) => a['stackname'].compareTo(b['stackname']));
-      listItems.clear();
-    }
-    if(selected == "STACKNAME" && sort == true)
-    {
-      fileContent.sort((a, b) => b['stackname'].compareTo(a['stackname']));
-      listItems.clear();
-    }
-    if(selected == "CREATION DATE" && sort == false)
-    {
-      fileContent.sort((a, b) => DateTime.parse(a['creation_date']).compareTo(DateTime.parse(b['creation_date'])));
-      listItems.clear();
-    }
-    if(selected == "CREATION DATE" && sort == true)
-    {
-      fileContent.sort((a, b) => DateTime.parse(b['creation_date']).compareTo(DateTime.parse(a['creation_date'])));
-      listItems.clear();
-    }
-    else
-    {
-      listItems.clear();
-    }
   }
 
   Future<void> loadStatisticCards() async
@@ -72,7 +46,7 @@ class _StatisticScreenState extends State<StatisticScreen>
         {
           List<dynamic> stackFileContent = jsonDecode(fileContent);
 
-          sortItems(selectedOption, sortValue, stackFileContent, statisticCards);
+          filter.FilterStacks(statisticCards, stackFileContent, selectedOption, sortValue);
 
           for (var stack in stackFileContent)
           {
@@ -120,7 +94,7 @@ class _StatisticScreenState extends State<StatisticScreen>
         {
           List<dynamic> stackFileContent = jsonDecode(fileContent);
 
-          sortItems(selectedOption, sortValue, stackFileContent, statisticCards);
+          filter.FilterStacks(statisticCards, stackFileContent, selectedOption, sortValue);
 
           for (var stack in stackFileContent)
           {

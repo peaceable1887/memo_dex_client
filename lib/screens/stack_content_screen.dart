@@ -8,6 +8,7 @@ import 'package:memo_dex_prototyp/screens/standard_learning_screen.dart';
 import 'package:memo_dex_prototyp/screens/edit_stack_screen.dart';
 import 'package:memo_dex_prototyp/services/rest_services.dart';
 import 'package:memo_dex_prototyp/widgets/stack_content_btn.dart';
+import '../helperClasses/filters.dart';
 import '../services/file_handler.dart';
 import '../widgets/card_btn.dart';
 
@@ -38,6 +39,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
   bool isMixed = false;
   final List<Widget> cards = [];
   final storage = FlutterSecureStorage();
+  final filter = Filters();
 
   @override
   void initState()
@@ -115,7 +117,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
 
     }catch(error)
     {
-      print('Fehler beim Laden der Daten: $error');
+      print('Fehler beim Laden der loadStack Daten: $error');
     }
   }
 
@@ -136,44 +138,10 @@ class _StackContentScreenState extends State<StackContentScreen> {
         {
           List<dynamic> cardFileContent = jsonDecode(fileContent);
 
-          if(selectedOption == "QUESTION" && sortValue == false)
-          {
-            cardFileContent.sort((a, b) => a['question'].compareTo(b['question']));
-            cards.clear();
-          }
-          if(selectedOption == "QUESTION" && sortValue == true)
-          {
-            cardFileContent.sort((a, b) => b['question'].compareTo(a['question']));
-            cards.clear();
-          }
-          if(selectedOption == "CREATION DATE" && sortValue == false)
-          {
-            cardFileContent.sort((a, b) => DateTime.parse(a['creation_date']).compareTo(DateTime.parse(b['creation_date'])));
-            cards.clear();
-          }
-          if(selectedOption == "CREATION DATE" && sortValue == true)
-          {
-            cardFileContent.sort((a, b) => DateTime.parse(b['creation_date']).compareTo(DateTime.parse(a['creation_date'])));
-            cards.clear();
-          }
-          if(selectedOption == "NOTICED" && sortValue == false)
-          {
-            cardFileContent.sort((a, b) => b['remember'].compareTo(a['remember']));
-            cards.clear();
-          }
-          if(selectedOption == "NOTICED" && sortValue == true)
-          {
-            cardFileContent.sort((a, b) => a['remember'].compareTo(b['remember']));
-            cards.clear();
-          }
-          else
-          {
-            cards.clear();
-          }
+          filter.FilterCards(cards, cardFileContent, selectedOption, sortValue);
 
           for (var card in cardFileContent)
           {
-
             if (card['is_deleted'] == 0)
             {
               cards.add(CardBtn(btnText: card["question"], stackId: widget.stackId, cardId: card["card_id"],));
@@ -183,7 +151,9 @@ class _StackContentScreenState extends State<StackContentScreen> {
           // Widget wird aktualisiert nnach dem Laden der Daten.
           if (mounted)
           {
-            setState(() {});
+            setState(() {
+
+            });
           }
         }
       }else
@@ -194,41 +164,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
         {
           List<dynamic> cardFileContent = jsonDecode(fileContent);
 
-
-          if(selectedOption == "QUESTION" && sortValue == false)
-          {
-            cardFileContent.sort((a, b) => a['question'].compareTo(b['question']));
-            cards.clear();
-          }
-          if(selectedOption == "QUESTION" && sortValue == true)
-          {
-            cardFileContent.sort((a, b) => b['question'].compareTo(a['question']));
-            cards.clear();
-          }
-          if(selectedOption == "CREATION DATE" && sortValue == false)
-          {
-            cardFileContent.sort((a, b) => DateTime.parse(a['creation_date']).compareTo(DateTime.parse(b['creation_date'])));
-            cards.clear();
-          }
-          if(selectedOption == "CREATION DATE" && sortValue == true)
-          {
-            cardFileContent.sort((a, b) => DateTime.parse(b['creation_date']).compareTo(DateTime.parse(a['creation_date'])));
-            cards.clear();
-          }
-          if(selectedOption == "NOTICED" && sortValue == false)
-          {
-            cardFileContent.sort((a, b) => b['remember'].compareTo(a['remember']));
-            cards.clear();
-          }
-          if(selectedOption == "NOTICED" && sortValue == true)
-          {
-            cardFileContent.sort((a, b) => a['remember'].compareTo(b['remember']));
-            cards.clear();
-          }
-          else
-          {
-            cards.clear();
-          }
+          filter.FilterCards(cards, cardFileContent, selectedOption, sortValue);
 
           for (var card in cardFileContent)
           {
@@ -236,14 +172,12 @@ class _StackContentScreenState extends State<StackContentScreen> {
             {
               cards.add(CardBtn(btnText: card["question"], stackId: widget.stackId, cardId: card["card_id"], isNoticed: card["remember"]));
               showText = false;
-            }else
+            }/*else
             {
               //TODO BUG: wenn die karte an den letzten index-position gelöscht wird, wird der wert auch true gesetzt
               showText = true;
-            }
-
+            }*/
           }
-
           // Widget wird aktualisiert nnach dem Laden der Daten.
           if (mounted)
           {
@@ -253,7 +187,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
       }
     }catch(error)
     {
-      print('Fehler beim Laden der Daten: $error');
+      print('Fehler beim Laden der loadCards Daten: $error');
     }
   }
 

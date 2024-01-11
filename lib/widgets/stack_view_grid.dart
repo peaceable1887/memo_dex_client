@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:memo_dex_prototyp/services/rest_services.dart';
 import 'package:memo_dex_prototyp/widgets/create_stack_btn.dart';
 import 'package:memo_dex_prototyp/widgets/stack_btn.dart';
+import '../helperClasses/filters.dart';
 import '../services/file_handler.dart';
 
 class StackViewGrid extends StatefulWidget {
@@ -18,6 +19,7 @@ class StackViewGrid extends StatefulWidget {
 class _StackViewGridState extends State<StackViewGrid> {
   List<Widget> stackButtons = [];
   FileHandler fileHandler = FileHandler();
+  final filter = Filters();
 
   @override
   void initState() {
@@ -47,30 +49,7 @@ class _StackViewGridState extends State<StackViewGrid> {
         {
           List<dynamic> stackFileContent = jsonDecode(fileContent);
 
-          if(selectedOption == "STACKNAME" && sortValue == false)
-          {
-            stackFileContent.sort((a, b) => a['stackname'].compareTo(b['stackname']));
-            stackButtons.clear();
-          }
-          if(selectedOption == "STACKNAME" && sortValue == true)
-          {
-            stackFileContent.sort((a, b) => b['stackname'].compareTo(a['stackname']));
-            stackButtons.clear();
-          }
-          if(selectedOption == "CREATION DATE" && sortValue == false)
-          {
-            stackFileContent.sort((a, b) => DateTime.parse(a['creation_date']).compareTo(DateTime.parse(b['creation_date'])));
-            stackButtons.clear();
-          }
-          if(selectedOption == "CREATION DATE" && sortValue == true)
-          {
-            stackFileContent.sort((a, b) => DateTime.parse(b['creation_date']).compareTo(DateTime.parse(a['creation_date'])));
-            stackButtons.clear();
-          }
-          else
-          {
-            stackButtons.clear();
-          }
+          filter.FilterStacks(stackButtons, stackFileContent, selectedOption!, sortValue!);
 
           for (var stack in stackFileContent)
           {
@@ -89,30 +68,7 @@ class _StackViewGridState extends State<StackViewGrid> {
         {
           List<dynamic> stackFileContent = jsonDecode(fileContent);
 
-          if(selectedOption == "STACKNAME" && sortValue == false)
-          {
-            stackFileContent.sort((a, b) => a['stackname'].compareTo(b['stackname']));
-            stackButtons.clear();
-          }
-          if(selectedOption == "STACKNAME" && sortValue == true)
-          {
-            stackFileContent.sort((a, b) => b['stackname'].compareTo(a['stackname']));
-            stackButtons.clear();
-          }
-          if(selectedOption == "CREATION DATE" && sortValue == false)
-          {
-            stackFileContent.sort((a, b) => DateTime.parse(a['creation_date']).compareTo(DateTime.parse(b['creation_date'])));
-            stackButtons.clear();
-          }
-          if(selectedOption == "CREATION DATE" && sortValue == true)
-          {
-            stackFileContent.sort((a, b) => DateTime.parse(b['creation_date']).compareTo(DateTime.parse(a['creation_date'])));
-            stackButtons.clear();
-          }
-          else
-          {
-            stackButtons.clear();
-          }
+          filter.FilterStacks(stackButtons, stackFileContent, selectedOption!, sortValue!);
 
           for (var stack in stackFileContent)
           {
@@ -130,7 +86,7 @@ class _StackViewGridState extends State<StackViewGrid> {
       }
     }catch (error)
     {
-      print('Fehler beim Laden der Daten: $error');
+      print('Fehler beim Laden der loadStacks Daten: $error');
     }
   }
 
