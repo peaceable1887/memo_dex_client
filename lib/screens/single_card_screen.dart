@@ -41,7 +41,6 @@ class _SingleCardScreenState extends State<SingleCardScreen> {
     super.initState();
   }
 
-
   void showSnackbarInformation() async
   {
     String? stackCreated = await storage.read(key: 'editCard');
@@ -59,8 +58,10 @@ class _SingleCardScreenState extends State<SingleCardScreen> {
     }
   }
 
-  Future<void> loadStack() async {
-    try {
+  Future<void> loadStack() async
+  {
+    try
+    {
       final stack = await RestServices(context).getStack(widget.stackId);
 
       setState(() {
@@ -71,11 +72,14 @@ class _SingleCardScreenState extends State<SingleCardScreen> {
     }
   }
 
-  Future<void> loadCard() async {
-    try {
+  Future<void> loadCard() async
+  {
+    try
+    {
       final cardsData = await RestServices(context).getCard(widget.cardId);
 
-      for (var card in cardsData) {
+      for (var card in cardsData)
+      {
         indexCards.add(
             LearningCard(
               question: card["question"],
@@ -88,14 +92,15 @@ class _SingleCardScreenState extends State<SingleCardScreen> {
       }
 
       // Widget wird aktualisiert nnach dem Laden der Daten.
-      if (mounted) {
-        setState(() {
+      if (mounted)
+      {
+        setState(()
+        {
           question = cardsData[0]["question"];
           answer = cardsData[0]["answer"];
           if(cardsData[0]["remember"] == 1)
           {
             isNoticed = true;
-            print(isNoticed);
           }
         });
       }
@@ -104,11 +109,13 @@ class _SingleCardScreenState extends State<SingleCardScreen> {
     }
   }
 
-  void pushToEditCard(){
+  //TODO NOCHMAL ANSEHEN: wenn die Karte als "isNoticed" markiert wird, wird der wert nicht an den edit_card_screen übergben
+  void pushToEditCard()
+  {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => EditCardScreen(stackId: widget.stackId, cardId: widget.cardId, stackname: stackname, question: question, answer: answer,),
+        builder: (context) => EditCardScreen(stackId: widget.stackId, cardId: widget.cardId, stackname: stackname, question: question, answer: answer,isNoticed: isNoticed,),
       ),
     );
   }

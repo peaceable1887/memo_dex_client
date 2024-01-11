@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 import '../services/rest_services.dart';
+import 'components/custom_snackbar.dart';
 
 class LearningCard extends StatefulWidget {
 
@@ -27,40 +28,41 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
   bool isCardTurned = false;
   bool showAnswerBtns = true;
   bool isCardNoticed = false;
+
   @override
   void initState()
   {
-    setLighIcon();
-    super.initState();
+    setLightIcon();
     controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 700));
     animation = Tween(end: 1.0, begin: 0.0).animate(controller);
-    animation.addListener(() {
-        setState(() {});
-      });
-    animation.addStatusListener((status) {
-        animationStatus = status;
-      });
+    animation.addListener(()
+    {
+      setState(() {});
+    });
+    animation.addStatusListener((status)
+    {
+      animationStatus = status;
+    });
+    super.initState();
   }
 
   @override
-  void dispose()
-  {
-    setLighIcon();
-    controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 700));
-    animation = Tween(end: 1.0, begin: 0.0).animate(controller);
-    animation.addListener(() {
-      setState(() {});
-    });
-    animation.addStatusListener((status) {
-      animationStatus = status;
-    });
-    super.dispose();
+  void didUpdateWidget(covariant LearningCard oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    // Überprüfe, ob die Daten geändert wurden, bevor du sie aktualisierst
+    if (widget.isNoticed != oldWidget.isNoticed) {
+      setLightIcon();
+      cardNoted();
+    }
   }
 
-  void setLighIcon()
+  void setLightIcon()
   {
-    setState(() {
-      if(widget.isNoticed == 1){
+    setState(()
+    {
+      if(widget.isNoticed == 1)
+      {
         isCardNoticed = true;
       }else{
         isCardNoticed = false;
@@ -70,13 +72,31 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
 
   void cardNoted()
   {
-    setState(() {
-      if(widget.isNoticed == 0){
+    setState(()
+    {
+      if(isCardNoticed == false)
+      {
         RestServices(context).updateCard(widget.question, widget.answer, 0, 1, widget.cardIndex,);
         isCardNoticed = true;
+        CustomSnackbar.showSnackbar(
+            context,
+            "Information",
+            "You marked the card as memorized.",
+            Color(0xFFE59113),
+            Duration(seconds: 0),
+            Duration(milliseconds: 1500)
+        );
       }else{
         RestServices(context).updateCard(widget.question, widget.answer, 0, 0, widget.cardIndex,);
         isCardNoticed = false;
+        CustomSnackbar.showSnackbar(
+            context,
+            "Information",
+            "You marked the card as unmemorized",
+            Color(0xFFE59113),
+            Duration(seconds: 0),
+            Duration(milliseconds: 1500)
+        );
       }
     });
   }
@@ -119,6 +139,14 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
           ),
         );
     }
+  }
+
+  @override
+  void dispose()
+  {
+    setLightIcon();
+    controller.dispose();
+    super.dispose();
   }
 
   @override

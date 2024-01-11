@@ -7,6 +7,7 @@ import 'package:carousel_slider/carousel_slider.dart'; // https://pub.dev/packag
 
 import '../services/rest_services.dart';
 import '../widgets/components/custom_snackbar.dart';
+import '../widgets/components/message_box.dart';
 import '../widgets/headline.dart';
 import '../widgets/learning_card.dart';
 import '../widgets/top_navigation_bar.dart';
@@ -98,6 +99,7 @@ class _CardLearningScreenState extends State<StandardLearningScreen> with Ticker
       // Widget wird aktualisiert nnach dem Laden der Daten.
       if (mounted) {
         setState(() {
+
         });
       }
     } catch (error) {
@@ -125,12 +127,32 @@ class _CardLearningScreenState extends State<StandardLearningScreen> with Ticker
 
           if(currentDuration.compareTo(fastestDuration) < 0)
           {
-            print("Neue Bestzeit!");
             RestServices(context).updateStackStatistic(widget.stackId, formatTime(), formatTime());
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return MessageBox(
+                    headline: "Fertig!",
+                    message: "Du hast eine neue Bestzeit erreicht.",
+                    stackId: widget.stackId,
+                );
+              },
+            );
+
           }else
           {
-            print("Bestzeit bleibt.");
             RestServices(context).updateStackStatistic(widget.stackId, fastestTime, formatTime());
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return MessageBox(
+                    headline: "Fertig!",
+                    message: "Du hast deine Bestzeit nicht übertroffen.",
+                    stackId: widget.stackId,
+                );
+              },
+            );
+
           }
         }
       });
