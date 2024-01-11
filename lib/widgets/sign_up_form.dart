@@ -36,14 +36,6 @@ class _SignUpFormState extends State<SignUpForm> {
     super.initState();
   }
 
-  @override
-  void dispose() {
-    _eMail.dispose();
-    _password.dispose();
-    _repeatPassword.dispose();
-    super.dispose();
-  }
-
   void updateButtonState() {
     setState(() {
       if (_eMail.text.isNotEmpty && _password.text.isNotEmpty && _repeatPassword.text.isNotEmpty && _isChecked) {
@@ -84,6 +76,15 @@ class _SignUpFormState extends State<SignUpForm> {
       );
     }
   }
+
+  @override
+  void dispose() {
+    _eMail.dispose();
+    _password.dispose();
+    _repeatPassword.dispose();
+    super.dispose();
+  }
+
 
   @override
   Widget build(BuildContext context) {

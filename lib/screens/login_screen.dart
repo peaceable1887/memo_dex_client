@@ -35,7 +35,7 @@ class _LoginScreenState extends State<LoginScreen> {
     {
       CustomSnackbar.showSnackbar(
           context,
-          "Information",
+          Icons.check_rounded,
           "User was successfully created.",
           Colors.green,
           Duration(milliseconds: 500),

@@ -33,14 +33,6 @@ class _AddCardScreenState extends State<AddCardScreen> {
     super.initState();
   }
 
-  @override
-  void dispose() {
-    _question.dispose();
-    _answer.dispose();
-    super.dispose();
-  }
-
-
   void updateButtonState() {
     setState(() {
       if(_question.text.isNotEmpty && _answer.text.isNotEmpty){
@@ -49,6 +41,13 @@ class _AddCardScreenState extends State<AddCardScreen> {
         _isButtonEnabled = false;
       }
     });
+  }
+
+  @override
+  void dispose() {
+    _question.dispose();
+    _answer.dispose();
+    super.dispose();
   }
 
   @override

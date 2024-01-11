@@ -163,7 +163,7 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
     loadCardStatistic();
     progressInPercent(widget.noticed, widget.notNoticed);
     _chartData = getChartData(widget.notNoticed);
-    super.initState();
+    super.dispose();
   }
 
   @override

@@ -80,7 +80,7 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
         isCardNoticed = true;
         CustomSnackbar.showSnackbar(
             context,
-            "Information",
+            Icons.warning_amber_rounded,
             "You marked the card as memorized.",
             Color(0xFFE59113),
             Duration(seconds: 0),
@@ -91,7 +91,7 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
         isCardNoticed = false;
         CustomSnackbar.showSnackbar(
             context,
-            "Information",
+            Icons.warning_amber_rounded,
             "You marked the card as unmemorized",
             Color(0xFFE59113),
             Duration(seconds: 0),

@@ -33,11 +33,6 @@ class _EditStackFormState extends State<EditStackForm> {
     super.initState();
   }
 
-  @override
-  void dispose() {
-    _stackname.dispose();
-    super.dispose();
-  }
   void updateButtonState() {
     setState(() {
       if(_stackname.text.isNotEmpty){
@@ -121,6 +116,12 @@ class _EditStackFormState extends State<EditStackForm> {
           ),
         )
     );
+  }
+
+  @override
+  void dispose() {
+    _stackname.dispose();
+    super.dispose();
   }
 
   @override

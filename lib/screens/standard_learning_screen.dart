@@ -293,14 +293,19 @@ class _CardLearningScreenState extends State<StandardLearningScreen> with Ticker
                     if (!snackbarShown) {
                     CustomSnackbar.showSnackbar(
                         context,
-                        "Information",
-                        "Before you can swipe further, you need to answer the card.",
+                        Icons.info_outline_rounded,
+                        "You need to answer the card.",
                         Colors.red,
                         Duration(seconds: 0),
                         Duration(milliseconds: 2000)
                     );
                     setState(() {
                       snackbarShown = true;
+                    });
+                    Future.delayed(Duration(seconds: 3), () {
+                      setState(() {
+                        snackbarShown = false;
+                      });
                     });
                   }
                 },

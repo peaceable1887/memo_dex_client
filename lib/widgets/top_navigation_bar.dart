@@ -21,7 +21,7 @@ class _TopNavigationBarState extends State<TopNavigationBar> {
   @override
   void dispose() {
     countTextLength(widget.btnText);
-    super.initState();
+    super.dispose();
   }
 
   //nochmal überabreiten! noch keine ideale lösung

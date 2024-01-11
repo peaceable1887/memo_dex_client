@@ -25,11 +25,6 @@ class _CreateStackFormState extends State<CreateStackForm> {
     super.initState();
   }
 
-  @override
-  void dispose() {
-    _stackname.dispose();
-    super.dispose();
-  }
   void updateButtonState() {
     setState(() {
       if(_stackname.text.isNotEmpty){
@@ -45,7 +40,7 @@ class _CreateStackFormState extends State<CreateStackForm> {
       height: 330,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        color: Colors.white,
+        color: Colors.transparent,
       ),
       padding: EdgeInsets.all(10),
       child: BlockPicker(
@@ -64,22 +59,27 @@ class _CreateStackFormState extends State<CreateStackForm> {
               side: BorderSide(color: Colors.white, width: 2),
               borderRadius: BorderRadius.circular(10.0)),
           title: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                child: Text(
-                    "Select a Color",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 26,
-                      fontFamily: "Inter",
-                      fontWeight: FontWeight.w600,
-                    ),
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.color_lens_rounded,
+                  size: 30.0,
+                  color: Colors.white,
                 ),
-              ),
-            ],
-          ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
+                  child: Text(
+                      "Select a Color",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 24,
+                        fontFamily: "Inter",
+                        fontWeight: FontWeight.w600,
+                      ),
+                  ),
+                ),
+              ],
+            ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -112,6 +112,12 @@ class _CreateStackFormState extends State<CreateStackForm> {
           ),
         )
     );
+  }
+
+  @override
+  void dispose() {
+    _stackname.dispose();
+    super.dispose();
   }
 
   @override

@@ -59,7 +59,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
     {
       CustomSnackbar.showSnackbar(
           context,
-          "Information",
+          Icons.check_rounded,
           "A stack was successfully edited.",
           Colors.green,
           Duration(milliseconds: 500),
@@ -71,7 +71,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
     {
       CustomSnackbar.showSnackbar(
           context,
-          "Information",
+          Icons.check_rounded,
           "A card was successfully created.",
           Colors.green,
           Duration(milliseconds: 500),
@@ -211,11 +211,11 @@ class _StackContentScreenState extends State<StackContentScreen> {
 
   @override
   void dispose() {
-    super.initState();
     showSnackbarInformation();
     loadStack();
     loadCards();
     showButtons();
+    super.dispose();
   }
 
   @override
@@ -305,16 +305,35 @@ class _StackContentScreenState extends State<StackContentScreen> {
                   onTap: (){
                     setState(() {
                       isMixed =! isMixed;
+                      if(isMixed)
+                      {
+                        CustomSnackbar.showSnackbar(
+                            context,
+                            Icons.warning_amber_rounded,
+                            "The cards are being shuffled.",
+                            Color(0xFFE59113),
+                            Duration(seconds: 0),
+                            Duration(milliseconds: 1500)
+                        );
+                      }else{
+                        CustomSnackbar.showSnackbar(
+                            context,
+                            Icons.warning_amber_rounded,
+                            "The cards are no longer shuffled.",
+                            Color(0xFFE59113),
+                            Duration(seconds: 0),
+                            Duration(milliseconds: 1500)
+                        );
+                      }
                     });
-                    print(isMixed);
                   },
                   child: isMixed ? Icon(
                     Icons.shuffle_rounded,
-                    size: 30.0,
+                    size: 32.0,
                     color: Color(0xFFE59113),
                   ): Icon(
                     Icons.shuffle_rounded,
-                    size: 30.0,
+                    size: 32.0,
                     color: Colors.white,// Icon als klickbares Element
                   ),
                 ),
@@ -379,7 +398,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
                   onTap: () {
                     showMenu(
                       context: context,
-                      position: RelativeRect.fromLTRB(1, 475, 0, 0),
+                      position: RelativeRect.fromLTRB(1, 445, 0, 0),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(10)),
                       ),

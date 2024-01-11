@@ -33,7 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
     {
       CustomSnackbar.showSnackbar(
         context,
-        "Information",
+        Icons.check_rounded,
         "A stack was successfully created.",
         Colors.green,
         Duration(milliseconds: 500),
@@ -112,7 +112,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       onTap: () {
                         showMenu(
                           context: context,
-                          position: RelativeRect.fromLTRB(1, 240, 0, 0),
+                          position: RelativeRect.fromLTRB(1, 220, 0, 0),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.all(Radius.circular(10)),
                           ),

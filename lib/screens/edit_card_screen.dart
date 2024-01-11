@@ -107,14 +107,12 @@ class _EditCardScreenState extends State<EditCardScreen> {
     },
   );
 
-
   @override
   void dispose() {
     _question.dispose();
     _answer.dispose();
     super.dispose();
   }
-
 
   @override
   Widget build(BuildContext context) {

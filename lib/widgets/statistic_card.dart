@@ -70,6 +70,13 @@ class _StatisticCardState extends State<StatisticCard> {
   }
 
   @override
+  void dispose() {
+    progressInPercent(widget.noticed, widget.notNoticed);
+    _chartData = getChartData(widget.notNoticed);
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 0, 20, 15),

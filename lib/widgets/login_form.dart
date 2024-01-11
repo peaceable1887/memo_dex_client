@@ -32,12 +32,7 @@ class _LoginFormState extends State<LoginForm> {
     super.initState();
   }
 
-  @override
-  void dispose() {
-    _eMail.dispose();
-    _password.dispose();
-    super.dispose();
-  }
+
   void updateButtonState() {
     setState(() {
       if(_eMail.text.isNotEmpty && _password.text.isNotEmpty){
@@ -61,6 +56,13 @@ class _LoginFormState extends State<LoginForm> {
         },
       );
     }
+  }
+
+  @override
+  void dispose() {
+    _eMail.dispose();
+    _password.dispose();
+    super.dispose();
   }
 
   @override
