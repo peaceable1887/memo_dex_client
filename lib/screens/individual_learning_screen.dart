@@ -54,7 +54,7 @@ class _CardLearningScreenState extends State<IndividualLearningScreen> with Tick
   Future<void> loadCards() async {
     try
     {
-      final cardsData = await RestServices(context).getAllCards(widget.stackId);
+      final cardsData = await RestServices(context).getAllCardsByStackId(widget.stackId);
 
       for (var card in cardsData) {
         if(card["remember"] == 0 && card["is_deleted"] == 0)

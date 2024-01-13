@@ -83,7 +83,7 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
   {
     try
     {
-      final cards = await RestServices(context).getAllCards(widget.stackId);
+      final cards = await RestServices(context).getAllCardsByStackId(widget.stackId);
 
       for (var card in cards)
       {

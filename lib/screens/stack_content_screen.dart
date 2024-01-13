@@ -302,7 +302,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
       }
       else
       {
-        final checkRequest = await RestServices(context).getAllCards(widget.stackId);
+        final checkRequest = await RestServices(context).getAllCards();
 
         if(checkRequest.isEmpty)
         {

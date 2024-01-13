@@ -348,7 +348,7 @@ class RestServices{
     }else{}
   }
 
-  Future<dynamic> getAllCards(stackId) async
+  Future<dynamic> getAllCards() async
   {
     String? accessToken = await storage.read(key: 'accessToken');
     try
@@ -357,6 +357,54 @@ class RestServices{
       {
         final response = await http.post(
           Uri.parse('http://10.0.2.2:3000/getAllCards'),
+          headers: <String, String>
+          {
+            'Content-Type': 'application/json',
+            'Authorization': "Bearer " + accessToken,
+          },
+        ).timeout(Duration(seconds: 10));
+
+        if (response.statusCode == 200)
+        {
+          dynamic jsonResponse = json.decode(response.body);
+          await fileHandler.saveJsonToLocalFile(jsonResponse, "allCards");
+
+          print("test: $jsonResponse");
+
+          return jsonResponse;
+        }else
+        {
+          throw http.ClientException('hat nicht geklappt. Statuscode: ${response.statusCode}');
+        }
+      }else
+      {
+        print("Accesstoken not available!");
+      }
+    }on TimeoutException catch (e)
+    {
+      print('Zeitüberschreitung: $e');
+      //var auf grad kein netz einbauen
+      return null;
+    }on http.ClientException catch (e)
+    {
+      print('Clientfehler: $e');
+      return null;
+    }catch (e)
+    {
+      print('Allgemeiner Fehler: $e');
+      return null;
+    }
+  }
+
+  Future<dynamic> getAllCardsByStackId(stackId) async
+  {
+    String? accessToken = await storage.read(key: 'accessToken');
+    try
+    {
+      if (accessToken != null)
+      {
+        final response = await http.post(
+          Uri.parse('http://10.0.2.2:3000/getAllCardsByStackId'),
           headers: <String, String>
           {
             'Content-Type': 'application/json',
@@ -371,7 +419,7 @@ class RestServices{
         if (response.statusCode == 200)
         {
           dynamic jsonResponse = json.decode(response.body);
-          await fileHandler.saveJsonToLocalFile(jsonResponse, "allCards");
+          await fileHandler.saveJsonToLocalFile(jsonResponse, "allCardsByStackId");
 
           print("test: $jsonResponse");
 

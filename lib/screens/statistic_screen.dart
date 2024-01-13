@@ -53,7 +53,7 @@ class _StatisticScreenState extends State<StatisticScreen>
           {
             if (stack['is_deleted'] == 0)
             {
-              final allCards = await RestServices(context).getAllCards(stack['stack_id']);
+              final allCards = await RestServices(context).getAllCardsByStackId(stack['stack_id']);
 
               String secondFileContent = await fileHandler.readJsonFromLocalFile("allCards");
 
@@ -102,7 +102,7 @@ class _StatisticScreenState extends State<StatisticScreen>
           {
             if (stack['is_deleted'] == 0)
             {
-              final allCards = await RestServices(context).getAllCards(stack['stack_id']);
+              final allCards = await RestServices(context).getAllCardsByStackId(stack['stack_id']);
 
               String secondFileContent = await fileHandler.readJsonFromLocalFile("allCards");
 
