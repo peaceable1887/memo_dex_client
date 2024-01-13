@@ -24,6 +24,7 @@ class _StatisticScreenState extends State<StatisticScreen>
   String selectedOption = "ALL STACKS";
   bool sortValue = false;
   final filter = Filters();
+  bool showLoadingCircular = true;
 
   @override
   void initState()
@@ -88,6 +89,7 @@ class _StatisticScreenState extends State<StatisticScreen>
         }
       }else
       {
+        showLoadingCircular = false;
         String fileContent = await fileHandler.readJsonFromLocalFile("allStacks");
 
         if(fileContent.isNotEmpty)
@@ -329,12 +331,26 @@ class _StatisticScreenState extends State<StatisticScreen>
             ),
           ),
           Expanded(
-            child: ListView.builder(
+            child: showLoadingCircular ?
+            Container(
+                height: MediaQuery.of(context).size.height/2,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: 50,
+                      height: 50,
+                      child: CircularProgressIndicator(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                )
+            ): ListView.builder(
               itemCount: statisticCards.length,
               itemBuilder: (context, index) {
                 return statisticCards[index];
               },
-
             ),
           )
         ],
@@ -342,4 +358,3 @@ class _StatisticScreenState extends State<StatisticScreen>
     );
   }
 }
-

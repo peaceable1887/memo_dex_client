@@ -40,6 +40,8 @@ class _StackContentScreenState extends State<StackContentScreen> {
   final List<Widget> cards = [];
   final storage = FlutterSecureStorage();
   final filter = Filters();
+  bool showLoadingCircular = true;
+  bool showConnectionInformation = true;
 
   @override
   void initState()
@@ -49,6 +51,42 @@ class _StackContentScreenState extends State<StackContentScreen> {
     loadStack();
     loadCards();
     showButtons();
+  }
+
+  Future<void> tryToConnect() async
+  {
+    final checkRequest = await RestServices(context).getAllStacks();
+
+    if(checkRequest == null)
+    {
+      await storage.write(key: 'notConnected', value: "true");
+      CustomSnackbar.showSnackbar(
+        context,
+        Icons.info_outline_rounded,
+        "Connection failed. You are still offline.",
+        Colors.red,
+        Duration(milliseconds: 500),
+        Duration(milliseconds: 1500),
+      );
+      setState(() {
+        showLoadingCircular = false;
+      });
+
+    }else
+    {
+      await storage.write(key: 'notConnected', value: "false");
+      CustomSnackbar.showSnackbar(
+        context,
+        Icons.check_rounded,
+        "Connection successful. You are online.",
+        Colors.green,
+        Duration(milliseconds: 500),
+        Duration(milliseconds: 1500),
+      );
+      setState(() {
+        showLoadingCircular = false;
+      });
+    }
   }
 
   void showSnackbarInformation() async
@@ -107,14 +145,110 @@ class _StackContentScreenState extends State<StackContentScreen> {
   {
     try
     {
-      final stack  = await RestServices(context).getStack(widget.stackId);
+      String? notConnected = await storage.read(key: "notConnected");
+      print(notConnected);
 
-      setState(()
+      if(notConnected == "true")
       {
-        stackname = stack[0]["stackname"];
-        color = stack[0]["color"];
-      });
+        await storage.write(key: 'notConnected', value: "true");
 
+        if(showConnectionInformation == true)
+        {
+          //TODO iconButton verwenden, wenn kein inet vorhanden ist
+          tryToConnect();
+        }
+        showConnectionInformation = false;
+        showLoadingCircular = false;
+
+        String fileContent = await fileHandler.readJsonFromLocalFile("allStacks");
+        List<dynamic> stacks = jsonDecode(fileContent);
+
+        if (fileContent.isNotEmpty)
+        {
+          for (var stack in stacks)
+          {
+            if (stack["stack_id"] == widget.stackId)
+            {
+              setState(()
+              {
+                stackname = stack["stackname"];
+                color = stack["color"];
+              });
+              // breche Schleife ab, da die gewünschten Daten gefunden wurden
+              break;
+            }
+          }
+        }
+
+      }else
+      {
+        final stack  = await RestServices(context).getStack(widget.stackId);
+
+        if(stack == null)
+        {
+          await storage.write(key: 'notConnected', value: "true");
+          showLoadingCircular = false;
+
+          CustomSnackbar.showSnackbar(
+            context,
+            Icons.info_outline_rounded,
+            "Connection failed. You are offline.",
+            Color(0xFFE59113),
+            Duration(milliseconds: 500),
+            Duration(milliseconds: 1500),
+          );
+
+          setState(()
+          {
+            showLoadingCircular = false;
+          });
+
+          String fileContent = await fileHandler.readJsonFromLocalFile("allStacks");
+          List<dynamic> stacks = jsonDecode(fileContent);
+
+          if (fileContent.isNotEmpty)
+          {
+            for (var stack in stacks)
+            {
+              if (stack["stack_id"] == widget.stackId)
+              {
+                setState(()
+                {
+                  stackname = stack["stackname"];
+                  color = stack["color"];
+                });
+                // breche Schleife ab, da die gewünschten Daten gefunden wurden
+                break;
+              }
+            }
+          }
+
+        }else
+        {
+          showLoadingCircular = false;
+          await storage.write(key: 'notConnected', value: "false");
+
+          String fileContent = await fileHandler.readJsonFromLocalFile("allStacks");
+          List<dynamic> stacks = jsonDecode(fileContent);
+
+          if (fileContent.isNotEmpty)
+          {
+            for (var stack in stacks)
+            {
+              if (stack["stack_id"] == widget.stackId)
+              {
+                setState(()
+                {
+                  stackname = stack["stackname"];
+                  color = stack["color"];
+                });
+                // breche Schleife ab, da die gewünschten Daten gefunden wurden
+                break;
+              }
+            }
+          }
+        }
+      }
     }catch(error)
     {
       print('Fehler beim Laden der loadStack Daten: $error');
@@ -125,15 +259,23 @@ class _StackContentScreenState extends State<StackContentScreen> {
   {
     try
     {
-      final checkRequest = await RestServices(context).getAllCards(widget.stackId);
+      String? notConnected = await storage.read(key: "notConnected");
+      print(notConnected);
 
-      if(checkRequest.isEmpty)
+      if(notConnected == "true")
       {
-        showText = true;
-      }
-      if(checkRequest == null)
-      {
+        await storage.write(key: 'notConnected', value: "true");
+
+        if(showConnectionInformation == true)
+        {
+          //TODO iconButton verwenden, wenn kein inet vorhanden ist
+          tryToConnect();
+        }
+        showConnectionInformation = false;
+        showLoadingCircular = false;
+
         String fileContent = await fileHandler.readJsonFromLocalFile("allCards");
+
         if (fileContent.isNotEmpty)
         {
           List<dynamic> cardFileContent = jsonDecode(fileContent);
@@ -142,46 +284,105 @@ class _StackContentScreenState extends State<StackContentScreen> {
 
           for (var card in cardFileContent)
           {
-            if (card['is_deleted'] == 0)
+            if(card['stack_stack_id'] == widget.stackId)
             {
-              cards.add(CardBtn(btnText: card["question"], stackId: widget.stackId, cardId: card["card_id"],));
-              showText = false;
+              if (card['is_deleted'] == 0)
+              {
+                cards.add(CardBtn(btnText: card["question"], stackId: widget.stackId, cardId: card["card_id"], isNoticed: card["remember"]));
+                showText = false;
+              }
             }
           }
           // Widget wird aktualisiert nnach dem Laden der Daten.
           if (mounted)
           {
-            setState(() {
-
-            });
+            setState(() {});
           }
         }
-      }else
+      }
+      else
       {
-        String fileContent = await fileHandler.readJsonFromLocalFile("allCards");
+        final checkRequest = await RestServices(context).getAllCards(widget.stackId);
 
-        if (fileContent.isNotEmpty)
+        if(checkRequest.isEmpty)
         {
-          List<dynamic> cardFileContent = jsonDecode(fileContent);
+          showText = true;
+        }
+        if(checkRequest == null)
+        {
+          await storage.write(key: 'notConnected', value: "true");
+          showLoadingCircular = false;
 
-          filter.FilterCards(cards, cardFileContent, selectedOption, sortValue);
+          CustomSnackbar.showSnackbar(
+            context,
+            Icons.info_outline_rounded,
+            "Connection failed. You are offline.",
+            Color(0xFFE59113),
+            Duration(milliseconds: 500),
+            Duration(milliseconds: 1500),
+          );
 
-          for (var card in cardFileContent)
+          setState(()
           {
-            if (card['is_deleted'] == 0)
+            showLoadingCircular = false;
+          });
+
+          String fileContent = await fileHandler.readJsonFromLocalFile("allCards");
+
+          if (fileContent.isNotEmpty)
+          {
+            List<dynamic> cardFileContent = jsonDecode(fileContent);
+
+            filter.FilterCards(cards, cardFileContent, selectedOption, sortValue);
+
+            for (var card in cardFileContent)
             {
-              cards.add(CardBtn(btnText: card["question"], stackId: widget.stackId, cardId: card["card_id"], isNoticed: card["remember"]));
-              showText = false;
-            }/*else
+              if(card['stack_stack_id'] == widget.stackId)
+              {
+                if (card['is_deleted'] == 0)
+                {
+                  cards.add(CardBtn(btnText: card["question"], stackId: widget.stackId, cardId: card["card_id"],));
+                  showText = false;
+                }
+              }
+
+            }
+            // Widget wird aktualisiert nnach dem Laden der Daten.
+            if (mounted)
             {
-              //TODO BUG: wenn die karte an den letzten index-position gelöscht wird, wird der wert auch true gesetzt
-              showText = true;
-            }*/
+              setState(() {
+
+              });
+            }
           }
-          // Widget wird aktualisiert nnach dem Laden der Daten.
-          if (mounted)
+        }else
+        {
+          await storage.write(key: 'notConnected', value: "false");
+          String fileContent = await fileHandler.readJsonFromLocalFile("allCards");
+          showLoadingCircular = false;
+
+          if (fileContent.isNotEmpty)
           {
-            setState(() {});
+            List<dynamic> cardFileContent = jsonDecode(fileContent);
+
+            filter.FilterCards(cards, cardFileContent, selectedOption, sortValue);
+
+            for (var card in cardFileContent)
+            {
+              if(card['stack_stack_id'] == widget.stackId)
+              {
+                if (card['is_deleted'] == 0)
+                {
+                  cards.add(CardBtn(btnText: card["question"], stackId: widget.stackId, cardId: card["card_id"], isNoticed: card["remember"]));
+                  showText = false;
+                }
+              }
+            }
+            // Widget wird aktualisiert nnach dem Laden der Daten.
+            if (mounted)
+            {
+              setState(() {});
+            }
           }
         }
       }
@@ -222,7 +423,21 @@ class _StackContentScreenState extends State<StackContentScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFF00324E),
-      body: Column(
+      body: showLoadingCircular ? Container(
+          height: MediaQuery.of(context).size.height,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: 50,
+                height: 50,
+                child: CircularProgressIndicator(
+                  color: Colors.white,
+                ),
+              ),
+            ],
+          )
+      ): Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Padding(
