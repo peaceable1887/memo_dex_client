@@ -145,6 +145,11 @@ class _StackContentScreenState extends State<StackContentScreen> {
 
         String fileContent = await fileHandler.readJsonFromLocalFile("allStacks");
 
+        setState(()
+        {
+          showLoadingCircular = false;
+        });
+
         if (fileContent.isNotEmpty)
         {
           List<dynamic> stacks = jsonDecode(fileContent);
@@ -222,7 +227,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
             {
               if (card['is_deleted'] == 0)
               {
-                cards.add(CardBtn(btnText: card["question"], stackId: widget.stackId, cardId: card["card_id"],));
+                cards.add(CardBtn(btnText: card["question"], stackId: widget.stackId, cardId: card["card_id"],isNoticed: card["remember"]));
                 showText = false;
               }
             }
