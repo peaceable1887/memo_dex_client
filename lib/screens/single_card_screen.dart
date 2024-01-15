@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:memo_dex_prototyp/screens/stack_content_screen.dart';
 
+import '../services/file_handler.dart';
 import '../services/rest_services.dart';
 import '../widgets/components/custom_snackbar.dart';
 import '../widgets/headline.dart';
@@ -31,6 +34,8 @@ class _SingleCardScreenState extends State<SingleCardScreen> {
   String question = "";
   String answer = "";
   final storage = FlutterSecureStorage();
+  FileHandler fileHandler = FileHandler();
+  bool showLoadingCircular = true;
 
   @override
   void initState()
@@ -62,13 +67,59 @@ class _SingleCardScreenState extends State<SingleCardScreen> {
   {
     try
     {
-      final stack = await RestServices(context).getStack(widget.stackId);
+      String? internetConnection = await storage.read(key: "internet_connection");
 
-      setState(() {
-        stackname = stack[0]["stackname"];
-      });
-    } catch (error) {
-      print('Fehler beim Laden der Daten: $error');
+      if(internetConnection == "false")
+      {
+        setState(()
+        {
+          showLoadingCircular = false;
+        });
+
+        String fileContent = await fileHandler.readJsonFromLocalFile("allStacks");
+
+        if (fileContent.isNotEmpty)
+        {
+          List<dynamic> stacks = jsonDecode(fileContent);
+
+          for (var stack in stacks)
+          {
+            if (stack["stack_id"] == widget.stackId)
+            {
+              setState(()
+              {
+                stackname = stack["stackname"];
+              });
+              // breche Schleife ab, da die gewünschten Daten gefunden wurden
+              break;
+            }
+          }
+        }
+      }else
+      {
+        await RestServices(context).getStack(widget.stackId);
+
+        String fileContent = await fileHandler.readJsonFromLocalFile("allStacks");
+
+        if (fileContent.isNotEmpty)
+        {
+          List<dynamic> stacks = jsonDecode(fileContent);
+
+          for (var stack in stacks)
+          {
+            if (stack["stack_id"] == widget.stackId)
+            {
+              setState(() {
+                stackname = stack["stackname"];
+              });
+              break;
+            }
+          }
+        }else{}
+      }
+    }catch(error)
+    {
+      print('Fehler beim Laden der loadStack Daten: $error');
     }
   }
 
@@ -76,36 +127,91 @@ class _SingleCardScreenState extends State<SingleCardScreen> {
   {
     try
     {
-      final cardsData = await RestServices(context).getCard(widget.cardId);
+      String? internetConnection = await storage.read(key: "internet_connection");
 
-      for (var card in cardsData)
-      {
-        indexCards.add(
-            LearningCard(
-              question: card["question"],
-              answer: card["answer"],
-              cardIndex: card["card_id"],
-              onClicked: (bool val){},
-              isNoticed: card["remember"],
-              isIndividual: true,
-            ));
-      }
-
-      // Widget wird aktualisiert nnach dem Laden der Daten.
-      if (mounted)
+      if(internetConnection == "false")
       {
         setState(()
         {
-          question = cardsData[0]["question"];
-          answer = cardsData[0]["answer"];
-          if(cardsData[0]["remember"] == 1)
-          {
-            isNoticed = true;
-          }
+          showLoadingCircular = false;
         });
+
+        String fileContent = await fileHandler.readJsonFromLocalFile("allCards");
+
+        if (fileContent.isNotEmpty)
+        {
+          List<dynamic> cardFileContent = jsonDecode(fileContent);
+
+          for (var card in cardFileContent)
+          {
+            if(card['stack_stack_id'] == widget.stackId && card['card_id'] == widget.cardId)
+            {
+              indexCards.add(LearningCard(
+                question: card["question"],
+                answer: card["answer"],
+                cardIndex: card["card_id"],
+                onClicked: (bool val){},
+                isNoticed: card["remember"],
+                isIndividual: true,
+              ));
+            }
+          }
+          // Widget wird aktualisiert nnach dem Laden der Daten.
+          if (mounted)
+          {
+            setState(()
+            {
+              question = cardFileContent[0]["question"];
+              answer = cardFileContent[0]["answer"];
+              if(cardFileContent[0]["remember"] == 1)
+              {
+                isNoticed = true;
+              }
+            });
+          }
+        }
+      }else
+      {
+        await RestServices(context).getAllCards();
+
+        String fileContent = await fileHandler.readJsonFromLocalFile("allCards");
+
+        if (fileContent.isNotEmpty)
+        {
+          List<dynamic> cardFileContent = jsonDecode(fileContent);
+
+          for (var card in cardFileContent)
+          {
+            if (card['stack_stack_id'] == widget.stackId && card['card_id'] == widget.cardId)
+            {
+              indexCards.add(LearningCard(
+                question: card["question"],
+                answer: card["answer"],
+                cardIndex: card["card_id"],
+                onClicked: (bool val){},
+                isNoticed: card["remember"],
+                isIndividual: true,
+              ));
+            }
+          }
+          // Widget wird aktualisiert nnach dem Laden der Daten.
+          if (mounted)
+          {
+            setState(()
+            {
+              question = cardFileContent[0]["question"];
+              answer = cardFileContent[0]["answer"];
+              if(cardFileContent[0]["remember"] == 1)
+              {
+                isNoticed = true;
+              }
+            });
+          }
+        }else{}
       }
-    } catch (error) {
-      print('Fehler beim Laden der Daten: $error');
+    }catch(error)
+    {
+      print('Fehler beim Laden der loadCards Daten: $error');
     }
   }
 

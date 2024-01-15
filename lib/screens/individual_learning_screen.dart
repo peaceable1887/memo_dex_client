@@ -1,10 +1,11 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:horizontal_blocked_scroll_physics/horizontal_blocked_scroll_physics.dart';
-import 'package:intl/intl.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:memo_dex_prototyp/screens/stack_content_screen.dart';
 import 'package:carousel_slider/carousel_slider.dart'; // https://pub.dev/packages/carousel_slider
 
+import '../services/file_handler.dart';
 import '../services/rest_services.dart';
 import '../widgets/headline.dart';
 import '../widgets/learning_card.dart';
@@ -28,6 +29,9 @@ class _CardLearningScreenState extends State<IndividualLearningScreen> with Tick
   final List<dynamic> indexCards = [];
   bool emptyCards = false;
   String stackname = "";
+  final storage = FlutterSecureStorage();
+  FileHandler fileHandler = FileHandler();
+  bool showLoadingCircular = true;
 
 
   @override
@@ -37,52 +41,155 @@ class _CardLearningScreenState extends State<IndividualLearningScreen> with Tick
     super.initState();
   }
 
-  Future<void> loadStack() async {
-    try{
-      final stack  = await RestServices(context).getStack(widget.stackId);
-
-      setState(()
-      {
-        stackname = stack[0]["stackname"];
-      });
-
-    } catch (error) {
-      print('Fehler beim Laden der Daten: $error');
-    }
-  }
-
-  Future<void> loadCards() async {
+  Future<void> loadStack() async
+  {
     try
     {
-      final cardsData = await RestServices(context).getAllCardsByStackId(widget.stackId);
+      String? internetConnection = await storage.read(key: "internet_connection");
 
-      for (var card in cardsData) {
-        if(card["remember"] == 0 && card["is_deleted"] == 0)
-        {
-          indexCards.add(LearningCard(
-            question: card["question"],
-              answer: card["answer"],
-            cardIndex: card["card_id"],
-            onClicked: (bool val){},
-            isNoticed: card["remember"],
-            isIndividual: true,
-          ));
-        }
-      }
-      if(widget.isMixed == true)
+      if(internetConnection == "false")
       {
-        indexCards.shuffle();
-      }else{}
-      // Widget wird aktualisiert nnach dem Laden der Daten.
-      if (mounted) {
-        setState(() {
+        setState(()
+        {
+          showLoadingCircular = false;
         });
+
+        String fileContent = await fileHandler.readJsonFromLocalFile("allStacks");
+
+        if (fileContent.isNotEmpty)
+        {
+          List<dynamic> stacks = jsonDecode(fileContent);
+
+          for (var stack in stacks)
+          {
+            if (stack["stack_id"] == widget.stackId)
+            {
+              setState(()
+              {
+                stackname = stack["stackname"];
+              });
+              // breche Schleife ab, da die gewünschten Daten gefunden wurden
+              break;
+            }
+          }
+        }
+      }else
+      {
+        await RestServices(context).getStack(widget.stackId);
+
+        String fileContent = await fileHandler.readJsonFromLocalFile("allStacks");
+
+        if (fileContent.isNotEmpty)
+        {
+          List<dynamic> stacks = jsonDecode(fileContent);
+
+          for (var stack in stacks)
+          {
+            if (stack["stack_id"] == widget.stackId)
+            {
+              setState(() {
+                stackname = stack["stackname"];
+              });
+              break;
+            }
+          }
+        }else{}
       }
-    } catch (error) {
-      print('Fehler beim Laden der Daten: $error');
+    }catch(error)
+    {
+      print('Fehler beim Laden der loadStack Daten: $error');
     }
   }
 
+  Future<void> loadCards() async
+  {
+    try
+    {
+      String? internetConnection = await storage.read(key: "internet_connection");
+
+      if(internetConnection == "false")
+      {
+        setState(()
+        {
+          showLoadingCircular = false;
+        });
+
+        String fileContent = await fileHandler.readJsonFromLocalFile("allCards");
+
+        if (fileContent.isNotEmpty)
+        {
+          List<dynamic> cardFileContent = jsonDecode(fileContent);
+
+          for (var card in cardFileContent)
+          {
+            if(card['stack_stack_id'] == widget.stackId)
+            {
+              if(card["remember"] == 0 && card["is_deleted"] == 0)
+              {
+                indexCards.add(LearningCard(
+                  question: card["question"],
+                  answer: card["answer"],
+                  cardIndex: card["card_id"],
+                  onClicked: (bool val){},
+                  isNoticed: card["remember"],
+                  isIndividual: true,
+                ));
+              }
+            }
+          }
+          if(widget.isMixed == true)
+          {
+            indexCards.shuffle();
+          }else{}
+          // Widget wird aktualisiert nnach dem Laden der Daten.
+          if (mounted)
+          {
+            setState(() {});
+          }
+        }
+      }else
+      {
+        await RestServices(context).getAllCards();
+
+        String fileContent = await fileHandler.readJsonFromLocalFile("allCards");
+
+        if (fileContent.isNotEmpty)
+        {
+          List<dynamic> cardFileContent = jsonDecode(fileContent);
+
+          for (var card in cardFileContent)
+          {
+            if (card['stack_stack_id'] == widget.stackId)
+            {
+              if(card["remember"] == 0 && card["is_deleted"] == 0)
+              {
+                indexCards.add(LearningCard(
+                  question: card["question"],
+                  answer: card["answer"],
+                  cardIndex: card["card_id"],
+                  onClicked: (bool val){},
+                  isNoticed: card["remember"],
+                  isIndividual: true,
+                ));
+              }
+            }
+          }
+          if(widget.isMixed == true)
+          {
+            indexCards.shuffle();
+          }else{}
+          // Widget wird aktualisiert nnach dem Laden der Daten.
+          if (mounted)
+          {
+            setState(() {});
+          }
+        }else{}
+      }
+    }catch(error)
+    {
+      print('Fehler beim Laden der loadCards Daten: $error');
+    }
+  }
 
   @override
   void dispose() {

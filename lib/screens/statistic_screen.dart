@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:memo_dex_prototyp/widgets/statistic_card.dart';
 import '../helperClasses/filters.dart';
 import '../services/file_handler.dart';
@@ -25,6 +26,7 @@ class _StatisticScreenState extends State<StatisticScreen>
   bool sortValue = false;
   final filter = Filters();
   bool showLoadingCircular = true;
+  final storage = FlutterSecureStorage();
 
   @override
   void initState()
@@ -37,10 +39,15 @@ class _StatisticScreenState extends State<StatisticScreen>
   {
     try
     {
-      final allStacks = await RestServices(context).getAllStacks();
+      String? internetConnection = await storage.read(key: "internet_connection");
 
-      if(allStacks == null)
+      if(internetConnection == "false")
       {
+        setState(()
+        {
+          showLoadingCircular = false;
+        });
+
         String fileContent = await fileHandler.readJsonFromLocalFile("allStacks");
 
         if(fileContent.isNotEmpty)
@@ -53,7 +60,6 @@ class _StatisticScreenState extends State<StatisticScreen>
           {
             if (stack['is_deleted'] == 0)
             {
-              final allCards = await RestServices(context).getAllCardsByStackId(stack['stack_id']);
 
               String secondFileContent = await fileHandler.readJsonFromLocalFile("allCards");
 
@@ -63,13 +69,16 @@ class _StatisticScreenState extends State<StatisticScreen>
 
                 for (var card in cardFileContent)
                 {
-                  if (card["remember"] == 1 && card["is_deleted"] == 0)
+                  if(card['stack_stack_id'] == stack["stack_id"])
                   {
-                    isNoticed.add(card["remember"]);
-                  }
-                  if (card["remember"] == 0 && card["is_deleted"] == 0)
-                  {
-                    isNotNoticed.add(card["remember"]);
+                    if (card["remember"] == 1 && card["is_deleted"] == 0)
+                    {
+                      isNoticed.add(card["remember"]);
+                    }
+                    if (card["remember"] == 0 && card["is_deleted"] == 0)
+                    {
+                      isNotNoticed.add(card["remember"]);
+                    }
                   }
                 }
 
@@ -89,7 +98,13 @@ class _StatisticScreenState extends State<StatisticScreen>
         }
       }else
       {
-        showLoadingCircular = false;
+        await RestServices(context).getAllStacks();
+
+        setState(()
+        {
+          showLoadingCircular = false;
+        });
+
         String fileContent = await fileHandler.readJsonFromLocalFile("allStacks");
 
         if(fileContent.isNotEmpty)
@@ -102,7 +117,7 @@ class _StatisticScreenState extends State<StatisticScreen>
           {
             if (stack['is_deleted'] == 0)
             {
-              final allCards = await RestServices(context).getAllCardsByStackId(stack['stack_id']);
+              await RestServices(context).getAllCardsByStackId(stack['stack_id']);
 
               String secondFileContent = await fileHandler.readJsonFromLocalFile("allCards");
 
@@ -112,16 +127,18 @@ class _StatisticScreenState extends State<StatisticScreen>
 
                 for (var card in cardFileContent)
                 {
-                  if (card["remember"] == 1 && card["is_deleted"] == 0)
+                  if(card['stack_stack_id'] == stack["stack_id"])
                   {
-                    isNoticed.add(card["remember"]);
-                  }
-                  if (card["remember"] == 0 && card["is_deleted"] == 0)
-                  {
-                    isNotNoticed.add(card["remember"]);
+                    if (card["remember"] == 1 && card["is_deleted"] == 0)
+                    {
+                      isNoticed.add(card["remember"]);
+                    }
+                    if (card["remember"] == 0 && card["is_deleted"] == 0)
+                    {
+                      isNotNoticed.add(card["remember"]);
+                    }
                   }
                 }
-
                 statisticCards.add(StatisticCard(
                   stackId: stack['stack_id'],
                   color: stack['color'],

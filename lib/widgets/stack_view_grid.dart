@@ -6,7 +6,6 @@ import 'package:memo_dex_prototyp/widgets/create_stack_btn.dart';
 import 'package:memo_dex_prototyp/widgets/stack_btn.dart';
 import '../helperClasses/filters.dart';
 import '../services/file_handler.dart';
-import 'components/custom_snackbar.dart';
 
 class StackViewGrid extends StatefulWidget {
   final String? selectedOption;
@@ -24,7 +23,6 @@ class _StackViewGridState extends State<StackViewGrid> {
   final filter = Filters();
   bool showLoadingCircular = true;
   final storage = FlutterSecureStorage();
-  bool showConnectionInformation = true;
 
   @override
   void initState()
@@ -42,44 +40,79 @@ class _StackViewGridState extends State<StackViewGrid> {
     super.didUpdateWidget(oldWidget);
   }
 
-  Future<void> tryToConnect() async
+  Future<void> loadStacks(String? selectedOption, bool? sortValue) async
   {
-      final checkRequest = await RestServices(context).getAllStacks();
+    String? internetConnection = await storage.read(key: "internet_connection");
 
-      if(checkRequest == null)
+    if(internetConnection == "false")
+    {
+      setState(()
       {
-        await storage.write(key: 'notConnected', value: "true");
-        CustomSnackbar.showSnackbar(
-          context,
-          Icons.info_outline_rounded,
-          "Connection failed. You are still offline.",
-          Colors.red,
-          Duration(milliseconds: 500),
-          Duration(milliseconds: 1500),
-        );
-        setState(() {
-          showLoadingCircular = false;
-        });
+        showLoadingCircular = false;
+      });
 
-      }else
+      String fileContent = await fileHandler.readJsonFromLocalFile("allStacks");
+      // Überprüfe ob der Inhalt eine Liste ist
+      if (fileContent.isNotEmpty)
       {
-        await storage.write(key: 'notConnected', value: "false");
-        CustomSnackbar.showSnackbar(
-          context,
-          Icons.check_rounded,
-          "Connection successful. You are online.",
-          Colors.green,
-          Duration(milliseconds: 500),
-          Duration(milliseconds: 1500),
-        );
-        setState(() {
-          showLoadingCircular = false;
-        });
-      }
+        List<dynamic> stackFileContent = jsonDecode(fileContent);
+
+        filter.FilterStacks(stackButtons, stackFileContent, selectedOption!, sortValue!);
+
+        for (var stack in stackFileContent)
+        {
+          if (stack['is_deleted'] == 0)
+          {
+            stackButtons.add(StackBtn(
+                stackId: stack['stack_id'],
+                iconColor: stack['color'],
+                stackName: stack['stackname']
+            ));
+          }
+        }
+        stackButtons.add(CreateStackBtn());
+      }else{}
+
+    }else
+    {
+      await RestServices(context).getAllStacks();
+
+      setState(() {
+        showLoadingCircular = false;
+      });
+
+      String fileContent = await fileHandler.readJsonFromLocalFile("allStacks");
+      // Überprüfe ob der Inhalt eine Liste ist
+      if (fileContent.isNotEmpty)
+      {
+        List<dynamic> stackFileContent = jsonDecode(fileContent);
+
+        filter.FilterStacks(stackButtons, stackFileContent, selectedOption!, sortValue!);
+
+        for (var stack in stackFileContent)
+        {
+          if (stack['is_deleted'] == 0)
+          {
+            stackButtons.add(StackBtn(
+                stackId: stack['stack_id'],
+                iconColor: stack['color'],
+                stackName: stack['stackname']
+            ));
+          }
+
+        }
+        stackButtons.add(CreateStackBtn());
+      }else{}
+
+    }
+    // Widget wird aktualisiert nach dem Laden der Daten.
+    if (mounted)
+    {
+      setState((){});
+    }
   }
 
-
-  Future<void> loadStacks(String? selectedOption, bool? sortValue) async
+ /* Future<void> loadStacks(String? selectedOption, bool? sortValue) async
   {
       String? notConnected = await storage.read(key: "notConnected");
       print(notConnected);
@@ -118,8 +151,6 @@ class _StackViewGridState extends State<StackViewGrid> {
 
         if(checkRequest == null)
         {
-          print("-------------bin offline erstmalig und setze notConnected auf true---------------");
-
           await storage.write(key: 'notConnected', value: "true");
           showLoadingCircular = false;
 
@@ -154,7 +185,6 @@ class _StackViewGridState extends State<StackViewGrid> {
           }
         }else
         {
-          print("-----------------bin online----------------");
           showLoadingCircular = false;
           await storage.write(key: 'notConnected', value: "false");
 
@@ -180,8 +210,7 @@ class _StackViewGridState extends State<StackViewGrid> {
       if (mounted) {
         setState((){});
       }
-
-  }
+  }*/
 
   @override
   void dispose() {

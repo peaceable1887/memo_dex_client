@@ -1,7 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import '../helperClasses/trim_text.dart';
+import '../services/file_handler.dart';
 import '../services/rest_services.dart';
 import '../widgets/headline.dart';
 import '../widgets/top_navigation_bar.dart';
@@ -41,6 +45,9 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
   late double progressValue;
   late String fastestRun = "00:00:00";
   late String latestRun = "00:00:00";
+  final storage = FlutterSecureStorage();
+  FileHandler fileHandler = FileHandler();
+  bool showLoadingCircular = true;
 
   @override
   void initState ()
@@ -56,23 +63,76 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
   {
     try
     {
-      final stack  = await RestServices(context).getStack(widget.stackId);
+      String? internetConnection = await storage.read(key: "internet_connection");
 
-      setState(()
+      if(internetConnection == "false")
       {
-        if(stack[0]["fastest_time"] != null || stack[0]["last_time"] != null)
+        setState(()
         {
-          fastestRun = stack[0]["fastest_time"] ?? "00:00:00";
-          latestRun = stack[0]["last_time"] ?? "00:00:00";
-        }
-        else
+          showLoadingCircular = false;
+        });
+
+        String fileContent = await fileHandler.readJsonFromLocalFile("allStacks");
+
+        if (fileContent.isNotEmpty)
         {
-          fastestRun = "00:00:00";
-          latestRun = "00:00:00";
+          List<dynamic> stacks = jsonDecode(fileContent);
+
+          for (var stack in stacks)
+          {
+            if (stack["stack_id"] == widget.stackId)
+            {
+              setState(() {
+                if (stack["fastest_time"] != null || stack["last_time"] != null)
+                {
+                  fastestRun = stack["fastest_time"] ?? "00:00:00";
+                  latestRun = stack["last_time"] ?? "00:00:00";
+                }
+                else
+                {
+                  fastestRun = "00:00:00";
+                  latestRun = "00:00:00";
+                }
+              });
+            }
+          }
         }
+      }else
+      {
+        await RestServices(context).getStack(widget.stackId);
 
-      });
+        setState(()
+        {
+          showLoadingCircular = false;
+        });
 
+        String fileContent = await fileHandler.readJsonFromLocalFile("allStacks");
+
+        if (fileContent.isNotEmpty)
+        {
+          List<dynamic> stacks = jsonDecode(fileContent);
+
+          for (var stack in stacks)
+          {
+            if (stack["stack_id"] == widget.stackId)
+            {
+              setState(()
+              {
+                if (stack["fastest_time"] != null || stack["last_time"] != null)
+                {
+                  fastestRun = stack["fastest_time"] ?? "00:00:00";
+                  latestRun = stack["last_time"] ?? "00:00:00";
+                }
+                else
+                {
+                  fastestRun = "00:00:00";
+                  latestRun = "00:00:00";
+                }
+              });
+            }
+          }
+        }
+      }
     }catch(error)
     {
       print('Fehler beim Laden der loadStackStatistcic: $error');
@@ -83,19 +143,68 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
   {
     try
     {
-      final cards = await RestServices(context).getAllCardsByStackId(widget.stackId);
+      String? internetConnection = await storage.read(key: "internet_connection");
 
-      for (var card in cards)
+      if(internetConnection == "false")
       {
-        String question = card["question"];
-        int answeredIncorrectly = card['answered_incorrectly'];
+        setState(()
+        {
+          showLoadingCircular = false;
+        });
 
-        combinedData.add({'question': question, 'answered_incorrectly': answeredIncorrectly,});
+        String fileContent = await fileHandler.readJsonFromLocalFile("allCards");
+
+        if (fileContent.isNotEmpty)
+        {
+          List<dynamic> cardFileContent = jsonDecode(fileContent);
+
+          for (var card in cardFileContent)
+          {
+
+            if(card['stack_stack_id'] == widget.stackId)
+            {
+              String question = card["question"];
+              int answeredIncorrectly = card['answered_incorrectly'];
+
+              combinedData.add({'question': question, 'answered_incorrectly': answeredIncorrectly,});
+            }
+          }
+
+          combinedData.sort((a, b) => b['answered_incorrectly'].compareTo(a['answered_incorrectly']));
+        }
+      }else
+      {
+        await RestServices(context).getAllCardsByStackId(widget.stackId);
+
+        setState(()
+        {
+          showLoadingCircular = false;
+        });
+
+        String fileContent = await fileHandler.readJsonFromLocalFile("allCards");
+
+        if (fileContent.isNotEmpty)
+        {
+          List<dynamic> cardFileContent = jsonDecode(fileContent);
+
+          for (var card in cardFileContent)
+          {
+
+
+            if(card['stack_stack_id'] == widget.stackId)
+            {
+              String question = card["question"];
+              int answeredIncorrectly = card['answered_incorrectly'];
+
+              combinedData.add({'question': question, 'answered_incorrectly': answeredIncorrectly,});
+            }
+          }
+
+          combinedData.sort((a, b) => b['answered_incorrectly'].compareTo(a['answered_incorrectly']));
+        }
       }
-
-      combinedData.sort((a, b) => b['answered_incorrectly'].compareTo(a['answered_incorrectly']));
-
-    } catch (error) {
+    } catch (error)
+    {
       print('Fehler beim Laden der loadCardStatistic: $error');
     }
   }
