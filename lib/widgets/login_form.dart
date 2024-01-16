@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:memo_dex_prototyp/services/rest_services.dart';
 import 'package:memo_dex_prototyp/widgets/divide_painter.dart';
 import 'package:memo_dex_prototyp/widgets/validation_message_box.dart';
@@ -21,6 +22,8 @@ class _LoginFormState extends State<LoginForm> {
   late TextEditingController _password;
   bool _isPasswordVisible = false;
   bool _isButtonEnabled = false;
+  final storage = FlutterSecureStorage();
+
 
   //nochmal genau ansehen was der teil macht
   @override
@@ -42,19 +45,32 @@ class _LoginFormState extends State<LoginForm> {
       }
     });
   }
-  void validateForm(String email, String password)
+  void validateForm(String email, String password) async
   {
     final emailRegExp = RegExp(r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$');
+    String? internetConnection = await storage.read(key: "internet_connection");
 
-    if (emailRegExp.hasMatch(email)) {
-        RestServices(context).loginUser(_eMail.text, _password.text);
-    }else {
+    if(internetConnection == "false")
+    {
       showDialog(
         context: context,
         builder: (BuildContext context) {
-          return ValidationMessageBox(message: "Bitte eine gültige E-Mail Adresse angeben.");
+          return ValidationMessageBox(message: "Keine Internetverbidnung vorhanden.");
         },
       );
+
+    }else
+    {
+      if (emailRegExp.hasMatch(email)) {
+        await RestServices(context).loginUser(_eMail.text, _password.text);
+      }else {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return ValidationMessageBox(message: "Bitte eine gültige E-Mail Adresse angeben.");
+          },
+        );
+      }
     }
   }
 

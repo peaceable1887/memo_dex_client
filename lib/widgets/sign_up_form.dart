@@ -46,12 +46,23 @@ class _SignUpFormState extends State<SignUpForm> {
     });
   }
 
-  void validateForm(String email, String password, String repeatPassword) {
+  void validateForm(String email, String password, String repeatPassword) async {
     final emailRegExp = RegExp(r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$');
+    String? internetConnection = await storage.read(key: "internet_connection");
 
-    if (emailRegExp.hasMatch(email)) {
-      if (password == repeatPassword && password.isNotEmpty) {
-          RestServices(context).createUser(_eMail.text, _password.text);
+    if(internetConnection == "false")
+    {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return ValidationMessageBox(message: "Keine Internetverbidnung vorhanden.");
+        },
+      );
+    }else{
+      if (emailRegExp.hasMatch(email))
+      {
+        if (password == repeatPassword && password.isNotEmpty) {
+          await RestServices(context).createUser(_eMail.text, _password.text);
           storage.write(key: 'addUser', value: "true");
           Navigator.push(
             context,
@@ -59,22 +70,26 @@ class _SignUpFormState extends State<SignUpForm> {
               builder: (context) => LoginScreen(),
             ),
           );
-      } else {
+        } else
+        {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return ValidationMessageBox(message: "Passwörter sind nicht identisch.");
+            },
+          );
+        }
+      } else
+      {
         showDialog(
           context: context,
           builder: (BuildContext context) {
-            return ValidationMessageBox(message: "Passwörter sind nicht identisch.");
+            return ValidationMessageBox(message: "Bitte eine gültige E-Mail Adresse angeben.");
           },
         );
       }
-    } else {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return ValidationMessageBox(message: "Bitte eine gültige E-Mail Adresse angeben.");
-        },
-      );
     }
+
   }
 
   @override

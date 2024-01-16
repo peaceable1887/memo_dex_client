@@ -1,10 +1,9 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:memo_dex_prototyp/screens/setting_screen.dart';
 import 'package:memo_dex_prototyp/screens/statistic_screen.dart';
 
-import '../services/rest_services.dart';
-import '../widgets/headline.dart';
-import '../widgets/top_search_bar.dart';
 import 'home_screen.dart';
 
 class BottomNavigationScreen extends StatefulWidget {
@@ -20,19 +19,22 @@ class BottomNavigationScreen extends StatefulWidget {
 class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
 
   int currentIndex = 0;
-
-  final screens = [
-    HomeScreen(),
-    StatisticScreen(),
-    SettingScreen(),
-  ];
+  bool snackbarIsDisplayed = false;
+  final screens = [HomeScreen(), StatisticScreen(), SettingScreen(),];
 
   @override
   void initState()
   {
-    updateIndex();
     super.initState();
+    updateIndex();
+    checkInternetConnection();
+    // Überwache Änderungen der Internetverbindung
+    Connectivity().onConnectivityChanged.listen((ConnectivityResult result)
+    {
+      checkInternetConnection();
+    });
   }
+
 
   void updateIndex()
   {
@@ -46,10 +48,23 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
     }
   }
 
+  Future<void> checkInternetConnection() async
+  {
+    ConnectivityResult connectivityResult = await Connectivity().checkConnectivity();
+    bool isConnected = (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi);
+
+    setState(() {
+      if (!isConnected) {
+        snackbarIsDisplayed = false;
+      } else {
+        snackbarIsDisplayed = true;
+      }
+    });
+  }
+
   @override
   void dispose()
   {
-    updateIndex();
     super.dispose();
   }
 
@@ -58,30 +73,33 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
     return Scaffold(
       backgroundColor: Color(0xFF00324E),
       body: screens[currentIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: currentIndex,
-        onTap: (index) => setState(() => currentIndex = index),
-        iconSize: 50,
-        selectedFontSize: 14,
-        unselectedFontSize: 14,
-        selectedLabelStyle: TextStyle(fontFamily: "Inter", fontWeight: FontWeight.w600,),
-        unselectedLabelStyle: TextStyle(fontFamily: "Inter", fontWeight: FontWeight.w600,),
-        selectedItemColor: Color(0xFFE59113),
-        unselectedItemColor: Color(0xFF8597A1),
-        items:[
-          BottomNavigationBarItem(
-              icon: Icon(Icons.home_rounded),
-              label: "Home"
-          ),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.insert_chart_outlined_outlined),
-              label: "Statistic"
-          ),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.settings_rounded),
-              label: "Settings"
-          ),
-        ],
+      bottomNavigationBar: Padding(
+        padding: snackbarIsDisplayed ? const EdgeInsets.fromLTRB(0, 0, 0, 0) : const EdgeInsets.fromLTRB(0, 0, 0, 52),
+        child: BottomNavigationBar(
+          currentIndex: currentIndex,
+          onTap: (index) => setState(() => currentIndex = index),
+          iconSize: 50,
+          selectedFontSize: 14,
+          unselectedFontSize: 14,
+          selectedLabelStyle: TextStyle(fontFamily: "Inter", fontWeight: FontWeight.w600,),
+          unselectedLabelStyle: TextStyle(fontFamily: "Inter", fontWeight: FontWeight.w600,),
+          selectedItemColor: Color(0xFFE59113),
+          unselectedItemColor: Color(0xFF8597A1),
+          items:[
+            BottomNavigationBarItem(
+                icon: Icon(Icons.home_rounded),
+                label: "Home"
+            ),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.insert_chart_outlined_outlined),
+                label: "Statistic"
+            ),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.settings_rounded),
+                label: "Settings"
+            ),
+          ],
+        ),
       ),
     );
   }

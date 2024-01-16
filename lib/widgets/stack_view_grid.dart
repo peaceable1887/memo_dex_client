@@ -214,7 +214,6 @@ class _StackViewGridState extends State<StackViewGrid> {
 
   @override
   void dispose() {
-    loadStacks(widget.selectedOption, widget.sortValue);
     super.dispose();
   }
 
