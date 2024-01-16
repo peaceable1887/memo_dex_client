@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import '../screens/bottom_navigation_screen.dart';
+import '../services/file_handler.dart';
 import '../services/rest_services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -17,6 +18,9 @@ class _CreateStackFormState extends State<CreateStackForm> {
   late TextEditingController _stackname;
   bool _isButtonEnabled = false;
   final storage = FlutterSecureStorage();
+  FileHandler fileHandler = FileHandler();
+
+
 
   @override
   void initState() {
@@ -256,8 +260,28 @@ class _CreateStackFormState extends State<CreateStackForm> {
                   ),
                   onPressed: _isButtonEnabled
                       ? () {
-                    setState(() {
-                      RestServices(context).createStack(_stackname.text, "${color.value.toRadixString(16).substring(2)}");
+                    setState(()
+                    {
+                      if(storage.read(key: "internet_connection") == "true")
+                      {
+                        RestServices(context).createStack(_stackname.text, "${color.value.toRadixString(16).substring(2)}");
+                      }else
+                      {
+                        storage.read(key: 'user_id').then((String? value)
+                        {
+                          if (value != null)
+                          {
+                            int userIdTest;
+                            userIdTest = int.tryParse(value) ?? 0;
+
+                            fileHandler.addToJsonFile(
+                                stackname: _stackname.text,
+                                color: "${color.value.toRadixString(16).substring(2)}",
+                                userId: userIdTest,
+                                fileName: "allStacks");
+                          } else {}
+                        });
+                      }
                       storage.write(key: 'stackCreated', value: "true");
                       Navigator.push(
                         context,

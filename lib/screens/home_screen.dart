@@ -19,7 +19,6 @@ class _HomeScreenState extends State<HomeScreen> {
   bool asc = false;
   final storage = FlutterSecureStorage();
 
-
   @override
   void initState() {
     showSnackbarInformation();

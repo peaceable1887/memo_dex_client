@@ -1,3 +1,4 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -27,12 +28,13 @@ class _LoginFormState extends State<LoginForm> {
 
   //nochmal genau ansehen was der teil macht
   @override
-  void initState() {
+  void initState()
+  {
+    super.initState();
     _eMail = TextEditingController();
     _eMail.addListener(updateButtonState);
     _password = TextEditingController();
     _password.addListener(updateButtonState);
-    super.initState();
   }
 
 
@@ -48,9 +50,10 @@ class _LoginFormState extends State<LoginForm> {
   void validateForm(String email, String password) async
   {
     final emailRegExp = RegExp(r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$');
-    String? internetConnection = await storage.read(key: "internet_connection");
+    ConnectivityResult connectivityResult = await Connectivity().checkConnectivity();
+    bool isConnected = (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi);
 
-    if(internetConnection == "false")
+    if(isConnected == false)
     {
       showDialog(
         context: context,
