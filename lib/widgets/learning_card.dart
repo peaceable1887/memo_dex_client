@@ -144,8 +144,6 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
   @override
   void dispose()
   {
-    setLightIcon();
-    controller.dispose();
     super.dispose();
   }
 

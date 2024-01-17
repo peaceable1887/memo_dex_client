@@ -64,7 +64,7 @@ class _SignUpFormState extends State<SignUpForm> {
         if (password == repeatPassword && password.isNotEmpty) {
           await RestServices(context).createUser(_eMail.text, _password.text);
           storage.write(key: 'addUser', value: "true");
-          Navigator.push(
+          Navigator.pushReplacement(
             context,
             MaterialPageRoute(
               builder: (context) => LoginScreen(),

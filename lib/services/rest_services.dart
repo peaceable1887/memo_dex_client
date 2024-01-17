@@ -14,6 +14,37 @@ class RestServices{
 
   RestServices(this.context);
 
+  Future<void> loadLocalStacks() async
+  {
+    String localFileContent = await fileHandler.readJsonFromLocalFile("allLocalStacks");
+
+    print("---------localFileContent------------");
+    print(localFileContent);
+
+    if (localFileContent.isNotEmpty)
+    {
+      List<dynamic> localContent = jsonDecode(localFileContent);
+      print("Länge der Liste: ${localContent.length}");
+
+      for (var stack in localContent)
+      {
+        print(stack['stackname']);
+        print(stack['color']);
+        print(stack['is_deleted']);
+        print(stack['creation_date']);
+        print(stack['user_user_id']);
+        createStack(stack['stackname'], stack['color']);
+        print("----------------NEXT------------------");
+
+      }
+      FileHandler().clearFileContent("allLocalStacks");
+    }else
+    {
+      print("loadLocalStacks are empty");
+    }
+
+  }
+
   Future<void> createUser(String eMail, String password) async {
     final response = await http.post(
       Uri.parse('http://10.0.2.2:4000/register'),
@@ -64,7 +95,7 @@ class RestServices{
       } else {
         // Handle the case where data["id"] is null
       }
-      Navigator.push(
+      Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => BottomNavigationScreen()),
       );

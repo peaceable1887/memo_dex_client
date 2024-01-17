@@ -222,8 +222,8 @@ class _EditStackFormState extends State<EditStackForm> {
                       ],
                     ),
                     Container(
-                      width: 22, // Ändern Sie die Breite nach Bedarf
-                      height: 22, // Ändern Sie die Höhe nach Bedarf
+                      width: 22,
+                      height: 22,
                       decoration: BoxDecoration(
                         color: newColor,
                         shape: BoxShape.circle,
@@ -261,7 +261,7 @@ class _EditStackFormState extends State<EditStackForm> {
                   setState(() {
                     RestServices(context).updateStack(_stackname.text, "${newColor.value.toRadixString(16).substring(2)}", 0, widget.stackId);
                     storage.write(key: 'stackUpdated', value: "true");
-                    Navigator.push(
+                    Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
                         builder: (context) => StackContentScreen(stackId: widget.stackId),

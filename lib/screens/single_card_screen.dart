@@ -218,10 +218,17 @@ class _SingleCardScreenState extends State<SingleCardScreen> {
   //TODO NOCHMAL ANSEHEN: wenn die Karte als "isNoticed" markiert wird, wird der wert nicht an den edit_card_screen übergben
   void pushToEditCard()
   {
-    Navigator.push(
+    Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (context) => EditCardScreen(stackId: widget.stackId, cardId: widget.cardId, stackname: stackname, question: question, answer: answer,isNoticed: isNoticed,),
+        builder: (context) => EditCardScreen(
+          stackId: widget.stackId,
+          cardId: widget.cardId,
+          stackname: stackname,
+          question: question,
+          answer: answer,
+          isNoticed: isNoticed,
+        ),
       ),
     );
   }
@@ -235,9 +242,6 @@ class _SingleCardScreenState extends State<SingleCardScreen> {
   @override
   void dispose()
   {
-    showSnackbarInformation();
-    loadStack();
-    loadCard();
     super.dispose();
   }
 
@@ -261,7 +265,7 @@ class _SingleCardScreenState extends State<SingleCardScreen> {
                     child: TopNavigationBar(
                       btnText: "Back",
                       onPressed: () {
-                        Navigator.push(
+                        Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
                             builder: (context) =>

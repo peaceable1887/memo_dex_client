@@ -80,30 +80,34 @@ class _StackContentScreenState extends State<StackContentScreen> {
   {
     String? stackCreated = await storage.read(key: 'stackUpdated');
     String? addCard = await storage.read(key: 'addCard');
-    if(stackCreated == "true")
+    if (mounted)
     {
-      CustomSnackbar.showSnackbar(
-          context,
-          Icons.check_rounded,
-          "A stack was successfully edited.",
-          Colors.green,
-          Duration(milliseconds: 500),
-          Duration(milliseconds: 1500)
-      );
-      await storage.write(key: 'stackUpdated', value: "false");
+      if(stackCreated == "true")
+      {
+        CustomSnackbar.showSnackbar(
+            context,
+            Icons.check_rounded,
+            "A stack was successfully edited.",
+            Colors.green,
+            Duration(milliseconds: 500),
+            Duration(milliseconds: 1500)
+        );
+        await storage.write(key: 'stackUpdated', value: "false");
+      }
+      if(addCard == "true")
+      {
+        CustomSnackbar.showSnackbar(
+            context,
+            Icons.check_rounded,
+            "A card was successfully created.",
+            Colors.green,
+            Duration(milliseconds: 500),
+            Duration(milliseconds: 1500)
+        );
+        await storage.write(key: 'addCard', value: "false");
+      }
     }
-    if(addCard == "true")
-    {
-      CustomSnackbar.showSnackbar(
-          context,
-          Icons.check_rounded,
-          "A card was successfully created.",
-          Colors.green,
-          Duration(milliseconds: 500),
-          Duration(milliseconds: 1500)
-      );
-      await storage.write(key: 'addCard', value: "false");
-    }
+
   }
 
   Future<void> loadStack() async
@@ -246,7 +250,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
   }
 
   void pushToAddCard(){
-    Navigator.push(
+    Navigator.pushReplacement(
       context,
       MaterialPageRoute(
         builder: (context) => AddCardScreen(stackId: widget.stackId, stackname: stackname),
@@ -255,7 +259,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
   }
 
   void pushToEditStack(){
-    Navigator.push(
+    Navigator.pushReplacement(
       context,
       MaterialPageRoute(
         builder: (context) => EditStackScreen(stackId: widget.stackId, stackname: stackname, color: color),
@@ -265,10 +269,6 @@ class _StackContentScreenState extends State<StackContentScreen> {
 
   @override
   void dispose() {
-    showSnackbarInformation();
-    loadStack();
-    loadCards();
-    showButtons();
     super.dispose();
   }
 
@@ -305,7 +305,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
                     child: TopNavigationBar(
                       btnText: "Home",
                       onPressed: () {
-                        Navigator.push(
+                        Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
                             builder: (context) => BottomNavigationScreen(),

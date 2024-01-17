@@ -21,7 +21,7 @@ class _StackBtnState extends State<StackBtn> {
   late bool isTooLong;
 
   void pushToStackContent(){
-    Navigator.push(
+    Navigator.pushReplacement(
       context,
       MaterialPageRoute(
         builder: (context) => StackContentScreen(stackId: widget.stackId),
@@ -54,7 +54,7 @@ class _StackBtnState extends State<StackBtn> {
             width: 150,
             child: Center(
               child: Text(
-                TrimText().trimText(widget.stackName, 30),
+                TrimText().trimText(widget.stackName, 10),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     color: Colors.black,

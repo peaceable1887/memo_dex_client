@@ -34,6 +34,7 @@ class _EditCardScreenState extends State<EditCardScreen> {
 
   @override
   void initState() {
+    print(widget.isNoticed);
     isNoticed = widget.isNoticed;
     _question = TextEditingController(text: widget.question);
     _answer = TextEditingController(text: widget.answer);
@@ -58,7 +59,7 @@ class _EditCardScreenState extends State<EditCardScreen> {
       }
       RestServices(context).updateCard(_question.text, _answer.text, 0, isMemorized, widget.cardId);
       storage.write(key: 'editCard', value: "true");
-      Navigator.push(
+      Navigator.pushReplacement(
         context,
         MaterialPageRoute(
           builder: (context) => SingleCardScreen(stackId: widget.stackId, cardId: widget.cardId),
@@ -84,7 +85,7 @@ class _EditCardScreenState extends State<EditCardScreen> {
         return DeleteMessageBox(
           onDelete: () async {
             await RestServices(context).updateCard(_question.text, _answer.text, 1, 0, widget.cardId,);
-            Navigator.push(
+            Navigator.pushReplacement(
               context,
               MaterialPageRoute(
                 builder: (context) => StackContentScreen(stackId: widget.stackId),
@@ -109,8 +110,6 @@ class _EditCardScreenState extends State<EditCardScreen> {
 
   @override
   void dispose() {
-    _question.dispose();
-    _answer.dispose();
     super.dispose();
   }
 
@@ -133,7 +132,7 @@ class _EditCardScreenState extends State<EditCardScreen> {
                     child: TopNavigationBar(
                       btnText: "Back",
                       onPressed: () {
-                        Navigator.push(
+                        Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
                             builder: (context) => SingleCardScreen(stackId: widget.stackId, cardId: widget.cardId,),
@@ -309,7 +308,7 @@ class _EditCardScreenState extends State<EditCardScreen> {
                                 onChanged: (bool value)
                                 {
                                   setState(() {
-                                    isNoticed = value;  // Aktualisiere widget.isNoticed
+                                    isNoticed = value;
                                   });
                                 }
                             ),

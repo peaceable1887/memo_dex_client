@@ -12,6 +12,7 @@ class CreateStackScreen extends StatefulWidget {
 }
 
 class _CreateStackScreenState extends State<CreateStackScreen> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,7 +49,7 @@ class _CreateStackScreenState extends State<CreateStackScreen> {
           child:TopNavigationBar(
               btnText: "Home",
               onPressed: () {
-                Navigator.push(
+                Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
                     builder: (context) => BottomNavigationScreen(),

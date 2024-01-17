@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -21,6 +23,7 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
   int currentIndex = 0;
   bool snackbarIsDisplayed = false;
   final screens = [HomeScreen(), StatisticScreen(), SettingScreen(),];
+  late StreamSubscription subscription;
 
   @override
   void initState()
@@ -28,13 +31,12 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
     super.initState();
     updateIndex();
     checkInternetConnection();
-    // Überwache Änderungen der Internetverbindung
-    Connectivity().onConnectivityChanged.listen((ConnectivityResult result)
+    subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result)
     {
+      print(result);
       checkInternetConnection();
     });
   }
-
 
   void updateIndex()
   {
@@ -60,13 +62,17 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
         snackbarIsDisplayed = true;
       }
     });
+
   }
 
   @override
   void dispose()
   {
+    checkInternetConnection();
+    subscription.cancel();
     super.dispose();
   }
+
 
   @override
   Widget build(BuildContext context) {

@@ -76,4 +76,22 @@ class FileHandler {
       print('Fehler beim Hinzufügen zum JSON-File: $e');
     }
   }
+
+  Future<void> clearFileContent(String fileName) async {
+    try {
+      final directory = await getApplicationDocumentsDirectory();
+      final filePath = '${directory.path}/$fileName.json';
+      final file = File(filePath);
+
+      if (await file.exists()) {
+        // Die Datei existiert, leere ihren Inhalt
+        await file.writeAsString('');
+        print('Dateiinhalt erfolgreich gelöscht: $filePath');
+      } else {
+        print('Die Datei existiert nicht.');
+      }
+    } catch (e) {
+      print('Fehler beim Löschen des Dateiinhalts: $e');
+    }
+  }
 }

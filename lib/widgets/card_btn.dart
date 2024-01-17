@@ -59,7 +59,7 @@ class _CardBtnState extends State<CardBtn> {
 
   void pushToCardContent(){
     print(widget.stackId);
-    Navigator.push(
+    Navigator.pushReplacement(
       context,
       MaterialPageRoute(
         builder: (context) => SingleCardScreen(stackId: widget.stackId, cardId: widget.cardId,),

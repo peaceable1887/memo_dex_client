@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import '../screens/bottom_navigation_screen.dart';
@@ -19,14 +22,29 @@ class _CreateStackFormState extends State<CreateStackForm> {
   bool _isButtonEnabled = false;
   final storage = FlutterSecureStorage();
   FileHandler fileHandler = FileHandler();
-
-
+  bool online = true;
 
   @override
   void initState() {
+    super.initState();
     _stackname = TextEditingController();
     _stackname.addListener(updateButtonState);
-    super.initState();
+    _checkConnection();
+  }
+
+  void _checkConnection() async
+  {
+    String? isConnected = await storage.read(key: 'internet_connection');
+
+    if(isConnected == "false")
+    {
+      online = false;
+      print(online);
+    } else
+    {
+      online = true;
+      print(online);
+    }
   }
 
   void updateButtonState() {
@@ -262,11 +280,15 @@ class _CreateStackFormState extends State<CreateStackForm> {
                       ? () {
                     setState(()
                     {
-                      if(storage.read(key: "internet_connection") == "true")
+                      if(online == true)
                       {
+                        print(online);
+                        print("gehe ins true");
+
                         RestServices(context).createStack(_stackname.text, "${color.value.toRadixString(16).substring(2)}");
                       }else
                       {
+                        print("gehe ins false");
                         storage.read(key: 'user_id').then((String? value)
                         {
                           if (value != null)
@@ -278,12 +300,12 @@ class _CreateStackFormState extends State<CreateStackForm> {
                                 stackname: _stackname.text,
                                 color: "${color.value.toRadixString(16).substring(2)}",
                                 userId: userIdTest,
-                                fileName: "allStacks");
+                                fileName: "allLocalStacks");
                           } else {}
                         });
                       }
                       storage.write(key: 'stackCreated', value: "true");
-                      Navigator.push(
+                      Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
                           builder: (context) => BottomNavigationScreen(),

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:memo_dex_prototyp/services/rest_services.dart';
@@ -42,40 +43,54 @@ class _StackViewGridState extends State<StackViewGrid> {
 
   Future<void> loadStacks(String? selectedOption, bool? sortValue) async
   {
-    String? internetConnection = await storage.read(key: "internet_connection");
+    String? isConnected = await storage.read(key: 'internet_connection');
 
-    if(internetConnection == "false")
+    if(isConnected == "false")
     {
+      print("bin offline");
       setState(()
       {
         showLoadingCircular = false;
       });
 
       String fileContent = await fileHandler.readJsonFromLocalFile("allStacks");
-      // Überprüfe ob der Inhalt eine Liste ist
-      if (fileContent.isNotEmpty)
-      {
-        List<dynamic> stackFileContent = jsonDecode(fileContent);
+      String fileLocalContent = await fileHandler.readJsonFromLocalFile("allLocalStacks");
+      print("test");
 
-        filter.FilterStacks(stackButtons, stackFileContent, selectedOption!, sortValue!);
-
-        for (var stack in stackFileContent)
+      // Überprüfe ob der Inhalt Liste ist
+      if (fileContent.isNotEmpty) {
+        if(fileLocalContent.isEmpty)
         {
-          if (stack['is_deleted'] == 0)
-          {
+          fileLocalContent = "[]";
+        }
+        List<dynamic> stackFileContent = jsonDecode(fileContent);
+        List<dynamic> localStackFileContent = jsonDecode(fileLocalContent);
+
+        // Füge die Inhalte der beiden Listen zusammen
+        List<dynamic> combinedStackContent = [...stackFileContent, ...localStackFileContent];
+        filter.FilterStacks(stackButtons, combinedStackContent, selectedOption!, sortValue!);
+
+        for (var stack in combinedStackContent)
+        {
+          if (stack['is_deleted'] == 0) {
             stackButtons.add(StackBtn(
-                stackId: stack['stack_id'],
-                iconColor: stack['color'],
-                stackName: stack['stackname']
+              stackId: stack['stack_id'],
+              iconColor: stack['color'],
+              stackName: stack['stackname'],
             ));
           }
         }
         stackButtons.add(CreateStackBtn());
-      }else{}
+      } else
+      {
+        // Handle den Fall, wenn eine der Dateien leer ist
+      }
 
     }else
     {
+      await RestServices(context).loadLocalStacks();
       await RestServices(context).getAllStacks();
+      print("bin online");
 
       setState(() {
         showLoadingCircular = false;
@@ -99,7 +114,6 @@ class _StackViewGridState extends State<StackViewGrid> {
                 stackName: stack['stackname']
             ));
           }
-
         }
         stackButtons.add(CreateStackBtn());
       }else{}
@@ -113,7 +127,8 @@ class _StackViewGridState extends State<StackViewGrid> {
   }
 
   @override
-  void dispose() {
+  void dispose()
+  {
     super.dispose();
   }
 

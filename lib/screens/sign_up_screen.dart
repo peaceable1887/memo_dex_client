@@ -55,7 +55,7 @@ class SignUpScreen extends StatelessWidget {
             TopNavigationBar(
               btnText: "",
               onPressed: () {
-                Navigator.push(
+                Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
                     builder: (context) => WelcomeScreen(),

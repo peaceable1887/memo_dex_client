@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:memo_dex_prototyp/widgets/stack_view_grid.dart';
@@ -20,9 +23,10 @@ class _HomeScreenState extends State<HomeScreen> {
   final storage = FlutterSecureStorage();
 
   @override
-  void initState() {
-    showSnackbarInformation();
+  void initState()
+  {
     super.initState();
+    showSnackbarInformation();
   }
 
   void showSnackbarInformation() async

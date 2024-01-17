@@ -29,7 +29,7 @@ class _EditStackScreenState extends State<EditStackScreen> {
         return DeleteMessageBox(
           onDelete: () async {
             await RestServices(context).deleteStack(1, widget.stackId);
-            Navigator.push(
+            Navigator.pushReplacement(
               context,
               MaterialPageRoute(
                 builder: (context) => BottomNavigationScreen(),
@@ -58,7 +58,7 @@ class _EditStackScreenState extends State<EditStackScreen> {
                   child: TopNavigationBar(
                     btnText: "Back",
                     onPressed: () {
-                      Navigator.push(
+                      Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
                           builder: (context) => StackContentScreen(stackId: widget.stackId),

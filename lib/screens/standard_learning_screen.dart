@@ -204,7 +204,7 @@ class _CardLearningScreenState extends State<StandardLearningScreen> with Ticker
                       child: TopNavigationBar(
                         btnText: "Back",
                         onPressed: () {
-                          Navigator.push(
+                          Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
                               builder: (context) => StackContentScreen(stackId: widget.stackId),

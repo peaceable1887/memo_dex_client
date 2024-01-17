@@ -26,11 +26,11 @@ class _AddCardScreenState extends State<AddCardScreen> {
 
   @override
   void initState() {
+    super.initState();
     _question = TextEditingController();
     _answer = TextEditingController();
     _question.addListener(updateButtonState);
     _answer.addListener(updateButtonState);
-    super.initState();
   }
 
   void updateButtonState() {
@@ -69,7 +69,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
                     child: TopNavigationBar(
                       btnText: "Back",
                       onPressed: () {
-                        Navigator.push(
+                        Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
                             builder: (context) => StackContentScreen(stackId: widget.stackId),
@@ -222,7 +222,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
                             setState(() {
                               RestServices(context).addCard(_question.text, _answer.text, widget.stackId);
                               storage.write(key: 'addCard', value: "true");
-                              Navigator.push(
+                              Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => StackContentScreen(stackId: widget.stackId),

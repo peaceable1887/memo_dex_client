@@ -95,7 +95,7 @@ class _StatisticCardState extends State<StatisticCard> {
         ),
         child: InkWell(
           onTap: () {
-            Navigator.push(
+            Navigator.pushReplacement(
               context,
               MaterialPageRoute(
                 builder: (context) => StatisticStackScreen(

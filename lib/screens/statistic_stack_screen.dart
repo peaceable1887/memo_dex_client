@@ -270,8 +270,6 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
   {
     loadStackStatistcic();
     loadCardStatistic();
-    progressInPercent(widget.noticed, widget.notNoticed);
-    _chartData = getChartData(widget.notNoticed);
     super.dispose();
   }
 
@@ -294,7 +292,7 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
                     child: TopNavigationBar(
                       btnText: "Statistic",
                       onPressed: () {
-                        Navigator.push(
+                        Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
                             builder: (context) => BottomNavigationScreen(index: 1),
