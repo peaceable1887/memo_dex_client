@@ -5,8 +5,8 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:memo_dex_prototyp/screens/stack_content_screen.dart';
 import 'package:carousel_slider/carousel_slider.dart'; // https://pub.dev/packages/carousel_slider
 
-import '../services/file_handler.dart';
-import '../services/rest_services.dart';
+import '../services/local/file_handler.dart';
+import '../services/rest/rest_services.dart';
 import '../widgets/headline.dart';
 import '../widgets/learning_card.dart';
 import '../widgets/top_navigation_bar.dart';

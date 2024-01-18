@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:memo_dex_prototyp/widgets/stack_btn.dart';
-import '../services/file_handler.dart';
+import '../services/local/file_handler.dart';
 
 class CustomSearchDelegate extends SearchDelegate
 {

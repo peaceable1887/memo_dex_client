@@ -1,8 +1,13 @@
+import 'dart:async';
+
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:memo_dex_prototyp/screens/stack_content_screen.dart';
+import 'package:memo_dex_prototyp/services/local/write_to_device_storage.dart';
 
-import '../services/rest_services.dart';
+import '../services/local/file_handler.dart';
+import '../services/rest/rest_services.dart';
 import '../widgets/headline.dart';
 import '../widgets/top_navigation_bar.dart';
 
@@ -23,6 +28,9 @@ class _AddCardScreenState extends State<AddCardScreen> {
   late TextEditingController _answer;
   bool _isButtonEnabled = false;
   final storage = FlutterSecureStorage();
+  FileHandler fileHandler = FileHandler();
+  late StreamSubscription subscription;
+  bool online = true;
 
   @override
   void initState() {
@@ -31,6 +39,28 @@ class _AddCardScreenState extends State<AddCardScreen> {
     _answer = TextEditingController();
     _question.addListener(updateButtonState);
     _answer.addListener(updateButtonState);
+    _checkInternetConnection();
+    print("stackid: ${widget.stackId}");
+    subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result)
+    {
+      _checkInternetConnection();
+    });
+  }
+
+  void _checkInternetConnection() async
+  {
+    ConnectivityResult connectivityResult = await Connectivity().checkConnectivity();
+    bool isConnected = (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi);
+
+    if(isConnected == false)
+    {
+      online = false;
+      print(online);
+    } else
+    {
+      online = true;
+      print(online);
+    }
   }
 
   void updateButtonState() {
@@ -47,6 +77,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
   void dispose() {
     _question.dispose();
     _answer.dispose();
+    subscription.cancel();
     super.dispose();
   }
 
@@ -220,7 +251,20 @@ class _AddCardScreenState extends State<AddCardScreen> {
                           onPressed: _isButtonEnabled
                               ? () {
                             setState(() {
-                              RestServices(context).addCard(_question.text, _answer.text, widget.stackId);
+                              if(online == true)
+                              {
+                                print("gehe ins true");
+                                RestServices(context).addCard(_question.text, _answer.text, widget.stackId);
+                              }else
+                              {
+                                print("stackid: ${widget.stackId}");
+                                print("gehe ins false");
+                                WriteToDeviceStorage().addCard(
+                                    question: _question.text,
+                                    answer: _answer.text,
+                                    stackId: widget.stackId,
+                                    fileName: "allLocalCards");
+                              }
                               storage.write(key: 'addCard', value: "true");
                               Navigator.pushReplacement(
                                 context,

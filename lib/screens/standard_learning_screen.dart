@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:memo_dex_prototyp/screens/stack_content_screen.dart';
 import 'package:carousel_slider/carousel_slider.dart'; // https://pub.dev/packages/carousel_slider
 
-import '../services/rest_services.dart';
+import '../services/rest/rest_services.dart';
 import '../widgets/components/custom_snackbar.dart';
 import '../widgets/components/message_box.dart';
 import '../widgets/headline.dart';

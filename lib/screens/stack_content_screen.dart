@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'dart:convert';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:memo_dex_prototyp/helperClasses/check_connection.dart';
@@ -7,10 +9,11 @@ import 'package:memo_dex_prototyp/screens/add_card_screen.dart';
 import 'package:memo_dex_prototyp/screens/bottom_navigation_screen.dart';
 import 'package:memo_dex_prototyp/screens/standard_learning_screen.dart';
 import 'package:memo_dex_prototyp/screens/edit_stack_screen.dart';
-import 'package:memo_dex_prototyp/services/rest_services.dart';
+import 'package:memo_dex_prototyp/services/local/upload_to_database.dart';
+import 'package:memo_dex_prototyp/services/rest/rest_services.dart';
 import 'package:memo_dex_prototyp/widgets/stack_content_btn.dart';
 import '../helperClasses/filters.dart';
-import '../services/file_handler.dart';
+import '../services/local/file_handler.dart';
 import '../widgets/card_btn.dart';
 
 import '../widgets/components/custom_snackbar.dart';
@@ -42,6 +45,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
   final storage = FlutterSecureStorage();
   final filter = Filters();
   bool showLoadingCircular = true;
+  late StreamSubscription subscription;
 
   List<Widget> showButtons()
   {
@@ -73,6 +77,11 @@ class _StackContentScreenState extends State<StackContentScreen> {
     loadStack();
     loadCards();
     showButtons();
+    subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result)
+    {
+      loadStack();
+      loadCards();
+    });
   }
 
   //TODO REDUNDANZ: muss noch ausgelagert werden
@@ -114,9 +123,10 @@ class _StackContentScreenState extends State<StackContentScreen> {
   {
     try
     {
-      String? internetConnection = await storage.read(key: "internet_connection");
+      ConnectivityResult connectivityResult = await Connectivity().checkConnectivity();
+      bool isConnected = (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi);
 
-      if(internetConnection == "false")
+      if(isConnected == false)
       {
         setState(()
         {
@@ -124,12 +134,21 @@ class _StackContentScreenState extends State<StackContentScreen> {
         });
 
         String fileContent = await fileHandler.readJsonFromLocalFile("allStacks");
+        String fileLocalContent = await fileHandler.readJsonFromLocalFile("allLocalStacks");
 
         if (fileContent.isNotEmpty)
         {
-          List<dynamic> stacks = jsonDecode(fileContent);
+          if(fileLocalContent.isEmpty)
+          {
+            fileLocalContent = "[]";
+          }
 
-          for (var stack in stacks)
+          List<dynamic> stackFileContent = jsonDecode(fileContent);
+          List<dynamic> localStackFileContent = jsonDecode(fileLocalContent);
+
+          List<dynamic> combinedStackContent = [...stackFileContent, ...localStackFileContent];
+
+          for (var stack in combinedStackContent)
           {
             if (stack["stack_id"] == widget.stackId)
             {
@@ -145,7 +164,9 @@ class _StackContentScreenState extends State<StackContentScreen> {
         }
       }else
       {
-        await RestServices(context).getStack(widget.stackId);
+
+        await UploadToDatabase(context).allLocalCards();
+        await RestServices(context).getAllStacks();
 
         String fileContent = await fileHandler.readJsonFromLocalFile("allStacks");
 
@@ -181,23 +202,29 @@ class _StackContentScreenState extends State<StackContentScreen> {
   {
     try
     {
-      String? internetConnection = await storage.read(key: "internet_connection");
+      ConnectivityResult connectivityResult = await Connectivity().checkConnectivity();
+      bool isConnected = (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi);
 
-      if(internetConnection == "false")
+      if(isConnected == false)
       {
         setState(()
         {
           showLoadingCircular = false;
         });
 
-        String fileContent = await fileHandler.readJsonFromLocalFile("allCards");
+        String serverFileCardContent = await fileHandler.readJsonFromLocalFile("allCards");
+        String localFileCardContent = await fileHandler.readJsonFromLocalFile("allLocalCards");
 
-        if (fileContent.isNotEmpty)
+        if (serverFileCardContent.isNotEmpty)
         {
-          List<dynamic> cardFileContent = jsonDecode(fileContent);
-          filter.FilterCards(cards, cardFileContent, selectedOption, sortValue);
+          List<dynamic> serverCardContent = jsonDecode(serverFileCardContent);
+          List<dynamic> localCardContent = jsonDecode(localFileCardContent);
 
-          for (var card in cardFileContent)
+          List<dynamic> combinedCardContent = [...serverCardContent, ...localCardContent];
+
+          filter.FilterCards(cards, combinedCardContent, selectedOption, sortValue);
+
+          for (var card in combinedCardContent)
           {
             if(card['stack_stack_id'] == widget.stackId)
             {
@@ -216,6 +243,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
         }
       }else
       {
+        await UploadToDatabase(context).allLocalCards();
         await RestServices(context).getAllCards();
 
         String fileContent = await fileHandler.readJsonFromLocalFile("allCards");
@@ -268,7 +296,9 @@ class _StackContentScreenState extends State<StackContentScreen> {
   }
 
   @override
-  void dispose() {
+  void dispose()
+  {
+    subscription.cancel();
     super.dispose();
   }
 

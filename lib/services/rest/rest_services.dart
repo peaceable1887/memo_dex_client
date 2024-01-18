@@ -4,8 +4,8 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:memo_dex_prototyp/screens/bottom_navigation_screen.dart';
-import '../widgets/validation_message_box.dart';
-import 'file_handler.dart';
+import '../../widgets/components/validation_message_box.dart';
+import '../local/file_handler.dart';
 
 class RestServices{
   final BuildContext context;
@@ -13,37 +13,6 @@ class RestServices{
   FileHandler fileHandler = FileHandler();
 
   RestServices(this.context);
-
-  Future<void> loadLocalStacks() async
-  {
-    String localFileContent = await fileHandler.readJsonFromLocalFile("allLocalStacks");
-
-    print("---------localFileContent------------");
-    print(localFileContent);
-
-    if (localFileContent.isNotEmpty)
-    {
-      List<dynamic> localContent = jsonDecode(localFileContent);
-      print("Länge der Liste: ${localContent.length}");
-
-      for (var stack in localContent)
-      {
-        print(stack['stackname']);
-        print(stack['color']);
-        print(stack['is_deleted']);
-        print(stack['creation_date']);
-        print(stack['user_user_id']);
-        createStack(stack['stackname'], stack['color']);
-        print("----------------NEXT------------------");
-
-      }
-      FileHandler().clearFileContent("allLocalStacks");
-    }else
-    {
-      print("loadLocalStacks are empty");
-    }
-
-  }
 
   Future<void> createUser(String eMail, String password) async {
     final response = await http.post(

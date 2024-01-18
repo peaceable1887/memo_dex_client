@@ -2,9 +2,9 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:memo_dex_prototyp/services/rest_services.dart';
-import 'package:memo_dex_prototyp/widgets/divide_painter.dart';
-import 'package:memo_dex_prototyp/widgets/validation_message_box.dart';
+import 'package:memo_dex_prototyp/services/rest/rest_services.dart';
+import 'package:memo_dex_prototyp/helperClasses/divide_painter.dart';
+import 'package:memo_dex_prototyp/widgets/components/validation_message_box.dart';
 
 import '../screens/home_screen.dart';
 import '../screens/welcome_screen.dart';

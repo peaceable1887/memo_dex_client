@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:memo_dex_prototyp/screens/stack_content_screen.dart';
-import '../services/rest_services.dart';
+import '../services/rest/rest_services.dart';
 
 class EditStackForm extends StatefulWidget {
 

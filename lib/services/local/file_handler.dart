@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 
+import '../../helperClasses/generator.dart';
+
 class FileHandler {
   Future<void> saveJsonToLocalFile(dynamic jsonData, String fileName) async {
     try {
@@ -39,43 +41,6 @@ class FileHandler {
     }
   }
 
-  Future<void> addToJsonFile({
-    required String stackname,
-    required String color,
-    required int userId,
-    required String fileName,
-  }) async {
-    try {
-      final directory = await getApplicationDocumentsDirectory();
-      final filePath = '${directory.path}/$fileName.json';
-      final file = File(filePath);
-
-      // Lese vorhandene Daten
-      List<Map<String, dynamic>> existingData = [];
-      if (await file.exists()) {
-        final content = await file.readAsString();
-        if (content.isNotEmpty) {
-          existingData = List<Map<String, dynamic>>.from(jsonDecode(content));
-        }
-      }
-
-      // Füge neuen Eintrag hinzu
-      existingData.add({
-        'stackname': stackname,
-        'color': color,
-        'is_deleted': 0,
-        'creation_date': DateTime.now().toIso8601String(),
-        'user_user_id': userId,
-      });
-
-      // Speichere aktualisierte Daten
-      final encodedJson = jsonEncode(existingData);
-      await file.writeAsString(encodedJson);
-      print('Daten erfolgreich zur JSON-Datei hinzugefügt: $filePath');
-    } catch (e) {
-      print('Fehler beim Hinzufügen zum JSON-File: $e');
-    }
-  }
 
   Future<void> clearFileContent(String fileName) async {
     try {

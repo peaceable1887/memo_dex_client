@@ -4,8 +4,9 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import '../screens/bottom_navigation_screen.dart';
-import '../services/file_handler.dart';
-import '../services/rest_services.dart';
+import '../services/local/file_handler.dart';
+import '../services/local/write_to_device_storage.dart';
+import '../services/rest/rest_services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class CreateStackForm extends StatefulWidget {
@@ -22,6 +23,7 @@ class _CreateStackFormState extends State<CreateStackForm> {
   bool _isButtonEnabled = false;
   final storage = FlutterSecureStorage();
   FileHandler fileHandler = FileHandler();
+  late StreamSubscription subscription;
   bool online = true;
 
   @override
@@ -29,14 +31,19 @@ class _CreateStackFormState extends State<CreateStackForm> {
     super.initState();
     _stackname = TextEditingController();
     _stackname.addListener(updateButtonState);
-    _checkConnection();
+    _checkInternetConnection();
+    subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result)
+    {
+      _checkInternetConnection();
+    });
   }
 
-  void _checkConnection() async
+  void _checkInternetConnection() async
   {
-    String? isConnected = await storage.read(key: 'internet_connection');
+    ConnectivityResult connectivityResult = await Connectivity().checkConnectivity();
+    bool isConnected = (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi);
 
-    if(isConnected == "false")
+    if(isConnected == false)
     {
       online = false;
       print(online);
@@ -138,6 +145,8 @@ class _CreateStackFormState extends State<CreateStackForm> {
 
   @override
   void dispose() {
+    _checkInternetConnection();
+    subscription.cancel();
     _stackname.dispose();
     super.dispose();
   }
@@ -296,7 +305,7 @@ class _CreateStackFormState extends State<CreateStackForm> {
                             int userIdTest;
                             userIdTest = int.tryParse(value) ?? 0;
 
-                            fileHandler.addToJsonFile(
+                            WriteToDeviceStorage().addStack(
                                 stackname: _stackname.text,
                                 color: "${color.value.toRadixString(16).substring(2)}",
                                 userId: userIdTest,

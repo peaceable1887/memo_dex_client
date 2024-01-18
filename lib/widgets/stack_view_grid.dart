@@ -1,12 +1,14 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:memo_dex_prototyp/services/rest_services.dart';
+import 'package:memo_dex_prototyp/services/local/upload_to_database.dart';
+import 'package:memo_dex_prototyp/services/rest/rest_services.dart';
 import 'package:memo_dex_prototyp/widgets/create_stack_btn.dart';
 import 'package:memo_dex_prototyp/widgets/stack_btn.dart';
 import '../helperClasses/filters.dart';
-import '../services/file_handler.dart';
+import '../services/local/file_handler.dart';
 
 class StackViewGrid extends StatefulWidget {
   final String? selectedOption;
@@ -23,6 +25,7 @@ class _StackViewGridState extends State<StackViewGrid> {
   FileHandler fileHandler = FileHandler();
   final filter = Filters();
   bool showLoadingCircular = true;
+  late StreamSubscription subscription;
   final storage = FlutterSecureStorage();
 
   @override
@@ -30,6 +33,10 @@ class _StackViewGridState extends State<StackViewGrid> {
   {
     super.initState();
     loadStacks(widget.selectedOption, widget.sortValue);
+    subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result)
+    {
+      loadStacks(widget.selectedOption, widget.sortValue);
+    });
   }
 
   @override
@@ -43,9 +50,11 @@ class _StackViewGridState extends State<StackViewGrid> {
 
   Future<void> loadStacks(String? selectedOption, bool? sortValue) async
   {
-    String? isConnected = await storage.read(key: 'internet_connection');
+    ConnectivityResult connectivityResult = await Connectivity().checkConnectivity();
+    bool isConnected = (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi);
 
-    if(isConnected == "false")
+
+    if(isConnected == false)
     {
       print("bin offline");
       setState(()
@@ -55,7 +64,6 @@ class _StackViewGridState extends State<StackViewGrid> {
 
       String fileContent = await fileHandler.readJsonFromLocalFile("allStacks");
       String fileLocalContent = await fileHandler.readJsonFromLocalFile("allLocalStacks");
-      print("test");
 
       // Überprüfe ob der Inhalt Liste ist
       if (fileContent.isNotEmpty) {
@@ -88,11 +96,12 @@ class _StackViewGridState extends State<StackViewGrid> {
 
     }else
     {
-      await RestServices(context).loadLocalStacks();
+      await UploadToDatabase(context).allLocalStacks();
       await RestServices(context).getAllStacks();
       print("bin online");
 
-      setState(() {
+      setState(()
+      {
         showLoadingCircular = false;
       });
 
@@ -129,6 +138,7 @@ class _StackViewGridState extends State<StackViewGrid> {
   @override
   void dispose()
   {
+    subscription.cancel();
     super.dispose();
   }
 

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:memo_dex_prototyp/screens/login_screen.dart';
-import 'package:memo_dex_prototyp/widgets/validation_message_box.dart';
+import 'package:memo_dex_prototyp/widgets/components/validation_message_box.dart';
 
 import '../screens/welcome_screen.dart';
-import '../services/rest_services.dart';
+import '../services/rest/rest_services.dart';
 import 'button.dart';
-import 'divide_painter.dart';
+import '../helperClasses/divide_painter.dart';
 
 class SignUpForm extends StatefulWidget {
   const SignUpForm({Key? key}) : super(key: key);

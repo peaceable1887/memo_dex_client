@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:memo_dex_prototyp/screens/bottom_navigation_screen.dart';
 import 'package:memo_dex_prototyp/screens/stack_content_screen.dart';
-import '../services/rest_services.dart';
+import '../services/rest/rest_services.dart';
 import '../widgets/create_stack_form.dart';
 import '../widgets/delete_message_box.dart';
 import '../widgets/edit_stack_form.dart';

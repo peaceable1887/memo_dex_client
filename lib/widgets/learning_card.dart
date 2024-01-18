@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 
-import '../services/rest_services.dart';
+import '../services/rest/rest_services.dart';
 import 'components/custom_snackbar.dart';
 
 class LearningCard extends StatefulWidget {

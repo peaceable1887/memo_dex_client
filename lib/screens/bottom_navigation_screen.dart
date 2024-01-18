@@ -33,7 +33,6 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
     checkInternetConnection();
     subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result)
     {
-      print(result);
       checkInternetConnection();
     });
   }
@@ -62,13 +61,11 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
         snackbarIsDisplayed = true;
       }
     });
-
   }
 
   @override
   void dispose()
   {
-    checkInternetConnection();
     subscription.cancel();
     super.dispose();
   }

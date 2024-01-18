@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:memo_dex_prototyp/widgets/statistic_card.dart';
 import '../helperClasses/filters.dart';
-import '../services/file_handler.dart';
-import '../services/rest_services.dart';
+import '../services/local/file_handler.dart';
+import '../services/rest/rest_services.dart';
 import '../widgets/headline.dart';
 
 class StatisticScreen extends StatefulWidget

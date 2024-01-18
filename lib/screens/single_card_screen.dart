@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:memo_dex_prototyp/screens/stack_content_screen.dart';
 
-import '../services/file_handler.dart';
-import '../services/rest_services.dart';
+import '../services/local/file_handler.dart';
+import '../services/rest/rest_services.dart';
 import '../widgets/components/custom_snackbar.dart';
 import '../widgets/headline.dart';
 import '../widgets/learning_card.dart';
@@ -161,6 +161,7 @@ class _SingleCardScreenState extends State<SingleCardScreen> {
           {
             setState(()
             {
+
               question = cardFileContent[0]["question"];
               answer = cardFileContent[0]["answer"];
               if(cardFileContent[0]["remember"] == 1)
@@ -192,20 +193,20 @@ class _SingleCardScreenState extends State<SingleCardScreen> {
                 isNoticed: card["remember"],
                 isIndividual: true,
               ));
+
+              question = card["question"];
+              answer = card["answer"];
+              if(card["remember"] == 1)
+              {
+                isNoticed = true;
+              }
             }
           }
           // Widget wird aktualisiert nnach dem Laden der Daten.
           if (mounted)
           {
             setState(()
-            {
-              question = cardFileContent[0]["question"];
-              answer = cardFileContent[0]["answer"];
-              if(cardFileContent[0]["remember"] == 1)
-              {
-                isNoticed = true;
-              }
-            });
+            {});
           }
         }else{}
       }
