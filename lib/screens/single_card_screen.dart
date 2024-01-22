@@ -1,6 +1,8 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:memo_dex_prototyp/screens/stack_content_screen.dart';
@@ -36,14 +38,21 @@ class _SingleCardScreenState extends State<SingleCardScreen> {
   final storage = FlutterSecureStorage();
   FileHandler fileHandler = FileHandler();
   bool showLoadingCircular = true;
+  late StreamSubscription subscription;
 
   @override
   void initState()
   {
+    super.initState();
     showSnackbarInformation();
     loadStack();
     loadCard();
-    super.initState();
+    subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result)
+    {
+      loadStack();
+      loadCard();
+    });
+
   }
 
   void showSnackbarInformation() async
@@ -67,9 +76,10 @@ class _SingleCardScreenState extends State<SingleCardScreen> {
   {
     try
     {
-      String? internetConnection = await storage.read(key: "internet_connection");
+      ConnectivityResult connectivityResult = await Connectivity().checkConnectivity();
+      bool isConnected = (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi);
 
-      if(internetConnection == "false")
+      if(isConnected == false)
       {
         setState(()
         {
@@ -127,9 +137,10 @@ class _SingleCardScreenState extends State<SingleCardScreen> {
   {
     try
     {
-      String? internetConnection = await storage.read(key: "internet_connection");
+      ConnectivityResult connectivityResult = await Connectivity().checkConnectivity();
+      bool isConnected = (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi);
 
-      if(internetConnection == "false")
+      if(isConnected == false)
       {
         setState(()
         {
@@ -154,21 +165,20 @@ class _SingleCardScreenState extends State<SingleCardScreen> {
                 isNoticed: card["remember"],
                 isIndividual: true,
               ));
+
+              question = card["question"];
+              answer = card["answer"];
+              if(card["remember"] == 1)
+              {
+                isNoticed = true;
+              }
             }
           }
           // Widget wird aktualisiert nnach dem Laden der Daten.
           if (mounted)
           {
             setState(()
-            {
-
-              question = cardFileContent[0]["question"];
-              answer = cardFileContent[0]["answer"];
-              if(cardFileContent[0]["remember"] == 1)
-              {
-                isNoticed = true;
-              }
-            });
+            {});
           }
         }
       }else
@@ -243,6 +253,7 @@ class _SingleCardScreenState extends State<SingleCardScreen> {
   @override
   void dispose()
   {
+    subscription.cancel();
     super.dispose();
   }
 

@@ -114,8 +114,7 @@ class RestServices{
     }
   }
 
-  Future<void> createStack(String stackname, String color) async {
-
+  Future<String> createStack(String stackname, String color) async {
     String? accessToken = await storage.read(key: 'accessToken');
     String? userId = await storage.read(key: 'user_id');
 
@@ -135,19 +134,24 @@ class RestServices{
         }),
       );
 
-      if (response.statusCode == 200) {
-        print("Stack wurde erstellt");
-      } else
+      if (response.statusCode == 200)
       {
+        // Erfolgreiche Anfrage
+        print("Stack wurde erfolgreich erstellt.");
+        return response.body; // Hier wird der Response-Body zurückgegeben
+      } else {
         showDialog(
           context: context,
-          builder: (BuildContext context) {
+          builder: (BuildContext context)
+          {
             return ValidationMessageBox(message: "Stack konnte nicht erstellt werden");
           },
         );
         throw Exception('Stack konnte nicht erstellt werden.');
       }
-    }else {
+    } else {
+      // Handle the case when accessToken is null
+      throw Exception('Access Token ist null.');
     }
   }
 

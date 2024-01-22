@@ -1,10 +1,13 @@
 import 'dart:async';
+import 'dart:convert';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:horizontal_blocked_scroll_physics/horizontal_blocked_scroll_physics.dart';
 import 'package:intl/intl.dart';
 import 'package:memo_dex_prototyp/screens/stack_content_screen.dart';
 import 'package:carousel_slider/carousel_slider.dart'; // https://pub.dev/packages/carousel_slider
 
+import '../services/local/file_handler.dart';
 import '../services/rest/rest_services.dart';
 import '../widgets/components/custom_snackbar.dart';
 import '../widgets/components/message_box.dart';
@@ -34,13 +37,23 @@ class _CardLearningScreenState extends State<StandardLearningScreen> with Ticker
   int seconds = 0;
   late Timer timer;
   bool snackbarShown = false;
+  late StreamSubscription subscription;
+  FileHandler fileHandler = FileHandler();
+  bool showLoadingCircular = true;
 
   @override
-  void initState() {
+  void initState()
+  {
+    super.initState();
     startTimer();
     loadStack();
     loadCards();
-    super.initState();
+    subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result)
+    {
+      loadStack();
+      loadCards();
+    });
+
   }
 
   void startTimer()
@@ -61,52 +74,156 @@ class _CardLearningScreenState extends State<StandardLearningScreen> with Ticker
   }
 
   Future<void> loadStack() async {
-    try{
-      final stack  = await RestServices(context).getStack(widget.stackId);
+    try
+    {
+      ConnectivityResult connectivityResult = await Connectivity().checkConnectivity();
+      bool isConnected = (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi);
 
-      setState(()
+      if(isConnected == false)
       {
-        stackname = stack[0]["stackname"];
-      });
+        setState(()
+        {
+          showLoadingCircular = false;
+        });
 
-    } catch (error) {
-      print('Fehler beim Laden der Daten: $error');
+        String fileContent = await fileHandler.readJsonFromLocalFile("allStacks");
+
+        if (fileContent.isNotEmpty)
+        {
+          List<dynamic> stacks = jsonDecode(fileContent);
+
+          for (var stack in stacks)
+          {
+            if (stack["stack_id"] == widget.stackId)
+            {
+              setState(()
+              {
+                stackname = stack["stackname"];
+              });
+              // breche Schleife ab, da die gewünschten Daten gefunden wurden
+              break;
+            }
+          }
+        }
+      }else
+      {
+        await RestServices(context).getStack(widget.stackId);
+
+        String fileContent = await fileHandler.readJsonFromLocalFile("allStacks");
+
+        if (fileContent.isNotEmpty)
+        {
+          List<dynamic> stacks = jsonDecode(fileContent);
+
+          for (var stack in stacks)
+          {
+            if (stack["stack_id"] == widget.stackId)
+            {
+              setState(() {
+                stackname = stack["stackname"];
+              });
+              break;
+            }
+          }
+        }else{}
+      }
+    }catch(error)
+    {
+      print('Fehler beim Laden der loadStack Daten: $error');
     }
   }
 
   Future<void> loadCards() async {
-    try{
-      final cardsData = await RestServices(context).getAllCardsByStackId(widget.stackId);
+    try
+    {
+      ConnectivityResult connectivityResult = await Connectivity().checkConnectivity();
+      bool isConnected = (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi);
 
-      for (var card in cardsData) {
-        if(card["remember"] == 0 && card["is_deleted"] == 0)
-        {
-          indexCards.add(LearningCard(
-            question: card["question"],
-            answer: card["answer"],
-            cardIndex: card["card_id"],
-            onClicked: handleCardClick,
-            isNoticed: card["remember"],
-            isIndividual: false,
-          ));
-        }
-
-      }
-      if(widget.isMixed == true)
+      if(isConnected == false)
       {
-        indexCards.shuffle();
-      }else{}
-      // Widget wird aktualisiert nnach dem Laden der Daten.
-      if (mounted) {
-        setState(() {
-
+        setState(()
+        {
+          showLoadingCircular = false;
         });
+
+        String fileContent = await fileHandler.readJsonFromLocalFile("allCards");
+
+        if (fileContent.isNotEmpty)
+        {
+          List<dynamic> cardFileContent = jsonDecode(fileContent);
+
+          for (var card in cardFileContent)
+          {
+            if(card['stack_stack_id'] == widget.stackId)
+            {
+              if(card["remember"] == 0 && card["is_deleted"] == 0)
+              {
+                indexCards.add(LearningCard(
+                  question: card["question"],
+                  answer: card["answer"],
+                  cardIndex: card["card_id"],
+                  onClicked: handleCardClick,
+                  isNoticed: card["remember"],
+                  isIndividual: false,
+                ));
+              }
+            }
+          }
+          if(widget.isMixed == true)
+          {
+            indexCards.shuffle();
+          }else{}
+          // Widget wird aktualisiert nnach dem Laden der Daten.
+          if (mounted)
+          {
+            setState(() {});
+          }
+        }
+      }else
+      {
+        await RestServices(context).getAllCards();
+
+        String fileContent = await fileHandler.readJsonFromLocalFile("allCards");
+
+        if (fileContent.isNotEmpty)
+        {
+          List<dynamic> cardFileContent = jsonDecode(fileContent);
+
+          for (var card in cardFileContent)
+          {
+            if (card['stack_stack_id'] == widget.stackId)
+            {
+              if(card["remember"] == 0 && card["is_deleted"] == 0)
+              {
+                indexCards.add(LearningCard(
+                  question: card["question"],
+                  answer: card["answer"],
+                  cardIndex: card["card_id"],
+                  onClicked: handleCardClick,
+                  isNoticed: card["remember"],
+                  isIndividual: false,
+                ));
+              }
+            }
+          }
+          if(widget.isMixed == true)
+          {
+            indexCards.shuffle();
+          }else{}
+          // Widget wird aktualisiert nnach dem Laden der Daten.
+          if (mounted)
+          {
+            setState(() {});
+          }
+        }else{}
       }
-    } catch (error) {
-      print('Fehler beim Laden der Daten: $error');
+    }catch(error)
+    {
+      print('Fehler beim Laden der loadCards Daten: $error');
     }
   }
 
+  //TODO muss noch für die den offline modus angepasst werden
   Future<void> handleCardClick(bool val) async {
     try {
       final time = await RestServices(context).getStackStatistic(widget.stackId);
@@ -118,6 +235,7 @@ class _CardLearningScreenState extends State<StandardLearningScreen> with Ticker
       final fastestTime = time[0]["fastest_time"];
 
       setState(() {
+        print(wasClicked);
         wasClicked = val;
 
         if (wasClicked == true && activeIndex == indexCards.length - 1) {
@@ -177,6 +295,7 @@ class _CardLearningScreenState extends State<StandardLearningScreen> with Ticker
     loadCards();
     timer.cancel();
     startTimer();
+    subscription.cancel();
     super.dispose();
   }
 

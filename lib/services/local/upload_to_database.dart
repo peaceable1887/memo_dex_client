@@ -11,62 +11,57 @@ class UploadToDatabase
 
   UploadToDatabase(this.context);
 
-  Future<void> allLocalStacks() async
+  Future<void> allLocalStackContent() async
   {
-    String localFileContent = await fileHandler.readJsonFromLocalFile("allLocalStacks");
+    String localStacks = await fileHandler.readJsonFromLocalFile("allLocalStacks");
 
-    print("---------allLocalStacks------------");
-    print(localFileContent);
+    print("---------Upload all Local Stack Content------------");
 
-    if (localFileContent.isNotEmpty)
+    if (localStacks.isNotEmpty)
     {
-      List<dynamic> localContent = jsonDecode(localFileContent);
-      print("Länge der Liste: ${localContent.length}");
+      List<dynamic> stacks = jsonDecode(localStacks);
 
-      for (var stack in localContent)
+      for (var stack in stacks)
       {
-        print(stack['stackname']);
-        print(stack['color']);
-        print(stack['is_deleted']);
-        print(stack['creation_date']);
-        print(stack['user_user_id']);
-        RestServices(context).createStack(stack['stackname'], stack['color']);
-        print("----------------NEXT------------------");
+        String responseBody = await RestServices(context).createStack(stack['stackname'], stack['color']);
+        print("Response Body: $responseBody");
+        allLocalCards(responseBody, stack['stack_id']);
+        print("----------------NEXT STACK------------------");
 
       }
       FileHandler().clearFileContent("allLocalStacks");
+
     }else
     {
-      print("loadLocalStacks are empty");
+      print("Stacks are empty");
+
     }
 
   }
 
-  Future<void> allLocalCards() async
+  Future<void> allLocalCards(stackId, localId) async
   {
     String localFileContent = await fileHandler.readJsonFromLocalFile("allLocalCards");
 
-    print("---------allLocalCards------------");
-    print(localFileContent);
+    print("---------Upload all Local Cards------------");
 
     if (localFileContent.isNotEmpty)
     {
       List<dynamic> localContent = jsonDecode(localFileContent);
-      print("Länge der Liste: ${localContent.length}");
 
       for (var card in localContent)
       {
-        print(card['question']);
-        print(card['answer']);
-        print(card['stack_stack_id']);
-        RestServices(context).addCard(card['question'], card['answer'], card['stack_stack_id']);
-        print("----------------NEXT------------------");
-
+        if(card['stack_stack_id'] == localId)
+        {
+          print(card["question"]);
+          card['stack_stack_id'] = stackId;
+          RestServices(context).addCard(card['question'], card['answer'], card['stack_stack_id']);
+          print("----------------NEXT CARD------------------");
+        }
       }
-      FileHandler().clearFileContent("allLocalCards");
     }else
     {
-      print("loadLocalCards are empty");
+      print("Local Cards are empty");
     }
 
   }

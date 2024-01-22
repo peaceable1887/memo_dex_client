@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:memo_dex_prototyp/helperClasses/check_connection.dart';
 import 'package:memo_dex_prototyp/screens/add_card_screen.dart';
 import 'package:memo_dex_prototyp/screens/bottom_navigation_screen.dart';
 import 'package:memo_dex_prototyp/screens/standard_learning_screen.dart';
@@ -46,6 +45,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
   final filter = Filters();
   bool showLoadingCircular = true;
   late StreamSubscription subscription;
+  bool switchOnlineStatus = false;
 
   List<Widget> showButtons()
   {
@@ -79,9 +79,18 @@ class _StackContentScreenState extends State<StackContentScreen> {
     showButtons();
     subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result)
     {
-      loadStack();
-      loadCards();
-    });
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (BuildContext context) => BottomNavigationScreen()),
+        );
+      });
+      /*print(switchOnlineStatus);
+      if(switchOnlineStatus == false)
+      {
+
+        switchOnlineStatus = true;
+      }*/
+
   }
 
   //TODO REDUNDANZ: muss noch ausgelagert werden
@@ -165,7 +174,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
       }else
       {
 
-        await UploadToDatabase(context).allLocalCards();
+        await UploadToDatabase(context).allLocalStackContent();
         await RestServices(context).getAllStacks();
 
         String fileContent = await fileHandler.readJsonFromLocalFile("allStacks");
@@ -188,7 +197,8 @@ class _StackContentScreenState extends State<StackContentScreen> {
                 color = stack["color"];
               });
               break;
-            }
+            }else
+            {}
           }
         }else{}
       }
@@ -211,12 +221,16 @@ class _StackContentScreenState extends State<StackContentScreen> {
         {
           showLoadingCircular = false;
         });
-
         String serverFileCardContent = await fileHandler.readJsonFromLocalFile("allCards");
         String localFileCardContent = await fileHandler.readJsonFromLocalFile("allLocalCards");
 
         if (serverFileCardContent.isNotEmpty)
         {
+          if(localFileCardContent.isEmpty)
+          {
+            localFileCardContent = "[]";
+          }
+
           List<dynamic> serverCardContent = jsonDecode(serverFileCardContent);
           List<dynamic> localCardContent = jsonDecode(localFileCardContent);
 
@@ -243,8 +257,12 @@ class _StackContentScreenState extends State<StackContentScreen> {
         }
       }else
       {
-        await UploadToDatabase(context).allLocalCards();
+
+        await UploadToDatabase(context).allLocalCards(widget.stackId, widget.stackId);
         await RestServices(context).getAllCards();
+
+        //TODO muss unter xyz Bedinung gecleart werden....
+        FileHandler().deleteItemById("allLocalCards", widget.stackId);
 
         String fileContent = await fileHandler.readJsonFromLocalFile("allCards");
 
@@ -330,8 +348,8 @@ class _StackContentScreenState extends State<StackContentScreen> {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 WillPopScope(
-                onWillPop: () async => false,
-                child: Container(
+                  onWillPop: () async => false,
+                  child: Container(
                     child: TopNavigationBar(
                       btnText: "Home",
                       onPressed: () {
@@ -667,7 +685,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
               padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
               itemCount: cards.length,
               itemBuilder: (context, index) {
-                  return cards[index];
+                return cards[index];
               },
             ),
           ),

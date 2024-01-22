@@ -53,10 +53,9 @@ class _StackViewGridState extends State<StackViewGrid> {
     ConnectivityResult connectivityResult = await Connectivity().checkConnectivity();
     bool isConnected = (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi);
 
-
     if(isConnected == false)
     {
-      print("bin offline");
+
       setState(()
       {
         showLoadingCircular = false;
@@ -96,9 +95,8 @@ class _StackViewGridState extends State<StackViewGrid> {
 
     }else
     {
-      await UploadToDatabase(context).allLocalStacks();
+      await UploadToDatabase(context).allLocalStackContent();
       await RestServices(context).getAllStacks();
-      print("bin online");
 
       setState(()
       {

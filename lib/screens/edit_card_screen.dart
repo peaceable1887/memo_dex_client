@@ -35,6 +35,7 @@ class _EditCardScreenState extends State<EditCardScreen> {
   @override
   void initState() {
     print(widget.isNoticed);
+    print(widget.question);
     isNoticed = widget.isNoticed;
     _question = TextEditingController(text: widget.question);
     _answer = TextEditingController(text: widget.answer);

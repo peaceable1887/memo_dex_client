@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:memo_dex_prototyp/helperClasses/generator.dart';
 import 'package:path_provider/path_provider.dart';
 
 class WriteToDeviceStorage
 {
+
   Future<void> addStack({
     required String stackname,
     required String color,
@@ -26,6 +28,7 @@ class WriteToDeviceStorage
 
       // Füge neuen Eintrag hinzu
       existingData.add({
+        "stack_id": Generator().generateRandomDecimal(),
         'stackname': stackname,
         'color': color,
         'is_deleted': 0,
@@ -45,7 +48,7 @@ class WriteToDeviceStorage
   Future<void> addCard({
     required String question,
     required String answer,
-    required int stackId,
+    required dynamic stackId,
     required String fileName,
   }) async {
     try {

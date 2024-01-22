@@ -41,6 +41,36 @@ class FileHandler {
     }
   }
 
+  Future<void> deleteItemById(String fileName, int targetId) async {
+    try {
+      final directory = await getApplicationDocumentsDirectory();
+      final filePath = '${directory.path}/$fileName.json';
+      final file = File(filePath);
+      print("tesssst");
+      if (await file.exists()) {
+        // Die Datei existiert, lese ihren Inhalt
+        final content = await file.readAsString();
+
+        // Parsen Sie den Inhalt als JSON
+        List<dynamic> jsonData = jsonDecode(content);
+
+        // Finde das Element mit der spezifizierten ID und lösche es
+        jsonData.removeWhere((item) => item['stack_stack_id'] == targetId);
+
+        // Konvertiere die aktualisierten Daten zurück in JSON
+        final updatedJson = jsonEncode(jsonData);
+
+        // Schreibe den aktualisierten Inhalt zurück in die Datei
+        await file.writeAsString(updatedJson);
+
+        print('Element mit ID $targetId erfolgreich gelöscht: $filePath');
+      } else {
+        print('Die Datei existiert nicht.');
+      }
+    } catch (e) {
+      print('Fehler beim Löschen des Elements: $e');
+    }
+  }
 
   Future<void> clearFileContent(String fileName) async {
     try {

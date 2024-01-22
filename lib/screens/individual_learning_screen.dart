@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:memo_dex_prototyp/screens/stack_content_screen.dart';
@@ -32,22 +33,31 @@ class _CardLearningScreenState extends State<IndividualLearningScreen> with Tick
   final storage = FlutterSecureStorage();
   FileHandler fileHandler = FileHandler();
   bool showLoadingCircular = true;
+  late StreamSubscription subscription;
 
 
   @override
-  void initState() {
+  void initState()
+  {
+    super.initState();
     loadStack();
     loadCards();
-    super.initState();
+    subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result)
+    {
+      loadStack();
+      loadCards();
+      indexCards.clear();
+    });
   }
 
   Future<void> loadStack() async
   {
     try
     {
-      String? internetConnection = await storage.read(key: "internet_connection");
+      ConnectivityResult connectivityResult = await Connectivity().checkConnectivity();
+      bool isConnected = (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi);
 
-      if(internetConnection == "false")
+      if(isConnected == false)
       {
         setState(()
         {
@@ -105,9 +115,10 @@ class _CardLearningScreenState extends State<IndividualLearningScreen> with Tick
   {
     try
     {
-      String? internetConnection = await storage.read(key: "internet_connection");
+      ConnectivityResult connectivityResult = await Connectivity().checkConnectivity();
+      bool isConnected = (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi);
 
-      if(internetConnection == "false")
+      if(isConnected == false)
       {
         setState(()
         {
@@ -195,6 +206,7 @@ class _CardLearningScreenState extends State<IndividualLearningScreen> with Tick
   void dispose() {
     loadStack();
     loadCards();
+    subscription.cancel();
     super.dispose();
   }
 
