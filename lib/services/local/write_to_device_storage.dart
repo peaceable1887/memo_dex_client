@@ -1,10 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:memo_dex_prototyp/helperClasses/generator.dart';
 import 'package:path_provider/path_provider.dart';
 
 class WriteToDeviceStorage
 {
+  final storage = FlutterSecureStorage();
 
   Future<void> addStack({
     required String stackname,
@@ -50,6 +52,7 @@ class WriteToDeviceStorage
     required String answer,
     required dynamic stackId,
     required String fileName,
+    required String? tempCardIndex,
   }) async {
     try {
       final directory = await getApplicationDocumentsDirectory();
@@ -65,20 +68,29 @@ class WriteToDeviceStorage
         }
       }
 
-      // Füge neuen Eintrag hinzu
-      existingData.add({
-        'question': question,
-        'answer': answer,
-        "is_deleted": 0,
-        "remember": 0,
-        "creation_date": DateTime.now().toIso8601String(),
-        "stack_stack_id": stackId
-      });
+      if (tempCardIndex != null)
+      {
+        int retrievedIntValue = int.tryParse(tempCardIndex) ?? 0;
+        print('Retrieved value as int: $retrievedIntValue');
 
-      // Speichere aktualisierte Daten
-      final encodedJson = jsonEncode(existingData);
-      await file.writeAsString(encodedJson);
-      print('Karte wurde erfolgreich zur JSON-Datei hinzugefügt: $filePath');
+        // Füge neuen Eintrag hinzu
+        existingData.add({
+          "card_id": retrievedIntValue + 1,
+          'question': question,
+          'answer': answer,
+          "is_deleted": 0,
+          "remember": 0,
+          "creation_date": DateTime.now().toIso8601String(),
+          "stack_stack_id": stackId
+        });
+
+        // Speichere aktualisierte Daten
+        final encodedJson = jsonEncode(existingData);
+        await file.writeAsString(encodedJson);
+        print('Karte wurde erfolgreich zur JSON-Datei hinzugefügt: $filePath');
+      }
+
+
     } catch (e) {
       print('Fehler beim Hinzufügen zum JSON-File: $e');
     }

@@ -78,19 +78,19 @@ class _StackContentScreenState extends State<StackContentScreen> {
     loadCards();
     showButtons();
     subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result)
-    {
+    async {
+      ConnectivityResult connectivityResult = await Connectivity().checkConnectivity();
+      bool isConnected = (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi);
+      if(isConnected == true)
+      {
+        await UploadToDatabase(context).updateAllLocalCards(widget.stackId);
+      }else{}
+
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (BuildContext context) => BottomNavigationScreen()),
         );
       });
-      /*print(switchOnlineStatus);
-      if(switchOnlineStatus == false)
-      {
-
-        switchOnlineStatus = true;
-      }*/
-
   }
 
   //TODO REDUNDANZ: muss noch ausgelagert werden
@@ -249,6 +249,13 @@ class _StackContentScreenState extends State<StackContentScreen> {
               }
             }
           }
+
+          print(combinedCardContent.length);
+          int arrLength = combinedCardContent.length;
+          String tempCardIndex = arrLength.toString();
+
+          await storage.write(key: 'tempCardIndex', value: tempCardIndex);
+
           // Widget wird aktualisiert nnach dem Laden der Daten.
           if (mounted)
           {
@@ -263,6 +270,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
 
         //TODO muss unter xyz Bedinung gecleart werden....
         FileHandler().deleteItemById("allLocalCards", widget.stackId);
+        //FileHandler().clearFileContent("allLocalCards");
 
         String fileContent = await fileHandler.readJsonFromLocalFile("allCards");
 

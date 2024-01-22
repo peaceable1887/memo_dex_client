@@ -1,6 +1,9 @@
+import 'dart:async';
 import 'dart:math';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 
+import '../services/local/file_handler.dart';
 import '../services/rest/rest_services.dart';
 import 'components/custom_snackbar.dart';
 
@@ -28,10 +31,14 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
   bool isCardTurned = false;
   bool showAnswerBtns = true;
   bool isCardNoticed = false;
+  bool online = true;
+  FileHandler fileHandler = FileHandler();
+  late StreamSubscription subscription;
 
   @override
   void initState()
   {
+    super.initState();
     setLightIcon();
     controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 700));
     animation = Tween(end: 1.0, begin: 0.0).animate(controller);
@@ -43,7 +50,11 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
     {
       animationStatus = status;
     });
-    super.initState();
+    _checkInternetConnection();
+    subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result)
+    {
+      _checkInternetConnection();
+    });
   }
 
   @override
@@ -54,6 +65,22 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
     if (widget.isNoticed != oldWidget.isNoticed) {
       setLightIcon();
       cardNoted();
+    }
+  }
+
+  void _checkInternetConnection() async
+  {
+    ConnectivityResult connectivityResult = await Connectivity().checkConnectivity();
+    bool isConnected = (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi);
+
+    if(isConnected == false)
+    {
+      online = false;
+      print(online);
+    } else
+    {
+      online = true;
+      print(online);
     }
   }
 
@@ -70,8 +97,42 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
     });
   }
 
+
+  void cardNotedOffline()
+  {
+    setState(()
+    {
+      if(isCardNoticed == false)
+      {
+        fileHandler.editItemById("allCards", "card_id", widget.cardIndex, {"remember":1});
+        isCardNoticed = true;
+        CustomSnackbar.showSnackbar(
+            context,
+            Icons.warning_amber_rounded,
+            "You marked the card as memorized.",
+            Color(0xFFE59113),
+            Duration(seconds: 0),
+            Duration(milliseconds: 1500)
+        );
+      }else{
+        fileHandler.editItemById("allCards", "card_id", widget.cardIndex, {"remember":0});
+        isCardNoticed = false;
+        CustomSnackbar.showSnackbar(
+            context,
+            Icons.warning_amber_rounded,
+            "You marked the card as unmemorized",
+            Color(0xFFE59113),
+            Duration(seconds: 0),
+            Duration(milliseconds: 1500)
+        );
+      }
+    });
+  }
+
   void cardNoted()
   {
+
+    print(online);
     setState(()
     {
       if(isCardNoticed == false)
@@ -144,6 +205,7 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
   @override
   void dispose()
   {
+    subscription.cancel();
     super.dispose();
   }
 
@@ -212,7 +274,7 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
                               Padding(
                                 padding: const EdgeInsets.fromLTRB(0, 15, 10, 0),
                                 child: InkWell(
-                                  onTap: cardNoted,
+                                  onTap: online ? cardNoted : cardNotedOffline,
                                   child: isCardNoticed ? Icon(
                                     Icons.lightbulb_rounded,
                                     size: 32.0,

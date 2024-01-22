@@ -1,7 +1,12 @@
+import 'dart:async';
+
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:memo_dex_prototyp/screens/stack_content_screen.dart';
+import '../services/local/file_handler.dart';
+import '../services/local/upload_to_database.dart';
 import '../services/rest/rest_services.dart';
 
 class EditStackForm extends StatefulWidget {
@@ -22,15 +27,65 @@ class _EditStackFormState extends State<EditStackForm> {
   late TextEditingController _stackname;
   bool _isButtonEnabled = false;
   final storage = FlutterSecureStorage();
+  FileHandler fileHandler = FileHandler();
+  late StreamSubscription subscription;
+  bool online = true;
 
   @override
   void initState() {
-
+    super.initState();
     _stackname = TextEditingController(text: widget.stackname);
     _stackname.addListener(updateButtonState);
     newColor = Color(int.parse("0xFF${widget.color}"));
     updateButtonState();
-    super.initState();
+    _checkInternetConnection();
+    subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result)
+    async {
+      _checkInternetConnection();
+      ConnectivityResult connectivityResult = await Connectivity().checkConnectivity();
+      bool isConnected = (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi);
+      if(isConnected == true)
+      {
+        await UploadToDatabase(context).updateAllLocalCards(widget.stackId);
+      }else{}
+
+    });
+  }
+
+  void _checkInternetConnection() async
+  {
+    ConnectivityResult connectivityResult = await Connectivity().checkConnectivity();
+    bool isConnected = (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi);
+
+    if(isConnected == false)
+    {
+      online = false;
+    } else
+    {
+      online = true;
+    }
+  }
+
+  Future<void> updateStack()
+  async {
+
+    if(online)
+    {
+      RestServices(context).updateStack(_stackname.text, "${newColor.value.toRadixString(16).substring(2)}", 0, widget.stackId);
+    }else
+    {
+      await fileHandler.editItemById("allStacks", "stack_id", widget.stackId, {"stackname":_stackname.text,"color":"${newColor.value.toRadixString(16).substring(2)}", "is_deleted": 0});
+    }
+
+    storage.write(key: 'stackUpdated', value: "true");
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => StackContentScreen(stackId: widget.stackId),
+      ),
+    );
+
   }
 
   void updateButtonState() {
@@ -120,6 +175,7 @@ class _EditStackFormState extends State<EditStackForm> {
 
   @override
   void dispose() {
+    subscription.cancel();
     _stackname.dispose();
     super.dispose();
   }
@@ -257,18 +313,7 @@ class _EditStackFormState extends State<EditStackForm> {
                   elevation: 0,
                 ),
                 onPressed: _isButtonEnabled
-                    ? () {
-                  setState(() {
-                    RestServices(context).updateStack(_stackname.text, "${newColor.value.toRadixString(16).substring(2)}", 0, widget.stackId);
-                    storage.write(key: 'stackUpdated', value: "true");
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => StackContentScreen(stackId: widget.stackId),
-                      ),
-                    );
-                  });
-                }
+                    ? updateStack
                     : null, // deaktivert den Button, wenn nicht aktiviert
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,

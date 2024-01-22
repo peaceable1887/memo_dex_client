@@ -41,6 +41,44 @@ class FileHandler {
     }
   }
 
+  Future<void> editItemById(String fileName, String contentId, int targetId, Map<String, dynamic> updatedData) async {
+    try {
+      final directory = await getApplicationDocumentsDirectory();
+      final filePath = '${directory.path}/$fileName.json';
+      final file = File(filePath);
+
+      if (await file.exists()) {
+        // Die Datei existiert, lese ihren Inhalt
+        final content = await file.readAsString();
+
+        // Parsen Sie den Inhalt als JSON
+        List<dynamic> jsonData = jsonDecode(content);
+
+        // Finde das Element mit der spezifizierten ID
+        var targetItem = jsonData.firstWhere((item) => item[contentId] == targetId, orElse: () => null);
+
+        if (targetItem != null) {
+          // Bearbeite das gefundene Element mit den aktualisierten Daten
+          targetItem.addAll(updatedData);
+
+          // Konvertiere die aktualisierten Daten zurück in JSON
+          final updatedJson = jsonEncode(jsonData);
+
+          // Schreibe den aktualisierten Inhalt zurück in die Datei
+          await file.writeAsString(updatedJson);
+
+          print('Element mit ID $targetId erfolgreich bearbeitet: $filePath');
+        } else {
+          print('Element mit ID $targetId wurde nicht gefunden.');
+        }
+      } else {
+        print('Die Datei existiert nicht.');
+      }
+    } catch (e) {
+      print('Fehler beim Bearbeiten des Elements: $e');
+    }
+  }
+
   Future<void> deleteItemById(String fileName, int targetId) async {
     try {
       final directory = await getApplicationDocumentsDirectory();

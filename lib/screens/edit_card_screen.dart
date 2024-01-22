@@ -1,8 +1,13 @@
+import 'dart:async';
+
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:memo_dex_prototyp/screens/single_card_screen.dart';
 import 'package:memo_dex_prototyp/screens/stack_content_screen.dart';
 
+import '../services/local/file_handler.dart';
+import '../services/local/upload_to_database.dart';
 import '../services/rest/rest_services.dart';
 import '../widgets/delete_message_box.dart';
 import '../widgets/headline.dart';
@@ -30,43 +35,76 @@ class _EditCardScreenState extends State<EditCardScreen> {
   late TextEditingController _answer;
   bool _isButtonEnabled = false;
   final storage = FlutterSecureStorage();
+  FileHandler fileHandler = FileHandler();
   bool isNoticed = true;
+  late StreamSubscription subscription;
+  bool online = true;
 
   @override
-  void initState() {
-    print(widget.isNoticed);
-    print(widget.question);
+  void initState()
+  {
+    super.initState();
     isNoticed = widget.isNoticed;
     _question = TextEditingController(text: widget.question);
     _answer = TextEditingController(text: widget.answer);
     _question.addListener(updateButtonState);
     _answer.addListener(updateButtonState);
     updateButtonState();
-    super.initState();
+    _checkInternetConnection();
+    subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result)
+    async {
+      _checkInternetConnection();
+      ConnectivityResult connectivityResult = await Connectivity().checkConnectivity();
+      bool isConnected = (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi);
+      if(isConnected == true)
+      {
+        await UploadToDatabase(context).updateAllLocalCards(widget.stackId);
+      }else{}
+
+    });
   }
 
-  void updateCard()
+  void _checkInternetConnection() async
   {
+    ConnectivityResult connectivityResult = await Connectivity().checkConnectivity();
+    bool isConnected = (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi);
+
+    if(isConnected == false)
+    {
+      online = false;
+    } else
+    {
+      online = true;
+    }
+  }
+
+  Future<void> updateCard()
+  async {
     int isMemorized;
 
-    setState(()
+    if(isNoticed == false)
     {
-      if(isNoticed == false)
-      {
-        isMemorized = 0;
-      }else
-      {
-        isMemorized = 1;
-      }
-      RestServices(context).updateCard(_question.text, _answer.text, 0, isMemorized, widget.cardId);
-      storage.write(key: 'editCard', value: "true");
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => SingleCardScreen(stackId: widget.stackId, cardId: widget.cardId),
-        ),
-      );
-    });
+      isMemorized = 0;
+    }else
+    {
+      isMemorized = 1;
+    }
+
+    if(online)
+    {
+      await RestServices(context).updateCard(_question.text, _answer.text, 0, isMemorized, widget.cardId);
+    }else
+    {
+      await fileHandler.editItemById("allCards", "card_id", widget.cardId, {"question":_question.text,"answer":_answer.text, "remember": isMemorized});
+    }
+
+    storage.write(key: 'editCard', value: "true");
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => SingleCardScreen(stackId: widget.stackId, cardId: widget.cardId),
+      ),
+    );
   }
 
   void updateButtonState() {
@@ -110,7 +148,9 @@ class _EditCardScreenState extends State<EditCardScreen> {
   );
 
   @override
-  void dispose() {
+  void dispose()
+  {
+    subscription.cancel();
     super.dispose();
   }
 

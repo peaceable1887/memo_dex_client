@@ -63,6 +63,62 @@ class UploadToDatabase
     {
       print("Local Cards are empty");
     }
+  }
+
+  Future<void> updateAllLocalCards(stackId) async
+  {
+    String localFileContent = await fileHandler.readJsonFromLocalFile("allCards");
+
+    print("---------Upload all Local Cards------------");
+
+    if (localFileContent.isNotEmpty)
+    {
+      List<dynamic> localContent = jsonDecode(localFileContent);
+
+      for (var card in localContent)
+      {
+        if(card['stack_stack_id'] == stackId)
+        {
+          RestServices(context).updateCard(
+              card['question'],
+              card['answer'],
+              card['is_deleted'],
+              card['remember'],
+              card['card_id']);
+        }
+      }
+    }else
+    {
+      print("Local Cards are empty");
+    }
+  }
+
+  Future<void> updateAllLocalStacks(stackId) async
+  {
+    String localFileContent = await fileHandler.readJsonFromLocalFile("allCards");
+
+    print("---------Upload all Local Cards------------");
+
+    if (localFileContent.isNotEmpty)
+    {
+      List<dynamic> localContent = jsonDecode(localFileContent);
+
+      for (var card in localContent)
+      {
+        if(card['stack_stack_id'] == stackId)
+        {
+          RestServices(context).updateCard(
+              card['question'],
+              card['answer'],
+              card['is_deleted'],
+              card['remember'],
+              card['card_id']);
+        }
+      }
+    }else
+    {
+      print("Local Cards are empty");
+    }
 
   }
 }

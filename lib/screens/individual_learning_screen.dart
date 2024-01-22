@@ -7,6 +7,7 @@ import 'package:memo_dex_prototyp/screens/stack_content_screen.dart';
 import 'package:carousel_slider/carousel_slider.dart'; // https://pub.dev/packages/carousel_slider
 
 import '../services/local/file_handler.dart';
+import '../services/local/upload_to_database.dart';
 import '../services/rest/rest_services.dart';
 import '../widgets/headline.dart';
 import '../widgets/learning_card.dart';
@@ -40,10 +41,17 @@ class _CardLearningScreenState extends State<IndividualLearningScreen> with Tick
   void initState()
   {
     super.initState();
+    print("stackid: ${widget.stackId}");
     loadStack();
     loadCards();
     subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result)
-    {
+    async {
+      ConnectivityResult connectivityResult = await Connectivity().checkConnectivity();
+      bool isConnected = (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi);
+      if(isConnected == true)
+      {
+        await UploadToDatabase(context).updateAllLocalCards(widget.stackId);
+      }else{}
       loadStack();
       loadCards();
       indexCards.clear();
@@ -125,13 +133,22 @@ class _CardLearningScreenState extends State<IndividualLearningScreen> with Tick
           showLoadingCircular = false;
         });
 
-        String fileContent = await fileHandler.readJsonFromLocalFile("allCards");
+        String serverFileCardContent = await fileHandler.readJsonFromLocalFile("allCards");
+        String localFileCardContent = await fileHandler.readJsonFromLocalFile("allLocalCards");
 
-        if (fileContent.isNotEmpty)
+        if (serverFileCardContent.isNotEmpty)
         {
-          List<dynamic> cardFileContent = jsonDecode(fileContent);
+          if(localFileCardContent.isEmpty)
+          {
+            localFileCardContent = "[]";
+          }
 
-          for (var card in cardFileContent)
+          List<dynamic> serverCardContent = jsonDecode(serverFileCardContent);
+          List<dynamic> localCardContent = jsonDecode(localFileCardContent);
+
+          List<dynamic> combinedCardContent = [...serverCardContent, ...localCardContent];
+
+          for (var card in combinedCardContent)
           {
             if(card['stack_stack_id'] == widget.stackId)
             {
@@ -160,7 +177,11 @@ class _CardLearningScreenState extends State<IndividualLearningScreen> with Tick
         }
       }else
       {
+        await UploadToDatabase(context).allLocalCards(widget.stackId, widget.stackId);
         await RestServices(context).getAllCards();
+
+        //TODO muss unter xyz Bedinung gecleart werden....
+        FileHandler().deleteItemById("allLocalCards", widget.stackId);
 
         String fileContent = await fileHandler.readJsonFromLocalFile("allCards");
 

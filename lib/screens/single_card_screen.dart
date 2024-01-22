@@ -8,6 +8,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:memo_dex_prototyp/screens/stack_content_screen.dart';
 
 import '../services/local/file_handler.dart';
+import '../services/local/upload_to_database.dart';
 import '../services/rest/rest_services.dart';
 import '../widgets/components/custom_snackbar.dart';
 import '../widgets/headline.dart';
@@ -48,11 +49,18 @@ class _SingleCardScreenState extends State<SingleCardScreen> {
     loadStack();
     loadCard();
     subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result)
-    {
+    async {
+      indexCards.clear();
+      ConnectivityResult connectivityResult = await Connectivity().checkConnectivity();
+      bool isConnected = (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi);
+      if(isConnected == true)
+      {
+        await UploadToDatabase(context).updateAllLocalCards(widget.stackId);
+      }else{}
+
       loadStack();
       loadCard();
     });
-
   }
 
   void showSnackbarInformation() async
@@ -86,13 +94,22 @@ class _SingleCardScreenState extends State<SingleCardScreen> {
           showLoadingCircular = false;
         });
 
-        String fileContent = await fileHandler.readJsonFromLocalFile("allStacks");
+        String serverFileStackContent = await fileHandler.readJsonFromLocalFile("allStacks");
+        String localFileStackContent = await fileHandler.readJsonFromLocalFile("allLocalStacks");
 
-        if (fileContent.isNotEmpty)
+        if (serverFileStackContent.isNotEmpty)
         {
-          List<dynamic> stacks = jsonDecode(fileContent);
+          if(localFileStackContent.isEmpty)
+          {
+            localFileStackContent = "[]";
+          }
 
-          for (var stack in stacks)
+          List<dynamic> stackFileContent = jsonDecode(serverFileStackContent);
+          List<dynamic> localStackFileContent = jsonDecode(localFileStackContent);
+
+          List<dynamic> combinedStackContent = [...stackFileContent, ...localStackFileContent];
+
+          for (var stack in combinedStackContent)
           {
             if (stack["stack_id"] == widget.stackId)
             {
@@ -107,6 +124,8 @@ class _SingleCardScreenState extends State<SingleCardScreen> {
         }
       }else
       {
+        await UploadToDatabase(context).allLocalStackContent();
+
         await RestServices(context).getStack(widget.stackId);
 
         String fileContent = await fileHandler.readJsonFromLocalFile("allStacks");
@@ -147,13 +166,22 @@ class _SingleCardScreenState extends State<SingleCardScreen> {
           showLoadingCircular = false;
         });
 
-        String fileContent = await fileHandler.readJsonFromLocalFile("allCards");
+        String serverFileCardContent = await fileHandler.readJsonFromLocalFile("allCards");
+        String localFileCardContent = await fileHandler.readJsonFromLocalFile("allLocalCards");
 
-        if (fileContent.isNotEmpty)
+        if (serverFileCardContent.isNotEmpty)
         {
-          List<dynamic> cardFileContent = jsonDecode(fileContent);
+          if(localFileCardContent.isEmpty)
+          {
+            localFileCardContent = "[]";
+          }
 
-          for (var card in cardFileContent)
+          List<dynamic> serverCardContent = jsonDecode(serverFileCardContent);
+          List<dynamic> localCardContent = jsonDecode(localFileCardContent);
+
+          List<dynamic> combinedCardContent = [...serverCardContent, ...localCardContent];
+
+          for (var card in combinedCardContent)
           {
             if(card['stack_stack_id'] == widget.stackId && card['card_id'] == widget.cardId)
             {
@@ -183,7 +211,10 @@ class _SingleCardScreenState extends State<SingleCardScreen> {
         }
       }else
       {
+        await UploadToDatabase(context).allLocalCards(widget.stackId, widget.stackId);
         await RestServices(context).getAllCards();
+
+        FileHandler().deleteItemById("allLocalCards", widget.stackId);
 
         String fileContent = await fileHandler.readJsonFromLocalFile("allCards");
 

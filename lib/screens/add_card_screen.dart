@@ -40,7 +40,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
     _question.addListener(updateButtonState);
     _answer.addListener(updateButtonState);
     _checkInternetConnection();
-    print("stackid: ${widget.stackId}");
+
     subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result)
     {
       _checkInternetConnection();
@@ -249,21 +249,23 @@ class _AddCardScreenState extends State<AddCardScreen> {
                             elevation: 0,
                           ),
                           onPressed: _isButtonEnabled
-                              ? () {
+                              ? () async
+                          {
+                            String? tempCardIndex = await storage.read(key: 'tempCardIndex');
+
                             setState(() {
                               if(online == true)
                               {
-                                print("gehe ins true");
                                 RestServices(context).addCard(_question.text, _answer.text, widget.stackId);
                               }else
                               {
-                                print("stackid: ${widget.stackId}");
-                                print("gehe ins false");
                                 WriteToDeviceStorage().addCard(
                                     question: _question.text,
                                     answer: _answer.text,
                                     stackId: widget.stackId,
-                                    fileName: "allLocalCards");
+                                    fileName: "allLocalCards",
+                                    tempCardIndex: tempCardIndex,
+                                );
                               }
                               storage.write(key: 'addCard', value: "true");
                               Navigator.pushReplacement(
