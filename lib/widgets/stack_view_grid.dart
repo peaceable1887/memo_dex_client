@@ -95,7 +95,9 @@ class _StackViewGridState extends State<StackViewGrid> {
 
     }else
     {
+      print("wird ausgeführt stack view grid");
       await UploadToDatabase(context).allLocalStackContent();
+      await UploadToDatabase(context).updateAllLocalStacks();
       await RestServices(context).getAllStacks();
 
       setState(()

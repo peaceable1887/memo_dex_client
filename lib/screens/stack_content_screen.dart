@@ -51,18 +51,18 @@ class _StackContentScreenState extends State<StackContentScreen> {
   {
     List<Widget> startLearningButtons = [
       StackContentBtn(
-          iconColor: "FFFFFF",
-          btnText: "Standard",
-          backgroundColor: "34A853",
-          onPressed: StandardLearningScreen(stackId: widget.stackId, isMixed: isMixed),
-          icon: Icons.star_border_rounded
+        iconColor: "FFFFFF",
+        btnText: "Standard",
+        backgroundColor: "34A853",
+        onPressed: StandardLearningScreen(stackId: widget.stackId, isMixed: isMixed),
+        icon: Icons.star_border_rounded,
       ),
       StackContentBtn(
-          iconColor: "FFFFFF",
-          btnText: "Individual",
-          backgroundColor: "E57435",
-          onPressed: IndividualLearningScreen(stackId: widget.stackId, isMixed: isMixed),
-          icon: Icons.my_library_books_rounded
+        iconColor: "FFFFFF",
+        btnText: "Individual",
+        backgroundColor: "E57435",
+        onPressed: IndividualLearningScreen(stackId: widget.stackId, isMixed: isMixed),
+        icon: Icons.my_library_books_rounded,
       )
     ];
 
@@ -76,11 +76,12 @@ class _StackContentScreenState extends State<StackContentScreen> {
     showSnackbarInformation();
     loadStack();
     loadCards();
-    showButtons();
     subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result)
-    async {
+    async
+    {
       ConnectivityResult connectivityResult = await Connectivity().checkConnectivity();
       bool isConnected = (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi);
+
       if(isConnected == true)
       {
         await UploadToDatabase(context).updateAllLocalCards(widget.stackId);
@@ -98,6 +99,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
   {
     String? stackCreated = await storage.read(key: 'stackUpdated');
     String? addCard = await storage.read(key: 'addCard');
+
     if (mounted)
     {
       if(stackCreated == "true")
@@ -173,7 +175,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
         }
       }else
       {
-
+        print("wird ausgeführt stack content");
         await UploadToDatabase(context).allLocalStackContent();
         await RestServices(context).getAllStacks();
 
@@ -250,7 +252,6 @@ class _StackContentScreenState extends State<StackContentScreen> {
             }
           }
 
-          print(combinedCardContent.length);
           int arrLength = combinedCardContent.length;
           String tempCardIndex = arrLength.toString();
 
@@ -264,13 +265,13 @@ class _StackContentScreenState extends State<StackContentScreen> {
         }
       }else
       {
-
         await UploadToDatabase(context).allLocalCards(widget.stackId, widget.stackId);
         await RestServices(context).getAllCards();
 
+        print("Stackid ${widget.stackId}");
         //TODO muss unter xyz Bedinung gecleart werden....
+
         FileHandler().deleteItemById("allLocalCards", widget.stackId);
-        //FileHandler().clearFileContent("allLocalCards");
 
         String fileContent = await fileHandler.readJsonFromLocalFile("allCards");
 

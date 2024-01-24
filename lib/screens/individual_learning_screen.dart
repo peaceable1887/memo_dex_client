@@ -72,13 +72,22 @@ class _CardLearningScreenState extends State<IndividualLearningScreen> with Tick
           showLoadingCircular = false;
         });
 
-        String fileContent = await fileHandler.readJsonFromLocalFile("allStacks");
+        String serverFileStackContent = await fileHandler.readJsonFromLocalFile("allStacks");
+        String localFileStackContent = await fileHandler.readJsonFromLocalFile("allLocalStacks");
 
-        if (fileContent.isNotEmpty)
+        if (serverFileStackContent.isNotEmpty)
         {
-          List<dynamic> stacks = jsonDecode(fileContent);
+          if(localFileStackContent.isEmpty)
+          {
+            localFileStackContent = "[]";
+          }
 
-          for (var stack in stacks)
+          List<dynamic> stackFileContent = jsonDecode(serverFileStackContent);
+          List<dynamic> localStackFileContent = jsonDecode(localFileStackContent);
+
+          List<dynamic> combinedStackContent = [...stackFileContent, ...localStackFileContent];
+
+          for (var stack in combinedStackContent)
           {
             if (stack["stack_id"] == widget.stackId)
             {
@@ -155,6 +164,7 @@ class _CardLearningScreenState extends State<IndividualLearningScreen> with Tick
               if(card["remember"] == 0 && card["is_deleted"] == 0)
               {
                 indexCards.add(LearningCard(
+                  stackId: card['stack_stack_id'],
                   question: card["question"],
                   answer: card["answer"],
                   cardIndex: card["card_id"],
@@ -179,8 +189,7 @@ class _CardLearningScreenState extends State<IndividualLearningScreen> with Tick
       {
         await UploadToDatabase(context).allLocalCards(widget.stackId, widget.stackId);
         await RestServices(context).getAllCards();
-
-        //TODO muss unter xyz Bedinung gecleart werden....
+        
         FileHandler().deleteItemById("allLocalCards", widget.stackId);
 
         String fileContent = await fileHandler.readJsonFromLocalFile("allCards");
@@ -195,6 +204,7 @@ class _CardLearningScreenState extends State<IndividualLearningScreen> with Tick
             {
               if(card["remember"] == 0 && card["is_deleted"] == 0)
               {
+                //TODO card_id einbauen
                 indexCards.add(LearningCard(
                   question: card["question"],
                   answer: card["answer"],

@@ -17,15 +17,30 @@ class CustomSearchDelegate extends SearchDelegate
   Future<void> loadStacks() async
   {
     String fileContent = await fileHandler.readJsonFromLocalFile("allStacks");
-    List<dynamic> stackFileContent = jsonDecode(fileContent);
-    // Überprüfe ob der Inhalt eine Liste ist
+    String fileLocalContent = await fileHandler.readJsonFromLocalFile("allLocalStacks");
+
+    // Überprüfe ob der Inhalt Liste ist
     if (fileContent.isNotEmpty)
     {
-      for (var stack in stackFileContent)
+      if(fileLocalContent.isEmpty)
+      {
+        fileLocalContent = "[]";
+      }
+
+      List<dynamic> stackFileContent = jsonDecode(fileContent);
+      List<dynamic> localStackFileContent = jsonDecode(fileLocalContent);
+
+      // Füge die Inhalte der beiden Listen zusammen
+      List<dynamic> combinedStackContent = [...stackFileContent, ...localStackFileContent];
+
+      for (var stack in combinedStackContent)
       {
         if (stack['is_deleted'] == 0)
         {
-          stackButtons.add(StackBtn(stackId: stack['stack_id'], iconColor: stack['color'], stackName: stack['stackname']));
+          stackButtons.add(StackBtn(
+              stackId: stack['stack_id'],
+              iconColor: stack['color'],
+              stackName: stack['stackname']));
         }
       }
     }

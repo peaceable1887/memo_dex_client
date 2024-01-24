@@ -41,7 +41,7 @@ class FileHandler {
     }
   }
 
-  Future<void> editItemById(String fileName, String contentId, int targetId, Map<String, dynamic> updatedData) async {
+  Future<void> editItemById(String fileName, String contentId, dynamic targetId, Map<String, dynamic> updatedData) async {
     try {
       final directory = await getApplicationDocumentsDirectory();
       final filePath = '${directory.path}/$fileName.json';

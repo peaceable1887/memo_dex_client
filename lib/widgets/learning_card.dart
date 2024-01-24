@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:math';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,7 @@ import 'components/custom_snackbar.dart';
 
 class LearningCard extends StatefulWidget {
 
+  final dynamic stackId;
   final int cardIndex;
   final String question;
   final String answer;
@@ -16,7 +18,14 @@ class LearningCard extends StatefulWidget {
   final int isNoticed;
   final bool isIndividual;
 
-  const LearningCard({Key? key, required this.question, required this.answer, required this.cardIndex, required this.onClicked, required this.isIndividual, required this.isNoticed}) : super(key: key);
+  const LearningCard({Key? key,
+    required this.question,
+    required this.answer,
+    required this.cardIndex,
+    required this.onClicked,
+    required this.isIndividual,
+    required this.isNoticed,
+    this.stackId}) : super(key: key);
 
   @override
   State<LearningCard> createState() => _LearningCardState();
@@ -97,14 +106,19 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
     });
   }
 
-
   void cardNotedOffline()
   {
     setState(()
     {
       if(isCardNoticed == false)
       {
-        fileHandler.editItemById("allCards", "card_id", widget.cardIndex, {"remember":1});
+        if(widget.stackId is int)
+        {
+          fileHandler.editItemById("allCards", "card_id", widget.cardIndex, {"remember":1, "is_updated": 1});
+        }else
+        {
+          fileHandler.editItemById("allLocalCards", "card_id", widget.cardIndex, {"remember":1, "is_updated": 1});
+        }
         isCardNoticed = true;
         CustomSnackbar.showSnackbar(
             context,
@@ -115,7 +129,13 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
             Duration(milliseconds: 1500)
         );
       }else{
-        fileHandler.editItemById("allCards", "card_id", widget.cardIndex, {"remember":0});
+        if(widget.stackId is int)
+        {
+          fileHandler.editItemById("allCards", "card_id", widget.cardIndex, {"remember":0, "is_updated": 1});
+        }else
+        {
+          fileHandler.editItemById("allLocalCards", "card_id", widget.cardIndex, {"remember":0, "is_updated": 1});
+        }
         isCardNoticed = false;
         CustomSnackbar.showSnackbar(
             context,
@@ -131,8 +151,6 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
 
   void cardNoted()
   {
-
-    print(online);
     setState(()
     {
       if(isCardNoticed == false)
@@ -162,15 +180,61 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
     });
   }
 
-  void sendAnswer(answeredCorrectly)
+  Future<void> sendAnswer(answeredCorrectly)
+  async
   {
-    setState(() {
-      if(answeredCorrectly == false){
-        RestServices(context).answeredIncorrectly(widget.cardIndex);
-      }else{
-        RestServices(context).answeredCorrectly(widget.cardIndex);
+    if(online)
+    {
+      setState(()
+      {
+        if(answeredCorrectly == false)
+        {
+          RestServices(context).answeredIncorrectly(widget.cardIndex);
+        }else
+        {
+          RestServices(context).answeredCorrectly(widget.cardIndex);
+        }
+      });
+    }else
+    {
+      String serverFileCardContent = await fileHandler.readJsonFromLocalFile("allCards");
+      String localFileCardContent = await fileHandler.readJsonFromLocalFile("allLocalCards");
+
+      if (serverFileCardContent.isNotEmpty)
+      {
+        if (localFileCardContent.isEmpty)
+        {
+          localFileCardContent = "[]";
+        }
+
+        List<dynamic> serverCardContent = jsonDecode(serverFileCardContent);
+        List<dynamic> localCardContent = jsonDecode(localFileCardContent);
+
+        List<dynamic> combinedCardContent = [
+          ...serverCardContent,
+          ...localCardContent
+        ];
+
+        for (var card in combinedCardContent)
+        {
+          if (card['card_id'] == widget.cardIndex)
+          {
+            if (card['is_deleted'] == 0)
+            {
+              setState(()
+              {
+                if (answeredCorrectly == false)
+                {
+                  fileHandler.editItemById("allCards", "card_id", widget.cardIndex, {"answered_incorrectly": card['answered_incorrectly']+1});
+                } else {
+                  fileHandler.editItemById("allCards", "card_id", widget.cardIndex, {"answered_correctly": card['answered_correctly']+1});
+                }
+              });
+            }
+          }
+        }
       }
-    });
+    }
   }
 
   Widget showText(String text)

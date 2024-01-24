@@ -8,6 +8,7 @@ import 'package:memo_dex_prototyp/screens/stack_content_screen.dart';
 import 'package:carousel_slider/carousel_slider.dart'; // https://pub.dev/packages/carousel_slider
 
 import '../services/local/file_handler.dart';
+import '../services/local/upload_to_database.dart';
 import '../services/rest/rest_services.dart';
 import '../widgets/components/custom_snackbar.dart';
 import '../widgets/components/message_box.dart';
@@ -49,11 +50,19 @@ class _CardLearningScreenState extends State<StandardLearningScreen> with Ticker
     loadStack();
     loadCards();
     subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result)
-    {
+    async {
+      ConnectivityResult connectivityResult = await Connectivity().checkConnectivity();
+      bool isConnected = (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi);
+      if(isConnected == true)
+      {
+        await UploadToDatabase(context).updateAllLocalCards(widget.stackId);
+        await UploadToDatabase(context).updateAllLocalCardStatistic(widget.stackId);
+
+      }else{}
       loadStack();
       loadCards();
+      indexCards.clear();
     });
-
   }
 
   void startTimer()
@@ -133,7 +142,8 @@ class _CardLearningScreenState extends State<StandardLearningScreen> with Ticker
     }
   }
 
-  Future<void> loadCards() async {
+  Future<void> loadCards() async
+  {
     try
     {
       ConnectivityResult connectivityResult = await Connectivity().checkConnectivity();
@@ -146,13 +156,22 @@ class _CardLearningScreenState extends State<StandardLearningScreen> with Ticker
           showLoadingCircular = false;
         });
 
-        String fileContent = await fileHandler.readJsonFromLocalFile("allCards");
+        String serverFileCardContent = await fileHandler.readJsonFromLocalFile("allCards");
+        String localFileCardContent = await fileHandler.readJsonFromLocalFile("allLocalCards");
 
-        if (fileContent.isNotEmpty)
+        if (serverFileCardContent.isNotEmpty)
         {
-          List<dynamic> cardFileContent = jsonDecode(fileContent);
+          if(localFileCardContent.isEmpty)
+          {
+            localFileCardContent = "[]";
+          }
 
-          for (var card in cardFileContent)
+          List<dynamic> serverCardContent = jsonDecode(serverFileCardContent);
+          List<dynamic> localCardContent = jsonDecode(localFileCardContent);
+
+          List<dynamic> combinedCardContent = [...serverCardContent, ...localCardContent];
+
+          for (var card in combinedCardContent)
           {
             if(card['stack_stack_id'] == widget.stackId)
             {
@@ -181,7 +200,11 @@ class _CardLearningScreenState extends State<StandardLearningScreen> with Ticker
         }
       }else
       {
+        await UploadToDatabase(context).allLocalCards(widget.stackId, widget.stackId);
         await RestServices(context).getAllCards();
+
+        //TODO muss unter xyz Bedinung gecleart werden....
+        FileHandler().deleteItemById("allLocalCards", widget.stackId);
 
         String fileContent = await fileHandler.readJsonFromLocalFile("allCards");
 
@@ -225,55 +248,128 @@ class _CardLearningScreenState extends State<StandardLearningScreen> with Ticker
 
   //TODO muss noch für die den offline modus angepasst werden
   Future<void> handleCardClick(bool val) async {
-    try {
-      final time = await RestServices(context).getStackStatistic(widget.stackId);
-      if(time[0]["fastest_time"] == null)
+    try
+    {
+      ConnectivityResult connectivityResult = await Connectivity().checkConnectivity();
+      bool isConnected = (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi);
+
+      if(isConnected == false)
       {
-        time[0]["fastest_time"] = "99:99:99";
-      }
+        String serverFileStackStatisticContent = await fileHandler.readJsonFromLocalFile("allStacks");
+        String localFileStackStatisticCardContent = await fileHandler.readJsonFromLocalFile("allLocalStacks");
 
-      final fastestTime = time[0]["fastest_time"];
-
-      setState(() {
-        print(wasClicked);
-        wasClicked = val;
-
-        if (wasClicked == true && activeIndex == indexCards.length - 1) {
-
-          Duration fastestDuration = parseDuration(fastestTime);
-          Duration currentDuration = parseDuration(formatTime());
-
-          if(currentDuration.compareTo(fastestDuration) < 0)
+        if (serverFileStackStatisticContent.isNotEmpty)
+        {
+          if (localFileStackStatisticCardContent.isEmpty)
           {
-            RestServices(context).updateStackStatistic(widget.stackId, formatTime(), formatTime());
-            showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return MessageBox(
+            localFileStackStatisticCardContent = "[]";
+          }
+
+          List<dynamic> serverStackStatisticContent = jsonDecode(serverFileStackStatisticContent);
+          List<dynamic> localStackStatisticContent = jsonDecode(localFileStackStatisticCardContent);
+
+          List<dynamic> combinedStackStatisticContent = [...serverStackStatisticContent, ...localStackStatisticContent];
+
+          if(combinedStackStatisticContent[0]["fastest_time"] == null)
+          {
+            combinedStackStatisticContent[0]["fastest_time"] = "99:99:99";
+          }
+
+          final fastestTime = combinedStackStatisticContent[0]["fastest_time"];
+
+          setState(() {
+            print(wasClicked);
+            wasClicked = val;
+
+            if (wasClicked == true && activeIndex == indexCards.length - 1) {
+
+              Duration fastestDuration = parseDuration(fastestTime);
+              Duration currentDuration = parseDuration(formatTime());
+
+              if(currentDuration.compareTo(fastestDuration) < 0)
+              {
+                fileHandler.editItemById("allStacks", "stack_id", widget.stackId, {"fastest_time": formatTime(),"last_time": formatTime()});
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return MessageBox(
+                      headline: "Fertig!",
+                      message: "Du hast eine neue Bestzeit erreicht.",
+                      stackId: widget.stackId,
+                    );
+                  },
+                );
+
+              }else
+              {
+                fileHandler.editItemById("allStacks", "stack_id", widget.stackId, {"fastest_time": fastestTime,"last_time": formatTime()});
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return MessageBox(
+                      headline: "Fertig!",
+                      message: "Du hast deine Bestzeit nicht übertroffen.",
+                      stackId: widget.stackId,
+                    );
+                  },
+                );
+              }
+            }
+          });
+
+        }
+
+      }else
+      {
+        final time = await RestServices(context).getStackStatistic(widget.stackId);
+        if(time[0]["fastest_time"] == null)
+        {
+          time[0]["fastest_time"] = "99:99:99";
+        }
+
+        final fastestTime = time[0]["fastest_time"];
+
+        setState(() {
+          print(wasClicked);
+          wasClicked = val;
+
+          if (wasClicked == true && activeIndex == indexCards.length - 1) {
+
+            Duration fastestDuration = parseDuration(fastestTime);
+            Duration currentDuration = parseDuration(formatTime());
+
+            if(currentDuration.compareTo(fastestDuration) < 0)
+            {
+              RestServices(context).updateStackStatistic(widget.stackId, formatTime(), formatTime());
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return MessageBox(
                     headline: "Fertig!",
                     message: "Du hast eine neue Bestzeit erreicht.",
                     stackId: widget.stackId,
-                );
-              },
-            );
+                  );
+                },
+              );
 
-          }else
-          {
-            RestServices(context).updateStackStatistic(widget.stackId, fastestTime, formatTime());
-            showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return MessageBox(
+            }else
+            {
+              RestServices(context).updateStackStatistic(widget.stackId, fastestTime, formatTime());
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return MessageBox(
                     headline: "Fertig!",
                     message: "Du hast deine Bestzeit nicht übertroffen.",
                     stackId: widget.stackId,
-                );
-              },
-            );
+                  );
+                },
+              );
 
+            }
           }
-        }
-      });
+        });
+      }
     } catch (error) {
       print('Fehler beim Laden der --Daten: $error');
     }

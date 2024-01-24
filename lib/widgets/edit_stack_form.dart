@@ -74,7 +74,18 @@ class _EditStackFormState extends State<EditStackForm> {
       RestServices(context).updateStack(_stackname.text, "${newColor.value.toRadixString(16).substring(2)}", 0, widget.stackId);
     }else
     {
-      await fileHandler.editItemById("allStacks", "stack_id", widget.stackId, {"stackname":_stackname.text,"color":"${newColor.value.toRadixString(16).substring(2)}", "is_deleted": 0});
+      if(widget.stackId is int)
+      {
+        await fileHandler.editItemById(
+            "allStacks", "stack_id", widget.stackId,
+            {"stackname":_stackname.text,"color":"${newColor.value.toRadixString(16).substring(2)}", "is_deleted": 0, "is_updated": 1});
+      }else
+      {
+        await fileHandler.editItemById(
+            "allLocalStacks", "stack_id", widget.stackId,
+            {"stackname":_stackname.text,"color":"${newColor.value.toRadixString(16).substring(2)}", "is_deleted": 0, "is_updated": 1});
+      }
+
     }
 
     storage.write(key: 'stackUpdated', value: "true");

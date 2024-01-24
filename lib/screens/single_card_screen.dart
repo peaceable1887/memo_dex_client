@@ -56,6 +56,8 @@ class _SingleCardScreenState extends State<SingleCardScreen> {
       if(isConnected == true)
       {
         await UploadToDatabase(context).updateAllLocalCards(widget.stackId);
+        //TODO erstmal deaktiviert. viele bugs...
+        //await UploadToDatabase(context).updateLocalStackContent(widget.stackId);
       }else{}
 
       loadStack();
@@ -186,6 +188,7 @@ class _SingleCardScreenState extends State<SingleCardScreen> {
             if(card['stack_stack_id'] == widget.stackId && card['card_id'] == widget.cardId)
             {
               indexCards.add(LearningCard(
+                stackId: card['stack_stack_id'],
                 question: card["question"],
                 answer: card["answer"],
                 cardIndex: card["card_id"],

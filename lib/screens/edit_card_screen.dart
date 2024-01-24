@@ -95,8 +95,19 @@ class _EditCardScreenState extends State<EditCardScreen> {
       await RestServices(context).updateCard(_question.text, _answer.text, 0, isMemorized, widget.cardId);
     }else
     {
-      await fileHandler.editItemById("allCards", "card_id", widget.cardId, {"question":_question.text,"answer":_answer.text, "remember": isMemorized});
-    }
+      if(widget.stackId is int)
+      {
+        await fileHandler.editItemById(
+            "allCards", "card_id", widget.cardId,
+            {"question":_question.text,"answer":_answer.text, "remember": isMemorized, "is_updated": 1});
+      }else
+      {
+        await fileHandler.editItemById(
+            "allLocalCards", "card_id", widget.cardId,
+            {"question":_question.text,"answer":_answer.text, "remember": isMemorized, "is_updated": 1});
+
+      }
+     }
 
     storage.write(key: 'editCard', value: "true");
     Navigator.pushReplacement(
@@ -122,8 +133,28 @@ class _EditCardScreenState extends State<EditCardScreen> {
       context: context,
       builder: (BuildContext context) {
         return DeleteMessageBox(
-          onDelete: () async {
-            await RestServices(context).updateCard(_question.text, _answer.text, 1, 0, widget.cardId,);
+          onDelete: () async
+          {
+            if(online)
+            {
+              await RestServices(context).updateCard(_question.text, _answer.text, 1, 0, widget.cardId,);
+            }else
+            {
+              if(widget.stackId is int)
+              {
+                await fileHandler.editItemById(
+                    "allCards", "card_id", widget.cardId,
+                    {"question":_question.text,"answer":_answer.text, "is_deleted": 1, "is_updated": 1});
+                await fileHandler.editItemById(
+                    "allLocalCards", "card_id", widget.cardId,
+                    {"question":_question.text,"answer":_answer.text, "is_deleted": 1, "is_updated": 1});
+              }else
+              {
+                await fileHandler.editItemById(
+                    "allLocalCards", "card_id", widget.cardId,
+                    {"question":_question.text,"answer":_answer.text, "is_deleted": 1, "is_updated": 1});
+              }
+            }
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(

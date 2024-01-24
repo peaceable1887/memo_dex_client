@@ -114,7 +114,7 @@ class RestServices{
     }
   }
 
-  Future<String> createStack(String stackname, String color) async {
+  Future<String> createStack(String stackname, String color, int isDeleted) async {
     String? accessToken = await storage.read(key: 'accessToken');
     String? userId = await storage.read(key: 'user_id');
 
@@ -128,8 +128,9 @@ class RestServices{
         body: jsonEncode(<String, dynamic>{
           'stackname': stackname,
           'color': color,
-          "is_deleted": 0,
+          "is_deleted": isDeleted,
           "creation_date": DateTime.now().toIso8601String(),
+          "is_updated": 0,
           "user_user_id": userId
         }),
       );
@@ -318,7 +319,7 @@ class RestServices{
     }else{}
   }
 
-  Future<void> addCard(String question, String answer, stackId) async {
+  Future<void> addCard(String question, String answer, int remember, int isDeleted, stackId) async {
 
     String? accessToken = await storage.read(key: 'accessToken');
 
@@ -332,8 +333,8 @@ class RestServices{
         body: jsonEncode(<String, dynamic>{
           "question": question,
           "answer": answer,
-          "is_deleted": 0,
-          "remember": 0,
+          "is_deleted": isDeleted,
+          "remember": remember,
           "creation_date": DateTime.now().toIso8601String(),
           "stack_stack_id": stackId
         }),
@@ -501,7 +502,7 @@ class RestServices{
     }
   }
 
-  Future<void> updateCard(String question, String answer, is_deleted, remember, cardId) async {
+  Future<void> updateCard(String question, String answer, int isDeleted, remember, cardId) async {
 
     String? accessToken = await storage.read(key: 'accessToken');
 
@@ -516,7 +517,7 @@ class RestServices{
           "card_id": cardId,
           "question": question,
           "answer": answer,
-          "is_deleted": is_deleted,
+          "is_deleted": isDeleted,
           "remember": remember
         }),
       );
@@ -597,6 +598,40 @@ class RestServices{
     }else {
     }
   }
+
+  Future<void> updateCardStatistic(cardId, answered_correctly, answered_incorrectly) async {
+
+    String? accessToken = await storage.read(key: 'accessToken');
+
+    if (accessToken != null) {
+      final response = await http.post(
+        Uri.parse('http://10.0.2.2:3000/updateCardStatistic'),
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization': "Bearer " + accessToken,
+        },
+        body: jsonEncode(<String, dynamic>{
+          "card_id": cardId,
+          "answered_correctly": answered_correctly,
+          "answered_incorrectly": answered_incorrectly,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        print("Antwort (Richtig/Falsch) wurde in die Datenbank gespeichert.");
+      } else {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return ValidationMessageBox(message: "Antwort (Richtig/Falsch) konnte nicht gespeichert werden");
+          },
+        );
+        throw Exception('Failed to insert data.');
+      }
+    }else {
+    }
+  }
+
   Future<void> updateStackStatistic(stackId, fastestTime, lastTime) async {
 
     String? accessToken = await storage.read(key: 'accessToken');
@@ -615,7 +650,8 @@ class RestServices{
         }),
       );
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200)
+      {
         print("Durchlauf wurde in die Datenbank gespeichert.");
       } else {
         showDialog(

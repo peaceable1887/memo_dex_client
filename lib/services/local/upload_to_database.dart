@@ -23,18 +23,79 @@ class UploadToDatabase
 
       for (var stack in stacks)
       {
-        String responseBody = await RestServices(context).createStack(stack['stackname'], stack['color']);
-        print("Response Body: $responseBody");
-        allLocalCards(responseBody, stack['stack_id']);
-        print("----------------NEXT STACK------------------");
+        String responseBody = await RestServices(context).createStack(
+            stack['stackname'], stack['color'], stack['is_deleted']);
 
+        print("Response Body: $responseBody");
+
+        allLocalCards(responseBody, stack['stack_id']);
+
+        print("----------------NEXT STACK------------------");
       }
       FileHandler().clearFileContent("allLocalStacks");
 
     }else
     {
       print("Stacks are empty");
+    }
+  }
 
+  Future<void> updateAllLocalStacks() async
+  {
+    String fileContent = await fileHandler.readJsonFromLocalFile("allStacks");
+
+    // Überprüfe ob der Inhalt Liste ist
+    if (fileContent.isNotEmpty) {
+
+      List<dynamic> stackFileContent = jsonDecode(fileContent);
+
+      for (var stack in stackFileContent)
+      {
+        if (stack['is_updated'] == 1) {
+          RestServices(context).updateStack(stack["stackname"],
+              stack["color"], stack["is_deleted"], stack['stack_id']);
+          stack['is_updated'] = 0;
+        }
+      }
+    }else
+    {
+      print("updateAllLocalStacks are empty");
+    }
+  }
+
+  Future<void> updateLocalStackStatistic(stackId) async
+  {
+    try
+    {
+      String localStacks = await fileHandler.readJsonFromLocalFile("allStacks");
+
+      print("---------updateLocalStackStatistic-----------");
+
+      if (localStacks.isNotEmpty)
+      {
+        List<dynamic> stacks = jsonDecode(localStacks);
+
+        for (var stack in stacks)
+        {
+          if(stack["stack_id"] == stackId)
+          {
+            if(stack["is_deleted"] == 0)
+            {
+              await RestServices(context).updateStackStatistic(stack["stack_id"],stack["fastest_time"] ,stack["last_time"]);
+              print("----------------NEXT STACK------------------");
+            }
+          }
+        }
+
+        FileHandler().clearFileContent("allLocalStacks");
+
+      }else
+      {
+        print("Stacks are empty");
+      }
+    }catch(error)
+    {
+      print("Fehler beim aktualisieren der updateLocalStackContent()-Funktion: $error");
     }
 
   }
@@ -55,7 +116,9 @@ class UploadToDatabase
         {
           print(card["question"]);
           card['stack_stack_id'] = stackId;
-          RestServices(context).addCard(card['question'], card['answer'], card['stack_stack_id']);
+          RestServices(context).addCard(
+              card['question'], card['answer'], card['remember'],
+              card['is_deleted'], card['stack_stack_id']);
           print("----------------NEXT CARD------------------");
         }
       }
@@ -79,12 +142,17 @@ class UploadToDatabase
       {
         if(card['stack_stack_id'] == stackId)
         {
-          RestServices(context).updateCard(
-              card['question'],
-              card['answer'],
-              card['is_deleted'],
-              card['remember'],
-              card['card_id']);
+          if (card['is_updated'] == 1)
+          {
+            RestServices(context).updateCard(
+                card['question'],
+                card['answer'],
+                card['is_deleted'],
+                card['remember'],
+                card['card_id']);
+            card['is_updated'] = 0;
+          }
+
         }
       }
     }else
@@ -93,11 +161,11 @@ class UploadToDatabase
     }
   }
 
-  Future<void> updateAllLocalStacks(stackId) async
+  Future<void> updateAllLocalCardStatistic(stackId) async
   {
     String localFileContent = await fileHandler.readJsonFromLocalFile("allCards");
 
-    print("---------Upload all Local Cards------------");
+    print("---------updateAllLocalCardStatistic------------");
 
     if (localFileContent.isNotEmpty)
     {
@@ -107,18 +175,16 @@ class UploadToDatabase
       {
         if(card['stack_stack_id'] == stackId)
         {
-          RestServices(context).updateCard(
-              card['question'],
-              card['answer'],
-              card['is_deleted'],
-              card['remember'],
-              card['card_id']);
+          if(card['is_deleted'] == 0)
+          {
+            RestServices(context).updateCardStatistic(card['card_id'], card['answered_correctly'],card['answered_incorrectly']);
+          }
         }
+
       }
     }else
     {
-      print("Local Cards are empty");
+      print("updateAllLocalCardStatistic are empty");
     }
-
   }
 }

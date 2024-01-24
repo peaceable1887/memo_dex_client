@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import '../screens/bottom_navigation_screen.dart';
 import '../services/local/file_handler.dart';
+import '../services/local/upload_to_database.dart';
 import '../services/local/write_to_device_storage.dart';
 import '../services/rest/rest_services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -294,7 +295,7 @@ class _CreateStackFormState extends State<CreateStackForm> {
                         print(online);
                         print("gehe ins true");
 
-                        RestServices(context).createStack(_stackname.text, "${color.value.toRadixString(16).substring(2)}");
+                        RestServices(context).createStack(_stackname.text, "${color.value.toRadixString(16).substring(2)}", 0);
                       }else
                       {
                         print("gehe ins false");
