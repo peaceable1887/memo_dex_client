@@ -91,7 +91,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
         context,
         MaterialPageRoute(builder: (BuildContext context) => BottomNavigationScreen()),
         );
-      });
+    });
   }
 
   //TODO REDUNDANZ: muss noch ausgelagert werden
@@ -267,11 +267,6 @@ class _StackContentScreenState extends State<StackContentScreen> {
       {
         await UploadToDatabase(context).allLocalCards(widget.stackId, widget.stackId);
         await RestServices(context).getAllCards();
-
-        print("Stackid ${widget.stackId}");
-        //TODO muss unter xyz Bedinung gecleart werden....
-
-        FileHandler().deleteItemById("allLocalCards", widget.stackId);
 
         String fileContent = await fileHandler.readJsonFromLocalFile("allCards");
 

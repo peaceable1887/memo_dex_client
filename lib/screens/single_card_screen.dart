@@ -217,8 +217,6 @@ class _SingleCardScreenState extends State<SingleCardScreen> {
         await UploadToDatabase(context).allLocalCards(widget.stackId, widget.stackId);
         await RestServices(context).getAllCards();
 
-        FileHandler().deleteItemById("allLocalCards", widget.stackId);
-
         String fileContent = await fileHandler.readJsonFromLocalFile("allCards");
 
         if (fileContent.isNotEmpty)

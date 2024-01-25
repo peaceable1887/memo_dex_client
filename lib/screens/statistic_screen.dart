@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'dart:convert';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:memo_dex_prototyp/widgets/statistic_card.dart';
@@ -27,21 +29,29 @@ class _StatisticScreenState extends State<StatisticScreen>
   final filter = Filters();
   bool showLoadingCircular = true;
   final storage = FlutterSecureStorage();
+  late StreamSubscription subscription;
 
   @override
   void initState()
   {
-    loadStatisticCards();
     super.initState();
+    loadStatisticCards();
+    subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result)
+    async
+    {
+      loadStatisticCards();
+    });
+
   }
 
   Future<void> loadStatisticCards() async
   {
     try
     {
-      String? internetConnection = await storage.read(key: "internet_connection");
+      ConnectivityResult connectivityResult = await Connectivity().checkConnectivity();
+      bool isConnected = (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi);
 
-      if(internetConnection == "false")
+      if(isConnected == false)
       {
         setState(()
         {
@@ -60,7 +70,6 @@ class _StatisticScreenState extends State<StatisticScreen>
           {
             if (stack['is_deleted'] == 0)
             {
-
               String secondFileContent = await fileHandler.readJsonFromLocalFile("allCards");
 
               if(secondFileContent.isNotEmpty)
@@ -168,6 +177,7 @@ class _StatisticScreenState extends State<StatisticScreen>
   @override
   void dispose()
   {
+    subscription.cancel();
     super.dispose();
   }
 

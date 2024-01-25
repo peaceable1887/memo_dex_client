@@ -100,6 +100,9 @@ class _EditCardScreenState extends State<EditCardScreen> {
         await fileHandler.editItemById(
             "allCards", "card_id", widget.cardId,
             {"question":_question.text,"answer":_answer.text, "remember": isMemorized, "is_updated": 1});
+        await fileHandler.editItemById(
+            "allLocalCards", "card_id", widget.cardId,
+            {"question":_question.text,"answer":_answer.text, "remember": isMemorized, "is_updated": 1});
       }else
       {
         await fileHandler.editItemById(

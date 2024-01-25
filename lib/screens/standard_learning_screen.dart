@@ -203,8 +203,7 @@ class _CardLearningScreenState extends State<StandardLearningScreen> with Ticker
         await UploadToDatabase(context).allLocalCards(widget.stackId, widget.stackId);
         await RestServices(context).getAllCards();
 
-        //TODO muss unter xyz Bedinung gecleart werden....
-        FileHandler().deleteItemById("allLocalCards", widget.stackId);
+
 
         String fileContent = await fileHandler.readJsonFromLocalFile("allCards");
 

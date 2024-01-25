@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'dart:convert';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -48,24 +50,35 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
   final storage = FlutterSecureStorage();
   FileHandler fileHandler = FileHandler();
   bool showLoadingCircular = true;
+  late StreamSubscription subscription;
 
   @override
   void initState ()
   {
+    super.initState();
     loadStackStatistcic();
     loadCardStatistic();
     progressInPercent(widget.noticed, widget.notNoticed);
     _chartData = getChartData(widget.notNoticed);
-    super.initState();
+    subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result)
+    async
+    {
+      loadStackStatistcic();
+      loadCardStatistic();
+      progressInPercent(widget.noticed, widget.notNoticed);
+      _chartData = getChartData(widget.notNoticed);
+    });
+
   }
 
   Future<void> loadStackStatistcic() async
   {
     try
     {
-      String? internetConnection = await storage.read(key: "internet_connection");
+      ConnectivityResult connectivityResult = await Connectivity().checkConnectivity();
+      bool isConnected = (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi);
 
-      if(internetConnection == "false")
+      if(isConnected == false)
       {
         setState(()
         {
@@ -143,9 +156,10 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
   {
     try
     {
-      String? internetConnection = await storage.read(key: "internet_connection");
+      ConnectivityResult connectivityResult = await Connectivity().checkConnectivity();
+      bool isConnected = (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi);
 
-      if(internetConnection == "false")
+      if(isConnected == false)
       {
         setState(()
         {
@@ -189,7 +203,6 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
 
           for (var card in cardFileContent)
           {
-
 
             if(card['stack_stack_id'] == widget.stackId)
             {
@@ -270,6 +283,7 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
   {
     loadStackStatistcic();
     loadCardStatistic();
+    subscription.cancel();
     super.dispose();
   }
 

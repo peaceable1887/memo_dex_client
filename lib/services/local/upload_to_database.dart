@@ -110,15 +110,22 @@ class UploadToDatabase
     {
       List<dynamic> localContent = jsonDecode(localFileContent);
 
-      for (var card in localContent)
-      {
-        if(card['stack_stack_id'] == localId)
-        {
+      for (var cardIndex = 0; cardIndex < localContent.length; cardIndex++) {
+
+        var card = localContent[cardIndex];
+
+        if (card['stack_stack_id'] == localId) {
           print(card["question"]);
           card['stack_stack_id'] = stackId;
+
           RestServices(context).addCard(
               card['question'], card['answer'], card['remember'],
               card['is_deleted'], card['stack_stack_id']);
+
+          print("cardid ${card["card_id"]}");
+
+          // Sammle die zu löschenden Elemente
+          await FileHandler().deleteItemById("allLocalCards", "card_id", card["card_id"]);
           print("----------------NEXT CARD------------------");
         }
       }
@@ -132,7 +139,7 @@ class UploadToDatabase
   {
     String localFileContent = await fileHandler.readJsonFromLocalFile("allCards");
 
-    print("---------Upload all Local Cards------------");
+    print("---------updateAllLocalCards------------");
 
     if (localFileContent.isNotEmpty)
     {
@@ -152,7 +159,6 @@ class UploadToDatabase
                 card['card_id']);
             card['is_updated'] = 0;
           }
-
         }
       }
     }else
