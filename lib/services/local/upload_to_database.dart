@@ -110,11 +110,12 @@ class UploadToDatabase
     {
       List<dynamic> localContent = jsonDecode(localFileContent);
 
-      for (var cardIndex = 0; cardIndex < localContent.length; cardIndex++) {
-
+      for (var cardIndex = 0; cardIndex < localContent.length; cardIndex++)
+      {
         var card = localContent[cardIndex];
 
-        if (card['stack_stack_id'] == localId) {
+        if (card['stack_stack_id'] == localId)
+        {
           print(card["question"]);
           card['stack_stack_id'] = stackId;
 
@@ -186,7 +187,6 @@ class UploadToDatabase
             RestServices(context).updateCardStatistic(card['card_id'], card['answered_correctly'],card['answered_incorrectly']);
           }
         }
-
       }
     }else
     {

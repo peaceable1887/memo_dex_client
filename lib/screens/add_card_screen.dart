@@ -11,6 +11,7 @@ import '../services/local/upload_to_database.dart';
 import '../services/rest/rest_services.dart';
 import '../widgets/headline.dart';
 import '../widgets/top_navigation_bar.dart';
+import 'bottom_navigation_screen.dart';
 
 class AddCardScreen extends StatefulWidget {
 
@@ -36,6 +37,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
   @override
   void initState() {
     super.initState();
+    print("StackID: ${widget.stackId}");
     _question = TextEditingController();
     _answer = TextEditingController();
     _question.addListener(updateButtonState);
@@ -46,6 +48,11 @@ class _AddCardScreenState extends State<AddCardScreen> {
     {
 
       _checkInternetConnection();
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (BuildContext context) => BottomNavigationScreen()),
+      );
     });
   }
 

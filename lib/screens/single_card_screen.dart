@@ -14,6 +14,7 @@ import '../widgets/components/custom_snackbar.dart';
 import '../widgets/headline.dart';
 import '../widgets/learning_card.dart';
 import '../widgets/top_navigation_bar.dart';
+import 'bottom_navigation_screen.dart';
 import 'edit_card_screen.dart';
 
 class SingleCardScreen extends StatefulWidget {
@@ -55,13 +56,15 @@ class _SingleCardScreenState extends State<SingleCardScreen> {
       bool isConnected = (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi);
       if(isConnected == true)
       {
-        await UploadToDatabase(context).updateAllLocalCards(widget.stackId);
+        //await UploadToDatabase(context).updateAllLocalCards(widget.stackId);
         //TODO erstmal deaktiviert. viele bugs...
         //await UploadToDatabase(context).updateLocalStackContent(widget.stackId);
       }else{}
 
-      loadStack();
-      loadCard();
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (BuildContext context) => BottomNavigationScreen()),
+      );
     });
   }
 

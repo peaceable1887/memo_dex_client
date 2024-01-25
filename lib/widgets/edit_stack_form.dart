@@ -186,8 +186,8 @@ class _EditStackFormState extends State<EditStackForm> {
 
   @override
   void dispose() {
-    subscription.cancel();
     _stackname.dispose();
+    subscription.cancel();
     super.dispose();
   }
 

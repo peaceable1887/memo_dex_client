@@ -175,7 +175,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
         }
       }else
       {
-        print("wird ausgeführt stack content");
+        print("wird ausgeführt loadStacks (stack_content)");
         await UploadToDatabase(context).allLocalStackContent();
         await RestServices(context).getAllStacks();
 
@@ -265,7 +265,12 @@ class _StackContentScreenState extends State<StackContentScreen> {
         }
       }else
       {
-        await UploadToDatabase(context).allLocalCards(widget.stackId, widget.stackId);
+        print("wird ausgeführt loadCards (stack_content)");
+        if(widget.stackId is int)
+        {
+          await UploadToDatabase(context).allLocalCards(widget.stackId, widget.stackId);
+        }
+
         await RestServices(context).getAllCards();
 
         String fileContent = await fileHandler.readJsonFromLocalFile("allCards");
