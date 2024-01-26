@@ -60,7 +60,12 @@ class _EditCardScreenState extends State<EditCardScreen> {
       {
         await UploadToDatabase(context).updateAllLocalCards(widget.stackId);
       }else{}
-
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => BottomNavigationScreen(),
+        ),
+      );
     });
   }
 
@@ -131,6 +136,7 @@ class _EditCardScreenState extends State<EditCardScreen> {
     });
   }
 
+
   void showDeleteMessageBox() {
     showDialog(
       context: context,
@@ -158,6 +164,10 @@ class _EditCardScreenState extends State<EditCardScreen> {
                     {"question":_question.text,"answer":_answer.text, "is_deleted": 1, "is_updated": 1});
               }
             }
+            //Overlay wird aus dem Widget-Tree entfernt
+            Navigator.of(context).pop();
+
+            //Route und ersetze das Widget
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
@@ -184,6 +194,7 @@ class _EditCardScreenState extends State<EditCardScreen> {
   @override
   void dispose()
   {
+    print("dispose edit card screen");
     subscription.cancel();
     super.dispose();
   }

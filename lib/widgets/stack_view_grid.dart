@@ -33,10 +33,9 @@ class _StackViewGridState extends State<StackViewGrid> {
   {
     super.initState();
     loadStacks(widget.selectedOption, widget.sortValue);
-    print("wird ausgeführt 1");
+
     subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result)
     {
-      print("wird ausgeführt 2");
       loadStacks(widget.selectedOption, widget.sortValue);
     });
   }
@@ -141,7 +140,7 @@ class _StackViewGridState extends State<StackViewGrid> {
   @override
   void dispose()
   {
-
+    print("dispose stackviewgrid");
     subscription.cancel();
     super.dispose();
   }

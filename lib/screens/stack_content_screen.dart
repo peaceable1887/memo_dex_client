@@ -325,6 +325,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
   @override
   void dispose()
   {
+    print("dispose stack content screen");
     subscription.cancel();
     super.dispose();
   }

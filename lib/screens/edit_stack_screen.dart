@@ -39,10 +39,10 @@ class _EditStackScreenState extends State<EditStackScreen> {
     async
     {
       _checkInternetConnection();
-      Navigator.pushReplacement(
+      /*Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (BuildContext context) => BottomNavigationScreen()),
-      );
+      );*/
     });
   }
 
@@ -80,6 +80,10 @@ class _EditStackScreenState extends State<EditStackScreen> {
               }
             }
 
+            //Overlay wird aus dem Widget-Tree entfernt
+            Navigator.of(context).pop();
+
+            //Route und ersetze das Widget
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
@@ -94,7 +98,9 @@ class _EditStackScreenState extends State<EditStackScreen> {
   }
 
   @override
-  void dispose() {
+  void dispose()
+  {
+    print("dispose edt stack screen");
     subscription.cancel();
     super.dispose();
   }

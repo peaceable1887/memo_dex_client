@@ -79,6 +79,7 @@ class _DeleteMessageBoxState extends State<DeleteMessageBox> {
                     child: TextButton(
                       onPressed: () async {
                         await widget.onDelete();
+
                       },
                       style: TextButton.styleFrom(
                         backgroundColor: Colors.white,

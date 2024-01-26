@@ -12,6 +12,7 @@ import '../services/rest/rest_services.dart';
 import '../widgets/headline.dart';
 import '../widgets/learning_card.dart';
 import '../widgets/top_navigation_bar.dart';
+import 'bottom_navigation_screen.dart';
 
 class IndividualLearningScreen extends StatefulWidget {
 
@@ -36,7 +37,6 @@ class _CardLearningScreenState extends State<IndividualLearningScreen> with Tick
   bool showLoadingCircular = true;
   late StreamSubscription subscription;
 
-
   @override
   void initState()
   {
@@ -52,9 +52,10 @@ class _CardLearningScreenState extends State<IndividualLearningScreen> with Tick
       {
         await UploadToDatabase(context).updateAllLocalCards(widget.stackId);
       }else{}
-      loadStack();
-      loadCards();
-      indexCards.clear();
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (BuildContext context) => BottomNavigationScreen()),
+      );
     });
   }
 
