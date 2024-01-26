@@ -123,7 +123,9 @@ class _StackViewGridState extends State<StackViewGrid> {
                 iconColor: stack['color'],
                 stackName: stack['stackname']
             ));
+            await UploadToDatabase(context).updateAllLocalCards(stack['stack_id']);
           }
+
         }
         stackButtons.add(CreateStackBtn());
 

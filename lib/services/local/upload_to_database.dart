@@ -91,7 +91,7 @@ class UploadToDatabase
 
       }else
       {
-        print("Stacks are empty");
+        print("updateLocalStackStatistic are empty");
       }
     }catch(error)
     {
@@ -125,6 +125,7 @@ class UploadToDatabase
 
           print("cardid ${card["card_id"]}");
 
+          //TODO allLocalCards werden eventuell nicht komplett entleert. Nochmal angucken...
           // Sammle die zu löschenden Elemente
           await FileHandler().deleteItemById("allLocalCards", "card_id", card["card_id"]);
           print("----------------NEXT CARD------------------");
@@ -159,6 +160,7 @@ class UploadToDatabase
                 card['remember'],
                 card['card_id']);
             card['is_updated'] = 0;
+             print("überarbeitete Karte: ${card}");
           }
         }
       }

@@ -375,8 +375,6 @@ class RestServices{
           dynamic jsonResponse = json.decode(response.body);
           await fileHandler.saveJsonToLocalFile(jsonResponse, "allCards");
 
-          print("test: $jsonResponse");
-
           return jsonResponse;
         }else
         {

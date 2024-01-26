@@ -291,7 +291,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
               }
             }
           }
-          // Widget wird aktualisiert nnach dem Laden der Daten.
+          // Widget wird aktualisiert nach dem Laden der Daten.
           if (mounted)
           {
             setState(() {});

@@ -115,6 +115,7 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
         if(widget.stackId is int)
         {
           fileHandler.editItemById("allCards", "card_id", widget.cardIndex, {"remember":1, "is_updated": 1});
+          fileHandler.editItemById("allLocalCards", "card_id", widget.cardIndex, {"remember":1, "is_updated": 1});
         }else
         {
           fileHandler.editItemById("allLocalCards", "card_id", widget.cardIndex, {"remember":1, "is_updated": 1});
@@ -132,6 +133,7 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
         if(widget.stackId is int)
         {
           fileHandler.editItemById("allCards", "card_id", widget.cardIndex, {"remember":0, "is_updated": 1});
+          fileHandler.editItemById("allLocalCards", "card_id", widget.cardIndex, {"remember":0, "is_updated": 1});
         }else
         {
           fileHandler.editItemById("allLocalCards", "card_id", widget.cardIndex, {"remember":0, "is_updated": 1});
