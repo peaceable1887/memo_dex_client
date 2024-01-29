@@ -81,6 +81,8 @@ class WriteToDeviceStorage
           "is_deleted": 0,
           "remember": 0,
           "creation_date": DateTime.now().toIso8601String(),
+          "answered_correctly": 0,
+          "answered_incorrectly": 0,
           "stack_stack_id": stackId
         });
 

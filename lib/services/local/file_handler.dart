@@ -48,10 +48,10 @@ class FileHandler {
       final file = File(filePath);
 
       if (await file.exists()) {
-        // Die Datei existiert, lese ihren Inhalt
+        // Die Datei existiert, lese Inhalt
         final content = await file.readAsString();
 
-        // Parsen Sie den Inhalt als JSON
+        // Parsen den Inhalt als JSON
         List<dynamic> jsonData = jsonDecode(content);
 
         // Finde das Element mit der spezifizierten ID

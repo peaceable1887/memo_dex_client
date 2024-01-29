@@ -41,7 +41,6 @@ class _CardLearningScreenState extends State<IndividualLearningScreen> with Tick
   void initState()
   {
     super.initState();
-    print("stackid: ${widget.stackId}");
     loadStack();
     loadCards();
     subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result)

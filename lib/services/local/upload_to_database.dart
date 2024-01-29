@@ -4,6 +4,8 @@ import 'package:memo_dex_prototyp/services/rest/rest_services.dart';
 
 import 'file_handler.dart';
 
+//TODO Funktion ausdrucksstärker und konsistenter benennen
+
 class UploadToDatabase
 {
   final BuildContext context;
@@ -61,43 +63,6 @@ class UploadToDatabase
     {
       print("updateAllLocalStacks are empty");
     }
-  }
-
-  Future<void> updateLocalStackStatistic(stackId) async
-  {
-    try
-    {
-      String localStacks = await fileHandler.readJsonFromLocalFile("allStacks");
-
-      print("---------updateLocalStackStatistic-----------");
-
-      if (localStacks.isNotEmpty)
-      {
-        List<dynamic> stacks = jsonDecode(localStacks);
-
-        for (var stack in stacks)
-        {
-          if(stack["stack_id"] == stackId)
-          {
-            if(stack["is_deleted"] == 0)
-            {
-              await RestServices(context).updateStackStatistic(stack["stack_id"],stack["fastest_time"] ,stack["last_time"]);
-              print("----------------NEXT STACK------------------");
-            }
-          }
-        }
-
-        FileHandler().clearFileContent("allLocalStacks");
-
-      }else
-      {
-        print("updateLocalStackStatistic are empty");
-      }
-    }catch(error)
-    {
-      print("Fehler beim aktualisieren der updateLocalStackContent()-Funktion: $error");
-    }
-
   }
 
   Future<void> allLocalCards(stackId, localId) async
@@ -170,6 +135,48 @@ class UploadToDatabase
     }
   }
 
+  Future<void> updateLocalStackStatistic(stackId) async
+  {
+    try
+    {
+      String localStacks = await fileHandler.readJsonFromLocalFile("allStacks");
+
+      print("---------updateLocalStackStatistic-----------");
+
+      if (localStacks.isNotEmpty)
+      {
+        List<dynamic> stacks = jsonDecode(localStacks);
+
+        for (var stack in stacks)
+        {
+          if(stack["stack_id"] == stackId)
+          {
+            if(stack["is_deleted"] == 0)
+            {
+              if(stack['is_updated'] == 1)
+              {
+                print("Update Stack: ${stack}");
+                await RestServices(context).updateStackStatistic(stack["stack_id"],stack["fastest_time"] ,stack["last_time"]);
+                stack['is_updated'] = 0;
+                print("----------------NEXT STACK------------------");
+              }
+            }
+          }
+        }
+
+        FileHandler().clearFileContent("allLocalStacks");
+
+      }else
+      {
+        print("updateLocalStackStatistic are empty");
+      }
+    }catch(error)
+    {
+      print("Fehler beim aktualisieren der updateLocalStackContent()-Funktion: $error");
+    }
+
+  }
+
   Future<void> updateAllLocalCardStatistic(stackId) async
   {
     String localFileContent = await fileHandler.readJsonFromLocalFile("allCards");
@@ -186,7 +193,11 @@ class UploadToDatabase
         {
           if(card['is_deleted'] == 0)
           {
-            RestServices(context).updateCardStatistic(card['card_id'], card['answered_correctly'],card['answered_incorrectly']);
+            if(card['is_updated'] == 1)
+            {
+              RestServices(context).updateCardStatistic(card['card_id'], card['answered_correctly'],card['answered_incorrectly']);
+              card['is_updated'] = 0;
+            }
           }
         }
       }

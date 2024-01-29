@@ -597,10 +597,11 @@ class RestServices{
     }
   }
 
-  Future<void> updateCardStatistic(cardId, answered_correctly, answered_incorrectly) async {
+  Future<void> updateCardStatistic(cardId, int answeredCorrectly, int answeredIncorrectly) async {
 
     String? accessToken = await storage.read(key: 'accessToken');
-
+    print("answeredCorrectly: ${answeredCorrectly}");
+    print("answeredIncorrectly: ${answeredIncorrectly}");
     if (accessToken != null) {
       final response = await http.post(
         Uri.parse('http://10.0.2.2:3000/updateCardStatistic'),
@@ -610,20 +611,21 @@ class RestServices{
         },
         body: jsonEncode(<String, dynamic>{
           "card_id": cardId,
-          "answered_correctly": answered_correctly,
-          "answered_incorrectly": answered_incorrectly,
+          "answered_correctly": answeredCorrectly,
+          "answered_incorrectly": answeredIncorrectly,
         }),
       );
 
       if (response.statusCode == 200) {
         print("Antwort (Richtig/Falsch) wurde in die Datenbank gespeichert.");
       } else {
-        showDialog(
+        /*showDialog(
           context: context,
           builder: (BuildContext context) {
             return ValidationMessageBox(message: "Antwort (Richtig/Falsch) konnte nicht gespeichert werden");
           },
-        );
+        );*/
+        print("Antwort (Richtig/Falsch) konnte nicht gespeichert werden");
         throw Exception('Failed to insert data.');
       }
     }else {

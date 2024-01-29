@@ -61,7 +61,8 @@ class MessageBox extends StatelessWidget {
             Spacer(),
             TextButton(
               onPressed: () {
-                Navigator.push(
+                Navigator.of(context).pop();
+                Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
                     builder: (context) => StackContentScreen(stackId: stackId)

@@ -15,6 +15,7 @@ import '../widgets/components/message_box.dart';
 import '../widgets/headline.dart';
 import '../widgets/learning_card.dart';
 import '../widgets/top_navigation_bar.dart';
+import 'bottom_navigation_screen.dart';
 
 class StandardLearningScreen extends StatefulWidget {
 
@@ -46,6 +47,7 @@ class _CardLearningScreenState extends State<StandardLearningScreen> with Ticker
   void initState()
   {
     super.initState();
+    print("Stackid: ${widget.stackId}");
     startTimer();
     loadStack();
     loadCards();
@@ -59,9 +61,10 @@ class _CardLearningScreenState extends State<StandardLearningScreen> with Ticker
         await UploadToDatabase(context).updateAllLocalCardStatistic(widget.stackId);
 
       }else{}
-      loadStack();
-      loadCards();
-      indexCards.clear();
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (BuildContext context) => BottomNavigationScreen()),
+      );
     });
   }
 
@@ -82,7 +85,8 @@ class _CardLearningScreenState extends State<StandardLearningScreen> with Ticker
     return DateFormat('HH:mm:ss').format(DateTime(0, 1, 1).add(duration));
   }
 
-  Future<void> loadStack() async {
+  Future<void> loadStack() async
+  {
     try
     {
       ConnectivityResult connectivityResult = await Connectivity().checkConnectivity();
@@ -95,13 +99,22 @@ class _CardLearningScreenState extends State<StandardLearningScreen> with Ticker
           showLoadingCircular = false;
         });
 
-        String fileContent = await fileHandler.readJsonFromLocalFile("allStacks");
+        String serverFileStackContent = await fileHandler.readJsonFromLocalFile("allStacks");
+        String localFileStackContent = await fileHandler.readJsonFromLocalFile("allLocalStacks");
 
-        if (fileContent.isNotEmpty)
+        if (serverFileStackContent.isNotEmpty)
         {
-          List<dynamic> stacks = jsonDecode(fileContent);
+          if(localFileStackContent.isEmpty)
+          {
+            localFileStackContent = "[]";
+          }
 
-          for (var stack in stacks)
+          List<dynamic> stackFileContent = jsonDecode(serverFileStackContent);
+          List<dynamic> localStackFileContent = jsonDecode(localFileStackContent);
+
+          List<dynamic> combinedStackContent = [...stackFileContent, ...localStackFileContent];
+
+          for (var stack in combinedStackContent)
           {
             if (stack["stack_id"] == widget.stackId)
             {
@@ -178,6 +191,7 @@ class _CardLearningScreenState extends State<StandardLearningScreen> with Ticker
               if(card["remember"] == 0 && card["is_deleted"] == 0)
               {
                 indexCards.add(LearningCard(
+                  stackId: card['stack_stack_id'],
                   question: card["question"],
                   answer: card["answer"],
                   cardIndex: card["card_id"],
@@ -203,8 +217,6 @@ class _CardLearningScreenState extends State<StandardLearningScreen> with Ticker
         await UploadToDatabase(context).allLocalCards(widget.stackId, widget.stackId);
         await RestServices(context).getAllCards();
 
-
-
         String fileContent = await fileHandler.readJsonFromLocalFile("allCards");
 
         if (fileContent.isNotEmpty)
@@ -218,6 +230,7 @@ class _CardLearningScreenState extends State<StandardLearningScreen> with Ticker
               if(card["remember"] == 0 && card["is_deleted"] == 0)
               {
                 indexCards.add(LearningCard(
+                  stackId: card['stack_stack_id'],
                   question: card["question"],
                   answer: card["answer"],
                   cardIndex: card["card_id"],
@@ -245,7 +258,7 @@ class _CardLearningScreenState extends State<StandardLearningScreen> with Ticker
     }
   }
 
-  //TODO muss noch für die den offline modus angepasst werden
+  //TODO muss noch für die den offline modus angepasst werden (Daten werden nicht erfasst wenn der Stack komplett offline erstellt wurde)
   Future<void> handleCardClick(bool val) async {
     try
     {
@@ -287,7 +300,13 @@ class _CardLearningScreenState extends State<StandardLearningScreen> with Ticker
 
               if(currentDuration.compareTo(fastestDuration) < 0)
               {
-                fileHandler.editItemById("allStacks", "stack_id", widget.stackId, {"fastest_time": formatTime(),"last_time": formatTime()});
+                fileHandler.editItemById(
+                    "allStacks", "stack_id", widget.stackId,
+                    {"fastest_time": formatTime(),"last_time": formatTime(), "is_updated": 1});
+                fileHandler.editItemById(
+                    "allLocalStacks", "stack_id", widget.stackId,
+                    {"fastest_time": formatTime(),"last_time": formatTime(), "is_updated": 1});
+
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {
@@ -301,7 +320,13 @@ class _CardLearningScreenState extends State<StandardLearningScreen> with Ticker
 
               }else
               {
-                fileHandler.editItemById("allStacks", "stack_id", widget.stackId, {"fastest_time": fastestTime,"last_time": formatTime()});
+                fileHandler.editItemById(
+                    "allStacks", "stack_id", widget.stackId,
+                    {"fastest_time": fastestTime,"last_time": formatTime(),"is_updated": 1});
+                fileHandler.editItemById(
+                    "allLocalStacks", "stack_id", widget.stackId,
+                    {"fastest_time": fastestTime,"last_time": formatTime(),"is_updated": 1});
+
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {
@@ -315,9 +340,7 @@ class _CardLearningScreenState extends State<StandardLearningScreen> with Ticker
               }
             }
           });
-
         }
-
       }else
       {
         final time = await RestServices(context).getStackStatistic(widget.stackId);
@@ -364,7 +387,6 @@ class _CardLearningScreenState extends State<StandardLearningScreen> with Ticker
                   );
                 },
               );
-
             }
           }
         });

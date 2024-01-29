@@ -73,10 +73,10 @@ class _EditStackScreenState extends State<EditStackScreen> {
             {
               if(widget.stackId is int)
               {
-                await fileHandler.editItemById("allStacks", "stack_id", widget.stackId, {"is_deleted":1});
+                await fileHandler.editItemById("allStacks", "stack_id", widget.stackId, {"is_deleted":1, "is_updated": 1});
               }else
               {
-                await fileHandler.editItemById("allLocalStacks", "stack_id", widget.stackId, {"is_deleted":1});
+                await fileHandler.editItemById("allLocalStacks", "stack_id", widget.stackId, {"is_deleted":1, "is_updated": 1});
               }
             }
 

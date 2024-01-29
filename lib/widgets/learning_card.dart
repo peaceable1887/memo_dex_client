@@ -106,6 +106,7 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
     });
   }
 
+  //TODO wenn Karte als memorized oder unmemorized markiert wird, wird der wert nicht übernommen bzw gespeichert
   void cardNotedOffline()
   {
     setState(()
@@ -114,11 +115,19 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
       {
         if(widget.stackId is int)
         {
-          fileHandler.editItemById("allCards", "card_id", widget.cardIndex, {"remember":1, "is_updated": 1});
-          fileHandler.editItemById("allLocalCards", "card_id", widget.cardIndex, {"remember":1, "is_updated": 1});
+          fileHandler.editItemById(
+              "allCards", "card_id", widget.cardIndex,
+              {"remember":1, "is_updated": 1});
+
+          fileHandler.editItemById(
+              "allLocalCards", "card_id", widget.cardIndex,
+              {"remember":1, "is_updated": 1});
+
         }else
         {
-          fileHandler.editItemById("allLocalCards", "card_id", widget.cardIndex, {"remember":1, "is_updated": 1});
+          fileHandler.editItemById(
+              "allLocalCards", "card_id", widget.cardIndex,
+              {"remember":1, "is_updated": 1});
         }
         isCardNoticed = true;
         CustomSnackbar.showSnackbar(
@@ -130,13 +139,23 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
             Duration(milliseconds: 1500)
         );
       }else{
+
         if(widget.stackId is int)
         {
-          fileHandler.editItemById("allCards", "card_id", widget.cardIndex, {"remember":0, "is_updated": 1});
-          fileHandler.editItemById("allLocalCards", "card_id", widget.cardIndex, {"remember":0, "is_updated": 1});
+
+          fileHandler.editItemById(
+              "allCards", "card_id", widget.cardIndex,
+              {"remember":0, "is_updated": 1});
+
+          fileHandler.editItemById(
+              "allLocalCards", "card_id", widget.cardIndex,
+              {"remember":0, "is_updated": 1});
+
         }else
         {
-          fileHandler.editItemById("allLocalCards", "card_id", widget.cardIndex, {"remember":0, "is_updated": 1});
+          fileHandler.editItemById(
+              "allLocalCards", "card_id", widget.cardIndex,
+              {"remember":0, "is_updated": 1});
         }
         isCardNoticed = false;
         CustomSnackbar.showSnackbar(
@@ -181,7 +200,7 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
       }
     });
   }
-
+  //TODO Daten werden nicht erfasst wenn der Stack komplett offline erstellt wurde
   Future<void> sendAnswer(answeredCorrectly)
   async
   {
@@ -212,10 +231,7 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
         List<dynamic> serverCardContent = jsonDecode(serverFileCardContent);
         List<dynamic> localCardContent = jsonDecode(localFileCardContent);
 
-        List<dynamic> combinedCardContent = [
-          ...serverCardContent,
-          ...localCardContent
-        ];
+        List<dynamic> combinedCardContent = [...serverCardContent, ...localCardContent];
 
         for (var card in combinedCardContent)
         {
@@ -225,11 +241,26 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
             {
               setState(()
               {
-                if (answeredCorrectly == false)
+                print("CorrectAnswer: ${card['answered_incorrectly']}");
+
+                if(widget.stackId is int)
                 {
-                  fileHandler.editItemById("allCards", "card_id", widget.cardIndex, {"answered_incorrectly": card['answered_incorrectly']+1});
-                } else {
-                  fileHandler.editItemById("allCards", "card_id", widget.cardIndex, {"answered_correctly": card['answered_correctly']+1});
+                  fileHandler.editItemById(
+                      "allCards", "card_id", widget.cardIndex,
+                      {"answered_incorrectly": card['answered_incorrectly']+1, "is_updated": 1});
+
+                  fileHandler.editItemById(
+                      "allLocalCards", "card_id", widget.cardIndex,
+                      {"answered_incorrectly": card['answered_incorrectly']+1, "is_updated": 1});
+
+                }else
+                {
+                  fileHandler.editItemById(
+                      "allCards", "card_id", widget.cardIndex,
+                      {"answered_correctly": card['answered_correctly']+1, "is_updated": 1});
+                  fileHandler.editItemById(
+                      "allLocalCards", "card_id", widget.cardIndex,
+                      {"answered_correctly": card['answered_correctly']+1, "is_updated": 1});
                 }
               });
             }
