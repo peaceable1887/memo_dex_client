@@ -15,7 +15,7 @@ class UploadToDatabase
 
   Future<void> allLocalStackContent() async
   {
-    String localStacks = await fileHandler.readJsonFromLocalFile("allLocalStacks");
+    String localStacks = await fileHandler.readJsonFromLocalFile("allStacks");
 
     print("---------Upload all Local Stack Content------------");
 
@@ -25,17 +25,19 @@ class UploadToDatabase
 
       for (var stack in stacks)
       {
-        String responseBody = await RestServices(context).createStack(
-            stack['stackname'], stack['color'], stack['is_deleted']);
+        if(stack["is_updated"] == 1)
+        {
+          String responseBody = await RestServices(context).createStack(
+              stack['stackname'], stack['color'], stack['is_deleted']);
 
-        print("Response Body: $responseBody");
+          print("Response Body: $responseBody");
 
-        allLocalCards(responseBody, stack['stack_id']);
+          allLocalCards(responseBody, stack['stack_id']);
 
-        print("----------------NEXT STACK------------------");
+          stack["is_updated"] = 0;
+          print("----------------NEXT STACK------------------");
+        }
       }
-      FileHandler().clearFileContent("allLocalStacks");
-
     }else
     {
       print("Stacks are empty");
@@ -56,6 +58,7 @@ class UploadToDatabase
         if (stack['is_updated'] == 1) {
           RestServices(context).updateStack(stack["stackname"],
               stack["color"], stack["is_deleted"], stack['stack_id']);
+
           stack['is_updated'] = 0;
         }
       }
@@ -67,9 +70,9 @@ class UploadToDatabase
 
   Future<void> allLocalCards(stackId, localId) async
   {
-    String localFileContent = await fileHandler.readJsonFromLocalFile("allLocalCards");
+    String localFileContent = await fileHandler.readJsonFromLocalFile("allCards");
 
-    print("---------Upload all Local Cards------------");
+    print("---------Upload all Local Cards blaaaaaaaaaaaaaaaaa------------");
 
     if (localFileContent.isNotEmpty)
     {
@@ -81,19 +84,19 @@ class UploadToDatabase
 
         if (card['stack_stack_id'] == localId)
         {
-          print(card["question"]);
           card['stack_stack_id'] = stackId;
 
-          RestServices(context).addCard(
-              card['question'], card['answer'], card['remember'],
-              card['is_deleted'], card['stack_stack_id']);
+          if(card["created_locally"] == 1)
+          {
+            RestServices(context).addCard(
+                card['question'], card['answer'], card['remember'],
+                card['is_deleted'], card['stack_stack_id']);
 
-          print("cardid ${card["card_id"]}");
+            card["is_updated"] = 0;
 
-          //TODO allLocalCards werden eventuell nicht komplett entleert. Nochmal angucken...
-          // Sammle die zu löschenden Elemente
-          await FileHandler().deleteItemById("allLocalCards", "card_id", card["card_id"]);
-          print("----------------NEXT CARD------------------");
+            print("----------------NEXT CARD------------------");
+          }
+
         }
       }
     }else
@@ -163,8 +166,6 @@ class UploadToDatabase
             }
           }
         }
-
-        FileHandler().clearFileContent("allLocalStacks");
 
       }else
       {

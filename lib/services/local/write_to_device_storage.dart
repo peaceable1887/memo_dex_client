@@ -13,7 +13,8 @@ class WriteToDeviceStorage
     required String color,
     required int userId,
     required String fileName,
-  }) async {
+  }) async
+  {
     try {
       final directory = await getApplicationDocumentsDirectory();
       final filePath = '${directory.path}/$fileName.json';
@@ -21,9 +22,11 @@ class WriteToDeviceStorage
 
       // Lese vorhandene Daten
       List<Map<String, dynamic>> existingData = [];
-      if (await file.exists()) {
+      if (await file.exists())
+      {
         final content = await file.readAsString();
-        if (content.isNotEmpty) {
+        if (content.isNotEmpty)
+        {
           existingData = List<Map<String, dynamic>>.from(jsonDecode(content));
         }
       }
@@ -35,6 +38,7 @@ class WriteToDeviceStorage
         'color': color,
         'is_deleted': 0,
         'creation_date': DateTime.now().toIso8601String(),
+        'is_updated': 1,
         'user_user_id': userId,
       });
 
@@ -53,7 +57,8 @@ class WriteToDeviceStorage
     required dynamic stackId,
     required String fileName,
     required String? tempCardIndex,
-  }) async {
+  }) async
+  {
     try {
       final directory = await getApplicationDocumentsDirectory();
       final filePath = '${directory.path}/$fileName.json';
@@ -61,9 +66,11 @@ class WriteToDeviceStorage
 
       // Lese vorhandene Daten
       List<Map<String, dynamic>> existingData = [];
-      if (await file.exists()) {
+      if (await file.exists())
+      {
         final content = await file.readAsString();
-        if (content.isNotEmpty) {
+        if (content.isNotEmpty)
+        {
           existingData = List<Map<String, dynamic>>.from(jsonDecode(content));
         }
       }
@@ -83,6 +90,8 @@ class WriteToDeviceStorage
           "creation_date": DateTime.now().toIso8601String(),
           "answered_correctly": 0,
           "answered_incorrectly": 0,
+          "is_updated": 1,
+          "created_locally": 1,
           "stack_stack_id": stackId
         });
 

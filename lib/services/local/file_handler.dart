@@ -2,10 +2,10 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 
-import '../../helperClasses/generator.dart';
-
-class FileHandler {
-  Future<void> saveJsonToLocalFile(dynamic jsonData, String fileName) async {
+class FileHandler
+{
+  Future<void> saveJsonToLocalFile(dynamic jsonData, String fileName) async
+  {
     try {
       final directory = await getApplicationDocumentsDirectory();
       final filePath = '${directory.path}/$fileName.json';
@@ -26,7 +26,8 @@ class FileHandler {
       final filePath = '${directory.path}/$fileName.json';
       final file = File(filePath);
 
-      if (await file.exists()) {
+      if (await file.exists())
+      {
         // Die Datei existiert, lese ihren Inhalt
         final content = await file.readAsString();
         print('Dateiinhalt: $content');

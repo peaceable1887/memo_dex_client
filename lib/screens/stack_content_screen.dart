@@ -144,22 +144,13 @@ class _StackContentScreenState extends State<StackContentScreen> {
           showLoadingCircular = false;
         });
 
-        String fileContent = await fileHandler.readJsonFromLocalFile("allStacks");
-        String fileLocalContent = await fileHandler.readJsonFromLocalFile("allLocalStacks");
+        String localStackContent = await fileHandler.readJsonFromLocalFile("allStacks");
 
-        if (fileContent.isNotEmpty)
+        if (localStackContent.isNotEmpty)
         {
-          if(fileLocalContent.isEmpty)
-          {
-            fileLocalContent = "[]";
-          }
+          List<dynamic> stackContent = jsonDecode(localStackContent);
 
-          List<dynamic> stackFileContent = jsonDecode(fileContent);
-          List<dynamic> localStackFileContent = jsonDecode(fileLocalContent);
-
-          List<dynamic> combinedStackContent = [...stackFileContent, ...localStackFileContent];
-
-          for (var stack in combinedStackContent)
+          for (var stack in stackContent)
           {
             if (stack["stack_id"] == widget.stackId)
             {
@@ -212,35 +203,31 @@ class _StackContentScreenState extends State<StackContentScreen> {
 
   Future<void> loadCards() async
   {
+    print("loadCards() wird ausgeführt");
     try
     {
       ConnectivityResult connectivityResult = await Connectivity().checkConnectivity();
       bool isConnected = (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi);
 
+      print("loadCards() wird ausgeführt 2");
       if(isConnected == false)
       {
+        print("loadCards() wird ausgeführt 3");
         setState(()
         {
           showLoadingCircular = false;
         });
-        String serverFileCardContent = await fileHandler.readJsonFromLocalFile("allCards");
-        String localFileCardContent = await fileHandler.readJsonFromLocalFile("allLocalCards");
 
-        if (serverFileCardContent.isNotEmpty)
+        String localCardContent = await fileHandler.readJsonFromLocalFile("allCards");
+        print("LOCAL CONTENT: $localCardContent");
+
+        if (localCardContent.isNotEmpty)
         {
-          if(localFileCardContent.isEmpty)
-          {
-            localFileCardContent = "[]";
-          }
+          List<dynamic> cardContent = jsonDecode(localCardContent);
 
-          List<dynamic> serverCardContent = jsonDecode(serverFileCardContent);
-          List<dynamic> localCardContent = jsonDecode(localFileCardContent);
+          filter.FilterCards(cards, cardContent, selectedOption, sortValue);
 
-          List<dynamic> combinedCardContent = [...serverCardContent, ...localCardContent];
-
-          filter.FilterCards(cards, combinedCardContent, selectedOption, sortValue);
-
-          for (var card in combinedCardContent)
+          for (var card in cardContent)
           {
             if(card['stack_stack_id'] == widget.stackId)
             {
@@ -252,7 +239,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
             }
           }
 
-          int arrLength = combinedCardContent.length;
+          int arrLength = cardContent.length;
           String tempCardIndex = arrLength.toString();
 
           await storage.write(key: 'tempCardIndex', value: tempCardIndex);
@@ -265,12 +252,6 @@ class _StackContentScreenState extends State<StackContentScreen> {
         }
       }else
       {
-        print("wird ausgeführt loadCards (stack_content)");
-        if(widget.stackId is int)
-        {
-          await UploadToDatabase(context).allLocalCards(widget.stackId, widget.stackId);
-        }
-
         await RestServices(context).getAllCards();
 
         String fileContent = await fileHandler.readJsonFromLocalFile("allCards");

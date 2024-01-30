@@ -113,22 +113,10 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
     {
       if(isCardNoticed == false)
       {
-        if(widget.stackId is int)
-        {
-          fileHandler.editItemById(
-              "allCards", "card_id", widget.cardIndex,
-              {"remember":1, "is_updated": 1});
+        fileHandler.editItemById(
+            "allCards", "card_id", widget.cardIndex,
+            {"remember":1, "is_updated": 1});
 
-          fileHandler.editItemById(
-              "allLocalCards", "card_id", widget.cardIndex,
-              {"remember":1, "is_updated": 1});
-
-        }else
-        {
-          fileHandler.editItemById(
-              "allLocalCards", "card_id", widget.cardIndex,
-              {"remember":1, "is_updated": 1});
-        }
         isCardNoticed = true;
         CustomSnackbar.showSnackbar(
             context,
@@ -138,25 +126,12 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
             Duration(seconds: 0),
             Duration(milliseconds: 1500)
         );
-      }else{
+      }else
+      {
+        fileHandler.editItemById(
+            "allCards", "card_id", widget.cardIndex,
+            {"remember":0, "is_updated": 1});
 
-        if(widget.stackId is int)
-        {
-
-          fileHandler.editItemById(
-              "allCards", "card_id", widget.cardIndex,
-              {"remember":0, "is_updated": 1});
-
-          fileHandler.editItemById(
-              "allLocalCards", "card_id", widget.cardIndex,
-              {"remember":0, "is_updated": 1});
-
-        }else
-        {
-          fileHandler.editItemById(
-              "allLocalCards", "card_id", widget.cardIndex,
-              {"remember":0, "is_updated": 1});
-        }
         isCardNoticed = false;
         CustomSnackbar.showSnackbar(
             context,
@@ -218,22 +193,13 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
       });
     }else
     {
-      String serverFileCardContent = await fileHandler.readJsonFromLocalFile("allCards");
-      String localFileCardContent = await fileHandler.readJsonFromLocalFile("allLocalCards");
+      String localCardContent = await fileHandler.readJsonFromLocalFile("allCards");
 
-      if (serverFileCardContent.isNotEmpty)
+      if (localCardContent.isNotEmpty)
       {
-        if (localFileCardContent.isEmpty)
-        {
-          localFileCardContent = "[]";
-        }
+        List<dynamic> cardContent = jsonDecode(localCardContent);
 
-        List<dynamic> serverCardContent = jsonDecode(serverFileCardContent);
-        List<dynamic> localCardContent = jsonDecode(localFileCardContent);
-
-        List<dynamic> combinedCardContent = [...serverCardContent, ...localCardContent];
-
-        for (var card in combinedCardContent)
+        for (var card in cardContent)
         {
           if (card['card_id'] == widget.cardIndex)
           {
@@ -243,25 +209,10 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
               {
                 print("CorrectAnswer: ${card['answered_incorrectly']}");
 
-                if(widget.stackId is int)
-                {
-                  fileHandler.editItemById(
-                      "allCards", "card_id", widget.cardIndex,
-                      {"answered_incorrectly": card['answered_incorrectly']+1, "is_updated": 1});
+                fileHandler.editItemById(
+                    "allCards", "card_id", widget.cardIndex,
+                    {"answered_incorrectly": card['answered_incorrectly']+1, "is_updated": 1});
 
-                  fileHandler.editItemById(
-                      "allLocalCards", "card_id", widget.cardIndex,
-                      {"answered_incorrectly": card['answered_incorrectly']+1, "is_updated": 1});
-
-                }else
-                {
-                  fileHandler.editItemById(
-                      "allCards", "card_id", widget.cardIndex,
-                      {"answered_correctly": card['answered_correctly']+1, "is_updated": 1});
-                  fileHandler.editItemById(
-                      "allLocalCards", "card_id", widget.cardIndex,
-                      {"answered_correctly": card['answered_correctly']+1, "is_updated": 1});
-                }
               });
             }
           }

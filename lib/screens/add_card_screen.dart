@@ -7,7 +7,6 @@ import 'package:memo_dex_prototyp/screens/stack_content_screen.dart';
 import 'package:memo_dex_prototyp/services/local/write_to_device_storage.dart';
 
 import '../services/local/file_handler.dart';
-import '../services/local/upload_to_database.dart';
 import '../services/rest/rest_services.dart';
 import '../widgets/headline.dart';
 import '../widgets/top_navigation_bar.dart';
@@ -37,7 +36,6 @@ class _AddCardScreenState extends State<AddCardScreen> {
   @override
   void initState() {
     super.initState();
-    print("StackID: ${widget.stackId}");
     _question = TextEditingController();
     _answer = TextEditingController();
     _question.addListener(updateButtonState);
@@ -260,30 +258,33 @@ class _AddCardScreenState extends State<AddCardScreen> {
                           onPressed: _isButtonEnabled
                               ? () async
                           {
+                            //storage wird im stack_content_screen in der funktion loadCards gesetzt
                             String? tempCardIndex = await storage.read(key: 'tempCardIndex');
+                            print("onlinestatis: ${online}");
 
-                            setState(() {
-                              if(online == true)
-                              {
-                                RestServices(context).addCard(_question.text, _answer.text, 0, 0, widget.stackId);
-                              }else
-                              {
-                                WriteToDeviceStorage().addCard(
-                                    question: _question.text,
-                                    answer: _answer.text,
-                                    stackId: widget.stackId,
-                                    fileName: "allLocalCards",
-                                    tempCardIndex: tempCardIndex,
-                                );
-                              }
-                              storage.write(key: 'addCard', value: "true");
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => StackContentScreen(stackId: widget.stackId),
-                                ),
+                            if(online == true)
+                            {
+                              RestServices(context).addCard(_question.text, _answer.text, 0, 0, widget.stackId);
+                            }else
+                            {
+                              await WriteToDeviceStorage().addCard(
+                                  question: _question.text,
+                                  answer: _answer.text,
+                                  stackId: widget.stackId,
+                                  fileName: "allCards",
+                                  tempCardIndex: tempCardIndex,
                               );
-                            });
+                            }
+                            //zeige die Snackbar an
+                            storage.write(key: 'addCard', value: "true");
+
+                            print(widget.stackId);
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => StackContentScreen(stackId: widget.stackId),
+                              ),
+                            );
                           }
                               : null,
                           child: Row(

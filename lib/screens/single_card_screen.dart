@@ -99,22 +99,13 @@ class _SingleCardScreenState extends State<SingleCardScreen> {
           showLoadingCircular = false;
         });
 
-        String serverFileStackContent = await fileHandler.readJsonFromLocalFile("allStacks");
-        String localFileStackContent = await fileHandler.readJsonFromLocalFile("allLocalStacks");
+        String localStackContent = await fileHandler.readJsonFromLocalFile("allStacks");
 
-        if (serverFileStackContent.isNotEmpty)
+        if (localStackContent.isNotEmpty)
         {
-          if(localFileStackContent.isEmpty)
-          {
-            localFileStackContent = "[]";
-          }
+          List<dynamic> stackContent = jsonDecode(localStackContent);
 
-          List<dynamic> stackFileContent = jsonDecode(serverFileStackContent);
-          List<dynamic> localStackFileContent = jsonDecode(localFileStackContent);
-
-          List<dynamic> combinedStackContent = [...stackFileContent, ...localStackFileContent];
-
-          for (var stack in combinedStackContent)
+          for (var stack in stackContent)
           {
             if (stack["stack_id"] == widget.stackId)
             {
@@ -171,22 +162,13 @@ class _SingleCardScreenState extends State<SingleCardScreen> {
           showLoadingCircular = false;
         });
 
-        String serverFileCardContent = await fileHandler.readJsonFromLocalFile("allCards");
-        String localFileCardContent = await fileHandler.readJsonFromLocalFile("allLocalCards");
+        String localCardContent = await fileHandler.readJsonFromLocalFile("allCards");
 
-        if (serverFileCardContent.isNotEmpty)
+        if (localCardContent.isNotEmpty)
         {
-          if(localFileCardContent.isEmpty)
-          {
-            localFileCardContent = "[]";
-          }
+          List<dynamic> cardContent = jsonDecode(localCardContent);
 
-          List<dynamic> serverCardContent = jsonDecode(serverFileCardContent);
-          List<dynamic> localCardContent = jsonDecode(localFileCardContent);
-
-          List<dynamic> combinedCardContent = [...serverCardContent, ...localCardContent];
-
-          for (var card in combinedCardContent)
+          for (var card in cardContent)
           {
             if(card['stack_stack_id'] == widget.stackId && card['card_id'] == widget.cardId)
             {

@@ -99,22 +99,13 @@ class _CardLearningScreenState extends State<StandardLearningScreen> with Ticker
           showLoadingCircular = false;
         });
 
-        String serverFileStackContent = await fileHandler.readJsonFromLocalFile("allStacks");
-        String localFileStackContent = await fileHandler.readJsonFromLocalFile("allLocalStacks");
+        String localStackContent = await fileHandler.readJsonFromLocalFile("allStacks");
 
-        if (serverFileStackContent.isNotEmpty)
+        if (localStackContent.isNotEmpty)
         {
-          if(localFileStackContent.isEmpty)
-          {
-            localFileStackContent = "[]";
-          }
+          List<dynamic> stackContent = jsonDecode(localStackContent);
 
-          List<dynamic> stackFileContent = jsonDecode(serverFileStackContent);
-          List<dynamic> localStackFileContent = jsonDecode(localFileStackContent);
-
-          List<dynamic> combinedStackContent = [...stackFileContent, ...localStackFileContent];
-
-          for (var stack in combinedStackContent)
+          for (var stack in stackContent)
           {
             if (stack["stack_id"] == widget.stackId)
             {
@@ -169,22 +160,13 @@ class _CardLearningScreenState extends State<StandardLearningScreen> with Ticker
           showLoadingCircular = false;
         });
 
-        String serverFileCardContent = await fileHandler.readJsonFromLocalFile("allCards");
-        String localFileCardContent = await fileHandler.readJsonFromLocalFile("allLocalCards");
+        String localCardContent = await fileHandler.readJsonFromLocalFile("allCards");
 
-        if (serverFileCardContent.isNotEmpty)
+        if (localCardContent.isNotEmpty)
         {
-          if(localFileCardContent.isEmpty)
-          {
-            localFileCardContent = "[]";
-          }
+          List<dynamic> cardContent = jsonDecode(localCardContent);
 
-          List<dynamic> serverCardContent = jsonDecode(serverFileCardContent);
-          List<dynamic> localCardContent = jsonDecode(localFileCardContent);
-
-          List<dynamic> combinedCardContent = [...serverCardContent, ...localCardContent];
-
-          for (var card in combinedCardContent)
+          for (var card in cardContent)
           {
             if(card['stack_stack_id'] == widget.stackId)
             {
@@ -267,27 +249,18 @@ class _CardLearningScreenState extends State<StandardLearningScreen> with Ticker
 
       if(isConnected == false)
       {
-        String serverFileStackStatisticContent = await fileHandler.readJsonFromLocalFile("allStacks");
-        String localFileStackStatisticCardContent = await fileHandler.readJsonFromLocalFile("allLocalStacks");
+        String localStackStatisticContent = await fileHandler.readJsonFromLocalFile("allStacks");
 
-        if (serverFileStackStatisticContent.isNotEmpty)
+        if (localStackStatisticContent.isNotEmpty)
         {
-          if (localFileStackStatisticCardContent.isEmpty)
+          List<dynamic> stackStatisticContent = jsonDecode(localStackStatisticContent);
+
+          if(stackStatisticContent[0]["fastest_time"] == null)
           {
-            localFileStackStatisticCardContent = "[]";
+            stackStatisticContent[0]["fastest_time"] = "99:99:99";
           }
 
-          List<dynamic> serverStackStatisticContent = jsonDecode(serverFileStackStatisticContent);
-          List<dynamic> localStackStatisticContent = jsonDecode(localFileStackStatisticCardContent);
-
-          List<dynamic> combinedStackStatisticContent = [...serverStackStatisticContent, ...localStackStatisticContent];
-
-          if(combinedStackStatisticContent[0]["fastest_time"] == null)
-          {
-            combinedStackStatisticContent[0]["fastest_time"] = "99:99:99";
-          }
-
-          final fastestTime = combinedStackStatisticContent[0]["fastest_time"];
+          final fastestTime = stackStatisticContent[0]["fastest_time"];
 
           setState(() {
             print(wasClicked);
@@ -302,9 +275,6 @@ class _CardLearningScreenState extends State<StandardLearningScreen> with Ticker
               {
                 fileHandler.editItemById(
                     "allStacks", "stack_id", widget.stackId,
-                    {"fastest_time": formatTime(),"last_time": formatTime(), "is_updated": 1});
-                fileHandler.editItemById(
-                    "allLocalStacks", "stack_id", widget.stackId,
                     {"fastest_time": formatTime(),"last_time": formatTime(), "is_updated": 1});
 
                 showDialog(
@@ -322,9 +292,6 @@ class _CardLearningScreenState extends State<StandardLearningScreen> with Ticker
               {
                 fileHandler.editItemById(
                     "allStacks", "stack_id", widget.stackId,
-                    {"fastest_time": fastestTime,"last_time": formatTime(),"is_updated": 1});
-                fileHandler.editItemById(
-                    "allLocalStacks", "stack_id", widget.stackId,
                     {"fastest_time": fastestTime,"last_time": formatTime(),"is_updated": 1});
 
                 showDialog(

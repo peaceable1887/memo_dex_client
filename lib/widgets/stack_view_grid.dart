@@ -60,23 +60,16 @@ class _StackViewGridState extends State<StackViewGrid> {
         showLoadingCircular = false;
       });
 
-      String fileContent = await fileHandler.readJsonFromLocalFile("allStacks");
-      String fileLocalContent = await fileHandler.readJsonFromLocalFile("allLocalStacks");
+      String localStackContent = await fileHandler.readJsonFromLocalFile("allStacks");
 
       // Überprüfe ob der Inhalt Liste ist
-      if (fileContent.isNotEmpty) {
-        if(fileLocalContent.isEmpty)
-        {
-          fileLocalContent = "[]";
-        }
-        List<dynamic> stackFileContent = jsonDecode(fileContent);
-        List<dynamic> localStackFileContent = jsonDecode(fileLocalContent);
+      if (localStackContent.isNotEmpty) {
 
-        // Füge die Inhalte der beiden Listen zusammen
-        List<dynamic> combinedStackContent = [...stackFileContent, ...localStackFileContent];
-        filter.FilterStacks(stackButtons, combinedStackContent, selectedOption!, sortValue!);
+        List<dynamic> stackContent = jsonDecode(localStackContent);
 
-        for (var stack in combinedStackContent)
+        filter.FilterStacks(stackButtons, stackContent, selectedOption!, sortValue!);
+
+        for (var stack in stackContent)
         {
           if (stack['is_deleted'] == 0) {
             stackButtons.add(StackBtn(
@@ -124,6 +117,7 @@ class _StackViewGridState extends State<StackViewGrid> {
                 stackName: stack['stackname']
             ));
             //TODO soll nur ausgeführt werden ein Update statt fand
+            await UploadToDatabase(context).allLocalCards(stack['stack_id'], stack['stack_id']);
             await UploadToDatabase(context).updateAllLocalCards(stack['stack_id']);
             await UploadToDatabase(context).updateLocalStackStatistic(stack['stack_id']);
             await UploadToDatabase(context).updateAllLocalCardStatistic(stack['stack_id']);

@@ -287,42 +287,38 @@ class _CreateStackFormState extends State<CreateStackForm> {
                     elevation: 0,
                   ),
                   onPressed: _isButtonEnabled
-                      ? () {
-                    setState(()
-                    {
-                      if(online == true)
+                      ? () async
                       {
-                        print(online);
-                        print("gehe ins true");
-
-                        RestServices(context).createStack(_stackname.text, "${color.value.toRadixString(16).substring(2)}", 0);
-                      }else
-                      {
-                        print("gehe ins false");
-                        storage.read(key: 'user_id').then((String? value)
+                        if(online == true)
                         {
-                          if (value != null)
-                          {
-                            int userIdTest;
-                            userIdTest = int.tryParse(value) ?? 0;
+                          RestServices(context).createStack(_stackname.text, "${color.value.toRadixString(16).substring(2)}", 0);
+                        }else
+                        {
+                          await storage.read(key: 'user_id').then((String? value)
+                          async {
+                            if (value != null)
+                            {
+                              int userIdTest;
+                              userIdTest = int.tryParse(value) ?? 0;
 
-                            WriteToDeviceStorage().addStack(
-                                stackname: _stackname.text,
-                                color: "${color.value.toRadixString(16).substring(2)}",
-                                userId: userIdTest,
-                                fileName: "allLocalStacks");
-                          } else {}
-                        });
+                              await WriteToDeviceStorage().addStack(
+                                  stackname: _stackname.text,
+                                  color: "${color.value.toRadixString(16).substring(2)}",
+                                  userId: userIdTest,
+                                  fileName: "allStacks");
+                            } else {}
+                          });
+                        }
+                        //zeige die Snackbar an
+                        storage.write(key: 'stackCreated', value: "true");
+
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => BottomNavigationScreen(),
+                          ),
+                        );
                       }
-                      storage.write(key: 'stackCreated', value: "true");
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => BottomNavigationScreen(),
-                        ),
-                      );
-                    });
-                  }
                       : null, // deaktivert den Button, wenn nicht aktiviert
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
