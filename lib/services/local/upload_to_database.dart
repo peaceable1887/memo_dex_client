@@ -25,17 +25,27 @@ class UploadToDatabase
 
       for (var stack in stacks)
       {
-        if(stack["is_updated"] == 1)
+        if(stack["created_locally"] == 1)
         {
           String responseBody = await RestServices(context).createStack(
               stack['stackname'], stack['color'], stack['is_deleted']);
 
           print("Response Body: $responseBody");
-
-          allLocalCards(responseBody, stack['stack_id']);
+          await updateLocalStackStatistic(responseBody, stack['stack_id']);
+          await allLocalCards(responseBody, stack['stack_id']);
 
           stack["is_updated"] = 0;
           print("----------------NEXT STACK------------------");
+        }else
+        {
+          if(stack["is_updated"] == 1)
+          {
+            await updateLocalStackStatistic(stack['stack_id'], stack['stack_id']);
+
+            stack["is_updated"] = 0;
+            print("----------------NEXT STACK------------------");
+          }
+
         }
       }
     }else
@@ -72,7 +82,7 @@ class UploadToDatabase
   {
     String localFileContent = await fileHandler.readJsonFromLocalFile("allCards");
 
-    print("---------Upload all Local Cards blaaaaaaaaaaaaaaaaa------------");
+    print("---------Upload all Local Cards ------------");
 
     if (localFileContent.isNotEmpty)
     {
@@ -88,11 +98,17 @@ class UploadToDatabase
 
           if(card["created_locally"] == 1)
           {
-            RestServices(context).addCard(
+            String responseBody = await RestServices(context).addCard(
                 card['question'], card['answer'], card['remember'],
                 card['is_deleted'], card['stack_stack_id']);
 
+            print("Response Body: $responseBody");
+
+            await RestServices(context).updateCardStatistic(
+                responseBody, card['answered_correctly'],card['answered_incorrectly']);
+
             card["is_updated"] = 0;
+            print("überarbeitete Upload all Local Cards Karte: ${card}");
 
             print("----------------NEXT CARD------------------");
           }
@@ -128,7 +144,7 @@ class UploadToDatabase
                 card['remember'],
                 card['card_id']);
             card['is_updated'] = 0;
-             print("überarbeitete Karte: ${card}");
+             print("überarbeitete updateAllLocalCards Karte: ${card}");
           }
         }
       }
@@ -138,7 +154,7 @@ class UploadToDatabase
     }
   }
 
-  Future<void> updateLocalStackStatistic(stackId) async
+  Future<void> updateLocalStackStatistic(stackId, localId) async
   {
     try
     {
@@ -152,16 +168,25 @@ class UploadToDatabase
 
         for (var stack in stacks)
         {
-          if(stack["stack_id"] == stackId)
+          if(stack["stack_id"] == localId)
           {
+            stack["stack_id"] = stackId;
+
             if(stack["is_deleted"] == 0)
             {
               if(stack['is_updated'] == 1)
               {
-                print("Update Stack: ${stack}");
-                await RestServices(context).updateStackStatistic(stack["stack_id"],stack["fastest_time"] ,stack["last_time"]);
-                stack['is_updated'] = 0;
-                print("----------------NEXT STACK------------------");
+                if(stack['fastest_time'] != null && stack['last_time'] != null)
+                {
+                  print("Update Stack: ${stack}");
+
+                  await RestServices(context).updateStackStatistic(
+                      stack["stack_id"],stack["fastest_time"] ,stack["last_time"], stack["pass"]-1);
+
+                  stack['is_updated'] = 0;
+
+                  print("----------------NEXT STACK------------------");
+                }
               }
             }
           }
@@ -196,8 +221,9 @@ class UploadToDatabase
           {
             if(card['is_updated'] == 1)
             {
-              RestServices(context).updateCardStatistic(card['card_id'], card['answered_correctly'],card['answered_incorrectly']);
+              await RestServices(context).updateCardStatistic(card['card_id'], card['answered_correctly'],card['answered_incorrectly']);
               card['is_updated'] = 0;
+              print("überarbeitete updateAllLocalCardStatistic Karte: ${card}");
             }
           }
         }

@@ -251,72 +251,81 @@ class _CardLearningScreenState extends State<StandardLearningScreen> with Ticker
       {
         String localStackStatisticContent = await fileHandler.readJsonFromLocalFile("allStacks");
 
-        if (localStackStatisticContent.isNotEmpty)
-        {
+        if (localStackStatisticContent.isNotEmpty) {
+
           List<dynamic> stackStatisticContent = jsonDecode(localStackStatisticContent);
 
-          if(stackStatisticContent[0]["fastest_time"] == null)
+          for (var stack in stackStatisticContent)
           {
-            stackStatisticContent[0]["fastest_time"] = "99:99:99";
-          }
-
-          final fastestTime = stackStatisticContent[0]["fastest_time"];
-
-          setState(() {
-            print(wasClicked);
-            wasClicked = val;
-
-            if (wasClicked == true && activeIndex == indexCards.length - 1) {
-
-              Duration fastestDuration = parseDuration(fastestTime);
-              Duration currentDuration = parseDuration(formatTime());
-
-              if(currentDuration.compareTo(fastestDuration) < 0)
+            if(stack["stack_id"] == widget.stackId)
+            {
+              if(stack["fastest_time"] == null)
               {
-                fileHandler.editItemById(
-                    "allStacks", "stack_id", widget.stackId,
-                    {"fastest_time": formatTime(),"last_time": formatTime(), "is_updated": 1});
-
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return MessageBox(
-                      headline: "Fertig!",
-                      message: "Du hast eine neue Bestzeit erreicht.",
-                      stackId: widget.stackId,
-                    );
-                  },
-                );
-
-              }else
-              {
-                fileHandler.editItemById(
-                    "allStacks", "stack_id", widget.stackId,
-                    {"fastest_time": fastestTime,"last_time": formatTime(),"is_updated": 1});
-
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return MessageBox(
-                      headline: "Fertig!",
-                      message: "Du hast deine Bestzeit nicht übertroffen.",
-                      stackId: widget.stackId,
-                    );
-                  },
-                );
+                stack["fastest_time"] = "99:99:99";
               }
+
+              final fastestTime = stack["fastest_time"];
+
+              setState(() {
+                wasClicked = val;
+
+                if (wasClicked == true && activeIndex == indexCards.length - 1) {
+
+                  Duration fastestDuration = parseDuration(fastestTime);
+                  Duration currentDuration = parseDuration(formatTime());
+
+                  int stackPass = stack["pass"] + 1;
+                  print("Stack Passes: ${stackPass}");
+
+                  if(currentDuration.compareTo(fastestDuration) < 0)
+                  {
+
+                    fileHandler.editItemById(
+                        "allStacks", "stack_id", widget.stackId,
+                        {"fastest_time": formatTime(),"last_time": formatTime(),"pass": stackPass ,"is_updated": 1});
+
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return MessageBox(
+                          headline: "Fertig!",
+                          message: "Du hast eine neue Bestzeit erreicht.",
+                          stackId: widget.stackId,
+                        );
+                      },
+                    );
+
+                  }else
+                  {
+                    fileHandler.editItemById(
+                        "allStacks", "stack_id", widget.stackId,
+                        {"fastest_time": fastestTime,"last_time": formatTime(), "pass": stackPass , "is_updated": 1});
+
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return MessageBox(
+                          headline: "Fertig!",
+                          message: "Du hast deine Bestzeit nicht übertroffen.",
+                          stackId: widget.stackId,
+                        );
+                      },
+                    );
+                  }
+                }
+              });
             }
-          });
-        }
+          }
+        } else{}
       }else
       {
-        final time = await RestServices(context).getStackStatistic(widget.stackId);
-        if(time[0]["fastest_time"] == null)
+        final stackStatistic= await RestServices(context).getStackStatistic(widget.stackId);
+        if(stackStatistic[0]["fastest_time"] == null)
         {
-          time[0]["fastest_time"] = "99:99:99";
+          stackStatistic[0]["fastest_time"] = "99:99:99";
         }
 
-        final fastestTime = time[0]["fastest_time"];
+        final fastestTime = stackStatistic[0]["fastest_time"];
 
         setState(() {
           print(wasClicked);
@@ -329,7 +338,7 @@ class _CardLearningScreenState extends State<StandardLearningScreen> with Ticker
 
             if(currentDuration.compareTo(fastestDuration) < 0)
             {
-              RestServices(context).updateStackStatistic(widget.stackId, formatTime(), formatTime());
+              RestServices(context).updateStackStatistic(widget.stackId, formatTime(), formatTime(), stackStatistic[0]["pass"]);
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
@@ -343,7 +352,7 @@ class _CardLearningScreenState extends State<StandardLearningScreen> with Ticker
 
             }else
             {
-              RestServices(context).updateStackStatistic(widget.stackId, fastestTime, formatTime());
+              RestServices(context).updateStackStatistic(widget.stackId, fastestTime, formatTime(), stackStatistic[0]["pass"]);
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
@@ -359,7 +368,7 @@ class _CardLearningScreenState extends State<StandardLearningScreen> with Ticker
         });
       }
     } catch (error) {
-      print('Fehler beim Laden der --Daten: $error');
+      print('Fehler beim Laden der Daten: $error');
     }
   }
 
@@ -375,6 +384,7 @@ class _CardLearningScreenState extends State<StandardLearningScreen> with Ticker
 
   @override
   void dispose() {
+    print("dispose standard learning screen");
     loadStack();
     loadCards();
     timer.cancel();

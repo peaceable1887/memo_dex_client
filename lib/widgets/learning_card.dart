@@ -207,11 +207,21 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
             {
               setState(()
               {
-                print("CorrectAnswer: ${card['answered_incorrectly']}");
+                if(answeredCorrectly == false)
+                {
+                  print("IncorrectAnswer: ${card['answered_incorrectly']}");
 
-                fileHandler.editItemById(
-                    "allCards", "card_id", widget.cardIndex,
-                    {"answered_incorrectly": card['answered_incorrectly']+1, "is_updated": 1});
+                  fileHandler.editItemById(
+                      "allCards", "card_id", widget.cardIndex,
+                      {"answered_incorrectly": card['answered_incorrectly']+1, "is_updated": 1});
+                }else
+                {
+                  print("CorrectAnswer: ${card['answered_correctly']}");
+
+                  fileHandler.editItemById(
+                      "allCards", "card_id", widget.cardIndex,
+                      {"answered_correctly": card['answered_correctly']+1, "is_updated": 1});
+                }
 
               });
             }

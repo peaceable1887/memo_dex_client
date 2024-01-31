@@ -117,9 +117,9 @@ class _StackViewGridState extends State<StackViewGrid> {
                 stackName: stack['stackname']
             ));
             //TODO soll nur ausgeführt werden ein Update statt fand
+            print("Update Cards in StackViewGrid");
             await UploadToDatabase(context).allLocalCards(stack['stack_id'], stack['stack_id']);
             await UploadToDatabase(context).updateAllLocalCards(stack['stack_id']);
-            await UploadToDatabase(context).updateLocalStackStatistic(stack['stack_id']);
             await UploadToDatabase(context).updateAllLocalCardStatistic(stack['stack_id']);
           }
 

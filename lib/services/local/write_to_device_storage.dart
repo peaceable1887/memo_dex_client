@@ -38,7 +38,9 @@ class WriteToDeviceStorage
         'color': color,
         'is_deleted': 0,
         'creation_date': DateTime.now().toIso8601String(),
+        'pass': 0,
         'is_updated': 1,
+        "created_locally": 1,
         'user_user_id': userId,
       });
 

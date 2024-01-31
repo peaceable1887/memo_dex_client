@@ -84,7 +84,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
 
       if(isConnected == true)
       {
-        await UploadToDatabase(context).updateAllLocalCards(widget.stackId);
+
       }else{}
 
       Navigator.pushReplacement(

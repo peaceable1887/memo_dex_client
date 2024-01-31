@@ -140,7 +140,8 @@ class RestServices{
         // Erfolgreiche Anfrage
         print("Stack wurde erfolgreich erstellt.");
         return response.body; // Hier wird der Response-Body zurückgegeben
-      } else {
+      } else
+      {
         showDialog(
           context: context,
           builder: (BuildContext context)
@@ -150,7 +151,8 @@ class RestServices{
         );
         throw Exception('Stack konnte nicht erstellt werden.');
       }
-    } else {
+    } else
+    {
       // Handle the case when accessToken is null
       throw Exception('Access Token ist null.');
     }
@@ -319,7 +321,7 @@ class RestServices{
     }else{}
   }
 
-  Future<void> addCard(String question, String answer, int remember, int isDeleted, stackId) async {
+  Future<String> addCard(String question, String answer, int remember, int isDeleted, stackId) async {
 
     String? accessToken = await storage.read(key: 'accessToken');
 
@@ -341,7 +343,8 @@ class RestServices{
       );
 
       if (response.statusCode == 200) {
-        print("Karte wurde erstellt");
+        print("Karte wurde erfolgreich erstellt.");
+        return response.body;
       } else {
         showDialog(
           context: context,
@@ -351,7 +354,11 @@ class RestServices{
         );
         throw Exception('Failed to create stack.');
       }
-    }else{}
+    }else
+    {
+      // Handle the case when accessToken is null
+      throw Exception('Access Token ist null.');
+    }
   }
 
   Future<dynamic> getAllCards() async
@@ -632,7 +639,7 @@ class RestServices{
     }
   }
 
-  Future<void> updateStackStatistic(stackId, fastestTime, lastTime) async {
+  Future<void> updateStackStatistic(stackId, fastestTime, lastTime, pass) async {
 
     String? accessToken = await storage.read(key: 'accessToken');
 
@@ -647,6 +654,7 @@ class RestServices{
           "stack_id": stackId,
           "fastest_time": fastestTime,
           "last_time": lastTime,
+          "pass": pass,
         }),
       );
 
