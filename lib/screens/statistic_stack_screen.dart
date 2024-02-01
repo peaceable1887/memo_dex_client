@@ -67,6 +67,11 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
       loadCardStatistic();
       progressInPercent(widget.noticed, widget.notNoticed);
       _chartData = getChartData(widget.notNoticed);
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (BuildContext context) => BottomNavigationScreen()),
+      );
     });
 
   }
@@ -281,6 +286,7 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
   @override
   void dispose()
   {
+    print("dispose stack statistic screen");
     loadStackStatistcic();
     loadCardStatistic();
     subscription.cancel();

@@ -9,6 +9,7 @@ import '../helperClasses/filters.dart';
 import '../services/local/file_handler.dart';
 import '../services/rest/rest_services.dart';
 import '../widgets/headline.dart';
+import 'bottom_navigation_screen.dart';
 
 class StatisticScreen extends StatefulWidget
 {
@@ -40,6 +41,10 @@ class _StatisticScreenState extends State<StatisticScreen>
     async
     {
       loadStatisticCards();
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (BuildContext context) => BottomNavigationScreen()),
+      );
     });
 
   }
@@ -177,6 +182,7 @@ class _StatisticScreenState extends State<StatisticScreen>
   @override
   void dispose()
   {
+    print("dispose statistic screen");
     subscription.cancel();
     super.dispose();
   }

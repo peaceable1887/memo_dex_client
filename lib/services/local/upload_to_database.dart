@@ -15,9 +15,10 @@ class UploadToDatabase
 
   Future<void> allLocalStackContent() async
   {
+    print("readJsonFromLocalFile");
     String localStacks = await fileHandler.readJsonFromLocalFile("allStacks");
 
-    print("---------Upload all Local Stack Content------------");
+    print("---------Upload all Local Stack Content in der funktion------------");
 
     if (localStacks.isNotEmpty)
     {
@@ -41,6 +42,7 @@ class UploadToDatabase
           if(stack["is_updated"] == 1)
           {
             await updateLocalStackStatistic(stack['stack_id'], stack['stack_id']);
+            await allLocalCards(stack['stack_id'], stack['stack_id']);
 
             stack["is_updated"] = 0;
             print("----------------NEXT STACK------------------");
@@ -65,12 +67,15 @@ class UploadToDatabase
 
       for (var stack in stackFileContent)
       {
-        if (stack['is_updated'] == 1) {
-          RestServices(context).updateStack(stack["stackname"],
+        if (stack['is_updated'] == 1)
+        {
+          await RestServices(context).updateStack(stack["stackname"],
               stack["color"], stack["is_deleted"], stack['stack_id']);
 
           stack['is_updated'] = 0;
+
         }
+
       }
     }else
     {
@@ -82,7 +87,7 @@ class UploadToDatabase
   {
     String localFileContent = await fileHandler.readJsonFromLocalFile("allCards");
 
-    print("---------Upload all Local Cards ------------");
+    print("---------Upload all Local Cards in der funktion ------------");
 
     if (localFileContent.isNotEmpty)
     {
@@ -96,23 +101,28 @@ class UploadToDatabase
         {
           card['stack_stack_id'] = stackId;
 
-          if(card["created_locally"] == 1)
+          if (card['is_updated'] == 1)
           {
-            String responseBody = await RestServices(context).addCard(
-                card['question'], card['answer'], card['remember'],
-                card['is_deleted'], card['stack_stack_id']);
+            if(card["created_locally"] == 1)
+            {
+              print("Karte vor dem Update: ${card}");
+              String responseBody = await RestServices(context).addCard(
+                  card['question'], card['answer'], card['remember'],
+                  card['is_deleted'], card['stack_stack_id']);
 
-            print("Response Body: $responseBody");
+              print("Response Body: $responseBody");
 
-            await RestServices(context).updateCardStatistic(
-                responseBody, card['answered_correctly'],card['answered_incorrectly']);
+              await RestServices(context).updateCardStatistic(
+                  responseBody, card['answered_correctly'],card['answered_incorrectly']);
 
-            card["is_updated"] = 0;
-            print("überarbeitete Upload all Local Cards Karte: ${card}");
+              await fileHandler.editItemById("allCards", "card_id", card['card_id'],  {"is_updated": 0});
+              card["is_updated"] = 0;
+              card["created_locally"] = 0;
+              print("überarbeitete Upload all Local Cards Karte: ${card}");
 
-            print("----------------NEXT CARD------------------");
+              print("----------------NEXT CARD------------------");
+            }
           }
-
         }
       }
     }else
@@ -125,7 +135,7 @@ class UploadToDatabase
   {
     String localFileContent = await fileHandler.readJsonFromLocalFile("allCards");
 
-    print("---------updateAllLocalCards------------");
+    print("---------updateAllLocalCards in der funktion------------");
 
     if (localFileContent.isNotEmpty)
     {
@@ -137,7 +147,7 @@ class UploadToDatabase
         {
           if (card['is_updated'] == 1)
           {
-            RestServices(context).updateCard(
+            await RestServices(context).updateCard(
                 card['question'],
                 card['answer'],
                 card['is_deleted'],
@@ -145,6 +155,9 @@ class UploadToDatabase
                 card['card_id']);
             card['is_updated'] = 0;
              print("überarbeitete updateAllLocalCards Karte: ${card}");
+          }else
+          {
+            print("karte wurde nicht geupdated: ${card}");
           }
         }
       }
@@ -160,7 +173,7 @@ class UploadToDatabase
     {
       String localStacks = await fileHandler.readJsonFromLocalFile("allStacks");
 
-      print("---------updateLocalStackStatistic-----------");
+      print("---------updateLocalStackStatistic in der funktion-----------");
 
       if (localStacks.isNotEmpty)
       {
@@ -207,7 +220,7 @@ class UploadToDatabase
   {
     String localFileContent = await fileHandler.readJsonFromLocalFile("allCards");
 
-    print("---------updateAllLocalCardStatistic------------");
+    print("---------updateAllLocalCardStatistic in der funktion------------");
 
     if (localFileContent.isNotEmpty)
     {

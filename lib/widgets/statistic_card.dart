@@ -69,13 +69,12 @@ class _StatisticCardState extends State<StatisticCard> {
     return chartData;
   }
 
-  //TODO NOCHMAL ANGUCKEN: lösst einen fehler beim menüwechsel (bottom-navigation)
-  /*@override
+
+  @override
   void dispose() {
-    progressInPercent(widget.noticed, widget.notNoticed);
-    _chartData = getChartData(widget.notNoticed);
+    print("dispose statistic card");
     super.dispose();
-  }*/
+  }
 
   @override
   Widget build(BuildContext context) {

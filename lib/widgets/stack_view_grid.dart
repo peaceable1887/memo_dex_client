@@ -87,11 +87,9 @@ class _StackViewGridState extends State<StackViewGrid> {
 
     }else
     {
-      print("wird ausgeführt stack view grid");
 
       await UploadToDatabase(context).allLocalStackContent();
       await UploadToDatabase(context).updateAllLocalStacks();
-      //TODO muss an anderer stelle oder unter einer bestimmten bedinuung ausgeführt werden. Überschreibt sonst die update datas...
       await RestServices(context).getAllStacks();
 
       setState(()
@@ -116,10 +114,12 @@ class _StackViewGridState extends State<StackViewGrid> {
                 iconColor: stack['color'],
                 stackName: stack['stackname']
             ));
-            //TODO soll nur ausgeführt werden ein Update statt fand
-            print("Update Cards in StackViewGrid");
+
+            //Updated alle Karten die Offline erstellt wurden, bei dem der Stack Online erstellt wurde
             await UploadToDatabase(context).allLocalCards(stack['stack_id'], stack['stack_id']);
+
             await UploadToDatabase(context).updateAllLocalCards(stack['stack_id']);
+
             await UploadToDatabase(context).updateAllLocalCardStatistic(stack['stack_id']);
           }
 

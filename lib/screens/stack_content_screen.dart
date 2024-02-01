@@ -90,7 +90,8 @@ class _StackContentScreenState extends State<StackContentScreen> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (BuildContext context) => BottomNavigationScreen()),
-        );
+      );
+
     });
   }
 
