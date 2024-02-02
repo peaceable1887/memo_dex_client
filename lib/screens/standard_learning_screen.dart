@@ -57,8 +57,8 @@ class _CardLearningScreenState extends State<StandardLearningScreen> with Ticker
       bool isConnected = (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi);
       if(isConnected == true)
       {
-        await UploadToDatabase(context).updateAllLocalCards(widget.stackId);
-        await UploadToDatabase(context).updateAllLocalCardStatistic(widget.stackId);
+        await UploadToDatabase(context).updateLocalCardContent(widget.stackId);
+        await UploadToDatabase(context).updateLocalCardStatistic(widget.stackId);
 
       }else{}
       Navigator.pushReplacement(
@@ -196,7 +196,7 @@ class _CardLearningScreenState extends State<StandardLearningScreen> with Ticker
         }
       }else
       {
-        await UploadToDatabase(context).allLocalCards(widget.stackId, widget.stackId);
+        await UploadToDatabase(context).createLocalCardContent(widget.stackId, widget.stackId);
         await ApiClient(context).cardApi.getAllCards();
 
         String fileContent = await fileHandler.readJsonFromLocalFile("allCards");

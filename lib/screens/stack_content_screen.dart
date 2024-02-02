@@ -178,7 +178,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
       }else
       {
         print("wird ausgeführt loadStacks (stack_content)");
-        await UploadToDatabase(context).allLocalStackContent();
+        await UploadToDatabase(context).createLocalStackContent();
         await ApiClient(context).stackApi.getAllStacks();
 
         String fileContent = await fileHandler.readJsonFromLocalFile("allStacks");

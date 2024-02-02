@@ -106,7 +106,6 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
     });
   }
 
-  //TODO wenn Karte als memorized oder unmemorized markiert wird, wird der wert nicht übernommen bzw gespeichert
   void cardNotedOffline()
   {
     setState(()
@@ -176,7 +175,7 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
       }
     });
   }
-  //TODO Daten werden nicht erfasst wenn der Stack komplett offline erstellt wurde
+
   Future<void> sendAnswer(answeredCorrectly)
   async
   {

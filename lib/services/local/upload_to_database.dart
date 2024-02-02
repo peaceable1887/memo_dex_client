@@ -13,7 +13,7 @@ class UploadToDatabase
 
   UploadToDatabase(this.context);
 
-  Future<void> allLocalStackContent() async
+  Future<void> createLocalStackContent() async
   {
     String localStacks = await fileHandler.readJsonFromLocalFile("allStacks");
 
@@ -34,7 +34,7 @@ class UploadToDatabase
           print("Response Body: $responseBody");
 
           await updateLocalStackStatistic(responseBody, stack['stack_id']);
-          await allLocalCards(responseBody, stack['stack_id']);
+          await createLocalCardContent(responseBody, stack['stack_id']);
 
           stack["is_updated"] = 0;
           print("----------------NEXT STACK------------------");
@@ -43,7 +43,7 @@ class UploadToDatabase
           if(stack["is_updated"] == 1)
           {
             await updateLocalStackStatistic(stack['stack_id'], stack['stack_id']);
-            await allLocalCards(stack['stack_id'], stack['stack_id']);
+            await createLocalCardContent(stack['stack_id'], stack['stack_id']);
 
             stack["is_updated"] = 0;
             print("----------------NEXT STACK------------------");
@@ -57,7 +57,7 @@ class UploadToDatabase
     }
   }
 
-  Future<void> updateAllLocalStacks() async
+  Future<void> updateLocalStackContent() async
   {
     String fileContent = await fileHandler.readJsonFromLocalFile("allStacks");
 
@@ -82,7 +82,7 @@ class UploadToDatabase
     }
   }
 
-  Future<void> allLocalCards(stackId, localId) async
+  Future<void> createLocalCardContent(stackId, localId) async
   {
     String localFileContent = await fileHandler.readJsonFromLocalFile("allCards");
 
@@ -132,7 +132,7 @@ class UploadToDatabase
     }
   }
 
-  Future<void> updateAllLocalCards(stackId) async
+  Future<void> updateLocalCardContent(stackId) async
   {
     String localFileContent = await fileHandler.readJsonFromLocalFile("allCards");
 
@@ -216,7 +216,7 @@ class UploadToDatabase
 
   }
 
-  Future<void> updateAllLocalCardStatistic(stackId) async
+  Future<void> updateLocalCardStatistic(stackId) async
   {
     String localFileContent = await fileHandler.readJsonFromLocalFile("allCards");
 

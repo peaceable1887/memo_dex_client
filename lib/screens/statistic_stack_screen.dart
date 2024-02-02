@@ -5,6 +5,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:memo_dex_prototyp/models/stack_statistic_data.dart';
 import 'package:memo_dex_prototyp/services/api/api_client.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import '../utils/trim_text.dart';
@@ -29,7 +30,8 @@ class StatisticStackScreen extends StatefulWidget {
 
 class _StatisticStackScreenState extends State<StatisticStackScreen>
 {
-  late List<GDPData> _chartData;
+  late List<StackStatisticData> _stackStatisticData;
+
   List<Map<String, dynamic>> combinedData = [
     {
       'question': 'no question',
@@ -61,7 +63,7 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
     loadCardStatistic();
     checkInternetConnection();
     progressInPercent(widget.noticed, widget.notNoticed);
-    _chartData = getChartData(widget.notNoticed);
+    _stackStatisticData = getStackStatisticData(widget.notNoticed);
     subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result)
     async
     {
@@ -254,7 +256,7 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
     });
   }
 
-  List<GDPData> getChartData(notNoticed)
+  List<StackStatisticData> getStackStatisticData(notNoticed)
   {
     if(notNoticed == 0 && widget.noticed == 0)
     {
@@ -269,12 +271,12 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
       (originalColor.blue * 0.7).round(),
     );
 
-    final List<GDPData> chartData = [
-      GDPData("Noticed", widget.noticed, originalColor),
-      GDPData("Noticed", notNoticed, darkerColor),
+    final List<StackStatisticData> statisticData = [
+      StackStatisticData("Noticed", widget.noticed, originalColor),
+      StackStatisticData("Noticed", notNoticed, darkerColor),
     ];
 
-    return chartData;
+    return statisticData;
   }
 
   String calculateDifference(String timeStringOne, String timeStringTwo) {
@@ -443,12 +445,12 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
                               ),
                             ],
                             series: <CircularSeries>[
-                              DoughnutSeries<GDPData, String>(
+                              DoughnutSeries<StackStatisticData, String>(
                                 radius: "70",
-                                dataSource: _chartData,
-                                pointColorMapper:(GDPData data,  _) => data.color,
-                                xValueMapper: (GDPData data, _) => data.continent,
-                                yValueMapper: (GDPData data, _) => data.gdp,
+                                dataSource: _stackStatisticData,
+                                pointColorMapper:(StackStatisticData data,  _) => data.color,
+                                xValueMapper: (StackStatisticData data, _) => data.stackName,
+                                yValueMapper: (StackStatisticData data, _) => data.memorized,
                                 innerRadius: '65%',
                               )
                             ],
@@ -1010,13 +1012,5 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
       ),
     );
   }
-}
-
-//TODO noch richtig benennen
-class GDPData{
-  GDPData(this.continent, this.gdp, this.color);
-  final String continent;
-  final int gdp;
-  final Color color;
 }
 

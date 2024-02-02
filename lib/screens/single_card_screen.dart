@@ -120,7 +120,7 @@ class _SingleCardScreenState extends State<SingleCardScreen> {
         }
       }else
       {
-        await UploadToDatabase(context).allLocalStackContent();
+        await UploadToDatabase(context).createLocalStackContent();
         await ApiClient(context).stackApi.getStack(widget.stackId);
 
         String fileContent = await fileHandler.readJsonFromLocalFile("allStacks");
@@ -198,7 +198,7 @@ class _SingleCardScreenState extends State<SingleCardScreen> {
         }
       }else
       {
-        await UploadToDatabase(context).allLocalCards(widget.stackId, widget.stackId);
+        await UploadToDatabase(context).createLocalCardContent(widget.stackId, widget.stackId);
         await ApiClient(context).cardApi.getAllCards();
 
         String fileContent = await fileHandler.readJsonFromLocalFile("allCards");

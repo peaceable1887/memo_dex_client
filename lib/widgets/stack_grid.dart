@@ -10,17 +10,17 @@ import 'package:memo_dex_prototyp/widgets/buttons/stack_btn.dart';
 import '../utils/filters.dart';
 import '../services/local/file_handler.dart';
 
-class StackViewGrid extends StatefulWidget {
+class StackGrid extends StatefulWidget {
   final String? selectedOption;
   final bool? sortValue;
 
-  StackViewGrid({Key? key, this.selectedOption, this.sortValue}) : super(key: key);
+  StackGrid({Key? key, this.selectedOption, this.sortValue}) : super(key: key);
 
   @override
-  State<StackViewGrid> createState() => _StackViewGridState();
+  State<StackGrid> createState() => _StackViewGridState();
 }
 
-class _StackViewGridState extends State<StackViewGrid> {
+class _StackViewGridState extends State<StackGrid> {
   List<Widget> stackButtons = [];
   FileHandler fileHandler = FileHandler();
   final filter = Filters();
@@ -40,7 +40,7 @@ class _StackViewGridState extends State<StackViewGrid> {
   }
 
   @override
-  void didUpdateWidget(covariant StackViewGrid oldWidget)
+  void didUpdateWidget(covariant StackGrid oldWidget)
   {
     if (oldWidget.selectedOption != widget.selectedOption || oldWidget.sortValue != widget.sortValue) {
       loadStacks(widget.selectedOption, widget.sortValue);
@@ -87,8 +87,8 @@ class _StackViewGridState extends State<StackViewGrid> {
 
     }else
     {
-      await UploadToDatabase(context).allLocalStackContent();
-      await UploadToDatabase(context).updateAllLocalStacks();
+      await UploadToDatabase(context).createLocalStackContent();
+      await UploadToDatabase(context).updateLocalStackContent();
       await ApiClient(context).stackApi.getAllStacks();
 
       setState(()
@@ -116,11 +116,11 @@ class _StackViewGridState extends State<StackViewGrid> {
 
             //Updated alle Karten die Offline erstellt wurden, bei dem der Stack Online erstellt wurde
             //kann eventuell raus
-            await UploadToDatabase(context).allLocalCards(stack['stack_id'], stack['stack_id']);
+            await UploadToDatabase(context).createLocalCardContent(stack['stack_id'], stack['stack_id']);
 
-            await UploadToDatabase(context).updateAllLocalCards(stack['stack_id']);
+            await UploadToDatabase(context).updateLocalCardContent(stack['stack_id']);
 
-            await UploadToDatabase(context).updateAllLocalCardStatistic(stack['stack_id']);
+            await UploadToDatabase(context).updateLocalCardStatistic(stack['stack_id']);
           }
 
         }

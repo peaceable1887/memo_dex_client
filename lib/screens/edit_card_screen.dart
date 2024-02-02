@@ -58,7 +58,7 @@ class _EditCardScreenState extends State<EditCardScreen> {
       bool isConnected = (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi);
       if(isConnected == true)
       {
-        await UploadToDatabase(context).updateAllLocalCards(widget.stackId);
+        await UploadToDatabase(context).updateLocalCardContent(widget.stackId);
       }else{}
       Navigator.pushReplacement(
         context,

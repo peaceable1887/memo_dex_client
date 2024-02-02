@@ -47,7 +47,8 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   @override
-  void dispose() {
+  void dispose()
+  {
     showSnackbarInformation();
     super.dispose();
   }
@@ -232,7 +233,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               Flexible(
-                child: StackViewGrid(selectedOption: selectedOption, sortValue: asc,),
+                child: StackGrid(selectedOption: selectedOption, sortValue: asc,),
               ),
             ],
           ),

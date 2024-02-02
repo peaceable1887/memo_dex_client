@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:memo_dex_prototyp/models/stack_statistic_data.dart';
 import 'package:memo_dex_prototyp/utils/trim_text.dart';
 import 'package:memo_dex_prototyp/screens/statistic_stack_screen.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -20,7 +21,7 @@ class StatisticCard extends StatefulWidget {
 
 class _StatisticCardState extends State<StatisticCard> {
 
-  late List<StackData> _stackData;
+  late List<StackStatisticData> _stackData;
   late double progressValue;
 
   @override
@@ -53,7 +54,7 @@ class _StatisticCardState extends State<StatisticCard> {
     });
   }
 
-  List<StackData> getStackData(notNoticed)
+  List<StackStatisticData> getStackData(notNoticed)
   {
 
     if(notNoticed == 0 && widget.noticed == 0)
@@ -61,9 +62,9 @@ class _StatisticCardState extends State<StatisticCard> {
       notNoticed = 1;
     }
 
-    final List<StackData> stackData = [
-      StackData("Noticed", widget.noticed, Colors.white),
-      StackData("Noticed", notNoticed, Color(0xFFD1D1D1)),
+    final List<StackStatisticData> stackData = [
+      StackStatisticData("Noticed", widget.noticed, Colors.white),
+      StackStatisticData("Noticed", notNoticed, Color(0xFFD1D1D1)),
     ];
 
     return stackData;
@@ -155,12 +156,12 @@ class _StatisticCardState extends State<StatisticCard> {
                           ),
                         ],
                         series: <CircularSeries>[
-                          DoughnutSeries<StackData, String>(
+                          DoughnutSeries<StackStatisticData, String>(
                               radius: "48",
                               dataSource: _stackData,
-                              pointColorMapper:(StackData data,  _) => data.color,
-                              xValueMapper: (StackData data, _) => data.stackName,
-                              yValueMapper: (StackData data, _) => data.memorized,
+                              pointColorMapper:(StackStatisticData data,  _) => data.color,
+                              xValueMapper: (StackStatisticData data, _) => data.stackName,
+                              yValueMapper: (StackStatisticData data, _) => data.memorized,
                               innerRadius: '69%',
                               animationDuration: 0,
                           )
@@ -208,12 +209,4 @@ class _StatisticCardState extends State<StatisticCard> {
       ),
     );
   }
-}
-
-class StackData
-{
-  StackData(this.stackName, this.memorized, this.color);
-  final String stackName;
-  final int memorized;
-  final Color color;
 }

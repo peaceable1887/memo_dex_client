@@ -49,7 +49,7 @@ class _CardLearningScreenState extends State<IndividualLearningScreen> with Tick
       bool isConnected = (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi);
       if(isConnected == true)
       {
-        await UploadToDatabase(context).updateAllLocalCards(widget.stackId);
+        await UploadToDatabase(context).updateLocalCardContent(widget.stackId);
       }else{}
       Navigator.pushReplacement(
         context,
@@ -169,7 +169,7 @@ class _CardLearningScreenState extends State<IndividualLearningScreen> with Tick
         }
       }else
       {
-        await UploadToDatabase(context).allLocalCards(widget.stackId, widget.stackId);
+        await UploadToDatabase(context).createLocalCardContent(widget.stackId, widget.stackId);
         await ApiClient(context).cardApi.getAllCards();
 
         String fileContent = await fileHandler.readJsonFromLocalFile("allCards");
