@@ -8,7 +8,7 @@ import 'package:carousel_slider/carousel_slider.dart'; // https://pub.dev/packag
 
 import '../services/local/file_handler.dart';
 import '../services/local/upload_to_database.dart';
-import '../services/rest/rest_services.dart';
+import '../services/api/rest_services.dart';
 import '../widgets/headline.dart';
 import '../widgets/learning_card.dart';
 import '../widgets/top_navigation_bar.dart';

@@ -40,7 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
         "A stack was successfully created.",
         Colors.green,
         Duration(milliseconds: 500),
-        Duration(milliseconds: 1500)
+        Duration(milliseconds: 1500),
       );
       await storage.write(key: 'stackCreated', value: "false");
     }

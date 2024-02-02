@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../helperClasses/trim_text.dart';
+import '../utils/trim_text.dart';
 
 class Headline extends StatefulWidget {
 

@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:memo_dex_prototyp/helperClasses/generator.dart';
+import 'package:memo_dex_prototyp/utils/generator.dart';
 import 'package:path_provider/path_provider.dart';
 
 class WriteToDeviceStorage

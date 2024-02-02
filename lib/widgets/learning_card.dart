@@ -5,7 +5,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 
 import '../services/local/file_handler.dart';
-import '../services/rest/rest_services.dart';
+import '../services/api/rest_services.dart';
 import 'components/custom_snackbar.dart';
 
 class LearningCard extends StatefulWidget {

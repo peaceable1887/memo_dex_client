@@ -2,8 +2,13 @@ import 'package:flutter/material.dart';
 
 class CustomSnackbar {
 
-  static void showSnackbar(BuildContext context, IconData iconType, String message, Color backgroundColor, Duration delay, Duration duration) {
-    Future.delayed(delay, () {
+  static void showSnackbar(
+      BuildContext context, IconData iconType, String message,
+      Color backgroundColor, Duration delay, Duration duration)
+  {
+
+    Future.delayed(delay, ()
+    {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           elevation: 0.0,

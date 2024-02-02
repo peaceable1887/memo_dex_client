@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:memo_dex_prototyp/helperClasses/trim_text.dart';
+import 'package:memo_dex_prototyp/utils/trim_text.dart';
 import 'package:memo_dex_prototyp/screens/statistic_stack_screen.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
@@ -20,14 +20,14 @@ class StatisticCard extends StatefulWidget {
 
 class _StatisticCardState extends State<StatisticCard> {
 
-  late List<GDPData> _chartData;
+  late List<StackData> _stackData;
   late double progressValue;
 
   @override
   void initState() {
     super.initState();
     progressInPercent(widget.noticed, widget.notNoticed);
-    _chartData = getChartData(widget.notNoticed);
+    _stackData = getStackData(widget.notNoticed);
   }
 
   @override
@@ -37,7 +37,7 @@ class _StatisticCardState extends State<StatisticCard> {
     // Überprüfe, ob die Daten geändert wurden, bevor du sie aktualisierst
     if (widget.noticed != oldWidget.noticed || widget.notNoticed != oldWidget.notNoticed) {
       progressInPercent(widget.noticed, widget.notNoticed);
-      _chartData = getChartData(widget.notNoticed);
+      _stackData = getStackData(widget.notNoticed);
     }
   }
 
@@ -53,7 +53,7 @@ class _StatisticCardState extends State<StatisticCard> {
     });
   }
 
-  List<GDPData> getChartData(notNoticed)
+  List<StackData> getStackData(notNoticed)
   {
 
     if(notNoticed == 0 && widget.noticed == 0)
@@ -61,12 +61,12 @@ class _StatisticCardState extends State<StatisticCard> {
       notNoticed = 1;
     }
 
-    final List<GDPData> chartData = [
-      GDPData("Noticed", widget.noticed, Colors.white),
-      GDPData("Noticed", notNoticed, Color(0xFFD1D1D1)),
+    final List<StackData> stackData = [
+      StackData("Noticed", widget.noticed, Colors.white),
+      StackData("Noticed", notNoticed, Color(0xFFD1D1D1)),
     ];
 
-    return chartData;
+    return stackData;
   }
 
 
@@ -155,12 +155,12 @@ class _StatisticCardState extends State<StatisticCard> {
                           ),
                         ],
                         series: <CircularSeries>[
-                          DoughnutSeries<GDPData, String>(
+                          DoughnutSeries<StackData, String>(
                               radius: "48",
-                              dataSource: _chartData,
-                              pointColorMapper:(GDPData data,  _) => data.color,
-                              xValueMapper: (GDPData data, _) => data.continent,
-                              yValueMapper: (GDPData data, _) => data.gdp,
+                              dataSource: _stackData,
+                              pointColorMapper:(StackData data,  _) => data.color,
+                              xValueMapper: (StackData data, _) => data.stackName,
+                              yValueMapper: (StackData data, _) => data.memorized,
                               innerRadius: '69%',
                               animationDuration: 0,
                           )
@@ -210,9 +210,10 @@ class _StatisticCardState extends State<StatisticCard> {
   }
 }
 
-class GDPData{
-  GDPData(this.continent, this.gdp, this.color);
-  final String continent;
-  final int gdp;
+class StackData
+{
+  StackData(this.stackName, this.memorized, this.color);
+  final String stackName;
+  final int memorized;
   final Color color;
 }

@@ -5,9 +5,9 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:memo_dex_prototyp/widgets/statistic_card.dart';
-import '../helperClasses/filters.dart';
+import '../utils/filters.dart';
 import '../services/local/file_handler.dart';
-import '../services/rest/rest_services.dart';
+import '../services/api/rest_services.dart';
 import '../widgets/headline.dart';
 import 'bottom_navigation_screen.dart';
 
@@ -40,7 +40,6 @@ class _StatisticScreenState extends State<StatisticScreen>
     subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result)
     async
     {
-      loadStatisticCards();
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (BuildContext context) => BottomNavigationScreen()),

@@ -7,8 +7,9 @@ class StackContentBtn extends StatefulWidget {
   final String btnText;
   final Widget onPressed;
   final IconData icon;
+  final bool isDeactivated;
 
-  const StackContentBtn({Key? key, required this.iconColor, required this.btnText, required this.backgroundColor, required this.onPressed, required this.icon}) : super(key: key);
+  const StackContentBtn({Key? key, required this.iconColor, required this.btnText, required this.backgroundColor, required this.onPressed, required this.icon, required this.isDeactivated}) : super(key: key);
 
   @override
   State<StackContentBtn> createState() => _StackContentBtnState();
@@ -19,7 +20,7 @@ class _StackContentBtnState extends State<StackContentBtn> {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: () {
+      onPressed: widget.isDeactivated ? null : () {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(

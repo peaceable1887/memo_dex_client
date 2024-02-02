@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:memo_dex_prototyp/services/rest/rest_services.dart';
+import 'package:memo_dex_prototyp/services/api/rest_services.dart';
 
 import 'file_handler.dart';
 
@@ -15,7 +15,6 @@ class UploadToDatabase
 
   Future<void> allLocalStackContent() async
   {
-    print("readJsonFromLocalFile");
     String localStacks = await fileHandler.readJsonFromLocalFile("allStacks");
 
     print("---------Upload all Local Stack Content in der funktion------------");
@@ -32,6 +31,7 @@ class UploadToDatabase
               stack['stackname'], stack['color'], stack['is_deleted']);
 
           print("Response Body: $responseBody");
+
           await updateLocalStackStatistic(responseBody, stack['stack_id']);
           await allLocalCards(responseBody, stack['stack_id']);
 
@@ -73,9 +73,7 @@ class UploadToDatabase
               stack["color"], stack["is_deleted"], stack['stack_id']);
 
           stack['is_updated'] = 0;
-
         }
-
       }
     }else
     {
@@ -105,7 +103,6 @@ class UploadToDatabase
           {
             if(card["created_locally"] == 1)
             {
-              print("Karte vor dem Update: ${card}");
               String responseBody = await RestServices(context).addCard(
                   card['question'], card['answer'], card['remember'],
                   card['is_deleted'], card['stack_stack_id']);
@@ -115,9 +112,12 @@ class UploadToDatabase
               await RestServices(context).updateCardStatistic(
                   responseBody, card['answered_correctly'],card['answered_incorrectly']);
 
-              await fileHandler.editItemById("allCards", "card_id", card['card_id'],  {"is_updated": 0});
+              await fileHandler.editItemById("allCards", "card_id", card['card_id'], {"is_updated": 0});
+
+              //kann eventuell raus...
               card["is_updated"] = 0;
               card["created_locally"] = 0;
+
               print("überarbeitete Upload all Local Cards Karte: ${card}");
 
               print("----------------NEXT CARD------------------");
@@ -153,11 +153,10 @@ class UploadToDatabase
                 card['is_deleted'],
                 card['remember'],
                 card['card_id']);
+
             card['is_updated'] = 0;
+
              print("überarbeitete updateAllLocalCards Karte: ${card}");
-          }else
-          {
-            print("karte wurde nicht geupdated: ${card}");
           }
         }
       }

@@ -7,7 +7,7 @@ import 'package:memo_dex_prototyp/screens/stack_content_screen.dart';
 import 'package:memo_dex_prototyp/services/local/write_to_device_storage.dart';
 
 import '../services/local/file_handler.dart';
-import '../services/rest/rest_services.dart';
+import '../services/api/rest_services.dart';
 import '../widgets/headline.dart';
 import '../widgets/top_navigation_bar.dart';
 import 'bottom_navigation_screen.dart';

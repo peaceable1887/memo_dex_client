@@ -7,7 +7,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:memo_dex_prototyp/screens/stack_content_screen.dart';
 import '../services/local/file_handler.dart';
 import '../services/local/upload_to_database.dart';
-import '../services/rest/rest_services.dart';
+import '../services/api/rest_services.dart';
 
 class EditStackForm extends StatefulWidget {
 

@@ -8,7 +8,7 @@ import 'package:memo_dex_prototyp/screens/stack_content_screen.dart';
 
 import '../services/local/file_handler.dart';
 import '../services/local/upload_to_database.dart';
-import '../services/rest/rest_services.dart';
+import '../services/api/rest_services.dart';
 import '../widgets/delete_message_box.dart';
 import '../widgets/headline.dart';
 import '../widgets/top_navigation_bar.dart';
@@ -381,7 +381,7 @@ class _EditCardScreenState extends State<EditCardScreen> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 25, 0, 25),
+                    padding: online ? const EdgeInsets.fromLTRB(0, 25, 0, 25) : const EdgeInsets.fromLTRB(0, 25, 0, 70) ,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Color(int.parse("0xFFE59113")),

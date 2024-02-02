@@ -7,7 +7,7 @@ import '../screens/bottom_navigation_screen.dart';
 import '../services/local/file_handler.dart';
 import '../services/local/upload_to_database.dart';
 import '../services/local/write_to_device_storage.dart';
-import '../services/rest/rest_services.dart';
+import '../services/api/rest_services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class CreateStackForm extends StatefulWidget {

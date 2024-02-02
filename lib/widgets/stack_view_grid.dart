@@ -3,11 +3,13 @@ import 'dart:convert';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:memo_dex_prototyp/services/api/api_client.dart';
+import 'package:memo_dex_prototyp/services/api/endpoints/stack_api.dart';
 import 'package:memo_dex_prototyp/services/local/upload_to_database.dart';
-import 'package:memo_dex_prototyp/services/rest/rest_services.dart';
+import 'package:memo_dex_prototyp/services/api/rest_services.dart';
 import 'package:memo_dex_prototyp/widgets/create_stack_btn.dart';
 import 'package:memo_dex_prototyp/widgets/stack_btn.dart';
-import '../helperClasses/filters.dart';
+import '../utils/filters.dart';
 import '../services/local/file_handler.dart';
 
 class StackViewGrid extends StatefulWidget {
@@ -87,10 +89,10 @@ class _StackViewGridState extends State<StackViewGrid> {
 
     }else
     {
-
       await UploadToDatabase(context).allLocalStackContent();
       await UploadToDatabase(context).updateAllLocalStacks();
-      await RestServices(context).getAllStacks();
+      //await RestServices(context).getAllStacks();
+      await ApiClient(context).stackApi.getAllStacks();
 
       setState(()
       {
@@ -116,6 +118,7 @@ class _StackViewGridState extends State<StackViewGrid> {
             ));
 
             //Updated alle Karten die Offline erstellt wurden, bei dem der Stack Online erstellt wurde
+            //kann eventuell raus
             await UploadToDatabase(context).allLocalCards(stack['stack_id'], stack['stack_id']);
 
             await UploadToDatabase(context).updateAllLocalCards(stack['stack_id']);

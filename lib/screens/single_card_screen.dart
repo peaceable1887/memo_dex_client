@@ -9,7 +9,7 @@ import 'package:memo_dex_prototyp/screens/stack_content_screen.dart';
 
 import '../services/local/file_handler.dart';
 import '../services/local/upload_to_database.dart';
-import '../services/rest/rest_services.dart';
+import '../services/api/rest_services.dart';
 import '../widgets/components/custom_snackbar.dart';
 import '../widgets/headline.dart';
 import '../widgets/learning_card.dart';

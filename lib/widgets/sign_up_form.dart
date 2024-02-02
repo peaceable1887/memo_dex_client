@@ -4,9 +4,9 @@ import 'package:memo_dex_prototyp/screens/login_screen.dart';
 import 'package:memo_dex_prototyp/widgets/components/validation_message_box.dart';
 
 import '../screens/welcome_screen.dart';
-import '../services/rest/rest_services.dart';
+import '../services/api/rest_services.dart';
 import 'button.dart';
-import '../helperClasses/divide_painter.dart';
+import '../utils/divide_painter.dart';
 
 class SignUpForm extends StatefulWidget {
   const SignUpForm({Key? key}) : super(key: key);

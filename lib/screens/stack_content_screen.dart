@@ -9,12 +9,11 @@ import 'package:memo_dex_prototyp/screens/bottom_navigation_screen.dart';
 import 'package:memo_dex_prototyp/screens/standard_learning_screen.dart';
 import 'package:memo_dex_prototyp/screens/edit_stack_screen.dart';
 import 'package:memo_dex_prototyp/services/local/upload_to_database.dart';
-import 'package:memo_dex_prototyp/services/rest/rest_services.dart';
+import 'package:memo_dex_prototyp/services/api/rest_services.dart';
 import 'package:memo_dex_prototyp/widgets/stack_content_btn.dart';
-import '../helperClasses/filters.dart';
+import '../utils/filters.dart';
 import '../services/local/file_handler.dart';
 import '../widgets/card_btn.dart';
-
 import '../widgets/components/custom_snackbar.dart';
 import '../widgets/headline.dart';
 import '../widgets/top_navigation_bar.dart';
@@ -46,8 +45,10 @@ class _StackContentScreenState extends State<StackContentScreen> {
   bool showLoadingCircular = true;
   late StreamSubscription subscription;
   bool switchOnlineStatus = false;
+  bool deactivateBtn = false;
+  bool snackbarIsDisplayed = false;
 
-  List<Widget> showButtons()
+  List<Widget> showButtons(bool isDeactivated)
   {
     List<Widget> startLearningButtons = [
       StackContentBtn(
@@ -56,6 +57,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
         backgroundColor: "34A853",
         onPressed: StandardLearningScreen(stackId: widget.stackId, isMixed: isMixed),
         icon: Icons.star_border_rounded,
+        isDeactivated: isDeactivated,
       ),
       StackContentBtn(
         iconColor: "FFFFFF",
@@ -63,6 +65,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
         backgroundColor: "E57435",
         onPressed: IndividualLearningScreen(stackId: widget.stackId, isMixed: isMixed),
         icon: Icons.my_library_books_rounded,
+        isDeactivated: isDeactivated,
       )
     ];
 
@@ -76,22 +79,29 @@ class _StackContentScreenState extends State<StackContentScreen> {
     showSnackbarInformation();
     loadStack();
     loadCards();
+    checkInternetConnection();
     subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result)
     async
     {
-      ConnectivityResult connectivityResult = await Connectivity().checkConnectivity();
-      bool isConnected = (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi);
-
-      if(isConnected == true)
-      {
-
-      }else{}
-
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (BuildContext context) => BottomNavigationScreen()),
       );
 
+    });
+  }
+
+  Future<void> checkInternetConnection() async
+  {
+    ConnectivityResult connectivityResult = await Connectivity().checkConnectivity();
+    bool isConnected = (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi);
+
+    setState(() {
+      if (!isConnected) {
+        snackbarIsDisplayed = true;
+      } else {
+        snackbarIsDisplayed = false;
+      }
     });
   }
 
@@ -204,23 +214,19 @@ class _StackContentScreenState extends State<StackContentScreen> {
 
   Future<void> loadCards() async
   {
-    print("loadCards() wird ausgeführt");
     try
     {
       ConnectivityResult connectivityResult = await Connectivity().checkConnectivity();
       bool isConnected = (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi);
 
-      print("loadCards() wird ausgeführt 2");
       if(isConnected == false)
       {
-        print("loadCards() wird ausgeführt 3");
         setState(()
         {
           showLoadingCircular = false;
         });
 
         String localCardContent = await fileHandler.readJsonFromLocalFile("allCards");
-        print("LOCAL CONTENT: $localCardContent");
 
         if (localCardContent.isNotEmpty)
         {
@@ -271,14 +277,23 @@ class _StackContentScreenState extends State<StackContentScreen> {
                 cards.add(CardBtn(btnText: card["question"], stackId: widget.stackId, cardId: card["card_id"],isNoticed: card["remember"]));
                 showText = false;
               }
-            }
+            }/*else
+            {
+              print("ich gehe hier rein");
+              print(deactivateBtn);
+              setState(()
+              {
+                deactivateBtn = true;
+              });
+              print(deactivateBtn);
+            }*/
           }
           // Widget wird aktualisiert nach dem Laden der Daten.
           if (mounted)
           {
             setState(() {});
           }
-        }else{}
+        }
       }
     }catch(error)
     {
@@ -460,9 +475,9 @@ class _StackContentScreenState extends State<StackContentScreen> {
                     (MediaQuery.of(context).size.height / 2.3),
               ),
               itemBuilder: (context, index) {
-                return showButtons()[index];
+                return showButtons(deactivateBtn)[index];
               },
-              itemCount: showButtons().length,
+              itemCount: showButtons(deactivateBtn).length,
             ),
           ),
           Padding(
@@ -674,7 +689,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
           ) :
           Expanded(
             child: ListView.builder(
-              padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
+              padding: snackbarIsDisplayed ? EdgeInsets.fromLTRB(20, 20, 20, 60) : EdgeInsets.fromLTRB(20, 20, 20, 20),
               itemCount: cards.length,
               itemBuilder: (context, index) {
                 return cards[index];

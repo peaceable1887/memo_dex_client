@@ -9,7 +9,7 @@ import 'package:carousel_slider/carousel_slider.dart'; // https://pub.dev/packag
 
 import '../services/local/file_handler.dart';
 import '../services/local/upload_to_database.dart';
-import '../services/rest/rest_services.dart';
+import '../services/api/rest_services.dart';
 import '../widgets/components/custom_snackbar.dart';
 import '../widgets/components/message_box.dart';
 import '../widgets/headline.dart';

@@ -8,7 +8,7 @@ import 'package:memo_dex_prototyp/widgets/top_navigation_bar.dart';
 
 import '../widgets/button.dart';
 import '../widgets/components/custom_snackbar.dart';
-import '../helperClasses/divide_painter.dart';
+import '../utils/divide_painter.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);

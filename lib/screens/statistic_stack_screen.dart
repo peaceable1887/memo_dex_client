@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import '../helperClasses/trim_text.dart';
+import '../utils/trim_text.dart';
 import '../services/local/file_handler.dart';
-import '../services/rest/rest_services.dart';
+import '../services/api/rest_services.dart';
 import '../widgets/headline.dart';
 import '../widgets/top_navigation_bar.dart';
 import 'bottom_navigation_screen.dart';
@@ -51,6 +51,7 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
   FileHandler fileHandler = FileHandler();
   bool showLoadingCircular = true;
   late StreamSubscription subscription;
+  bool snackbarIsDisplayed = false;
 
   @override
   void initState ()
@@ -58,22 +59,32 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
     super.initState();
     loadStackStatistcic();
     loadCardStatistic();
+    checkInternetConnection();
     progressInPercent(widget.noticed, widget.notNoticed);
     _chartData = getChartData(widget.notNoticed);
     subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result)
     async
     {
-      loadStackStatistcic();
-      loadCardStatistic();
-      progressInPercent(widget.noticed, widget.notNoticed);
-      _chartData = getChartData(widget.notNoticed);
-
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (BuildContext context) => BottomNavigationScreen()),
       );
     });
 
+  }
+
+  Future<void> checkInternetConnection() async
+  {
+    ConnectivityResult connectivityResult = await Connectivity().checkConnectivity();
+    bool isConnected = (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi);
+
+    setState(() {
+      if (!isConnected) {
+        snackbarIsDisplayed = true;
+      } else {
+        snackbarIsDisplayed = false;
+      }
+    });
   }
 
   Future<void> loadStackStatistcic() async
@@ -100,7 +111,8 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
           {
             if (stack["stack_id"] == widget.stackId)
             {
-              setState(() {
+              setState(()
+              {
                 if (stack["fastest_time"] != null || stack["last_time"] != null)
                 {
                   fastestRun = stack["fastest_time"] ?? "00:00:00";
@@ -177,19 +189,21 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
         {
           List<dynamic> cardFileContent = jsonDecode(fileContent);
 
-          for (var card in cardFileContent)
+          setState(()
           {
-
-            if(card['stack_stack_id'] == widget.stackId)
+            for (var card in cardFileContent)
             {
-              String question = card["question"];
-              int answeredIncorrectly = card['answered_incorrectly'];
+              if(card['stack_stack_id'] == widget.stackId)
+              {
+                String question = card["question"];
+                int answeredIncorrectly = card['answered_incorrectly'];
 
-              combinedData.add({'question': question, 'answered_incorrectly': answeredIncorrectly,});
+                combinedData.add({'question': question, 'answered_incorrectly': answeredIncorrectly,});
+              }
             }
-          }
+            combinedData.sort((a, b) => b['answered_incorrectly'].compareTo(a['answered_incorrectly']));
+          });
 
-          combinedData.sort((a, b) => b['answered_incorrectly'].compareTo(a['answered_incorrectly']));
         }
       }else
       {
@@ -206,19 +220,20 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
         {
           List<dynamic> cardFileContent = jsonDecode(fileContent);
 
-          for (var card in cardFileContent)
+          setState(()
           {
-
-            if(card['stack_stack_id'] == widget.stackId)
+            for (var card in cardFileContent)
             {
-              String question = card["question"];
-              int answeredIncorrectly = card['answered_incorrectly'];
+              if(card['stack_stack_id'] == widget.stackId)
+              {
+                String question = card["question"];
+                int answeredIncorrectly = card['answered_incorrectly'];
 
-              combinedData.add({'question': question, 'answered_incorrectly': answeredIncorrectly,});
+                combinedData.add({'question': question, 'answered_incorrectly': answeredIncorrectly,});
+              }
             }
-          }
-
-          combinedData.sort((a, b) => b['answered_incorrectly'].compareTo(a['answered_incorrectly']));
+            combinedData.sort((a, b) => b['answered_incorrectly'].compareTo(a['answered_incorrectly']));
+          });
         }
       }
     } catch (error)
@@ -806,7 +821,7 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.fromLTRB(20, 5, 20, 20),
+                  padding: snackbarIsDisplayed ? EdgeInsets.fromLTRB(20, 5, 20, 70) : EdgeInsets.fromLTRB(20, 5, 20, 20),
                   child: Container(
                     padding:  const EdgeInsets.fromLTRB(15, 10, 15, 15),
                     decoration: BoxDecoration(
