@@ -10,11 +10,11 @@ import 'package:memo_dex_prototyp/services/api/api_client.dart';
 
 import '../services/local/file_handler.dart';
 import '../services/local/upload_to_database.dart';
-import '../widgets/components/custom_snackbar.dart';
-import '../widgets/components/message_box.dart';
-import '../widgets/headline.dart';
-import '../widgets/learning_card.dart';
-import '../widgets/top_navigation_bar.dart';
+import '../widgets/dialogs/custom_snackbar.dart';
+import '../widgets/dialogs/message_box.dart';
+import '../widgets/header/headline.dart';
+import '../widgets/components/learning_card.dart';
+import '../widgets/header/top_navigation_bar.dart';
 import 'bottom_navigation_screen.dart';
 
 class StandardLearningScreen extends StatefulWidget {

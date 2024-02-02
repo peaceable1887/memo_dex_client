@@ -5,10 +5,10 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:memo_dex_prototyp/services/api/api_client.dart';
-import 'package:memo_dex_prototyp/widgets/statistic_card.dart';
+import 'package:memo_dex_prototyp/widgets/buttons/statistic_card_btn.dart';
 import '../utils/filters.dart';
 import '../services/local/file_handler.dart';
-import '../widgets/headline.dart';
+import '../widgets/header/headline.dart';
 import 'bottom_navigation_screen.dart';
 
 class StatisticScreen extends StatefulWidget

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../../../screens/bottom_navigation_screen.dart';
-import '../../../widgets/components/validation_message_box.dart';
+import '../../../widgets/dialogs/validation_message_box.dart';
 import '../../local/file_handler.dart';
 
 class UserApi

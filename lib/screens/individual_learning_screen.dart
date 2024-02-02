@@ -9,9 +9,9 @@ import 'package:memo_dex_prototyp/services/api/api_client.dart';
 
 import '../services/local/file_handler.dart';
 import '../services/local/upload_to_database.dart';
-import '../widgets/headline.dart';
-import '../widgets/learning_card.dart';
-import '../widgets/top_navigation_bar.dart';
+import '../widgets/header/headline.dart';
+import '../widgets/components/learning_card.dart';
+import '../widgets/header/top_navigation_bar.dart';
 import 'bottom_navigation_screen.dart';
 
 class IndividualLearningScreen extends StatefulWidget {

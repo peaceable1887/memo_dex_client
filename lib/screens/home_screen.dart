@@ -3,11 +3,11 @@ import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:memo_dex_prototyp/widgets/stack_view_grid.dart';
-import '../widgets/components/custom_snackbar.dart';
+import 'package:memo_dex_prototyp/widgets/stack_grid.dart';
+import '../widgets/dialogs/custom_snackbar.dart';
 import '../widgets/custom_search_delegate.dart';
-import '../widgets/headline.dart';
-import '../widgets/top_search_bar.dart';
+import '../widgets/header/headline.dart';
+import '../widgets/header/top_search_bar.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);

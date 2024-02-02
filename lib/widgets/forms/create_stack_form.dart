@@ -4,9 +4,9 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:memo_dex_prototyp/services/api/api_client.dart';
-import '../screens/bottom_navigation_screen.dart';
-import '../services/local/file_handler.dart';
-import '../services/local/write_to_device_storage.dart';
+import '../../screens/bottom_navigation_screen.dart';
+import '../../services/local/file_handler.dart';
+import '../../services/local/write_to_device_storage.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class CreateStackForm extends StatefulWidget {

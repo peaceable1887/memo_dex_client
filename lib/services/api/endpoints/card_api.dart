@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-import '../../../widgets/components/validation_message_box.dart';
+import '../../../widgets/dialogs/validation_message_box.dart';
 import '../../local/file_handler.dart';
 
 class CardApi

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../widgets/headline.dart';
+import '../widgets/header/headline.dart';
 
 class SettingScreen extends StatefulWidget {
   const SettingScreen({Key? key}) : super(key: key);

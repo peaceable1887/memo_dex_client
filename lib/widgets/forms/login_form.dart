@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:memo_dex_prototyp/services/api/api_client.dart';
 import 'package:memo_dex_prototyp/utils/divide_painter.dart';
-import 'package:memo_dex_prototyp/widgets/components/validation_message_box.dart';
+import 'package:memo_dex_prototyp/widgets/dialogs/validation_message_box.dart';
 
-import '../screens/welcome_screen.dart';
-import 'button.dart';
+import '../../screens/welcome_screen.dart';
+import '../buttons/button.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({Key? key}) : super(key: key);

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:memo_dex_prototyp/screens/stack_content_screen.dart';
 
-import '../utils/trim_text.dart';
+import '../../utils/trim_text.dart';
 
 class StackBtn extends StatefulWidget {
 

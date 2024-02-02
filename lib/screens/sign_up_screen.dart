@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:memo_dex_prototyp/screens/welcome_screen.dart';
-import 'package:memo_dex_prototyp/widgets/top_navigation_bar.dart';
+import 'package:memo_dex_prototyp/widgets/header/top_navigation_bar.dart';
 
-import '../widgets/headline.dart';
-import '../widgets/sign_up_form.dart';
+import '../widgets/header/headline.dart';
+import '../widgets/forms/sign_up_form.dart';
 
 class SignUpScreen extends StatelessWidget {
   const SignUpScreen({Key? key}) : super(key: key);

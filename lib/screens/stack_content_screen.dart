@@ -4,19 +4,19 @@ import 'dart:convert';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:memo_dex_prototyp/screens/add_card_screen.dart';
+import 'package:memo_dex_prototyp/screens/create_card_screen.dart';
 import 'package:memo_dex_prototyp/screens/bottom_navigation_screen.dart';
 import 'package:memo_dex_prototyp/screens/standard_learning_screen.dart';
 import 'package:memo_dex_prototyp/screens/edit_stack_screen.dart';
 import 'package:memo_dex_prototyp/services/api/api_client.dart';
 import 'package:memo_dex_prototyp/services/local/upload_to_database.dart';
-import 'package:memo_dex_prototyp/widgets/stack_content_btn.dart';
+import 'package:memo_dex_prototyp/widgets/buttons/stack_content_btn.dart';
 import '../utils/filters.dart';
 import '../services/local/file_handler.dart';
-import '../widgets/card_btn.dart';
-import '../widgets/components/custom_snackbar.dart';
-import '../widgets/headline.dart';
-import '../widgets/top_navigation_bar.dart';
+import '../widgets/buttons/card_btn.dart';
+import '../widgets/dialogs/custom_snackbar.dart';
+import '../widgets/header/headline.dart';
+import '../widgets/header/top_navigation_bar.dart';
 import 'individual_learning_screen.dart';
 
 class StackContentScreen extends StatefulWidget {
