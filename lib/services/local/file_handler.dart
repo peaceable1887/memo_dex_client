@@ -28,7 +28,7 @@ class FileHandler
 
       if (await file.exists())
       {
-        // Die Datei existiert, lese ihren Inhalt
+        // Die Datei existiert
         final content = await file.readAsString();
         print('Dateiinhalt: $content');
         return content;
@@ -49,7 +49,7 @@ class FileHandler
       final file = File(filePath);
 
       if (await file.exists()) {
-        // Die Datei existiert, lese Inhalt
+        // Die Datei existiert
         final content = await file.readAsString();
 
         // Parsen den Inhalt als JSON

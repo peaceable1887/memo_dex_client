@@ -8,11 +8,11 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:memo_dex_prototyp/models/stack_statistic_data.dart';
 import 'package:memo_dex_prototyp/services/api/api_client.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import '../utils/trim_text.dart';
-import '../services/local/file_handler.dart';
-import '../widgets/header/headline.dart';
-import '../widgets/header/top_navigation_bar.dart';
-import 'bottom_navigation_screen.dart';
+import '../../utils/trim.dart';
+import '../../services/local/file_handler.dart';
+import '../../widgets/header/headline.dart';
+import '../../widgets/header/top_navigation_bar.dart';
+import '../bottom_navigation_screen.dart';
 
 class StatisticStackScreen extends StatefulWidget {
 
@@ -927,7 +927,7 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
                                   ),
                                 ),
                                 Text(
-                                  '${TrimText().trimText(combinedData[0]['question'], 15)}',
+                                  '${Trim().trimText(combinedData[0]['question'], 15)}',
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 15,
@@ -936,7 +936,7 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
                                   ),
                                 ),
                                 Text(
-                                  '${TrimText().trimText(combinedData[1]['question'], 15)}',
+                                  '${Trim().trimText(combinedData[1]['question'], 15)}',
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 15,
@@ -945,7 +945,7 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
                                   ),
                                 ),
                                 Text(
-                                  '${TrimText().trimText(combinedData[2]['question'], 15)}',
+                                  '${Trim().trimText(combinedData[2]['question'], 15)}',
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 15,

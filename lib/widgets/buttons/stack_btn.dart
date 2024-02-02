@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:memo_dex_prototyp/screens/stack_content_screen.dart';
+import 'package:memo_dex_prototyp/screens/stack/stack_content_screen.dart';
 
-import '../../utils/trim_text.dart';
+import '../../utils/trim.dart';
 
 class StackBtn extends StatefulWidget {
 
@@ -54,7 +54,7 @@ class _StackBtnState extends State<StackBtn> {
             width: 150,
             child: Center(
               child: Text(
-                TrimText().trimText(widget.stackName, 10),
+                Trim().trimText(widget.stackName, 10),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     color: Colors.black,

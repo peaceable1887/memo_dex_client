@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:memo_dex_prototyp/screens/single_card_screen.dart';
+import 'package:memo_dex_prototyp/screens/card/single_card_screen.dart';
 
 class CardBtn extends StatefulWidget {
 

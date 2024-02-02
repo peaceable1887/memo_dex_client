@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:memo_dex_prototyp/models/stack_statistic_data.dart';
-import 'package:memo_dex_prototyp/utils/trim_text.dart';
-import 'package:memo_dex_prototyp/screens/statistic_stack_screen.dart';
+import 'package:memo_dex_prototyp/utils/trim.dart';
+import 'package:memo_dex_prototyp/screens/statistic/statistic_stack_screen.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class StatisticCard extends StatefulWidget {
@@ -180,7 +180,7 @@ class _StatisticCardState extends State<StatisticCard> {
                                   Padding(
                                     padding: const EdgeInsets.fromLTRB(10, 0, 0, 2),
                                     child: Text(
-                                      TrimText().trimText(widget.stackName, 20),
+                                      Trim().trimText(widget.stackName, 14),
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 22,

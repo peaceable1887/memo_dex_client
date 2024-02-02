@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:memo_dex_prototyp/screens/login_screen.dart';
+import 'package:memo_dex_prototyp/screens/user/login_screen.dart';
 import 'package:memo_dex_prototyp/services/api/api_client.dart';
 import 'package:memo_dex_prototyp/widgets/dialogs/validation_message_box.dart';
 

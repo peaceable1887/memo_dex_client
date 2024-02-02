@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../../screens/bottom_navigation_screen.dart';
-import '../../screens/stack_content_screen.dart';
+import '../../screens/stack/stack_content_screen.dart';
 import '../../services/api/api_client.dart';
 import '../../services/local/file_handler.dart';
 import '../../services/local/write_to_device_storage.dart';

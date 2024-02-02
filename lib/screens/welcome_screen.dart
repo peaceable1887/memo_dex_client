@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:memo_dex_prototyp/screens/login_screen.dart';
-import 'package:memo_dex_prototyp/screens/sign_up_screen.dart';
+import 'package:memo_dex_prototyp/screens/user/login_screen.dart';
+import 'package:memo_dex_prototyp/screens/user/sign_up_screen.dart';
 
 import '../widgets/buttons/button.dart';
 

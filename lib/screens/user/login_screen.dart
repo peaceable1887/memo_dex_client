@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:memo_dex_prototyp/screens/sign_up_screen.dart';
 import 'package:memo_dex_prototyp/screens/welcome_screen.dart';
 import 'package:memo_dex_prototyp/widgets/header/headline.dart';
 import 'package:memo_dex_prototyp/widgets/forms/login_form.dart';
 import 'package:memo_dex_prototyp/widgets/header/top_navigation_bar.dart';
-
-import '../widgets/buttons/button.dart';
-import '../widgets/dialogs/custom_snackbar.dart';
-import '../utils/divide_painter.dart';
+import '../../widgets/dialogs/custom_snackbar.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);

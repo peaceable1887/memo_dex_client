@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../utils/trim_text.dart';
+import '../../utils/trim.dart';
 
 class Headline extends StatefulWidget {
 
@@ -32,7 +32,7 @@ class _HeadlineState extends State<Headline> {
       padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
       child: Container(
         child: Text(
-          TrimText().trimText(widget.text,30),
+          Trim().trimText(widget.text,30),
           textAlign: TextAlign.center,
           style: TextStyle(
               color: Colors.white,

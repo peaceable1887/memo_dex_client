@@ -4,7 +4,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:memo_dex_prototyp/screens/stack_content_screen.dart';
+import 'package:memo_dex_prototyp/screens/stack/stack_content_screen.dart';
 import 'package:memo_dex_prototyp/services/api/api_client.dart';
 import '../../services/local/file_handler.dart';
 import '../../services/local/upload_to_database.dart';

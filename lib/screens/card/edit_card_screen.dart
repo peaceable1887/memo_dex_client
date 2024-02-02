@@ -3,16 +3,16 @@ import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:memo_dex_prototyp/screens/single_card_screen.dart';
-import 'package:memo_dex_prototyp/screens/stack_content_screen.dart';
+import 'package:memo_dex_prototyp/screens/card/single_card_screen.dart';
+import 'package:memo_dex_prototyp/screens/stack/stack_content_screen.dart';
 import 'package:memo_dex_prototyp/services/api/api_client.dart';
 
-import '../services/local/file_handler.dart';
-import '../services/local/upload_to_database.dart';
-import '../widgets/dialogs/delete_message_box.dart';
-import '../widgets/header/headline.dart';
-import '../widgets/header/top_navigation_bar.dart';
-import 'bottom_navigation_screen.dart';
+import '../../services/local/file_handler.dart';
+import '../../services/local/upload_to_database.dart';
+import '../../widgets/dialogs/delete_message_box.dart';
+import '../../widgets/header/headline.dart';
+import '../../widgets/header/top_navigation_bar.dart';
+import '../bottom_navigation_screen.dart';
 
 class EditCardScreen extends StatefulWidget {
 

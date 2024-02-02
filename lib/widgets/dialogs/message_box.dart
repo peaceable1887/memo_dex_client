@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:memo_dex_prototyp/screens/stack_content_screen.dart';
+import 'package:memo_dex_prototyp/screens/stack/stack_content_screen.dart';
 
 class MessageBox extends StatelessWidget {
   final String headline;

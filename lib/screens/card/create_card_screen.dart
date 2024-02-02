@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:memo_dex_prototyp/screens/stack_content_screen.dart';
+import 'package:memo_dex_prototyp/screens/stack/stack_content_screen.dart';
 import 'package:memo_dex_prototyp/widgets/forms/create_card_form.dart';
-import '../widgets/header/headline.dart';
-import '../widgets/header/top_navigation_bar.dart';
-
+import '../../widgets/header/headline.dart';
+import '../../widgets/header/top_navigation_bar.dart';
 
 class AddCardScreen extends StatefulWidget {
 
