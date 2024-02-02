@@ -4,8 +4,8 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:memo_dex_prototyp/screens/bottom_navigation_screen.dart';
 import 'package:memo_dex_prototyp/screens/stack_content_screen.dart';
+import 'package:memo_dex_prototyp/services/api/api_client.dart';
 import '../services/local/file_handler.dart';
-import '../services/api/rest_services.dart';
 import '../widgets/delete_message_box.dart';
 import '../widgets/edit_stack_form.dart';
 import '../widgets/headline.dart';
@@ -67,7 +67,7 @@ class _EditStackScreenState extends State<EditStackScreen> {
           onDelete: () async {
             if(online)
             {
-              await RestServices(context).deleteStack(1, widget.stackId);
+              await ApiClient(context).stackApi.deleteStack(1, widget.stackId);
             }else
             {
               await fileHandler.editItemById(

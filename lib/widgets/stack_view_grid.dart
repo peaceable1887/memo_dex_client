@@ -4,9 +4,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:memo_dex_prototyp/services/api/api_client.dart';
-import 'package:memo_dex_prototyp/services/api/endpoints/stack_api.dart';
 import 'package:memo_dex_prototyp/services/local/upload_to_database.dart';
-import 'package:memo_dex_prototyp/services/api/rest_services.dart';
 import 'package:memo_dex_prototyp/widgets/create_stack_btn.dart';
 import 'package:memo_dex_prototyp/widgets/stack_btn.dart';
 import '../utils/filters.dart';
@@ -91,7 +89,6 @@ class _StackViewGridState extends State<StackViewGrid> {
     {
       await UploadToDatabase(context).allLocalStackContent();
       await UploadToDatabase(context).updateAllLocalStacks();
-      //await RestServices(context).getAllStacks();
       await ApiClient(context).stackApi.getAllStacks();
 
       setState(()

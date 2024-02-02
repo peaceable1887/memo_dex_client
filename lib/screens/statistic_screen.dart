@@ -4,10 +4,10 @@ import 'dart:convert';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:memo_dex_prototyp/services/api/api_client.dart';
 import 'package:memo_dex_prototyp/widgets/statistic_card.dart';
 import '../utils/filters.dart';
 import '../services/local/file_handler.dart';
-import '../services/api/rest_services.dart';
 import '../widgets/headline.dart';
 import 'bottom_navigation_screen.dart';
 
@@ -111,7 +111,7 @@ class _StatisticScreenState extends State<StatisticScreen>
         }
       }else
       {
-        await RestServices(context).getAllStacks();
+        await ApiClient(context).stackApi.getAllStacks();
 
         setState(()
         {
@@ -130,7 +130,7 @@ class _StatisticScreenState extends State<StatisticScreen>
           {
             if (stack['is_deleted'] == 0)
             {
-              await RestServices(context).getAllCardsByStackId(stack['stack_id']);
+              await ApiClient(context).cardApi.getAllCardsByStackId(stack['stack_id']);
 
               String secondFileContent = await fileHandler.readJsonFromLocalFile("allCards");
 

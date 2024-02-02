@@ -4,10 +4,10 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:memo_dex_prototyp/screens/stack_content_screen.dart';
+import 'package:memo_dex_prototyp/services/api/api_client.dart';
 import 'package:memo_dex_prototyp/services/local/write_to_device_storage.dart';
 
 import '../services/local/file_handler.dart';
-import '../services/api/rest_services.dart';
 import '../widgets/headline.dart';
 import '../widgets/top_navigation_bar.dart';
 import 'bottom_navigation_screen.dart';
@@ -264,7 +264,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
 
                             if(online == true)
                             {
-                              RestServices(context).addCard(_question.text, _answer.text, 0, 0, widget.stackId);
+                              await ApiClient(context).cardApi.addCard(_question.text, _answer.text, 0, 0, widget.stackId);
                             }else
                             {
                               await WriteToDeviceStorage().addCard(

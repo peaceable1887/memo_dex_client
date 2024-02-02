@@ -3,9 +3,9 @@ import 'dart:convert';
 import 'dart:math';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:memo_dex_prototyp/services/api/api_client.dart';
 
 import '../services/local/file_handler.dart';
-import '../services/api/rest_services.dart';
 import 'components/custom_snackbar.dart';
 
 class LearningCard extends StatefulWidget {
@@ -151,7 +151,7 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
     {
       if(isCardNoticed == false)
       {
-        RestServices(context).updateCard(widget.question, widget.answer, 0, 1, widget.cardIndex,);
+        ApiClient(context).cardApi.updateCard(widget.question, widget.answer, 0, 1, widget.cardIndex);
         isCardNoticed = true;
         CustomSnackbar.showSnackbar(
             context,
@@ -161,8 +161,9 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
             Duration(seconds: 0),
             Duration(milliseconds: 1500)
         );
-      }else{
-        RestServices(context).updateCard(widget.question, widget.answer, 0, 0, widget.cardIndex,);
+      }else
+      {
+        ApiClient(context).cardApi.updateCard(widget.question, widget.answer, 0, 0, widget.cardIndex);
         isCardNoticed = false;
         CustomSnackbar.showSnackbar(
             context,
@@ -185,10 +186,10 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
       {
         if(answeredCorrectly == false)
         {
-          RestServices(context).answeredIncorrectly(widget.cardIndex);
+          ApiClient(context).cardApi.answeredIncorrectly(widget.cardIndex);
         }else
         {
-          RestServices(context).answeredCorrectly(widget.cardIndex);
+          ApiClient(context).cardApi.answeredCorrectly(widget.cardIndex);
         }
       });
     }else

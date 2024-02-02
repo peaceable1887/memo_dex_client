@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:memo_dex_prototyp/screens/login_screen.dart';
+import 'package:memo_dex_prototyp/services/api/api_client.dart';
 import 'package:memo_dex_prototyp/widgets/components/validation_message_box.dart';
 
 import '../screens/welcome_screen.dart';
-import '../services/api/rest_services.dart';
 import 'button.dart';
 import '../utils/divide_painter.dart';
 
@@ -62,7 +62,7 @@ class _SignUpFormState extends State<SignUpForm> {
       if (emailRegExp.hasMatch(email))
       {
         if (password == repeatPassword && password.isNotEmpty) {
-          await RestServices(context).createUser(_eMail.text, _password.text);
+          await ApiClient(context).userApi.createUser(_eMail.text, _password.text);
           storage.write(key: 'addUser', value: "true");
           Navigator.pushReplacement(
             context,

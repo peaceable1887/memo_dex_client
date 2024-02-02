@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:memo_dex_prototyp/services/api/rest_services.dart';
+import 'package:memo_dex_prototyp/services/api/api_client.dart';
 
 import 'file_handler.dart';
 
@@ -27,8 +27,9 @@ class UploadToDatabase
       {
         if(stack["created_locally"] == 1)
         {
-          String responseBody = await RestServices(context).createStack(
+          String responseBody = await ApiClient(context).stackApi.createStack(
               stack['stackname'], stack['color'], stack['is_deleted']);
+
 
           print("Response Body: $responseBody");
 
@@ -69,7 +70,7 @@ class UploadToDatabase
       {
         if (stack['is_updated'] == 1)
         {
-          await RestServices(context).updateStack(stack["stackname"],
+          await ApiClient(context).stackApi.updateStack(stack["stackname"],
               stack["color"], stack["is_deleted"], stack['stack_id']);
 
           stack['is_updated'] = 0;
@@ -103,13 +104,13 @@ class UploadToDatabase
           {
             if(card["created_locally"] == 1)
             {
-              String responseBody = await RestServices(context).addCard(
+              String responseBody = await ApiClient(context).cardApi.addCard(
                   card['question'], card['answer'], card['remember'],
                   card['is_deleted'], card['stack_stack_id']);
 
               print("Response Body: $responseBody");
 
-              await RestServices(context).updateCardStatistic(
+              await ApiClient(context).cardApi.updateCardStatistic(
                   responseBody, card['answered_correctly'],card['answered_incorrectly']);
 
               await fileHandler.editItemById("allCards", "card_id", card['card_id'], {"is_updated": 0});
@@ -147,8 +148,8 @@ class UploadToDatabase
         {
           if (card['is_updated'] == 1)
           {
-            await RestServices(context).updateCard(
-                card['question'],
+
+            await ApiClient(context).cardApi.updateCard(card['question'],
                 card['answer'],
                 card['is_deleted'],
                 card['remember'],
@@ -192,7 +193,7 @@ class UploadToDatabase
                 {
                   print("Update Stack: ${stack}");
 
-                  await RestServices(context).updateStackStatistic(
+                  await ApiClient(context).stackApi.updateStackStatistic(
                       stack["stack_id"],stack["fastest_time"] ,stack["last_time"], stack["pass"]-1);
 
                   stack['is_updated'] = 0;
@@ -233,7 +234,8 @@ class UploadToDatabase
           {
             if(card['is_updated'] == 1)
             {
-              await RestServices(context).updateCardStatistic(card['card_id'], card['answered_correctly'],card['answered_incorrectly']);
+              await ApiClient(context).cardApi.updateCardStatistic(
+                  card['card_id'], card['answered_correctly'],card['answered_incorrectly']);
               card['is_updated'] = 0;
               print("überarbeitete updateAllLocalCardStatistic Karte: ${card}");
             }

@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:memo_dex_prototyp/screens/stack_content_screen.dart';
+import 'package:memo_dex_prototyp/services/api/api_client.dart';
 import '../services/local/file_handler.dart';
 import '../services/local/upload_to_database.dart';
-import '../services/api/rest_services.dart';
 
 class EditStackForm extends StatefulWidget {
 
@@ -71,7 +71,7 @@ class _EditStackFormState extends State<EditStackForm> {
 
     if(online)
     {
-      RestServices(context).updateStack(_stackname.text, "${newColor.value.toRadixString(16).substring(2)}", 0, widget.stackId);
+      await ApiClient(context).stackApi.updateStack(_stackname.text, "${newColor.value.toRadixString(16).substring(2)}", 0, widget.stackId);
     }else
     {
       await fileHandler.editItemById(

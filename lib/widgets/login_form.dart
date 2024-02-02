@@ -2,11 +2,10 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:memo_dex_prototyp/services/api/rest_services.dart';
+import 'package:memo_dex_prototyp/services/api/api_client.dart';
 import 'package:memo_dex_prototyp/utils/divide_painter.dart';
 import 'package:memo_dex_prototyp/widgets/components/validation_message_box.dart';
 
-import '../screens/home_screen.dart';
 import '../screens/welcome_screen.dart';
 import 'button.dart';
 
@@ -64,8 +63,9 @@ class _LoginFormState extends State<LoginForm> {
 
     }else
     {
-      if (emailRegExp.hasMatch(email)) {
-        await RestServices(context).loginUser(_eMail.text, _password.text);
+      if (emailRegExp.hasMatch(email))
+      {
+        await ApiClient(context).userApi.loginUser(_eMail.text, _password.text);
       }else {
         showDialog(
           context: context,

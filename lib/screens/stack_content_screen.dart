@@ -8,8 +8,8 @@ import 'package:memo_dex_prototyp/screens/add_card_screen.dart';
 import 'package:memo_dex_prototyp/screens/bottom_navigation_screen.dart';
 import 'package:memo_dex_prototyp/screens/standard_learning_screen.dart';
 import 'package:memo_dex_prototyp/screens/edit_stack_screen.dart';
+import 'package:memo_dex_prototyp/services/api/api_client.dart';
 import 'package:memo_dex_prototyp/services/local/upload_to_database.dart';
-import 'package:memo_dex_prototyp/services/api/rest_services.dart';
 import 'package:memo_dex_prototyp/widgets/stack_content_btn.dart';
 import '../utils/filters.dart';
 import '../services/local/file_handler.dart';
@@ -179,7 +179,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
       {
         print("wird ausgeführt loadStacks (stack_content)");
         await UploadToDatabase(context).allLocalStackContent();
-        await RestServices(context).getAllStacks();
+        await ApiClient(context).stackApi.getAllStacks();
 
         String fileContent = await fileHandler.readJsonFromLocalFile("allStacks");
 
@@ -259,7 +259,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
         }
       }else
       {
-        await RestServices(context).getAllCards();
+        await ApiClient(context).cardApi.getAllCards();
 
         String fileContent = await fileHandler.readJsonFromLocalFile("allCards");
 

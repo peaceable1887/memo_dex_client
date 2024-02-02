@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:memo_dex_prototyp/screens/stack_content_screen.dart';
 import 'package:carousel_slider/carousel_slider.dart'; // https://pub.dev/packages/carousel_slider
+import 'package:memo_dex_prototyp/services/api/api_client.dart';
 
 import '../services/local/file_handler.dart';
 import '../services/local/upload_to_database.dart';
-import '../services/api/rest_services.dart';
 import '../widgets/headline.dart';
 import '../widgets/learning_card.dart';
 import '../widgets/top_navigation_bar.dart';
@@ -93,7 +93,7 @@ class _CardLearningScreenState extends State<IndividualLearningScreen> with Tick
         }
       }else
       {
-        await RestServices(context).getStack(widget.stackId);
+        await ApiClient(context).stackApi.getStack(widget.stackId);
 
         String fileContent = await fileHandler.readJsonFromLocalFile("allStacks");
 
@@ -170,7 +170,7 @@ class _CardLearningScreenState extends State<IndividualLearningScreen> with Tick
       }else
       {
         await UploadToDatabase(context).allLocalCards(widget.stackId, widget.stackId);
-        await RestServices(context).getAllCards();
+        await ApiClient(context).cardApi.getAllCards();
 
         String fileContent = await fileHandler.readJsonFromLocalFile("allCards");
 

@@ -6,10 +6,10 @@ import 'package:horizontal_blocked_scroll_physics/horizontal_blocked_scroll_phys
 import 'package:intl/intl.dart';
 import 'package:memo_dex_prototyp/screens/stack_content_screen.dart';
 import 'package:carousel_slider/carousel_slider.dart'; // https://pub.dev/packages/carousel_slider
+import 'package:memo_dex_prototyp/services/api/api_client.dart';
 
 import '../services/local/file_handler.dart';
 import '../services/local/upload_to_database.dart';
-import '../services/api/rest_services.dart';
 import '../widgets/components/custom_snackbar.dart';
 import '../widgets/components/message_box.dart';
 import '../widgets/headline.dart';
@@ -120,7 +120,7 @@ class _CardLearningScreenState extends State<StandardLearningScreen> with Ticker
         }
       }else
       {
-        await RestServices(context).getStack(widget.stackId);
+        await ApiClient(context).stackApi.getStack(widget.stackId);
 
         String fileContent = await fileHandler.readJsonFromLocalFile("allStacks");
 
@@ -197,7 +197,7 @@ class _CardLearningScreenState extends State<StandardLearningScreen> with Ticker
       }else
       {
         await UploadToDatabase(context).allLocalCards(widget.stackId, widget.stackId);
-        await RestServices(context).getAllCards();
+        await ApiClient(context).cardApi.getAllCards();
 
         String fileContent = await fileHandler.readJsonFromLocalFile("allCards");
 
@@ -319,7 +319,8 @@ class _CardLearningScreenState extends State<StandardLearningScreen> with Ticker
         } else{}
       }else
       {
-        final stackStatistic= await RestServices(context).getStackStatistic(widget.stackId);
+        final stackStatistic= await ApiClient(context).stackApi.getStackStatistic(widget.stackId);
+
         if(stackStatistic[0]["fastest_time"] == null)
         {
           stackStatistic[0]["fastest_time"] = "99:99:99";
@@ -327,7 +328,6 @@ class _CardLearningScreenState extends State<StandardLearningScreen> with Ticker
 
         final fastestTime = stackStatistic[0]["fastest_time"];
 
-        setState(() {
           print(wasClicked);
           wasClicked = val;
 
@@ -338,7 +338,7 @@ class _CardLearningScreenState extends State<StandardLearningScreen> with Ticker
 
             if(currentDuration.compareTo(fastestDuration) < 0)
             {
-              RestServices(context).updateStackStatistic(widget.stackId, formatTime(), formatTime(), stackStatistic[0]["pass"]);
+              await ApiClient(context).stackApi.updateStackStatistic(widget.stackId, formatTime(), formatTime(), stackStatistic[0]["pass"]);
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
@@ -352,7 +352,7 @@ class _CardLearningScreenState extends State<StandardLearningScreen> with Ticker
 
             }else
             {
-              RestServices(context).updateStackStatistic(widget.stackId, fastestTime, formatTime(), stackStatistic[0]["pass"]);
+              await ApiClient(context).stackApi.updateStackStatistic(widget.stackId, fastestTime, formatTime(), stackStatistic[0]["pass"]);
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
@@ -365,7 +365,7 @@ class _CardLearningScreenState extends State<StandardLearningScreen> with Ticker
               );
             }
           }
-        });
+
       }
     } catch (error) {
       print('Fehler beim Laden der Daten: $error');
