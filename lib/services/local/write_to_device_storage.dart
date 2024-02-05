@@ -108,4 +108,50 @@ class WriteToDeviceStorage
       print('Fehler beim Hinzufügen zum JSON-File: $e');
     }
   }
+
+  Future<void> addPass({
+    required dynamic stackId,
+    required String time,
+    required String fileName,
+    required String? tempPassIndex,
+  }) async
+  {
+    try {
+      final directory = await getApplicationDocumentsDirectory();
+      final filePath = '${directory.path}/$fileName.json';
+      final file = File(filePath);
+
+      // Lese vorhandene Daten
+      List<Map<String, dynamic>> existingData = [];
+      if (await file.exists())
+      {
+        final content = await file.readAsString();
+        if (content.isNotEmpty)
+        {
+          existingData = List<Map<String, dynamic>>.from(jsonDecode(content));
+        }
+      }
+      if (tempPassIndex != null)
+      {
+        int retrievedIntValue = int.tryParse(tempPassIndex) ?? 0;
+        print('Retrieved value as int: $retrievedIntValue');
+
+        // Füge neuen Eintrag hinzu
+        existingData.add({
+          "pass_id": retrievedIntValue + 1,
+          'date': DateTime.now().toIso8601String(),
+          'time': time,
+          "created_locally": 1,
+          'stack_stack_id': stackId,
+        });
+      }
+
+      // Speichere aktualisierte Daten
+      final encodedJson = jsonEncode(existingData);
+      await file.writeAsString(encodedJson);
+      print('Stack wurde erfolgreich zur JSON-Datei hinzugefügt: $filePath');
+    } catch (e) {
+      print('Fehler beim Hinzufügen zum JSON-File: $e');
+    }
+  }
 }

@@ -247,4 +247,30 @@ class UploadToDatabase
       print("updateAllLocalCardStatistic are empty");
     }
   }
+
+  Future<void> createLocalStackRunsContent() async
+  {
+    String localStackRun = await fileHandler.readJsonFromLocalFile("stackRuns");
+
+    print("---------Upload all createLocalStackRunsContent in der funktion------------");
+
+    if (localStackRun.isNotEmpty)
+    {
+      List<dynamic> stackRuns = jsonDecode(localStackRun);
+
+      for (var stackRun in stackRuns)
+      {
+        if(stackRun["created_locally"] == 1)
+        {
+          await ApiClient(context).stackApi.insertStackRun(
+              stackRun["time"], stackRun["stack_stack_id"]);
+
+          print("----------------NEXT PASS------------------");
+        }
+      }
+    }else
+    {
+      print("createLocalStackRunsContent are empty");
+    }
+  }
 }

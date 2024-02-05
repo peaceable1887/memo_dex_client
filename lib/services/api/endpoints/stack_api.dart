@@ -257,6 +257,92 @@ class StackApi
     }
   }
 
+  Future<dynamic> insertStackRun(time, stackId) async {
+
+    String? accessToken = await storage.read(key: 'accessToken');
+
+    if (accessToken != null) {
+      final response = await http.post(
+        Uri.parse('http://10.0.2.2:3000/stackRun'),
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization': "Bearer " + accessToken,
+        },
+        body: jsonEncode(<String, dynamic>{
+          "date": DateTime.now().toIso8601String(),
+          "time": time,
+          "stack_stack_id": stackId,
+        }),
+      );
+
+      if (response.statusCode == 200)
+      {
+        print("Durchlauf wurde in die Datenbank gespeichert.");
+      } else {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return ValidationMessageBox(message: "Durchlauf konnte nicht gespeichert werden");
+          },
+        );
+        throw Exception('Failed to insert data.');
+      }
+    }else {
+    }
+  }
+
+  Future<dynamic> getAllStackRuns() async
+  {
+    String? accessToken = await storage.read(key: 'accessToken');
+    String? userId = await storage.read(key: 'user_id');
+    try
+    {
+      if (accessToken != null)
+      {
+        final response = await http.post(
+          Uri.parse('http://10.0.2.2:3000/getAllStackRuns'),
+          headers: <String, String>
+          {
+            'Content-Type': 'application/json',
+            'Authorization': "Bearer " + accessToken,
+          },
+          body: jsonEncode(<String, dynamic>
+          {
+            "user_id": userId
+          }),
+        ).timeout(Duration(seconds: 10));
+        if (response.statusCode == 200)
+        {
+          dynamic jsonResponse = json.decode(response.body);
+          // Daten werden zusätzlich lokal abgespeichert
+          print(jsonResponse);
+          await fileHandler.saveJsonToLocalFile(jsonResponse, "stackRuns");
+
+          return jsonResponse;
+        }else
+        {
+          throw http.ClientException('hat nicht geklappt. Statuscode: ${response.statusCode}');
+        }
+      }else
+      {
+        print("Token existiert nicht!");
+      }
+    }on TimeoutException catch (e)
+    {
+      print('Zeitüberschreitung: $e');
+      //var auf grad kein netz einbauen
+      return null;
+    }on http.ClientException catch (e)
+    {
+      print('Clientfehler: $e');
+      return null;
+    }catch (e)
+    {
+      print('Allgemeiner Fehler: $e');
+      return null;
+    }
+  }
+
   Future<dynamic> getStackStatistic(stackId) async
   {
     String? accessToken = await storage.read(key: 'accessToken');

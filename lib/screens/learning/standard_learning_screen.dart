@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:horizontal_blocked_scroll_physics/horizontal_blocked_scroll_physics.dart';
 import 'package:intl/intl.dart';
 import 'package:memo_dex_prototyp/screens/stack/stack_content_screen.dart';
@@ -10,6 +11,7 @@ import 'package:memo_dex_prototyp/services/api/api_client.dart';
 
 import '../../services/local/file_handler.dart';
 import '../../services/local/upload_to_database.dart';
+import '../../services/local/write_to_device_storage.dart';
 import '../../widgets/dialogs/custom_snackbar.dart';
 import '../../widgets/dialogs/message_box.dart';
 import '../../widgets/header/headline.dart';
@@ -42,12 +44,12 @@ class _CardLearningScreenState extends State<StandardLearningScreen> with Ticker
   late StreamSubscription subscription;
   FileHandler fileHandler = FileHandler();
   bool showLoadingCircular = true;
+  final storage = FlutterSecureStorage();
 
   @override
   void initState()
   {
     super.initState();
-    print("Stackid: ${widget.stackId}");
     startTimer();
     loadStack();
     loadCards();
@@ -266,7 +268,13 @@ class _CardLearningScreenState extends State<StandardLearningScreen> with Ticker
 
               final fastestTime = stack["fastest_time"];
 
-              setState(() {
+              String localStackRunContent = await fileHandler.readJsonFromLocalFile("stackRuns");
+              int arrLength = localStackRunContent.length;
+              String tempPassIndex = arrLength.toString();
+
+              print(tempPassIndex);
+
+              setState(() async {
                 wasClicked = val;
 
                 if (wasClicked == true && activeIndex == indexCards.length - 1) {
@@ -279,10 +287,16 @@ class _CardLearningScreenState extends State<StandardLearningScreen> with Ticker
 
                   if(currentDuration.compareTo(fastestDuration) < 0)
                   {
-
                     fileHandler.editItemById(
                         "allStacks", "stack_id", widget.stackId,
                         {"fastest_time": formatTime(),"last_time": formatTime(),"pass": stackPass ,"is_updated": 1});
+
+                    await WriteToDeviceStorage().addPass(
+                      stackId: widget.stackId,
+                      time: formatTime(),
+                      fileName: "stackRuns",
+                      tempPassIndex: tempPassIndex,
+                    );
 
                     showDialog(
                       context: context,
@@ -300,6 +314,13 @@ class _CardLearningScreenState extends State<StandardLearningScreen> with Ticker
                     fileHandler.editItemById(
                         "allStacks", "stack_id", widget.stackId,
                         {"fastest_time": fastestTime,"last_time": formatTime(), "pass": stackPass , "is_updated": 1});
+
+                    await WriteToDeviceStorage().addPass(
+                      stackId: widget.stackId,
+                      time: formatTime(),
+                      fileName: "stackRuns",
+                      tempPassIndex: tempPassIndex,
+                    );
 
                     showDialog(
                       context: context,
@@ -338,7 +359,11 @@ class _CardLearningScreenState extends State<StandardLearningScreen> with Ticker
 
             if(currentDuration.compareTo(fastestDuration) < 0)
             {
+              //TODO rausnehmen wenn db struktur aktualisiert wurde
               await ApiClient(context).stackApi.updateStackStatistic(widget.stackId, formatTime(), formatTime(), stackStatistic[0]["pass"]);
+
+              await ApiClient(context).stackApi.insertStackRun(formatTime(),widget.stackId);
+
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
@@ -352,7 +377,11 @@ class _CardLearningScreenState extends State<StandardLearningScreen> with Ticker
 
             }else
             {
+              //TODO rausnehmen wenn db struktur aktualisiert wurde
               await ApiClient(context).stackApi.updateStackStatistic(widget.stackId, fastestTime, formatTime(), stackStatistic[0]["pass"]);
+
+              await ApiClient(context).stackApi.insertStackRun(formatTime(),widget.stackId);
+
               showDialog(
                 context: context,
                 builder: (BuildContext context) {

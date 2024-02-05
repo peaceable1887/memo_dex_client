@@ -242,7 +242,6 @@ class _CreateCardFormState extends State<CreateCardForm>
                 //zeige die Snackbar an
                 storage.write(key: 'addCard', value: "true");
 
-                print(widget.stackId);
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(

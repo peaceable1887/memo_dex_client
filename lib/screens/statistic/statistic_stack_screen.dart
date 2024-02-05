@@ -103,66 +103,67 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
           showLoadingCircular = false;
         });
 
-        String fileContent = await fileHandler.readJsonFromLocalFile("allStacks");
+        String runContent = await fileHandler.readJsonFromLocalFile("stackRuns");
 
-        if (fileContent.isNotEmpty)
+        if (runContent.isNotEmpty)
         {
-          List<dynamic> stacks = jsonDecode(fileContent);
+          List<dynamic> runs = jsonDecode(runContent);
 
-          for (var stack in stacks)
+          setState(()
           {
-            if (stack["stack_id"] == widget.stackId)
+            String fastestTime = "99:99:99";
+
+            for (var run in runs)
             {
-              setState(()
+              if (run["stack_stack_id"] == widget.stackId)
               {
-                if (stack["fastest_time"] != null || stack["last_time"] != null)
+                String currentTime = run['time'];
+
+                if (currentTime.compareTo(fastestTime) < 0)
                 {
-                  fastestRun = stack["fastest_time"] ?? "00:00:00";
-                  latestRun = stack["last_time"] ?? "00:00:00";
+                  fastestTime = currentTime;
+                  fastestRun = fastestTime;
                 }
-                else
-                {
-                  fastestRun = "00:00:00";
-                  latestRun = "00:00:00";
-                }
-              });
+                latestRun = run['time'];
+              }
             }
-          }
+          });
         }
       }else
       {
         await ApiClient(context).stackApi.getStack(widget.stackId);
+        await ApiClient(context).stackApi.getAllStackRuns();
 
         setState(()
         {
           showLoadingCircular = false;
         });
 
-        String fileContent = await fileHandler.readJsonFromLocalFile("allStacks");
+        String runContent = await fileHandler.readJsonFromLocalFile("stackRuns");
 
-        if (fileContent.isNotEmpty)
+        if (runContent.isNotEmpty)
         {
-          List<dynamic> stacks = jsonDecode(fileContent);
+          List<dynamic> runs = jsonDecode(runContent);
 
-          for (var stack in stacks)
+          setState(()
           {
-            if (stack["stack_id"] == widget.stackId)
+            String fastestTime = "99:99:99";
+
+            for (var run in runs)
             {
-              setState(()
+              if (run["stack_stack_id"] == widget.stackId)
               {
-                if (stack["fastest_time"] != null || stack["last_time"] != null)
+                String currentTime = run['time'];
+                if (currentTime.compareTo(fastestTime) < 0)
                 {
-                  fastestRun = stack["fastest_time"] ?? "00:00:00";
-                  latestRun = stack["last_time"] ?? "00:00:00";
+                  fastestTime = currentTime;
+                  fastestRun = fastestTime;
                 }
-                else
-                {
-                  fastestRun = "00:00:00";
-                  latestRun = "00:00:00";
-                }
-              });
+                latestRun = run['time'];
+              }
+
             }
-          }
+          });
         }
       }
     }catch(error)
@@ -291,7 +292,9 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
       String minutes = (difference.inMinutes % 60).toString().padLeft(2, '0');
       String seconds = (difference.inSeconds % 60).toString().padLeft(2, '0');
 
-      return "$hours:$minutes:$seconds";
+      String time = "$hours:$minutes:$seconds";
+
+      return time;
 
     }catch (error)
     {

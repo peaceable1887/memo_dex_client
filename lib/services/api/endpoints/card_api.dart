@@ -58,6 +58,7 @@ class CardApi
   Future<dynamic> getAllCards() async
   {
     String? accessToken = await storage.read(key: 'accessToken');
+    String? userId = await storage.read(key: 'user_id');
     try
     {
       if (accessToken != null)
@@ -69,6 +70,10 @@ class CardApi
             'Content-Type': 'application/json',
             'Authorization': "Bearer " + accessToken,
           },
+          body: jsonEncode(<String, dynamic>
+          {
+            "user_id": userId
+          }),
         ).timeout(Duration(seconds: 10));
 
         if (response.statusCode == 200)
