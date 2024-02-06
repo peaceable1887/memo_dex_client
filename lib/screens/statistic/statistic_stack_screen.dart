@@ -5,6 +5,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:get/get.dart';
 import 'package:memo_dex_prototyp/models/stack_statistic_data.dart';
 import 'package:memo_dex_prototyp/services/api/api_client.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -49,6 +50,7 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
   late double progressValue;
   late String fastestRun = "00:00:00";
   late String latestRun = "00:00:00";
+  String averageTime = "00:00:00";
   final storage = FlutterSecureStorage();
   FileHandler fileHandler = FileHandler();
   bool showLoadingCircular = true;
@@ -128,6 +130,8 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
               }
             }
           });
+
+          calculateAverage(runs);
         }
       }else
       {
@@ -154,6 +158,7 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
               if (run["stack_stack_id"] == widget.stackId)
               {
                 String currentTime = run['time'];
+
                 if (currentTime.compareTo(fastestTime) < 0)
                 {
                   fastestTime = currentTime;
@@ -161,9 +166,14 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
                 }
                 latestRun = run['time'];
               }
-
             }
           });
+
+          calculateAverage(runs);
+
+        }else
+        {
+          print("File stackRuns is empty.");
         }
       }
     }catch(error)
@@ -171,6 +181,8 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
       print('Fehler beim Laden der loadStackStatistcic: $error');
     }
   }
+
+
 
   Future<void> loadCardStatistic() async
   {
@@ -278,6 +290,58 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
     ];
 
     return statisticData;
+  }
+
+  Future<void> calculateAverage(List<dynamic> runs) async
+  {
+    List<String> runList = [];
+    int totalSeconds = 0;
+    int numberOfRuns = 0;
+
+    for (var run in runs)
+    {
+      if (run["stack_stack_id"] == widget.stackId)
+      {
+        runList.add(run["time"]);
+      }
+    }
+
+    for (var runString in runList)
+    {
+      List<String> splitRun = runString.split(":");
+      try
+      {
+        int hours = int.parse(splitRun[0].trim());
+        int minutes = int.parse(splitRun[1].trim());
+        int seconds = int.parse(splitRun[2].trim());
+
+        int totalSecondsRun = (hours * 3600) + (minutes * 60) + seconds;
+
+        totalSeconds += totalSecondsRun;
+        numberOfRuns++;
+      } catch (e) {
+        print("Fehler beim Parsen der Zeitangabe: $e");
+      }
+    }
+
+    if (numberOfRuns > 0)
+    {
+      int averageTotalSeconds = totalSeconds ~/ numberOfRuns;
+      int averageHours = averageTotalSeconds ~/ 3600;
+      int averageMinutes = (averageTotalSeconds % 3600) ~/ 60;
+      int averageSeconds = averageTotalSeconds % 60;
+
+      // formatierung der zeitangabe
+      averageTime = "${averageHours.toString().padLeft(2, '0')}:${averageMinutes.toString().padLeft(2, '0')}:${averageSeconds.toString().padLeft(2, '0')}";
+      print(averageTime);
+      setState(()
+      {
+        averageTime = averageTime;
+      });
+    } else
+    {
+      print("Keine Laufzeiten gefunden.");
+    }
   }
 
   String calculateDifference(String timeStringOne, String timeStringTwo) {
@@ -790,7 +854,7 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      '${calculateDifference(fastestRun, latestRun)}',
+                                      averageTime,
                                       style: TextStyle(
                                         color: Colors.black,
                                         fontSize: 16,
@@ -807,7 +871,7 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      "DIFFERENCE",
+                                      "AVERAGE",
                                       style: TextStyle(
                                         color: Colors.grey,
                                         fontSize: 12,
