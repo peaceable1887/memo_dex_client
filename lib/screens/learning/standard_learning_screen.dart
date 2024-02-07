@@ -311,6 +311,9 @@ class _CardLearningScreenState extends State<StandardLearningScreen> with Ticker
                 {
                   if(formatTimeInteger.compareTo(fastestTime) < 0)
                   {
+                    await fileHandler.editItemById(
+                        "allStacks", "stack_id", widget.stackId,
+                        {"is_updated": 1});
                     await WriteToDeviceStorage().addPass(
                       stackId: widget.stackId,
                       time: formatTime(),
@@ -330,6 +333,9 @@ class _CardLearningScreenState extends State<StandardLearningScreen> with Ticker
                     );
                   }else
                   {
+                    await fileHandler.editItemById(
+                        "allStacks", "stack_id", widget.stackId,
+                        {"is_updated": 1});
                     await WriteToDeviceStorage().addPass(
                       stackId: widget.stackId,
                       time: formatTime(),

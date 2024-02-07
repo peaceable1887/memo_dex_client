@@ -48,6 +48,7 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
   void initState()
   {
     super.initState();
+    print("widget.cardIndex: ${widget.cardIndex}");
     setLightIcon();
     controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 700));
     animation = Tween(end: 1.0, begin: 0.0).animate(controller);
@@ -108,10 +109,13 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
 
   void cardNotedOffline()
   {
-    setState(()
-    {
+    setState(() {
       if(isCardNoticed == false)
       {
+        fileHandler.editItemById(
+            "allStacks", "stack_id", widget.stackId,
+            {"is_updated": 1});
+
         fileHandler.editItemById(
             "allCards", "card_id", widget.cardIndex,
             {"remember":1, "is_updated": 1});
@@ -127,6 +131,10 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
         );
       }else
       {
+        fileHandler.editItemById(
+            "allStacks", "stack_id", widget.stackId,
+            {"is_updated": 1});
+
         fileHandler.editItemById(
             "allCards", "card_id", widget.cardIndex,
             {"remember":0, "is_updated": 1});
@@ -205,22 +213,36 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
           {
             if (card['is_deleted'] == 0)
             {
-              setState(()
-              {
+              setState(() {
                 if(answeredCorrectly == false)
                 {
+                  print(card);
                   print("IncorrectAnswer: ${card['answered_incorrectly']}");
+                  print("widget.cardIndex: ${widget.cardIndex}");
+                  print("cardid: ${card["card_id"]}");
+
+                  fileHandler.editItemById(
+                      "allStacks", "stack_id", widget.stackId,
+                      {"is_updated": 1});
 
                   fileHandler.editItemById(
                       "allCards", "card_id", widget.cardIndex,
-                      {"answered_incorrectly": card['answered_incorrectly']+1, "is_updated": 1});
+                      {"answered_incorrectly": card['answered_incorrectly'] + 1, "is_updated": 1});
                 }else
                 {
+                  print(card);
                   print("CorrectAnswer: ${card['answered_correctly']}");
+                  print("widget.cardIndex: ${widget.cardIndex}");
+                  print("cardid: ${card["card_id"]}");
+
+
+                  fileHandler.editItemById(
+                      "allStacks", "stack_id", widget.stackId,
+                      {"is_updated": 1});
 
                   fileHandler.editItemById(
                       "allCards", "card_id", widget.cardIndex,
-                      {"answered_correctly": card['answered_correctly']+1, "is_updated": 1});
+                      {"answered_correctly": card['answered_correctly'] + 1, "is_updated": 1});
                 }
 
               });

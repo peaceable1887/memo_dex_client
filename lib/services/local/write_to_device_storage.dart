@@ -58,7 +58,7 @@ class WriteToDeviceStorage
     required String answer,
     required dynamic stackId,
     required String fileName,
-    required String? tempCardIndex,
+    required int? tempCardIndex,
   }) async
   {
     try {
@@ -79,12 +79,9 @@ class WriteToDeviceStorage
 
       if (tempCardIndex != null)
       {
-        int retrievedIntValue = int.tryParse(tempCardIndex) ?? 0;
-        print('Retrieved value as int: $retrievedIntValue');
-
         // Füge neuen Eintrag hinzu
         existingData.add({
-          "card_id": retrievedIntValue + 1,
+          "card_id": tempCardIndex,
           'question': question,
           'answer': answer,
           "is_deleted": 0,
@@ -108,7 +105,6 @@ class WriteToDeviceStorage
       print('Fehler beim Hinzufügen zum JSON-File: $e');
     }
   }
-
   Future<void> addPass({
     required dynamic stackId,
     required String time,

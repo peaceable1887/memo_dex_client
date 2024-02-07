@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:memo_dex_prototyp/utils/generator.dart';
 
 import '../../screens/bottom_navigation_screen.dart';
 import '../../screens/stack/stack_content_screen.dart';
@@ -76,6 +77,13 @@ class _CreateCardFormState extends State<CreateCardForm>
         _isButtonEnabled = false;
       }
     });
+  }
+
+  int generateTemporaryUniqueNumber()
+  {
+    DateTime now = DateTime.now();
+    int uniqueNumber = now.millisecondsSinceEpoch;
+    return uniqueNumber;
   }
 
   @override
@@ -231,12 +239,15 @@ class _CreateCardFormState extends State<CreateCardForm>
                   await ApiClient(context).cardApi.addCard(_question.text, _answer.text, 0, 0, widget.stackId);
                 }else
                 {
+                  print("WIDGET STACKID: ${widget.stackId}");
+                  fileHandler.editItemById("allStacks", "stack_id", widget.stackId, {"is_updated": 1});
+
                   await WriteToDeviceStorage().addCard(
                     question: _question.text,
                     answer: _answer.text,
                     stackId: widget.stackId,
                     fileName: "allCards",
-                    tempCardIndex: tempCardIndex,
+                    tempCardIndex: Generator().generateTemporaryUniqueNumber(),
                   );
                 }
                 //zeige die Snackbar an

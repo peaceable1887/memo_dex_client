@@ -178,7 +178,6 @@ class _StackContentScreenState extends State<StackContentScreen> {
         }
       }else
       {
-        print("wird ausgeführt loadStacks (stack_content)");
         await UploadToDatabase(context).createLocalStackContent();
         await ApiClient(context).stackApi.getAllStacks();
 
@@ -250,6 +249,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
           int arrLength = cardContent.length;
           String tempCardIndex = arrLength.toString();
 
+          print(tempCardIndex);
           await storage.write(key: 'tempCardIndex', value: tempCardIndex);
 
           // Widget wird aktualisiert nnach dem Laden der Daten.

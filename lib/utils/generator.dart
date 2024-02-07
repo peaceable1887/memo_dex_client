@@ -14,4 +14,11 @@ class Generator
 
     return result;
   }
+
+  int generateTemporaryUniqueNumber()
+  {
+    DateTime now = DateTime.now();
+    int uniqueNumber = now.millisecondsSinceEpoch;
+    return uniqueNumber;
+  }
 }

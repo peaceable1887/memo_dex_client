@@ -27,12 +27,15 @@ class UploadToDatabase
       {
         if(stack["created_locally"] == 1)
         {
+          print("test");
           String responseBody = await ApiClient(context).stackApi.createStack(
               stack['stackname'], stack['color'], stack['is_deleted']);
 
           print("Response Body: $responseBody");
-          //await createLocalStackRunsContent(responseBody);
+
+          await createLocalStackRunsContent(responseBody, stack['stack_id']);
           await createLocalCardContent(responseBody, stack['stack_id']);
+
           stack["is_updated"] = 0;
 
           print("----------------NEXT STACK------------------");
@@ -40,12 +43,13 @@ class UploadToDatabase
         {
           if(stack["is_updated"] == 1)
           {
-            //await createLocalStackRunsContent(stack['stack_id']);
+            print("--------------dsadasdas------------------");
             await createLocalCardContent(stack['stack_id'], stack['stack_id']);
-            stack["is_updated"] = 0;
+            await updateLocalCardContent(stack['stack_id']);
+            await createLocalStackRunsContent(stack['stack_id'], stack['stack_id']);
+            await updateLocalCardStatistic(stack['stack_id']);
             print("----------------NEXT STACK------------------");
           }
-
         }
       }
     }else
@@ -84,7 +88,6 @@ class UploadToDatabase
     String localFileContent = await fileHandler.readJsonFromLocalFile("allCards");
 
     print("---------Upload all Local Cards in der funktion ------------");
-
     if (localFileContent.isNotEmpty)
     {
       List<dynamic> localContent = jsonDecode(localFileContent);
@@ -95,12 +98,15 @@ class UploadToDatabase
 
         if (card['stack_stack_id'] == localId)
         {
+          print(card);
           card['stack_stack_id'] = stackId;
 
           if (card['is_updated'] == 1)
           {
+            print("5xxxxxxxxxxxxxxxxxxxxx");
             if(card["created_locally"] == 1)
             {
+              print("6xxxxxxxxxxxxxxxxxxxxx");
               String responseBody = await ApiClient(context).cardApi.addCard(
                   card['question'], card['answer'], card['remember'],
                   card['is_deleted'], card['stack_stack_id']);
@@ -111,10 +117,6 @@ class UploadToDatabase
                   responseBody, card['answered_correctly'],card['answered_incorrectly']);
 
               await fileHandler.editItemById("allCards", "card_id", card['card_id'], {"is_updated": 0});
-
-              //kann eventuell raus...
-              card["is_updated"] = 0;
-              card["created_locally"] = 0;
 
               print("überarbeitete Upload all Local Cards Karte: ${card}");
 
@@ -145,7 +147,6 @@ class UploadToDatabase
         {
           if (card['is_updated'] == 1)
           {
-
             await ApiClient(context).cardApi.updateCard(card['question'],
                 card['answer'],
                 card['is_deleted'],
@@ -176,12 +177,16 @@ class UploadToDatabase
 
       for (var card in localContent)
       {
+        print("ausführung 1");
         if(card['stack_stack_id'] == stackId)
         {
+          print("ausführung 2");
           if(card['is_deleted'] == 0)
           {
+            print("ausführung 3");
             if(card['is_updated'] == 1)
             {
+              print("ausführung 4");
               await ApiClient(context).cardApi.updateCardStatistic(
                   card['card_id'], card['answered_correctly'],card['answered_incorrectly']);
               card['is_updated'] = 0;
@@ -196,7 +201,7 @@ class UploadToDatabase
     }
   }
 
-  Future<void> createLocalStackRunsContent(stackId) async
+  Future<void> createLocalStackRunsContent(stackId, localId) async
   {
     String localStackRun = await fileHandler.readJsonFromLocalFile("stackRuns");
 
@@ -206,16 +211,25 @@ class UploadToDatabase
     {
       List<dynamic> stackRuns = jsonDecode(localStackRun);
 
-      for (var stackRun in stackRuns)
+      for (var cardIndex = 0; cardIndex < stackRuns.length; cardIndex++)
       {
-        if(stackRun["created_locally"] == 1 && stackRun["time"] != "24:00:00")
-        {
-          await ApiClient(context).stackApi.insertStackRun(
-              stackRun["time"], stackId);
+        var stackRun = stackRuns[cardIndex];
 
-          print("----------------NEXT PASS------------------");
+        if (stackRun['stack_stack_id'] == localId)
+        {
+          stackRun['stack_stack_id'] = stackId;
+
+          if(stackRun["created_locally"] == 1 && stackRun["time"] != "24:00:00")
+          {
+            await ApiClient(context).stackApi.insertStackRun(
+                stackRun["time"], stackId);
+
+            print("----------------NEXT PASS------------------");
+          }
         }
       }
+
+
     }else
     {
       print("createLocalStackRunsContent are empty");

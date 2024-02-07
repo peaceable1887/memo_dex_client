@@ -116,15 +116,12 @@ class _StackViewGridState extends State<StackGrid> {
             ));
 
             //Updated alle Karten die Offline erstellt wurden, bei dem der Stack Online erstellt wurde
-            //kann eventuell raus
-            await UploadToDatabase(context).createLocalCardContent(stack['stack_id'], stack['stack_id']);
-
-            await UploadToDatabase(context).updateLocalCardContent(stack['stack_id']);
-
-            await UploadToDatabase(context).updateLocalCardStatistic(stack['stack_id']);
+            //await UploadToDatabase(context).createLocalCardContent(stack['stack_id'], stack['stack_id']);
+            //await UploadToDatabase(context).updateLocalCardContent(stack['stack_id']);
+            //await UploadToDatabase(context).updateLocalCardStatistic(stack['stack_id']);
+            await ApiClient(context).cardApi.getAllCards();
 
           }
-
         }
         stackButtons.add(CreateStackBtn());
 
