@@ -45,6 +45,7 @@ class _CardLearningScreenState extends State<StandardLearningScreen> with Ticker
   FileHandler fileHandler = FileHandler();
   bool showLoadingCircular = true;
   final storage = FlutterSecureStorage();
+  bool isFirstIfBranchExecuted = false;
 
   @override
   void initState()
@@ -242,8 +243,8 @@ class _CardLearningScreenState extends State<StandardLearningScreen> with Ticker
     }
   }
 
-  //TODO muss noch für die den offline modus angepasst werden (Daten werden nicht erfasst wenn der Stack komplett offline erstellt wurde)
-  Future<void> handleCardClick(bool val) async {
+  Future<void> handleCardClick(bool val) async
+  {
     try
     {
       ConnectivityResult connectivityResult = await Connectivity().checkConnectivity();
@@ -251,46 +252,65 @@ class _CardLearningScreenState extends State<StandardLearningScreen> with Ticker
 
       if(isConnected == false)
       {
-        String localStackStatisticContent = await fileHandler.readJsonFromLocalFile("allStacks");
+        if(!isFirstIfBranchExecuted)
+        {
+          //create dummy stackRun data if stackRun with given stack_stack_id is not available
+          await createLocalStackRun();
+          isFirstIfBranchExecuted = true;
+        }
 
-        if (localStackStatisticContent.isNotEmpty) {
+        String localStackRunContent = await fileHandler.readJsonFromLocalFile("stackRuns");
 
-          List<dynamic> stackStatisticContent = jsonDecode(localStackStatisticContent);
+        if (localStackRunContent.isNotEmpty)
+        {
+          List<dynamic> stackRunContent = jsonDecode(localStackRunContent);
 
-          for (var stack in stackStatisticContent)
+          for (var run in stackRunContent)
           {
-            if(stack["stack_id"] == widget.stackId)
+            int arrLength = localStackRunContent.length;
+            String tempPassIndex = arrLength.toString();
+
+            if(run["stack_stack_id"] == widget.stackId)
             {
-              if(stack["fastest_time"] == null)
+              List<int> total = [];
+
+              for(int i = 0; i < stackRunContent.length; i++)
               {
-                stack["fastest_time"] = "99:99:99";
+                if(stackRunContent[i]["stack_stack_id"] == widget.stackId)
+                {
+                  List<String> splitRun = stackRunContent[i]["time"].split(":");
+                  int hours = int.parse(splitRun[0]);
+                  int minutes = int.parse(splitRun[1]);
+                  int seconds = int.parse(splitRun[2]);
+
+                  int totalSecondsRun = (hours * 3600) + (minutes * 60) + seconds;
+                  total.add(totalSecondsRun);
+                }
               }
 
-              final fastestTime = stack["fastest_time"];
+              //sort by the fastest time
+              total.sort();
+              print(total);
+              final int fastestTime = total[0];
 
-              String localStackRunContent = await fileHandler.readJsonFromLocalFile("stackRuns");
-              int arrLength = localStackRunContent.length;
-              String tempPassIndex = arrLength.toString();
+              List<String> splitFormatTime = formatTime().split(":");
+              int hours = int.parse(splitFormatTime[0]);
+              int minutes = int.parse(splitFormatTime[1]);
+              int seconds = int.parse(splitFormatTime[2]);
 
-              print(tempPassIndex);
+              int formatTimeInteger = (hours * 3600) + (minutes * 60) + seconds;
 
-              setState(() async {
+              print("STACKRUNTIME: ${fastestTime}");
+              print("FORMATTIME: ${formatTimeInteger}");
+
+              setState(() async
+              {
                 wasClicked = val;
 
-                if (wasClicked == true && activeIndex == indexCards.length - 1) {
-
-                  Duration fastestDuration = parseDuration(fastestTime);
-                  Duration currentDuration = parseDuration(formatTime());
-
-                  int stackPass = stack["pass"] + 1;
-                  print("Stack Passes: ${stackPass}");
-
-                  if(currentDuration.compareTo(fastestDuration) < 0)
+                if (wasClicked == true && activeIndex == indexCards.length - 1)
+                {
+                  if(formatTimeInteger.compareTo(fastestTime) < 0)
                   {
-                    fileHandler.editItemById(
-                        "allStacks", "stack_id", widget.stackId,
-                        {"fastest_time": formatTime(),"last_time": formatTime(),"pass": stackPass ,"is_updated": 1});
-
                     await WriteToDeviceStorage().addPass(
                       stackId: widget.stackId,
                       time: formatTime(),
@@ -308,13 +328,8 @@ class _CardLearningScreenState extends State<StandardLearningScreen> with Ticker
                         );
                       },
                     );
-
                   }else
                   {
-                    fileHandler.editItemById(
-                        "allStacks", "stack_id", widget.stackId,
-                        {"fastest_time": fastestTime,"last_time": formatTime(), "pass": stackPass , "is_updated": 1});
-
                     await WriteToDeviceStorage().addPass(
                       stackId: widget.stackId,
                       time: formatTime(),
@@ -340,30 +355,48 @@ class _CardLearningScreenState extends State<StandardLearningScreen> with Ticker
         } else{}
       }else
       {
-        final stackStatistic= await ApiClient(context).stackApi.getStackStatistic(widget.stackId);
+        var stackRunTime = await ApiClient(context).stackApi.getStackRun(widget.stackId);
+        List<int> total = [];
 
-        if(stackStatistic[0]["fastest_time"] == null)
+        if (stackRunTime == null || stackRunTime.isEmpty)
         {
-          stackStatistic[0]["fastest_time"] = "99:99:99";
+          stackRunTime = [{"time": "99:99:99"}];
         }
 
-        final fastestTime = stackStatistic[0]["fastest_time"];
+        for(int i = 0; i < stackRunTime.length; i++)
+        {
+          List<String> splitRun = stackRunTime[i]["time"].split(":");
+          int hours = int.parse(splitRun[0]);
+          int minutes = int.parse(splitRun[1]);
+          int seconds = int.parse(splitRun[2]);
 
-          print(wasClicked);
+          int totalSecondsRun = (hours * 3600) + (minutes * 60) + seconds;
+          total.add(totalSecondsRun);
+        }
+
+        //sort by the fastest time
+        total.sort();
+
+        final int fastestTime = total[0];
+
+        List<String> splitFormatTime = formatTime().split(":");
+        int hours = int.parse(splitFormatTime[0]);
+        int minutes = int.parse(splitFormatTime[1]);
+        int seconds = int.parse(splitFormatTime[2]);
+
+        int formatTimeInteger = (hours * 3600) + (minutes * 60) + seconds;
+
+        print("FORMATTIME: ${formatTimeInteger}");
+
+        setState(() async
+        {
           wasClicked = val;
 
-          if (wasClicked == true && activeIndex == indexCards.length - 1) {
-
-            Duration fastestDuration = parseDuration(fastestTime);
-            Duration currentDuration = parseDuration(formatTime());
-
-            if(currentDuration.compareTo(fastestDuration) < 0)
+          if (wasClicked == true && activeIndex == indexCards.length - 1)
+          {
+            if(formatTimeInteger.compareTo(fastestTime) < 0)
             {
-              //TODO rausnehmen wenn db struktur aktualisiert wurde
-              await ApiClient(context).stackApi.updateStackStatistic(widget.stackId, formatTime(), formatTime(), stackStatistic[0]["pass"]);
-
               await ApiClient(context).stackApi.insertStackRun(formatTime(),widget.stackId);
-
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
@@ -377,11 +410,7 @@ class _CardLearningScreenState extends State<StandardLearningScreen> with Ticker
 
             }else
             {
-              //TODO rausnehmen wenn db struktur aktualisiert wurde
-              await ApiClient(context).stackApi.updateStackStatistic(widget.stackId, fastestTime, formatTime(), stackStatistic[0]["pass"]);
-
               await ApiClient(context).stackApi.insertStackRun(formatTime(),widget.stackId);
-
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
@@ -394,10 +423,38 @@ class _CardLearningScreenState extends State<StandardLearningScreen> with Ticker
               );
             }
           }
-
+        });
       }
     } catch (error) {
       print('Fehler beim Laden der Daten: $error');
+    }
+  }
+
+  Future<void> createLocalStackRun() async
+  {
+    String localStackRunContent = await fileHandler.readJsonFromLocalFile("stackRuns");
+
+    if (localStackRunContent.isNotEmpty)
+    {
+      List<dynamic> stackRunContent = jsonDecode(localStackRunContent);
+      bool test = false;
+
+      for(int i = 0; i < stackRunContent.length; i++)
+      {
+        int arrLength = localStackRunContent.length;
+        String tempPassIndex = arrLength.toString();
+
+        if(!test && stackRunContent[i]["stack_stack_id"] != widget.stackId)
+        {
+          await WriteToDeviceStorage().addPass(
+            stackId: widget.stackId,
+            time: "24:00:00",
+            fileName: "stackRuns",
+            tempPassIndex: tempPassIndex,
+          );
+          test = true;
+        }
+      }
     }
   }
 

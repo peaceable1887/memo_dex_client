@@ -48,9 +48,9 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
     },
   ];
   late double progressValue;
-  late String fastestRun = "00:00:00";
-  late String latestRun = "00:00:00";
-  String averageTime = "00:00:00";
+  late String fastestRun = "keine Zeit";
+  late String latestRun = "keine Zeit";
+  String averageTime = "keine Zeit";
   final storage = FlutterSecureStorage();
   FileHandler fileHandler = FileHandler();
   bool showLoadingCircular = true;
@@ -298,19 +298,34 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
     int totalSeconds = 0;
     int numberOfRuns = 0;
 
+    print("test 1");
+    print("runs: ${runs}");
+
+
     for (var run in runs)
     {
+      print("stack_stack_id: ${run["stack_stack_id"]}");
+      print("widget.stackId: ${widget.stackId}");
+      print("test 2");
+
       if (run["stack_stack_id"] == widget.stackId)
       {
-        runList.add(run["time"]);
+        print("test 3");
+        if(run["time"] != "24:00:00")
+        {
+          print("test 4");
+          runList.add(run["time"]);
+        }
       }
     }
 
     for (var runString in runList)
     {
+      print("test 5");
       List<String> splitRun = runString.split(":");
       try
       {
+        print("test 6");
         int hours = int.parse(splitRun[0].trim());
         int minutes = int.parse(splitRun[1].trim());
         int seconds = int.parse(splitRun[2].trim());
@@ -323,9 +338,10 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
         print("Fehler beim Parsen der Zeitangabe: $e");
       }
     }
-
+    print("test 7");
     if (numberOfRuns > 0)
     {
+      print("test 8");
       int averageTotalSeconds = totalSeconds ~/ numberOfRuns;
       int averageHours = averageTotalSeconds ~/ 3600;
       int averageMinutes = (averageTotalSeconds % 3600) ~/ 60;

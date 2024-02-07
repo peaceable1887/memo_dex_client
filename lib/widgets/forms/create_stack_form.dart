@@ -297,14 +297,15 @@ class _CreateStackFormState extends State<CreateStackForm> {
                           async {
                             if (value != null)
                             {
-                              int userIdTest;
-                              userIdTest = int.tryParse(value) ?? 0;
+                              int userId;
+                              userId = int.tryParse(value) ?? 0;
 
                               await WriteToDeviceStorage().addStack(
                                   stackname: _stackname.text,
                                   color: "${color.value.toRadixString(16).substring(2)}",
-                                  userId: userIdTest,
+                                  userId: userId,
                                   fileName: "allStacks");
+
                             } else {}
                           });
                         }

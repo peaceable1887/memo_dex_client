@@ -89,7 +89,6 @@ class _StackViewGridState extends State<StackGrid> {
     {
       await UploadToDatabase(context).createLocalStackContent();
       await UploadToDatabase(context).updateLocalStackContent();
-      await UploadToDatabase(context).createLocalStackRunsContent();
       await ApiClient(context).stackApi.getAllStacks();
       await ApiClient(context).stackApi.getAllStackRuns();
 

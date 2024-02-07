@@ -30,21 +30,18 @@ class UploadToDatabase
           String responseBody = await ApiClient(context).stackApi.createStack(
               stack['stackname'], stack['color'], stack['is_deleted']);
 
-
           print("Response Body: $responseBody");
-
-          await updateLocalStackStatistic(responseBody, stack['stack_id']);
+          //await createLocalStackRunsContent(responseBody);
           await createLocalCardContent(responseBody, stack['stack_id']);
-
           stack["is_updated"] = 0;
+
           print("----------------NEXT STACK------------------");
         }else
         {
           if(stack["is_updated"] == 1)
           {
-            await updateLocalStackStatistic(stack['stack_id'], stack['stack_id']);
+            //await createLocalStackRunsContent(stack['stack_id']);
             await createLocalCardContent(stack['stack_id'], stack['stack_id']);
-
             stack["is_updated"] = 0;
             print("----------------NEXT STACK------------------");
           }
@@ -167,55 +164,6 @@ class UploadToDatabase
     }
   }
 
-  Future<void> updateLocalStackStatistic(stackId, localId) async
-  {
-    try
-    {
-      String localStacks = await fileHandler.readJsonFromLocalFile("allStacks");
-
-      print("---------updateLocalStackStatistic in der funktion-----------");
-
-      if (localStacks.isNotEmpty)
-      {
-        List<dynamic> stacks = jsonDecode(localStacks);
-
-        for (var stack in stacks)
-        {
-          if(stack["stack_id"] == localId)
-          {
-            stack["stack_id"] = stackId;
-
-            if(stack["is_deleted"] == 0)
-            {
-              if(stack['is_updated'] == 1)
-              {
-                if(stack['fastest_time'] != null && stack['last_time'] != null)
-                {
-                  print("Update Stack: ${stack}");
-
-                  await ApiClient(context).stackApi.updateStackStatistic(
-                      stack["stack_id"],stack["fastest_time"] ,stack["last_time"], stack["pass"]-1);
-
-                  stack['is_updated'] = 0;
-
-                  print("----------------NEXT STACK------------------");
-                }
-              }
-            }
-          }
-        }
-
-      }else
-      {
-        print("updateLocalStackStatistic are empty");
-      }
-    }catch(error)
-    {
-      print("Fehler beim aktualisieren der updateLocalStackContent()-Funktion: $error");
-    }
-
-  }
-
   Future<void> updateLocalCardStatistic(stackId) async
   {
     String localFileContent = await fileHandler.readJsonFromLocalFile("allCards");
@@ -248,11 +196,11 @@ class UploadToDatabase
     }
   }
 
-  Future<void> createLocalStackRunsContent() async
+  Future<void> createLocalStackRunsContent(stackId) async
   {
     String localStackRun = await fileHandler.readJsonFromLocalFile("stackRuns");
 
-    print("---------Upload all createLocalStackRunsContent in der funktion------------");
+    print("---------xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx------------");
 
     if (localStackRun.isNotEmpty)
     {
@@ -260,10 +208,10 @@ class UploadToDatabase
 
       for (var stackRun in stackRuns)
       {
-        if(stackRun["created_locally"] == 1)
+        if(stackRun["created_locally"] == 1 && stackRun["time"] != "24:00:00")
         {
           await ApiClient(context).stackApi.insertStackRun(
-              stackRun["time"], stackRun["stack_stack_id"]);
+              stackRun["time"], stackId);
 
           print("----------------NEXT PASS------------------");
         }

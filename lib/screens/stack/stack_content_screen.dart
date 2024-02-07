@@ -165,6 +165,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
           {
             if (stack["stack_id"] == widget.stackId)
             {
+
               setState(()
               {
                 stackname = stack["stackname"];

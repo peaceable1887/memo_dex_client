@@ -222,48 +222,13 @@ class StackApi
     }else{}
   }
 
-  Future<void> updateStackStatistic(stackId, fastestTime, lastTime, pass) async {
-
-    String? accessToken = await storage.read(key: 'accessToken');
-
-    if (accessToken != null) {
-      final response = await http.post(
-        Uri.parse('http://10.0.2.2:3000/updateStackStatistic'),
-        headers: <String, String>{
-          'Content-Type': 'application/json',
-          'Authorization': "Bearer " + accessToken,
-        },
-        body: jsonEncode(<String, dynamic>{
-          "stack_id": stackId,
-          "fastest_time": fastestTime,
-          "last_time": lastTime,
-          "pass": pass,
-        }),
-      );
-
-      if (response.statusCode == 200)
-      {
-        print("Durchlauf wurde in die Datenbank gespeichert.");
-      } else {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return ValidationMessageBox(message: "Durchlauf konnte nicht gespeichert werden");
-          },
-        );
-        throw Exception('Failed to insert data.');
-      }
-    }else {
-    }
-  }
-
   Future<dynamic> insertStackRun(time, stackId) async {
 
     String? accessToken = await storage.read(key: 'accessToken');
 
     if (accessToken != null) {
       final response = await http.post(
-        Uri.parse('http://10.0.2.2:3000/stackRun'),
+        Uri.parse('http://10.0.2.2:3000/createStackRun'),
         headers: <String, String>{
           'Content-Type': 'application/json',
           'Authorization': "Bearer " + accessToken,
@@ -288,6 +253,55 @@ class StackApi
         throw Exception('Failed to insert data.');
       }
     }else {
+    }
+  }
+
+  Future<dynamic> getStackRun(stackId) async
+  {
+    String? accessToken = await storage.read(key: 'accessToken');
+    try
+    {
+      if (accessToken != null)
+      {
+        final response = await http.post(
+          Uri.parse('http://10.0.2.2:3000/getStackRun'),
+          headers: <String, String>
+          {
+            'Content-Type': 'application/json',
+            'Authorization': "Bearer " + accessToken,
+          },
+          body: jsonEncode(<String, dynamic>
+          {
+            "stack_id": stackId
+          }),
+        ).timeout(Duration(seconds: 10));
+        if (response.statusCode == 200)
+        {
+          dynamic jsonResponse = json.decode(response.body);
+          // Daten werden zusätzlich lokal abgespeichert
+
+          return jsonResponse;
+        }else
+        {
+          throw http.ClientException('hat nicht geklappt. Statuscode: ${response.statusCode}');
+        }
+      }else
+      {
+        print("Token existiert nicht!");
+      }
+    }on TimeoutException catch (e)
+    {
+      print('Zeitüberschreitung: $e');
+      //var auf grad kein netz einbauen
+      return null;
+    }on http.ClientException catch (e)
+    {
+      print('Clientfehler: $e');
+      return null;
+    }catch (e)
+    {
+      print('Allgemeiner Fehler: $e');
+      return null;
     }
   }
 
@@ -343,51 +357,4 @@ class StackApi
     }
   }
 
-  Future<dynamic> getStackStatistic(stackId) async
-  {
-    String? accessToken = await storage.read(key: 'accessToken');
-    try
-    {
-      if (accessToken != null) {
-        final response = await http.post(
-          Uri.parse('http://10.0.2.2:3000/getStackStatistic'),
-          headers: <String, String>{
-            'Content-Type': 'application/json',
-            'Authorization': "Bearer " + accessToken,
-          },
-          body: jsonEncode(<String, dynamic>{
-            "stack_id": stackId
-          }),
-        ).timeout(Duration(seconds: 10));
-
-        if (response.statusCode == 200)
-        {
-          dynamic jsonResponse = json.decode(response.body);
-          await fileHandler.saveJsonToLocalFile(jsonResponse, "stackStatistic");
-
-          return jsonResponse;
-
-        }else
-        {
-          throw http.ClientException('hat nicht geklappt. Statuscode: ${response.statusCode}');
-        }
-      }else
-      {
-        print("Zugangstoken existiert nicht!");
-      }
-    }on TimeoutException catch (e)
-    {
-      print('Zeitüberschreitung: $e');
-      //var auf grad kein netz einbauen
-      return null;
-    }on http.ClientException catch (e)
-    {
-      print('Clientfehler: $e');
-      return null;
-    }catch (e)
-    {
-      print('Allgemeiner Fehler: $e');
-      return null;
-    }
-  }
 }
