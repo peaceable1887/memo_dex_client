@@ -47,6 +47,7 @@ dependencies:
   horizontal_blocked_scroll_physics: ^4.0.1
   syncfusion_flutter_charts: ^21.2.4
   get: ^4.6.6
+  fl_chart: ^0.66.1
 
 dev_dependencies:
   flutter_test:

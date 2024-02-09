@@ -328,8 +328,7 @@ class StackApi
         if (response.statusCode == 200)
         {
           dynamic jsonResponse = json.decode(response.body);
-          // Daten werden zusätzlich lokal abgespeichert
-          print(jsonResponse);
+
           await fileHandler.saveJsonToLocalFile(jsonResponse, "stackRuns");
 
           return jsonResponse;

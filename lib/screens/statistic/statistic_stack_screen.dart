@@ -2,12 +2,15 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:get/get.dart';
 import 'package:memo_dex_prototyp/models/stack_statistic_data.dart';
 import 'package:memo_dex_prototyp/services/api/api_client.dart';
+import 'package:memo_dex_prototyp/widgets/buttons/date_picker_btn.dart';
+import 'package:memo_dex_prototyp/widgets/buttons/dropdown_menu_btn.dart';
+import 'package:memo_dex_prototyp/widgets/components/statistic/statistic_line_chart.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import '../../utils/trim.dart';
 import '../../services/local/file_handler.dart';
@@ -56,6 +59,11 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
   bool showLoadingCircular = true;
   late StreamSubscription subscription;
   bool snackbarIsDisplayed = false;
+  late int selectedYear;
+  late int selectedMonth;
+  int currentDay = 1;
+  late int currentMonth;
+  List<Map<String, dynamic>> runInformation = [];
 
   @override
   void initState ()
@@ -63,6 +71,9 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
     super.initState();
     loadStackStatistcic();
     loadCardStatistic();
+    loadStackRuns();
+    selectedYear = DateTime.now().year;
+    selectedMonth = DateTime.now().month;
     checkInternetConnection();
     progressInPercent(widget.noticed, widget.notNoticed);
     _stackStatisticData = getStackStatisticData(widget.notNoticed);
@@ -74,7 +85,6 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
         MaterialPageRoute(builder: (BuildContext context) => BottomNavigationScreen()),
       );
     });
-
   }
 
   Future<void> checkInternetConnection() async
@@ -182,8 +192,6 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
     }
   }
 
-
-
   Future<void> loadCardStatistic() async
   {
     try
@@ -257,6 +265,172 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
     }
   }
 
+  Future<void> loadStackRuns() async
+  {
+    try
+    {
+      ConnectivityResult connectivityResult = await Connectivity().checkConnectivity();
+      bool isConnected = (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi);
+
+      if(isConnected == false)
+      {
+        setState(()
+        {
+          showLoadingCircular = false;
+        });
+
+        String fileContent = await fileHandler.readJsonFromLocalFile("stackRuns");
+
+        if (fileContent.isNotEmpty)
+        {
+          List<dynamic> stackRunFileContent = jsonDecode(fileContent);
+          setState(()
+          {
+            List<dynamic> information = [];
+            String formattedDate = "";
+
+            for (var stackRun in stackRunFileContent)
+            {
+              if(stackRun['stack_stack_id'] == widget.stackId)
+              {
+                DateTime dateTime = DateTime.parse(stackRun["date"]);
+                formattedDate = "${dateTime.year}-${dateTime.month.toString().padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')}";
+
+                splitFormattedDate(formattedDate);
+                information.add(formattedDate);
+
+                print("DATE INFORMATION: $information");
+
+              }
+            }
+
+            List<dynamic> dateInformation = information;
+            Map<String, int> dateCountMap = {};
+
+            for (int i = 0; i < dateInformation.length; i++)
+            {
+              String currentDate = dateInformation[i];
+
+              if (dateCountMap.containsKey(currentDate))
+              {
+                dateCountMap[currentDate] = dateCountMap[currentDate]! + 1;
+              } else
+              {
+                dateCountMap[currentDate] = 1;
+              }
+            }
+
+            dateCountMap.forEach((date, numberOfRuns)
+            {
+              print("[$date, $numberOfRuns]");
+              runInformation.add({'date': date, 'numberOfRuns': numberOfRuns});
+            });
+
+            print("RUN INFORMATION: $runInformation");
+
+          });
+        }
+      }else
+      {
+        await ApiClient(context).stackApi.getAllStackRuns();
+
+        setState(()
+        {
+          showLoadingCircular = false;
+        });
+
+        String fileContent = await fileHandler.readJsonFromLocalFile("stackRuns");
+        print("FILE CONTENT: $fileContent");
+        if (fileContent.isNotEmpty)
+        {
+          List<dynamic> stackRunFileContent = jsonDecode(fileContent);
+          setState(()
+          {
+            List<dynamic> information = [];
+            String formattedDate = "";
+
+            for (var stackRun in stackRunFileContent)
+            {
+              if(stackRun['stack_stack_id'] == widget.stackId)
+              {
+                DateTime dateTime = DateTime.parse(stackRun["date"]);
+                formattedDate = "${dateTime.year}-${dateTime.month.toString().padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')}";
+
+                splitFormattedDate(formattedDate);
+                information.add(formattedDate);
+
+                print("DATE INFORMATION: $information");
+
+              }
+            }
+
+            List<dynamic> dateInformation = information;
+            Map<String, int> dateCountMap = {};
+
+            for (int i = 0; i < dateInformation.length; i++)
+            {
+              String currentDate = dateInformation[i];
+
+              if (dateCountMap.containsKey(currentDate))
+              {
+                dateCountMap[currentDate] = dateCountMap[currentDate]! + 1;
+              } else
+              {
+                dateCountMap[currentDate] = 1;
+              }
+            }
+
+            dateCountMap.forEach((date, numberOfRuns)
+            {
+              print("[$date, $numberOfRuns]");
+              runInformation.add({'date': date, 'numberOfRuns': numberOfRuns});
+            });
+
+            print("RUN INFORMATION: $runInformation");
+
+          });
+        }
+      }
+    } catch (error)
+    {
+      print('Fehler beim Laden des StackRunContent: $error');
+    }
+  }
+
+  void splitFormattedDate(String formattedDate)
+  {
+    List<String> splitFormattedDate = formattedDate.split("-");
+    try
+    {
+      int month = int.parse(splitFormattedDate[1].trim());
+      int day = int.parse(splitFormattedDate[2].trim());
+
+      setState(()
+      {
+        currentMonth = month;
+        currentDay = day;
+      });
+
+      print("MONTH: ${currentMonth}");
+      print("DAY: ${currentDay}");
+
+    } catch (e)
+    {
+      print("Fehler beim Parsen der Zeitangabe: $e");
+    }
+  }
+
+  void updateSelectedValues(int year, int month) {
+    setState(()
+    {
+      selectedYear = year;
+      selectedMonth = month;
+      print(selectedYear);
+      print(selectedMonth);
+    });
+  }
+
+  //TODO noch auslagern
   void progressInPercent(noticed, notNoticed)
   {
     if(notNoticed == 0 && widget.noticed == 0)
@@ -268,7 +442,7 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
       progressValue = (noticed/(noticed+notNoticed))*100;
     });
   }
-
+  //TODO noch auslagern
   List<StackStatisticData> getStackStatisticData(notNoticed)
   {
     if(notNoticed == 0 && widget.noticed == 0)
@@ -291,29 +465,20 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
 
     return statisticData;
   }
-
+  
+  //TODO noch auslagern
   Future<void> calculateAverage(List<dynamic> runs) async
   {
     List<String> runList = [];
     int totalSeconds = 0;
     int numberOfRuns = 0;
 
-    print("test 1");
-    print("runs: ${runs}");
-
-
     for (var run in runs)
     {
-      print("stack_stack_id: ${run["stack_stack_id"]}");
-      print("widget.stackId: ${widget.stackId}");
-      print("test 2");
-
       if (run["stack_stack_id"] == widget.stackId)
       {
-        print("test 3");
         if(run["time"] != "24:00:00")
         {
-          print("test 4");
           runList.add(run["time"]);
         }
       }
@@ -321,11 +486,9 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
 
     for (var runString in runList)
     {
-      print("test 5");
       List<String> splitRun = runString.split(":");
       try
       {
-        print("test 6");
         int hours = int.parse(splitRun[0].trim());
         int minutes = int.parse(splitRun[1].trim());
         int seconds = int.parse(splitRun[2].trim());
@@ -338,10 +501,9 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
         print("Fehler beim Parsen der Zeitangabe: $e");
       }
     }
-    print("test 7");
+
     if (numberOfRuns > 0)
     {
-      print("test 8");
       int averageTotalSeconds = totalSeconds ~/ numberOfRuns;
       int averageHours = averageTotalSeconds ~/ 3600;
       int averageMinutes = (averageTotalSeconds % 3600) ~/ 60;
@@ -359,7 +521,7 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
       print("Keine Laufzeiten gefunden.");
     }
   }
-
+  //TODO noch auslagern
   String calculateDifference(String timeStringOne, String timeStringTwo) {
     try
     {
@@ -451,6 +613,29 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
           Expanded(
             child: ListView(
               children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                  child: Container(
+                    padding: const EdgeInsets.fromLTRB(5, 0, 5, 10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+                          child: DatePickerBtn(onDateSelected: (year, month)
+                          {
+                            updateSelectedValues(year, month);
+                          },),
+                        ),
+                        StatisticLineChart(
+                          year: selectedYear,
+                          month: selectedMonth,
+                          runInformation: runInformation,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                   child: Container(
