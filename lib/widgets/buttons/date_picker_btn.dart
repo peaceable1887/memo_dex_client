@@ -60,8 +60,10 @@ class _DatePickerBtnState extends State<DatePickerBtn>
                     child: Text((index + 1).toString()),
                   ),
                 ),
-                onChanged: (value) {
-                  setState(() {
+                onChanged: (value)
+                {
+                  setState(()
+                  {
                     selectedMonth = value!;
                     widget.onDateSelected(selectedYear, selectedMonth);
                   });

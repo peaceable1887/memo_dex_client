@@ -386,8 +386,6 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
               runInformation.add({'date': date, 'numberOfRuns': numberOfRuns});
             });
 
-            print("RUN INFORMATION: $runInformation");
-
           });
         }
       }
@@ -411,9 +409,6 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
         currentDay = day;
       });
 
-      print("MONTH: ${currentMonth}");
-      print("DAY: ${currentDay}");
-
     } catch (e)
     {
       print("Fehler beim Parsen der Zeitangabe: $e");
@@ -425,8 +420,6 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
     {
       selectedYear = year;
       selectedMonth = month;
-      print(selectedYear);
-      print(selectedMonth);
     });
   }
 
@@ -615,29 +608,6 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
               children: [
                 Padding(
                   padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-                  child: Container(
-                    padding: const EdgeInsets.fromLTRB(5, 0, 5, 10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
-                          child: DatePickerBtn(onDateSelected: (year, month)
-                          {
-                            updateSelectedValues(year, month);
-                          },),
-                        ),
-                        StatisticLineChart(
-                          year: selectedYear,
-                          month: selectedMonth,
-                          runInformation: runInformation,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                   child: Container(
                     padding:  const EdgeInsets.fromLTRB(12, 10, 12, 10),
                     decoration: BoxDecoration(
@@ -873,7 +843,30 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(15, 15, 15, 10),
+                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                  child: Container(
+                    padding: const EdgeInsets.fromLTRB(5, 0, 17, 0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+                          child: DatePickerBtn(onDateSelected: (year, month)
+                          {
+                            updateSelectedValues(year, month);
+                          },),
+                        ),
+                        StatisticLineChart(
+                          year: selectedYear,
+                          month: selectedMonth,
+                          runInformation: runInformation,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(15, 10, 15, 20),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [

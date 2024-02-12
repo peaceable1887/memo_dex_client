@@ -15,7 +15,7 @@ class StatisticLineChart extends StatefulWidget {
 
 class _StatisticLineChartState extends State<StatisticLineChart>
 {
-  double _maxNumberOfRuns = 0.0;
+  double _maxNumberOfRuns = 25.0;
   late int _currentYear;
   late int _currentMonth;
 
@@ -23,7 +23,6 @@ class _StatisticLineChartState extends State<StatisticLineChart>
   void initState()
   {
     super.initState();
-
   }
 
   int getMonthLength(int month)
@@ -38,7 +37,7 @@ class _StatisticLineChartState extends State<StatisticLineChart>
     }
     if(month == 2)
     {
-      return 29;
+      return 28;
     }else
     {
       return 0;
@@ -63,9 +62,6 @@ class _StatisticLineChartState extends State<StatisticLineChart>
           _currentYear = widget.year;
           _currentMonth = widget.month;
         });
-
-        print("MONTH: ${month}");
-        print("CURRENT MONTH: ${_currentMonth}");
 
         if(year == _currentYear && month == _currentMonth)
         {
@@ -96,7 +92,11 @@ class _StatisticLineChartState extends State<StatisticLineChart>
         {
           setState(()
           {
-            _maxNumberOfRuns = currentRuns;
+            if(currentRuns >= _maxNumberOfRuns)
+            {
+              _maxNumberOfRuns = currentRuns;
+            }
+
           });
         }
       }
@@ -130,7 +130,7 @@ class _StatisticLineChartState extends State<StatisticLineChart>
           minX: 0,
           maxX: getMonthLength(widget.month).toDouble(),
           minY: 0,
-          maxY: _maxNumberOfRuns+1,
+          maxY: _maxNumberOfRuns,
           backgroundColor: Color(0xFF00324E),
           titlesData: FlTitlesData(
             show: true,
@@ -146,12 +146,12 @@ class _StatisticLineChartState extends State<StatisticLineChart>
             ),
             leftTitles: AxisTitles(
               sideTitles: SideTitles(
-                showTitles: false,
-                interval: 1,
+                showTitles: true,
+                interval: 5,
                 getTitlesWidget: (value, meta)
                 {
-                  String text = "";
-                  print(text);
+                  int runText = value.toInt();
+                  String text = runText.toString();
 
                   return Text(
                     text,
@@ -168,34 +168,11 @@ class _StatisticLineChartState extends State<StatisticLineChart>
             bottomTitles: AxisTitles(
               sideTitles: SideTitles(
                 showTitles: true,
-                interval: 1,
+                interval: 5,
                 getTitlesWidget: (value, meta)
                 {
-                  String text = "";
-                  switch (value.toInt())
-                  {
-                    case 1:
-                      text = "1";
-                      break;
-                    case 5:
-                      text = "5";
-                      break;
-                    case 10:
-                      text = "10";
-                      break;
-                    case 15:
-                      text = "15";
-                      break;
-                    case 20:
-                      text = "20";
-                      break;
-                    case 25:
-                      text = "25";
-                      break;
-                    case 30:
-                      text = "30";
-                      break;
-                  }
+                  int monthText = value.toInt();
+                  String text = monthText.toString();
 
                   return Text(
                     text,
