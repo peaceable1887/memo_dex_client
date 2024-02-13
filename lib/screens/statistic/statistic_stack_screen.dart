@@ -9,9 +9,9 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:memo_dex_prototyp/models/stack_statistic_data.dart';
 import 'package:memo_dex_prototyp/services/api/api_client.dart';
 import 'package:memo_dex_prototyp/widgets/buttons/date_picker_btn.dart';
-import 'package:memo_dex_prototyp/widgets/buttons/dropdown_menu_btn.dart';
 import 'package:memo_dex_prototyp/widgets/components/statistic/statistic_line_chart.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+import '../../utils/divide_painter.dart';
 import '../../utils/trim.dart';
 import '../../services/local/file_handler.dart';
 import '../../widgets/header/headline.dart';
@@ -431,7 +431,8 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
       notNoticed = 1;
     }
 
-    setState(() {
+    setState(()
+    {
       progressValue = (noticed/(noticed+notNoticed))*100;
     });
   }
@@ -443,7 +444,7 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
       notNoticed = 1;
     }
 
-    Color originalColor = Color(int.parse("0xFF${widget.color}"));
+    Color originalColor = Color(0xFFE59113);
     Color darkerColor = Color.fromARGB(
       originalColor.alpha,
       (originalColor.red * 0.7).round(),
@@ -453,7 +454,7 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
 
     final List<StackStatisticData> statisticData = [
       StackStatisticData("Noticed", widget.noticed, originalColor),
-      StackStatisticData("Noticed", notNoticed, darkerColor),
+      StackStatisticData("Noticed", notNoticed, Colors.white),
     ];
 
     return statisticData;
@@ -592,7 +593,7 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
-                  "DETAILS",
+                  "OVERVIEW",
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 20,
@@ -607,70 +608,37 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
             child: ListView(
               children: [
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                  padding: const EdgeInsets.fromLTRB(0, 40, 0, 20),
                   child: Container(
-                    padding:  const EdgeInsets.fromLTRB(12, 10, 12, 10),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Color.fromRGBO(0, 0, 0, 0.15),
-                          blurRadius: 15.0,
-                          offset: Offset(4, 10),
-                        ),
-                      ],
-                    ),
+                    padding:  const EdgeInsets.fromLTRB(0, 10, 0, 0),
                     child: Column(
                       children: [
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.insert_chart_outlined_rounded,
-                              size: 24.0,
-                              color: Colors.grey,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
-                              child: Text(
-                                "PROGRESS",
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 16,
-                                    fontFamily: "Inter",
-                                    fontWeight: FontWeight.w600
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
                         Container(
-                          height: 165,
+                          height: 137,
+                          width: 137,
                           child: SfCircularChart(
                             annotations:  <CircularChartAnnotation>[
                               CircularChartAnnotation(
-                                widget: Padding(
-                                  padding: const EdgeInsets.fromLTRB(4, 0, 0, 0),
-                                  child: Container(
+                                  widget: Container(
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
                                         Text(
                                           '${progressValue.toInt()}',
                                           style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 30,
+                                            color: Colors.white,
+                                            fontSize: 40,
                                             fontFamily: "Inter",
                                             fontWeight: FontWeight.w700,
                                           ),
                                         ),
                                         Padding(
-                                          padding: const EdgeInsets.fromLTRB(0, 6, 0, 0),
+                                          padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
                                           child: const Text(
                                             '%',
                                             style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 14,
+                                              color: Colors.white,
+                                              fontSize: 16,
                                               fontFamily: "Inter",
                                               fontWeight: FontWeight.w700,
                                             ),
@@ -679,163 +647,156 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
                                       ],
                                     ),
                                   ),
-                                ),
                               ),
                             ],
                             series: <CircularSeries>[
                               DoughnutSeries<StackStatisticData, String>(
-                                radius: "70",
+                                radius: "110",
                                 dataSource: _stackStatisticData,
                                 pointColorMapper:(StackStatisticData data,  _) => data.color,
                                 xValueMapper: (StackStatisticData data, _) => data.stackName,
                                 yValueMapper: (StackStatisticData data, _) => data.memorized,
-                                innerRadius: '65%',
+                                innerRadius: '70%',
                               )
                             ],
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Column(
+                          padding: const EdgeInsets.fromLTRB(0, 45, 0, 0),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Color(0xFF00324E),
+                              borderRadius: BorderRadius.only(
+                                  topRight: Radius.circular(10),
+                                  topLeft: Radius.circular(10),
+                                  bottomRight: Radius.circular(10),
+                                  bottomLeft: Radius.circular(10)
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Color.fromRGBO(0, 0, 0, 0.15),
+                                  blurRadius: 8.0,
+                                  offset: Offset(0, 8),
+                                ),
+                              ],
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 30, 0, 10),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
                                 children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Container(
-                                        height: 20,
-                                        child: Image(
-                                          image: AssetImage("assets/images/card_btn_icon.png"),
-                                        ),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            "TOTAL CARDS",
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 12,
+                                              fontFamily: "Inter",
+                                              fontWeight: FontWeight.w400,
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
+                                            child: Text(
+                                              '${widget.noticed.toInt() + widget.notNoticed.toInt()}',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 24,
+                                                fontFamily: "Inter",
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                          )
+                                        ],
                                       ),
                                     ],
                                   ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Padding(
-                                        padding: const EdgeInsets.fromLTRB(0, 2, 0, 2),
-                                        child: Text(
-                                          '${widget.noticed.toInt() + widget.notNoticed.toInt()}',
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 20,
-                                            fontFamily: "Inter",
-                                            fontWeight: FontWeight.w700,
-                                          ),
-                                        ),
-                                      )
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            "NOTICED",
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 12,
+                                              fontFamily: "Inter",
+                                              fontWeight: FontWeight.w400,
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
+                                            child: Text(
+                                              '${widget.noticed.toInt()}',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 24,
+                                                fontFamily: "Inter",
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+
                                     ],
                                   ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Text(
-                                        "TOTAL CARDS",
-                                        style: TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: 12,
-                                          fontFamily: "Inter",
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              Column(
-                                children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Icon(
-                                        Icons.lightbulb_rounded,
-                                        size: 22.0,
-                                        color: Color(0xFFE59113),
-                                      )
-                                    ],
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.fromLTRB(0, 2, 0, 2),
-                                        child: Text(
-                                          '${widget.noticed.toInt()}',
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 20,
-                                            fontFamily: "Inter",
-                                            fontWeight: FontWeight.w700,
-                                          ),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        "NOTICED",
-                                        style: TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: 12,
-                                          fontFamily: "Inter",
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      )
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            "NOT NOTICED",
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 12,
+                                              fontFamily: "Inter",
+                                              fontWeight: FontWeight.w400,
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
+                                            child: Text(
+                                              '${widget.notNoticed.toInt()}',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 24,
+                                                fontFamily: "Inter",
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                          )
+                                        ],
+                                      ),
                                     ],
                                   ),
                                 ],
                               ),
-                              Column(
-                                children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Icon(
-                                        Icons.lightbulb_outline_rounded,
-                                        size: 22.0,
-                                        color: Color(0xFFE59113),
-                                      )
-                                    ],
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.fromLTRB(0, 2, 0, 2),
-                                        child: Text(
-                                          '${widget.notNoticed.toInt()}',
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 20,
-                                            fontFamily: "Inter",
-                                            fontWeight: FontWeight.w700,
-                                          ),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        "NOT NOTICED",
-                                        style: TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: 12,
-                                          fontFamily: "Inter",
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ],
+                            ),
                           ),
                         ),
                       ],
@@ -843,30 +804,22 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-                  child: Container(
-                    padding: const EdgeInsets.fromLTRB(5, 0, 17, 0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
-                          child: DatePickerBtn(onDateSelected: (year, month)
-                          {
-                            updateSelectedValues(year, month);
-                          },),
+                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                  child: Row(
+                    children: [
+                      Text("RUN DETAILS",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontFamily: "Inter",
+                          fontWeight: FontWeight.w600,
                         ),
-                        StatisticLineChart(
-                          year: selectedYear,
-                          month: selectedMonth,
-                          runInformation: runInformation,
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(15, 10, 15, 20),
+                  padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
@@ -1084,42 +1037,113 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
                   ),
                 ),
                 Padding(
-                  padding: snackbarIsDisplayed ? EdgeInsets.fromLTRB(20, 5, 20, 70) : EdgeInsets.fromLTRB(20, 5, 20, 20),
+                  padding: const EdgeInsets.fromLTRB(0, 10, 0, 20),
                   child: Container(
-                    padding:  const EdgeInsets.fromLTRB(15, 10, 15, 15),
+                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Text(
+                                              "TOTAL RUNS",
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 12,
+                                                fontFamily: "Inter",
+                                                fontWeight: FontWeight.w400,
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            Padding(
+                                              padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                              child: Text(
+                                                '14',
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 24,
+                                                  fontFamily: "Inter",
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                  child: DatePickerBtn(onDateSelected: (year, month)
+                                  {
+                                    updateSelectedValues(year, month);
+                                  },),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
+                          child: CustomPaint(
+                            size: Size(MediaQuery.of(context).size.width, 2),
+                            painter: DividePainter(),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(20, 10, 30, 0),
+                          child: StatisticLineChart(
+                            year: selectedYear,
+                            month: selectedMonth,
+                            runInformation: runInformation,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+
+                Padding(
+                  padding: snackbarIsDisplayed ? EdgeInsets.fromLTRB(0, 5, 0, 70) : EdgeInsets.fromLTRB(0, 5, 0, 20),
+                  child: Container(
+                    padding:  const EdgeInsets.fromLTRB(20, 5, 20, 5),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: Color(0xFF00324E),
                       borderRadius: BorderRadius.circular(10),
                       boxShadow: [
                         BoxShadow(
                           color: Color.fromRGBO(0, 0, 0, 0.15),
                           blurRadius: 15.0,
-                          offset: Offset(4, 10),
+                          offset: Offset(0, -15),
                         ),
                       ],
                     ),
                     child: Column(
                       children: [
                         Padding(
-                          padding: EdgeInsets.fromLTRB(0, 5, 0, 10),
+                          padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              Icon(
-                                Icons.cancel_outlined,
-                                size: 24.0,
-                                color: Colors.red,
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
-                                child: Text(
-                                  "COMMONLY ANSWERED WRONG",
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 16,
-                                      fontFamily: "Inter",
-                                      fontWeight: FontWeight.w600
-                                  ),
+                              Text("COMMONLY ANSWERED WRONG",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                  fontFamily: "Inter",
+                                  fontWeight: FontWeight.w600,
                                 ),
                               ),
                             ],
@@ -1129,133 +1153,157 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
+                                Icon(
+                                  Icons.format_list_numbered,
+                                  size: 22.0,
+                                  color: Color(0xFFE59113),
+                                ),
+                                SizedBox(height: 5),
                                 Padding(
-                                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
                                   child: Text(
-                                    "PLACE",
+                                    "Place",
                                     style: TextStyle(
-                                        color: Colors.grey,
+                                        color: Colors.white,
                                         fontSize: 15,
                                         fontFamily: "Inter",
-                                        fontWeight: FontWeight.w400
+                                        fontWeight: FontWeight.w500
                                     ),
                                   ),
                                 ),
                                 Text(
                                   "1.",
                                   style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 15,
+                                      color: Colors.white,
+                                      fontSize: 14,
                                       fontFamily: "Inter",
-                                      fontWeight: FontWeight.w600
+                                      fontWeight: FontWeight.w400
                                   ),
                                 ),
+                                SizedBox(height: 10),
                                 Text(
                                   "2.",
                                   style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 15,
+                                      color: Colors.white,
+                                      fontSize: 14,
                                       fontFamily: "Inter",
-                                      fontWeight: FontWeight.w600
+                                      fontWeight: FontWeight.w400
                                   ),
                                 ),
+                                SizedBox(height: 10),
                                 Text(
                                   "3.",
                                   style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 15,
+                                      color: Colors.white,
+                                      fontSize: 14,
                                       fontFamily: "Inter",
-                                      fontWeight: FontWeight.w600
+                                      fontWeight: FontWeight.w400
                                   ),
                                 ),
                               ],
                             ),
                             Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
+                                Icon(
+                                  Icons.question_answer_rounded,
+                                  size: 22.0,
+                                  color: Color(0xFFE59113),
+                                ),
+                                SizedBox(height: 5),
                                 Padding(
-                                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
                                   child: Text(
-                                    "QUESTION",
+                                    "Question",
                                     style: TextStyle(
-                                        color: Colors.grey,
+                                        color: Colors.white,
                                         fontSize: 15,
                                         fontFamily: "Inter",
-                                        fontWeight: FontWeight.w400
+                                        fontWeight: FontWeight.w500
                                     ),
                                   ),
                                 ),
                                 Text(
                                   '${Trim().trimText(combinedData[0]['question'], 15)}',
                                   style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 15,
+                                      color: Colors.white,
+                                      fontSize: 14,
                                       fontFamily: "Inter",
-                                      fontWeight: FontWeight.w500
+                                      fontWeight: FontWeight.w400
                                   ),
                                 ),
+                                SizedBox(height: 10),
                                 Text(
                                   '${Trim().trimText(combinedData[1]['question'], 15)}',
                                   style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 15,
+                                      color: Colors.white,
+                                      fontSize: 14,
                                       fontFamily: "Inter",
-                                      fontWeight: FontWeight.w500
+                                      fontWeight: FontWeight.w400
                                   ),
                                 ),
+                                SizedBox(height: 10),
                                 Text(
                                   '${Trim().trimText(combinedData[2]['question'], 15)}',
                                   style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 15,
+                                      color: Colors.white,
+                                      fontSize: 14,
                                       fontFamily: "Inter",
-                                      fontWeight: FontWeight.w500
+                                      fontWeight: FontWeight.w400
                                   ),
                                 ),
                               ],
                             ),
                             Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
+                                Icon(
+                                  Icons.numbers_rounded,
+                                  size: 22.0,
+                                  color: Color(0xFFE59113),
+                                ),
+                                SizedBox(height: 5),
                                 Padding(
-                                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
                                   child: Text(
-                                    "NUMBER",
+                                    "Number",
                                     style: TextStyle(
-                                        color: Colors.grey,
+                                        color: Colors.white,
                                         fontSize: 15,
                                         fontFamily: "Inter",
-                                        fontWeight: FontWeight.w400
+                                        fontWeight: FontWeight.w500
                                     ),
                                   ),
                                 ),
                                 Text(
                                   '${combinedData[0]['answered_incorrectly'].toInt()}',
                                   style: TextStyle(
-                                      color: Colors.red,
-                                      fontSize: 15,
+                                      color: Colors.white,
+                                      fontSize: 14,
                                       fontFamily: "Inter",
-                                      fontWeight: FontWeight.w600
+                                      fontWeight: FontWeight.w400
                                   ),
                                 ),
+                                SizedBox(height: 10),
                                 Text(
                                   '${combinedData[1]['answered_incorrectly'].toInt()}',
                                   style: TextStyle(
-                                      color: Colors.red,
-                                      fontSize: 15,
+                                      color: Colors.white,
+                                      fontSize: 14,
                                       fontFamily: "Inter",
-                                      fontWeight: FontWeight.w600
+                                      fontWeight: FontWeight.w400
                                   ),
                                 ),
+                                SizedBox(height: 10),
                                 Text(
                                   '${combinedData[2]['answered_incorrectly'].toInt()}',
                                   style: TextStyle(
-                                      color: Colors.red,
-                                      fontSize: 15,
+                                      color: Colors.white,
+                                      fontSize: 14,
                                       fontFamily: "Inter",
-                                      fontWeight: FontWeight.w600
+                                      fontWeight: FontWeight.w400
                                   ),
                                 ),
                               ],

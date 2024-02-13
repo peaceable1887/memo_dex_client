@@ -16,6 +16,73 @@ class _DatePickerBtnState extends State<DatePickerBtn>
   late int selectedYear;
   late int selectedMonth;
 
+  Widget showMonthAsText(int monthValue)
+  {
+    if(monthValue == 1)
+    {
+      return Text("January");
+    }
+    if(monthValue == 2)
+    {
+
+      return Text("February");
+    }
+    if(monthValue == 3)
+    {
+
+      return Text("March");
+    }
+    if(monthValue == 4)
+    {
+
+      return Text("April");
+    }
+    if(monthValue == 5)
+    {
+
+      return Text("May");
+    }
+    if(monthValue == 6)
+    {
+
+      return Text("June");
+    }
+    if(monthValue == 7)
+    {
+
+      return Text("July");
+    }
+    if(monthValue == 8)
+    {
+
+      return Text("August");
+    }
+    if(monthValue == 9)
+    {
+
+      return Text("September");
+    }
+    if(monthValue == 10)
+    {
+
+      return Text("October");
+    }
+    if(monthValue == 11)
+    {
+
+      return Text("Novemeber");
+    }
+    if(monthValue == 12)
+    {
+
+      return Text("December");
+    }
+    else
+    {
+      return Text("");
+    }
+  }
+
   @override
   void initState()
   {
@@ -27,16 +94,16 @@ class _DatePickerBtnState extends State<DatePickerBtn>
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Padding(
           padding: const EdgeInsets.fromLTRB(0, 0, 5, 0),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Monat",
+              Text("MONTH",
                 style: TextStyle(
                     color: Colors.white,
-                    fontSize: 14,
+                    fontSize: 12,
                     fontFamily: "Inter",
                     fontWeight: FontWeight.w400
                 ),
@@ -45,6 +112,7 @@ class _DatePickerBtnState extends State<DatePickerBtn>
                 underline: Container(
                   height: 0,
                 ),
+                isDense: true,
                 dropdownColor: Color(0xFF00324E),
                 iconEnabledColor: Colors.white,
                 style: TextStyle(
@@ -57,7 +125,7 @@ class _DatePickerBtnState extends State<DatePickerBtn>
                 items: List.generate(
                   12, (index) => DropdownMenuItem<int>(
                     value: index + 1,
-                    child: Text((index + 1).toString()),
+                    child: showMonthAsText(index +1),
                   ),
                 ),
                 onChanged: (value)
@@ -74,43 +142,47 @@ class _DatePickerBtnState extends State<DatePickerBtn>
         ),
         Padding(
           padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
-          child: Column(
-            children: [
-              Text("Jahr",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 14,
-                  fontFamily: "Inter",
-                  fontWeight: FontWeight.w400
-                ),
-              ),
-              DropdownButton<int>(
-                underline: Container(
-                  height: 0,
-                ),
-                dropdownColor: Color(0xFF00324E),
-                iconEnabledColor: Colors.white,
-                style: TextStyle(
+          child: Container(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("YEAR",
+                  style: TextStyle(
                     color: Colors.white,
-                    fontSize: 16,
+                    fontSize: 12,
                     fontFamily: "Inter",
-                    fontWeight: FontWeight.w500
-                ),
-                value: selectedYear,
-                items: List.generate(
-                  101, (index) => DropdownMenuItem<int>(
-                    value: 2000 + index,
-                    child: Text((2000 + index).toString()),
+                    fontWeight: FontWeight.w400
                   ),
                 ),
-                onChanged: (value) {
-                  setState(() {
-                    selectedYear = value!;
-                    widget.onDateSelected(selectedYear, selectedMonth);
-                  });
-                },
-              ),
-            ],
+                DropdownButton<int>(
+                  underline: Container(
+                    height: 0,
+                  ),
+                  isDense: true,
+                  dropdownColor: Color(0xFF00324E),
+                  iconEnabledColor: Colors.white,
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontFamily: "Inter",
+                      fontWeight: FontWeight.w500
+                  ),
+                  value: selectedYear,
+                  items: List.generate(
+                    101, (index) => DropdownMenuItem<int>(
+                      value: 2000 + index,
+                      child: Text((2000 + index).toString()),
+                    ),
+                  ),
+                  onChanged: (value) {
+                    setState(() {
+                      selectedYear = value!;
+                      widget.onDateSelected(selectedYear, selectedMonth);
+                    });
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ],
