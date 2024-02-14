@@ -114,7 +114,6 @@ class _StatisticLineChartState extends State<StatisticLineChart>
       child: LineChart(
         LineChartData(
           lineBarsData: [
-            //TODO aussortieren in extra model
             LineChartBarData(
               spots: getFlSpots(),
               isCurved: true,
@@ -123,7 +122,7 @@ class _StatisticLineChartState extends State<StatisticLineChart>
               barWidth: 4,
               belowBarData: BarAreaData(
                 show: true,
-                color: Colors.green.withOpacity(0.0),
+                color: Colors.white.withOpacity(0.0),
               ),
             ),
           ],
@@ -152,7 +151,6 @@ class _StatisticLineChartState extends State<StatisticLineChart>
                 {
                   int runText = value.toInt();
                   String text = runText.toString();
-
                   return Text(
                     text,
                     style: TextStyle(
@@ -166,6 +164,15 @@ class _StatisticLineChartState extends State<StatisticLineChart>
               ),
             ),
             bottomTitles: AxisTitles(
+              axisNameWidget: const Text(
+                "Day",
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 12,
+                    fontFamily: "Inter",
+                    fontWeight: FontWeight.w500
+                ),
+              ),
               sideTitles: SideTitles(
                 showTitles: true,
                 interval: 5,

@@ -64,6 +64,9 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
   int currentDay = 1;
   late int currentMonth;
   List<Map<String, dynamic>> runInformation = [];
+  bool showShadow = false;
+  final double scrollThreshold = 30.0;
+  int _totalRuns = 0;
 
   @override
   void initState ()
@@ -327,6 +330,8 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
             });
 
             print("RUN INFORMATION: $runInformation");
+            print("DATE INFORMATION: ${information.length}");
+            _totalRuns = information.length;
 
           });
         }
@@ -360,6 +365,8 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
                 information.add(formattedDate);
 
                 print("DATE INFORMATION: $information");
+                print("DATE INFORMATION: ${information.length}");
+                _totalRuns = information.length;
 
               }
             }
@@ -588,476 +595,129 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
             ),
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(20,30,0,0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(
-                  "OVERVIEW",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontFamily: "Inter",
-                      fontWeight: FontWeight.w600
-                  ),
+            padding: const EdgeInsets.fromLTRB(0,25,0,0),
+            child: Container(
+              decoration: showShadow ? BoxDecoration(
+                color: Colors.white.withOpacity(0.2),
+              ) : null,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(20,5,0,5),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      "OVERVIEW",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontFamily: "Inter",
+                          fontWeight: FontWeight.w600
+                      ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
           Expanded(
-            child: ListView(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 40, 0, 20),
-                  child: Container(
-                    padding:  const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                    child: Column(
-                      children: [
-                        Container(
-                          height: 137,
-                          width: 137,
-                          child: SfCircularChart(
-                            annotations:  <CircularChartAnnotation>[
-                              CircularChartAnnotation(
-                                  widget: Container(
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          '${progressValue.toInt()}',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 40,
-                                            fontFamily: "Inter",
-                                            fontWeight: FontWeight.w700,
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
-                                          child: const Text(
-                                            '%',
+            child: NotificationListener<ScrollNotification>(
+              onNotification: (scrollNotification) {
+                if (scrollNotification is ScrollUpdateNotification)
+                {
+                  setState(() {
+                    showShadow = scrollNotification.metrics.pixels > scrollThreshold;
+                  });
+                }
+                return false;
+              },
+              child: ListView(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 40, 0, 20),
+                    child: Container(
+                      padding:  const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                      child: Column(
+                        children: [
+                          Container(
+                            height: 137,
+                            width: 137,
+                            child: SfCircularChart(
+                              annotations:  <CircularChartAnnotation>[
+                                CircularChartAnnotation(
+                                    widget: Container(
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            '${progressValue.toInt()}',
                                             style: TextStyle(
                                               color: Colors.white,
-                                              fontSize: 16,
+                                              fontSize: 40,
                                               fontFamily: "Inter",
                                               fontWeight: FontWeight.w700,
                                             ),
                                           ),
-                                        ),
-                                      ],
+                                          Padding(
+                                            padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
+                                            child: const Text(
+                                              '%',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 16,
+                                                fontFamily: "Inter",
+                                                fontWeight: FontWeight.w700,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                              ),
-                            ],
-                            series: <CircularSeries>[
-                              DoughnutSeries<StackStatisticData, String>(
-                                radius: "110",
-                                dataSource: _stackStatisticData,
-                                pointColorMapper:(StackStatisticData data,  _) => data.color,
-                                xValueMapper: (StackStatisticData data, _) => data.stackName,
-                                yValueMapper: (StackStatisticData data, _) => data.memorized,
-                                innerRadius: '70%',
-                              )
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 45, 0, 0),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Color(0xFF00324E),
-                              borderRadius: BorderRadius.only(
-                                  topRight: Radius.circular(10),
-                                  topLeft: Radius.circular(10),
-                                  bottomRight: Radius.circular(10),
-                                  bottomLeft: Radius.circular(10)
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Color.fromRGBO(0, 0, 0, 0.15),
-                                  blurRadius: 8.0,
-                                  offset: Offset(0, 8),
                                 ),
                               ],
+                              series: <CircularSeries>[
+                                DoughnutSeries<StackStatisticData, String>(
+                                  radius: "110",
+                                  dataSource: _stackStatisticData,
+                                  pointColorMapper:(StackStatisticData data,  _) => data.color,
+                                  xValueMapper: (StackStatisticData data, _) => data.stackName,
+                                  yValueMapper: (StackStatisticData data, _) => data.memorized,
+                                  innerRadius: '70%',
+                                )
+                              ],
                             ),
-                            child: Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 30, 0, 10),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                children: [
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            "TOTAL CARDS",
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 12,
-                                              fontFamily: "Inter",
-                                              fontWeight: FontWeight.w400,
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
-                                            child: Text(
-                                              '${widget.noticed.toInt() + widget.notNoticed.toInt()}',
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 24,
-                                                fontFamily: "Inter",
-                                                fontWeight: FontWeight.w600,
-                                              ),
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            "NOTICED",
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 12,
-                                              fontFamily: "Inter",
-                                              fontWeight: FontWeight.w400,
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
-                                            child: Text(
-                                              '${widget.noticed.toInt()}',
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 24,
-                                                fontFamily: "Inter",
-                                                fontWeight: FontWeight.w600,
-                                              ),
-                                            ),
-                                          )
-                                        ],
-                                      ),
-
-                                    ],
-                                  ),
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            "NOT NOTICED",
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 12,
-                                              fontFamily: "Inter",
-                                              fontWeight: FontWeight.w400,
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
-                                            child: Text(
-                                              '${widget.notNoticed.toInt()}',
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 24,
-                                                fontFamily: "Inter",
-                                                fontWeight: FontWeight.w600,
-                                              ),
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ],
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 45, 0, 0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Color(0xFF00324E),
+                                borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(10),
+                                    topLeft: Radius.circular(10),
+                                    bottomRight: Radius.circular(10),
+                                    bottomLeft: Radius.circular(10)
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Color.fromRGBO(0, 0, 0, 0.15),
+                                    blurRadius: 8.0,
+                                    offset: Offset(0, 8),
                                   ),
                                 ],
                               ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                  child: Row(
-                    children: [
-                      Text("RUN DETAILS",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontFamily: "Inter",
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                        child: Container(
-                          height: MediaQuery.of(context).size.height /6.7,
-                          width:  MediaQuery.of(context).size.width /3.6,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Color.fromRGBO(0, 0, 0, 0.15),
-                                blurRadius: 15.0,
-                                offset: Offset(4, 10),
-                              ),
-                            ],
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                              child: Padding(
+                                padding: const EdgeInsets.fromLTRB(0, 30, 0, 10),
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                                   children: [
-                                    Icon(
-                                      Icons.timelapse_rounded,
-                                      size: 22.0,
-                                      color: Colors.green,
-                                    )
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      '${fastestRun}',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 16,
-                                        fontFamily: "Inter",
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "FASTEST RUN",
-                                      style: TextStyle(
-                                        color: Colors.grey,
-                                        fontSize: 12,
-                                        fontFamily: "Inter",
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                        child: Container(
-                          height: MediaQuery.of(context).size.height /6.7,
-                          width:  MediaQuery.of(context).size.width /3.6,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Color.fromRGBO(0, 0, 0, 0.15),
-                                blurRadius: 15.0,
-                                offset: Offset(4, 10),
-                              ),
-                            ],
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      Icons.timelapse_rounded,
-                                      size: 22.0,
-                                      color: Color(0xFFE59113),
-                                    )
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      '${latestRun}',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 16,
-                                        fontFamily: "Inter",
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "LATEST RUN",
-                                      style: TextStyle(
-                                        color: Colors.grey,
-                                        fontSize: 12,
-                                        fontFamily: "Inter",
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                        child: Container(
-                          height: MediaQuery.of(context).size.height /6.7,
-                          width:  MediaQuery.of(context).size.width /3.6,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Color.fromRGBO(0, 0, 0, 0.15),
-                                blurRadius: 15.0,
-                                offset: Offset(4, 10),
-                              ),
-                            ],
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      Icons.difference_rounded,
-                                      size: 22.0,
-                                      color: Colors.red,
-                                    )
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      averageTime,
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 16,
-                                        fontFamily: "Inter",
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "AVERAGE",
-                                      style: TextStyle(
-                                        color: Colors.grey,
-                                        fontSize: 12,
-                                        fontFamily: "Inter",
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 10, 0, 20),
-                  child: Container(
-                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                    child: Column(
+                                    Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
                                             Text(
-                                              "TOTAL RUNS",
+                                              "TOTAL CARDS",
                                               style: TextStyle(
                                                 color: Colors.white,
                                                 fontSize: 12,
@@ -1068,11 +728,12 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
                                           ],
                                         ),
                                         Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
                                             Padding(
-                                              padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                              padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
                                               child: Text(
-                                                '14',
+                                                '${widget.noticed.toInt() + widget.notNoticed.toInt()}',
                                                 style: TextStyle(
                                                   color: Colors.white,
                                                   fontSize: 24,
@@ -1085,236 +746,600 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
                                         ),
                                       ],
                                     ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                  child: DatePickerBtn(onDateSelected: (year, month)
-                                  {
-                                    updateSelectedValues(year, month);
-                                  },),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
-                          child: CustomPaint(
-                            size: Size(MediaQuery.of(context).size.width, 2),
-                            painter: DividePainter(),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(20, 10, 30, 0),
-                          child: StatisticLineChart(
-                            year: selectedYear,
-                            month: selectedMonth,
-                            runInformation: runInformation,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-
-                Padding(
-                  padding: snackbarIsDisplayed ? EdgeInsets.fromLTRB(0, 5, 0, 70) : EdgeInsets.fromLTRB(0, 5, 0, 20),
-                  child: Container(
-                    padding:  const EdgeInsets.fromLTRB(20, 5, 20, 5),
-                    decoration: BoxDecoration(
-                      color: Color(0xFF00324E),
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Color.fromRGBO(0, 0, 0, 0.15),
-                          blurRadius: 15.0,
-                          offset: Offset(0, -15),
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                          child: Row(
-                            children: [
-                              Text("COMMONLY ANSWERED WRONG",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 18,
-                                  fontFamily: "Inter",
-                                  fontWeight: FontWeight.w600,
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              "NOTICED",
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 12,
+                                                fontFamily: "Inter",
+                                                fontWeight: FontWeight.w400,
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Padding(
+                                              padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
+                                              child: Text(
+                                                '${widget.noticed.toInt()}',
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 24,
+                                                  fontFamily: "Inter",
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              "NOT NOTICED",
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 12,
+                                                fontFamily: "Inter",
+                                                fontWeight: FontWeight.w400,
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Padding(
+                                              padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
+                                              child: Text(
+                                                '${widget.notNoticed.toInt()}',
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 24,
+                                                  fontFamily: "Inter",
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                    child: Row(
+                      children: [
+                        Text("RUN DETAILS",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontFamily: "Inter",
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.format_list_numbered,
-                                  size: 22.0,
-                                  color: Color(0xFFE59113),
-                                ),
-                                SizedBox(height: 5),
-                                Padding(
-                                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
-                                  child: Text(
-                                    "Place",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 15,
-                                        fontFamily: "Inter",
-                                        fontWeight: FontWeight.w500
-                                    ),
-                                  ),
-                                ),
-                                Text(
-                                  "1.",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 14,
-                                      fontFamily: "Inter",
-                                      fontWeight: FontWeight.w400
-                                  ),
-                                ),
-                                SizedBox(height: 10),
-                                Text(
-                                  "2.",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 14,
-                                      fontFamily: "Inter",
-                                      fontWeight: FontWeight.w400
-                                  ),
-                                ),
-                                SizedBox(height: 10),
-                                Text(
-                                  "3.",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 14,
-                                      fontFamily: "Inter",
-                                      fontWeight: FontWeight.w400
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.question_answer_rounded,
-                                  size: 22.0,
-                                  color: Color(0xFFE59113),
-                                ),
-                                SizedBox(height: 5),
-                                Padding(
-                                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
-                                  child: Text(
-                                    "Question",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 15,
-                                        fontFamily: "Inter",
-                                        fontWeight: FontWeight.w500
-                                    ),
-                                  ),
-                                ),
-                                Text(
-                                  '${Trim().trimText(combinedData[0]['question'], 15)}',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 14,
-                                      fontFamily: "Inter",
-                                      fontWeight: FontWeight.w400
-                                  ),
-                                ),
-                                SizedBox(height: 10),
-                                Text(
-                                  '${Trim().trimText(combinedData[1]['question'], 15)}',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 14,
-                                      fontFamily: "Inter",
-                                      fontWeight: FontWeight.w400
-                                  ),
-                                ),
-                                SizedBox(height: 10),
-                                Text(
-                                  '${Trim().trimText(combinedData[2]['question'], 15)}',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 14,
-                                      fontFamily: "Inter",
-                                      fontWeight: FontWeight.w400
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.numbers_rounded,
-                                  size: 22.0,
-                                  color: Color(0xFFE59113),
-                                ),
-                                SizedBox(height: 5),
-                                Padding(
-                                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
-                                  child: Text(
-                                    "Number",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 15,
-                                        fontFamily: "Inter",
-                                        fontWeight: FontWeight.w500
-                                    ),
-                                  ),
-                                ),
-                                Text(
-                                  '${combinedData[0]['answered_incorrectly'].toInt()}',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 14,
-                                      fontFamily: "Inter",
-                                      fontWeight: FontWeight.w400
-                                  ),
-                                ),
-                                SizedBox(height: 10),
-                                Text(
-                                  '${combinedData[1]['answered_incorrectly'].toInt()}',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 14,
-                                      fontFamily: "Inter",
-                                      fontWeight: FontWeight.w400
-                                  ),
-                                ),
-                                SizedBox(height: 10),
-                                Text(
-                                  '${combinedData[2]['answered_incorrectly'].toInt()}',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 14,
-                                      fontFamily: "Inter",
-                                      fontWeight: FontWeight.w400
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        )
                       ],
                     ),
                   ),
-                ),
-              ],
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                          child: Container(
+                            height: MediaQuery.of(context).size.height /6.7,
+                            width:  MediaQuery.of(context).size.width /3.6,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Color.fromRGBO(0, 0, 0, 0.15),
+                                  blurRadius: 15.0,
+                                  offset: Offset(4, 10),
+                                ),
+                              ],
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.fast_forward_rounded,
+                                        size: 22.0,
+                                        color: Colors.green,
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        '${fastestRun}',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 16,
+                                          fontFamily: "Inter",
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        "FASTEST RUN",
+                                        style: TextStyle(
+                                          color: Colors.grey,
+                                          fontSize: 12,
+                                          fontFamily: "Inter",
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                          child: Container(
+                            height: MediaQuery.of(context).size.height /6.7,
+                            width:  MediaQuery.of(context).size.width /3.6,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Color.fromRGBO(0, 0, 0, 0.15),
+                                  blurRadius: 15.0,
+                                  offset: Offset(4, 10),
+                                ),
+                              ],
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.av_timer_rounded,
+                                        size: 22.0,
+                                        color: Color(0xFFE59113),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        '${latestRun}',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 16,
+                                          fontFamily: "Inter",
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        "LATEST RUN",
+                                        style: TextStyle(
+                                          color: Colors.grey,
+                                          fontSize: 12,
+                                          fontFamily: "Inter",
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                          child: Container(
+                            height: MediaQuery.of(context).size.height /6.7,
+                            width:  MediaQuery.of(context).size.width /3.6,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Color.fromRGBO(0, 0, 0, 0.15),
+                                  blurRadius: 15.0,
+                                  offset: Offset(4, 10),
+                                ),
+                              ],
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.bar_chart,
+                                        size: 22.0,
+                                        color: Colors.red,
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        averageTime,
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 16,
+                                          fontFamily: "Inter",
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        "AVERAGE",
+                                        style: TextStyle(
+                                          color: Colors.grey,
+                                          fontSize: 12,
+                                          fontFamily: "Inter",
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 10, 0, 20),
+                    child: Container(
+                      padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Text(
+                                                "TOTAL RUNS",
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 12,
+                                                  fontFamily: "Inter",
+                                                  fontWeight: FontWeight.w400,
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                          Row(
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                                child: Text(
+                                                  '$_totalRuns',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 24,
+                                                    fontFamily: "Inter",
+                                                    fontWeight: FontWeight.w600,
+                                                  ),
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                    child: DatePickerBtn(onDateSelected: (year, month)
+                                    {
+                                      updateSelectedValues(year, month);
+                                    },),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
+                            child: CustomPaint(
+                              size: Size(MediaQuery.of(context).size.width, 2),
+                              painter: DividePainter(),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(20, 10, 30, 0),
+                            child: StatisticLineChart(
+                              year: selectedYear,
+                              month: selectedMonth,
+                              runInformation: runInformation,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+              
+                  Padding(
+                    padding: snackbarIsDisplayed ? EdgeInsets.fromLTRB(0, 5, 0, 70) : EdgeInsets.fromLTRB(0, 5, 0, 20),
+                    child: Container(
+                      padding:  const EdgeInsets.fromLTRB(20, 5, 20, 5),
+                      decoration: BoxDecoration(
+                        color: Color(0xFF00324E),
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Color.fromRGBO(0, 0, 0, 0.15),
+                            blurRadius: 15.0,
+                            offset: Offset(0, -15),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 15, 0, 15),
+                            child: Row(
+                              children: [
+                                Text("COMMONLY ANSWERED WRONG",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 18,
+                                    fontFamily: "Inter",
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.format_list_numbered,
+                                    size: 22.0,
+                                    color: Color(0xFFE59113),
+                                  ),
+                                  SizedBox(height: 5),
+                                  Padding(
+                                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+                                    child: Text(
+                                      "Place",
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 15,
+                                          fontFamily: "Inter",
+                                          fontWeight: FontWeight.w500
+                                      ),
+                                    ),
+                                  ),
+                                  Text(
+                                    "1.",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 14,
+                                        fontFamily: "Inter",
+                                        fontWeight: FontWeight.w400
+                                    ),
+                                  ),
+                                  SizedBox(height: 10),
+                                  Text(
+                                    "2.",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 14,
+                                        fontFamily: "Inter",
+                                        fontWeight: FontWeight.w400
+                                    ),
+                                  ),
+                                  SizedBox(height: 10),
+                                  Text(
+                                    "3.",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 14,
+                                        fontFamily: "Inter",
+                                        fontWeight: FontWeight.w400
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.question_answer_rounded,
+                                    size: 22.0,
+                                    color: Color(0xFFE59113),
+                                  ),
+                                  SizedBox(height: 5),
+                                  Padding(
+                                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+                                    child: Text(
+                                      "Question",
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 15,
+                                          fontFamily: "Inter",
+                                          fontWeight: FontWeight.w500
+                                      ),
+                                    ),
+                                  ),
+                                  Text(
+                                    '${Trim().trimText(combinedData[0]['question'], 15)}',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 14,
+                                        fontFamily: "Inter",
+                                        fontWeight: FontWeight.w400
+                                    ),
+                                  ),
+                                  SizedBox(height: 10),
+                                  Text(
+                                    '${Trim().trimText(combinedData[1]['question'], 15)}',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 14,
+                                        fontFamily: "Inter",
+                                        fontWeight: FontWeight.w400
+                                    ),
+                                  ),
+                                  SizedBox(height: 10),
+                                  Text(
+                                    '${Trim().trimText(combinedData[2]['question'], 15)}',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 14,
+                                        fontFamily: "Inter",
+                                        fontWeight: FontWeight.w400
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.error_outline_rounded,
+                                    size: 22.0,
+                                    color: Color(0xFFE59113),
+                                  ),
+                                  SizedBox(height: 5),
+                                  Padding(
+                                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+                                    child: Text(
+                                      "Number",
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 15,
+                                          fontFamily: "Inter",
+                                          fontWeight: FontWeight.w500
+                                      ),
+                                    ),
+                                  ),
+                                  Text(
+                                    '${combinedData[0]['answered_incorrectly'].toInt()}',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 14,
+                                        fontFamily: "Inter",
+                                        fontWeight: FontWeight.w400
+                                    ),
+                                  ),
+                                  SizedBox(height: 10),
+                                  Text(
+                                    '${combinedData[1]['answered_incorrectly'].toInt()}',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 14,
+                                        fontFamily: "Inter",
+                                        fontWeight: FontWeight.w400
+                                    ),
+                                  ),
+                                  SizedBox(height: 10),
+                                  Text(
+                                    '${combinedData[2]['answered_incorrectly'].toInt()}',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 14,
+                                        fontFamily: "Inter",
+                                        fontWeight: FontWeight.w400
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             )
           ),
         ],

@@ -366,17 +366,17 @@ class _EditCardScreenState extends State<EditCardScreen> {
                               ),
                             ),
                             Switch(
-                                thumbIcon: thumbIcon,
-                                value: isNoticed,
-                                activeColor: Colors.white,
-                                activeTrackColor: Color(0xFFE59113),
-                                inactiveTrackColor: Colors.grey,
-                                onChanged: (bool value)
-                                {
-                                  setState(() {
-                                    isNoticed = value;
-                                  });
-                                }
+                              thumbIcon: thumbIcon,
+                              value: isNoticed,
+                              activeColor: Colors.white,
+                              activeTrackColor: Color(0xFFE59113),
+                              inactiveTrackColor: Colors.grey,
+                              onChanged: (bool value)
+                              {
+                                setState(() {
+                                  isNoticed = value;
+                                });
+                              }
                             ),
                           ],
                         ),
