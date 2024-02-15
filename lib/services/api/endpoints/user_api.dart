@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:memo_dex_prototyp/screens/welcome_screen.dart';
 
 import '../../../screens/bottom_navigation_screen.dart';
 import '../../../widgets/dialogs/validation_message_box.dart';
@@ -78,7 +79,55 @@ class UserApi
           return ValidationMessageBox(message: "E-Mail und/oder Passwort sind falsch.");
         },
       );
-      throw http.ClientException('Failed to login1.');
+      throw http.ClientException('Failed to login.');
+    }
+  }
+
+  Future<void> logoutUser() async
+  {
+    String? accessToken = await storage.read(key: 'accessToken');
+    bool userLoggedOut;
+
+    try
+    {
+      if(accessToken != null)
+      {
+        final response = await http.delete(
+          Uri.parse('http://10.0.2.2:4000/logout'),
+          headers: <String, String>{
+            'Content-Type': 'application/json',
+          },
+          body: jsonEncode(<String, String>{
+            'token': accessToken
+          }),
+        );
+
+        if (response.statusCode == 204)
+        {
+          print("Successfully logged out!");
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => WelcomeScreen(),
+            ),
+          );
+        } else
+        {
+          print("Can not logged out!");
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => BottomNavigationScreen(index: 2,),
+            ),
+          );
+        }
+      }else
+      {
+        print("No Token available");
+      }
+    }catch(error)
+    {
+      print("ERROR: $error");
     }
   }
 

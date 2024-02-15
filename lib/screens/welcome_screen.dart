@@ -38,14 +38,30 @@ class WelcomeScreen extends StatelessWidget {
                           backgroundColor: "E59113",
                           borderColor: "E59113",
                           textColor: "00324E",
-                          onPressed: LoginScreen(),
+                          onPressed: ()
+                          {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => LoginScreen(),
+                              ),
+                            );
+                          },
                         ),
                         Button(
                           text: "Sign up",
                           backgroundColor: "00324E",
                           borderColor: "E59113",
                           textColor: "E59113",
-                          onPressed: SignUpScreen(),
+                          onPressed: ()
+                          {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => SignUpScreen(),
+                              ),
+                            );
+                          },
                         ),
                       ],
                     ),

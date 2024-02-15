@@ -378,7 +378,15 @@ class _SignUpFormState extends State<SignUpForm> {
                     backgroundColor: "FFFFFF",
                     borderColor: "FFFFFF",
                     textColor: "8597A1",
-                    onPressed: WelcomeScreen(),
+                    onPressed: ()
+                    {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => WelcomeScreen(),
+                        ),
+                      );
+                    },
                     iconPath: "assets/images/google_icon.png",
                   ),
                 ],

@@ -4,6 +4,8 @@ import 'package:memo_dex_prototyp/screens/setting/account/email_setting_screen.d
 import 'package:memo_dex_prototyp/screens/setting/account/password_setting_screen.dart';
 import 'package:memo_dex_prototyp/screens/setting/configuration/language_setting_screen.dart';
 import 'package:memo_dex_prototyp/screens/setting/datamanagement/trash_setting_screen.dart';
+import 'package:memo_dex_prototyp/screens/welcome_screen.dart';
+import 'package:memo_dex_prototyp/services/api/api_client.dart';
 import 'package:memo_dex_prototyp/widgets/buttons/setting_btn.dart';
 
 import '../widgets/buttons/button.dart';
@@ -64,6 +66,10 @@ class _SettingScreenState extends State<SettingScreen> {
     }
   }
 
+  Future<void>logoutUser() async
+  {
+    await ApiClient(context).userApi.logoutUser();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -178,7 +184,7 @@ class _SettingScreenState extends State<SettingScreen> {
                     backgroundColor: "00324E",
                     borderColor: "E59113",
                     textColor: "E59113",
-                    onPressed: BottomNavigationScreen(),
+                    onPressed: logoutUser, // Übergeben Sie die Rückruffunktion anstelle sie sofort aufzurufen
                   ),
                 ],
               ),

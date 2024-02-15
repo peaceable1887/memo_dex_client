@@ -6,7 +6,7 @@ class Button extends StatelessWidget {
   final String backgroundColor;
   final String borderColor;
   final String textColor;
-  final Widget onPressed;
+  final VoidCallback onPressed;
   final String? iconPath;
 
   const Button({Key? key,
@@ -36,14 +36,7 @@ class Button extends StatelessWidget {
               ),
               elevation: 0,
             ),
-            onPressed: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => onPressed,
-                ),
-              );
-            },
+            onPressed: onPressed,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
