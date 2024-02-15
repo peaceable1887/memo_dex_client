@@ -26,17 +26,20 @@ class _SignUpFormState extends State<SignUpForm> {
   final storage = FlutterSecureStorage();
 
   @override
-  void initState() {
+  void initState()
+  {
+    super.initState();
     _eMail = TextEditingController();
     _eMail.addListener(updateButtonState);
     _password = TextEditingController();
     _password.addListener(updateButtonState);
     _repeatPassword = TextEditingController();
     _repeatPassword.addListener(updateButtonState);
-    super.initState();
+
   }
 
-  void updateButtonState() {
+  void updateButtonState()
+  {
     setState(() {
       if (_eMail.text.isNotEmpty && _password.text.isNotEmpty && _repeatPassword.text.isNotEmpty && _isChecked) {
         _isEnabled = true;
@@ -46,7 +49,8 @@ class _SignUpFormState extends State<SignUpForm> {
     });
   }
 
-  void validateForm(String email, String password, String repeatPassword) async {
+  void validateForm(String email, String password, String repeatPassword) async
+  {
     final emailRegExp = RegExp(r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$');
     String? internetConnection = await storage.read(key: "internet_connection");
 
@@ -89,7 +93,6 @@ class _SignUpFormState extends State<SignUpForm> {
         );
       }
     }
-
   }
 
   @override

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
@@ -78,6 +79,211 @@ class UserApi
         },
       );
       throw http.ClientException('Failed to login1.');
+    }
+  }
+
+  Future<dynamic> getUserEmail() async
+  {
+    String? accessToken = await storage.read(key: 'accessToken');
+    String? userId = await storage.read(key: 'user_id');
+
+    try{
+      if (accessToken != null)
+      {
+        final response = await http.post(
+          Uri.parse('http://10.0.2.2:3000/getUserEmail'),
+          headers: <String, String>
+          {
+            'Content-Type': 'application/json',
+            'Authorization': "Bearer " + accessToken,
+          },
+          body: jsonEncode(<String, dynamic>
+          {
+            "user_id": userId
+          }),
+        ).timeout(Duration(seconds: 10));
+        if (response.statusCode == 200)
+        {
+          dynamic jsonResponse = json.decode(response.body);
+          // Daten werden zusätzlich lokal abgespeichert
+          return jsonResponse;
+        }else
+        {
+          throw http.ClientException('Can not get User E-Mail. ERROR: ${response.statusCode}');
+        }
+      }else
+      {
+        print("Token existiert nicht!");
+      }
+    }on TimeoutException catch (e)
+    {
+      print('Zeitüberschreitung: $e');
+      //var auf grad kein netz einbauen
+      return null;
+    }on http.ClientException catch (e)
+    {
+      print('Clientfehler: $e');
+      return null;
+    }catch (e)
+    {
+      print('Allgemeiner Fehler: $e');
+      return null;
+    }
+  }
+
+  Future<dynamic> updateUserEmail(String eMail) async
+  {
+    String? accessToken = await storage.read(key: 'accessToken');
+    String? userId = await storage.read(key: 'user_id');
+
+    try{
+      if (accessToken != null)
+      {
+        final response = await http.post(
+          Uri.parse('http://10.0.2.2:3000/updateUserEmail'),
+          headers: <String, String>
+          {
+            'Content-Type': 'application/json',
+            'Authorization': "Bearer " + accessToken,
+          },
+          body: jsonEncode(<String, dynamic>
+          {
+            "user_id": userId,
+            "email": eMail,
+          }),
+        ).timeout(Duration(seconds: 10));
+        if (response.statusCode == 200)
+        {
+          print("User E-Mail is successfully updated!");
+          dynamic jsonResponse = json.decode(response.body);
+          // Daten werden zusätzlich lokal abgespeichert
+          return jsonResponse;
+        }else
+        {
+          throw http.ClientException('Can not update User E-Mail. ERROR: ${response.statusCode}');
+        }
+      }else
+      {
+        print("Token existiert nicht!");
+      }
+    }on TimeoutException catch (e)
+    {
+      print('Zeitüberschreitung: $e');
+      //var auf grad kein netz einbauen
+      return null;
+    }on http.ClientException catch (e)
+    {
+      print('Clientfehler: $e');
+      return null;
+    }catch (e)
+    {
+      print('Allgemeiner Fehler: $e');
+      return null;
+    }
+  }
+
+  Future<dynamic> updateUserPassword(String password) async
+  {
+    String? accessToken = await storage.read(key: 'accessToken');
+    String? userId = await storage.read(key: 'user_id');
+
+    try{
+      if (accessToken != null)
+      {
+        final response = await http.post(
+          Uri.parse('http://10.0.2.2:3000/updateUserPassword'),
+          headers: <String, String>
+          {
+            'Content-Type': 'application/json',
+            'Authorization': "Bearer " + accessToken,
+          },
+          body: jsonEncode(<String, dynamic>
+          {
+            "user_id": userId,
+            "password": password,
+          }),
+        ).timeout(Duration(seconds: 10));
+        if (response.statusCode == 200)
+        {
+          print("Password was successfully updated!");
+
+          // Daten werden zusätzlich lokal abgespeichert
+        }else
+        {
+          throw http.ClientException('Can not update User E-Mail. ERROR: ${response.statusCode}');
+        }
+      }else
+      {
+        print("Token existiert nicht!");
+      }
+    }on TimeoutException catch (e)
+    {
+      print('Zeitüberschreitung: $e');
+      //var auf grad kein netz einbauen
+      return null;
+    }on http.ClientException catch (e)
+    {
+      print('Clientfehler: $e');
+      return null;
+    }catch (e)
+    {
+      print('Allgemeiner Fehler: $e');
+      return null;
+    }
+  }
+
+  Future<dynamic> verifyUserPassword(String password) async
+  {
+    String? accessToken = await storage.read(key: 'accessToken');
+    String? userId = await storage.read(key: 'user_id');
+    bool passwordIsVerified;
+
+    try{
+      if (accessToken != null)
+      {
+        final response = await http.post(
+          Uri.parse('http://10.0.2.2:3000/verifyPassword'),
+          headers: <String, String>
+          {
+            'Content-Type': 'application/json',
+            'Authorization': "Bearer " + accessToken,
+          },
+          body: jsonEncode(<String, dynamic>
+          {
+            "user_id": userId,
+            "password": password
+          }),
+        ).timeout(Duration(seconds: 10));
+        if (response.statusCode == 200)
+        {
+          print("Password was successfully verified!");
+          passwordIsVerified = true;
+          // Daten werden zusätzlich lokal abgespeichert
+          return passwordIsVerified;
+        }else
+        {
+          print("Password was wrong!");
+          passwordIsVerified = false;
+          // Daten werden zusätzlich lokal abgespeichert
+          return passwordIsVerified;
+        }
+      }else
+      {
+        print("Token existiert nicht!");
+      }
+    }on TimeoutException catch (e)
+    {
+      print('Zeitüberschreitung: $e');
+      //var auf grad kein netz einbauen
+      return null;
+    }on http.ClientException catch (e)
+    {
+      print('Clientfehler: $e');
+      return null;
+    }catch (e)
+    {
+      print('Allgemeiner Fehler: $e');
+      return null;
     }
   }
 }

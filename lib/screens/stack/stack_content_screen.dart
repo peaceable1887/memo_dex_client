@@ -138,7 +138,6 @@ class _StackContentScreenState extends State<StackContentScreen> {
         await storage.write(key: 'addCard', value: "false");
       }
     }
-
   }
 
   Future<void> loadStack() async

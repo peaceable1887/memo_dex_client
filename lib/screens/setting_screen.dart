@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:memo_dex_prototyp/screens/setting/account/email_setting_screen.dart';
 import 'package:memo_dex_prototyp/screens/setting/account/password_setting_screen.dart';
 import 'package:memo_dex_prototyp/screens/setting/configuration/language_setting_screen.dart';
@@ -6,6 +7,7 @@ import 'package:memo_dex_prototyp/screens/setting/datamanagement/trash_setting_s
 import 'package:memo_dex_prototyp/widgets/buttons/setting_btn.dart';
 
 import '../widgets/buttons/button.dart';
+import '../widgets/dialogs/custom_snackbar.dart';
 import '../widgets/header/headline.dart';
 import 'bottom_navigation_screen.dart';
 
@@ -17,6 +19,51 @@ class SettingScreen extends StatefulWidget {
 }
 
 class _SettingScreenState extends State<SettingScreen> {
+
+  final storage = FlutterSecureStorage();
+
+  @override
+  void initState()
+  {
+    super.initState();
+    showSnackbarInformation();
+  }
+
+  //TODO REDUNDANZ: muss noch ausgelagert werden
+  void showSnackbarInformation() async
+  {
+    String? eMailWasUpdated = await storage.read(key: 'editEmail');
+    String? passwordWasUpdated = await storage.read(key: 'editPassword');
+
+    if (mounted)
+    {
+      if(eMailWasUpdated == "true")
+      {
+        CustomSnackbar.showSnackbar(
+            context,
+            Icons.check_rounded,
+            "The E-Mail was successfully edited.",
+            Colors.green,
+            Duration(milliseconds: 500),
+            Duration(milliseconds: 1500)
+        );
+        await storage.write(key: 'editEmail', value: "false");
+      }
+      if(passwordWasUpdated == "true")
+      {
+        CustomSnackbar.showSnackbar(
+            context,
+            Icons.check_rounded,
+            "The password was successfully edited.",
+            Colors.green,
+            Duration(milliseconds: 500),
+            Duration(milliseconds: 1500)
+        );
+        await storage.write(key: 'editPassword', value: "false");
+      }
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +93,7 @@ class _SettingScreenState extends State<SettingScreen> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text(
-                            "ACCOUNT",
+                            "EDIT ACCOUNT",
                             style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 20,
@@ -62,7 +109,6 @@ class _SettingScreenState extends State<SettingScreen> {
                         buttonBorderRadius: [10,10,0,0],
                         pushToContent: EmailSettingScreen(),
                       ),
-                      SizedBox(height: 1,),
                       SettingBtn(
                           buttonText: "Password",
                           buttonBorderRadius: [0,0,10,10],
