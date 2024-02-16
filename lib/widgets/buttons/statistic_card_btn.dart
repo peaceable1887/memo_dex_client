@@ -78,9 +78,9 @@ class _StatisticCardState extends State<StatisticCard> {
     return stackData;
   }
 
-
   @override
-  void dispose() {
+  void dispose()
+  {
     print("dispose statistic card");
     super.dispose();
   }
@@ -116,102 +116,122 @@ class _StatisticCardState extends State<StatisticCard> {
               ),
             );
           },
-            child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                padding: const EdgeInsets.fromLTRB(0, 5, 0, 5) ,
-                height: 110,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      width: 130,
-                      child: SfCircularChart(
-                        annotations:  <CircularChartAnnotation>[
-                          CircularChartAnnotation(
-                            widget: Padding(
-                              padding: const EdgeInsets.fromLTRB(4, 0, 0, 0),
-                              child: Container(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      '${progressValue.toInt()}',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 22,
-                                        fontFamily: "Inter",
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.fromLTRB(0, 6, 0, 0),
-                                      child: const Text(
-                                        '%',
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 12,
-                                          fontFamily: "Inter",
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
+          child: Container(
+            height: 110,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  height: 80,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Icon(
+                              CupertinoIcons.square_stack_3d_up_fill,
+                              size: 28.0,
+                              color: Color(int.parse("0xFF${widget.color}")), // Ändere diese Farbe nach deinen Wünschen
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
+                              child: Text(
+                                Trim().trimText(widget.stackName, 14),
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 22,
+                                  fontFamily: "Inter",
+                                  fontWeight: FontWeight.w600,
                                 ),
                               ),
                             ),
-                          ),
-                        ],
-                        series: <CircularSeries>[
-                          DoughnutSeries<StackStatisticData, String>(
-                              radius: "48",
-                              dataSource: _stackData,
-                              pointColorMapper:(StackStatisticData data,  _) => data.color,
-                              xValueMapper: (StackStatisticData data, _) => data.stackName,
-                              yValueMapper: (StackStatisticData data, _) => data.memorized,
-                              innerRadius: '69%',
-                              animationDuration: 0,
-                          )
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(5, MediaQuery.of(context).size.height/29, 10, 5),
-                        child: Container(
-                          height: 80,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Row(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.fromLTRB(10, 0, 0, 2),
-                                    child: Text(
-                                      Trim().trimText(widget.stackName, 14),
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 22,
-                                        fontFamily: "Inter",
-                                        fontWeight: FontWeight.w600,
-                                      ),
+                      Container(
+                        padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Click to see more details",
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 12,
+                                fontFamily: "Inter",
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            SizedBox(width: 2,),
+                            Icon(
+                              Icons.arrow_forward_ios_rounded,
+                              size: 14.0,
+                              color: Color(0xFF8597A1), // Ändere diese Farbe nach deinen Wünschen
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                Container(
+                  width: 130,
+                  child: SfCircularChart(
+                    annotations:  <CircularChartAnnotation>[
+                      CircularChartAnnotation(
+                        widget: Padding(
+                          padding: const EdgeInsets.fromLTRB(4, 0, 0, 0),
+                          child: Container(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  '${progressValue.toInt()}',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 22,
+                                    fontFamily: "Inter",
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.fromLTRB(0, 6, 0, 0),
+                                  child: const Text(
+                                    '%',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 12,
+                                      fontFamily: "Inter",
+                                      fontWeight: FontWeight.w500,
                                     ),
                                   ),
-                                  Icon(
-                                    Icons.arrow_forward_ios_rounded,
-                                    size: 25.0,
-                                    color: Color(0xFF8597A1), // Ändere diese Farbe nach deinen Wünschen
-                                  ),
-                                ],
-                              ),
-                            ],
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                  ],
+                    ],
+                    series: <CircularSeries>[
+                      DoughnutSeries<StackStatisticData, String>(
+                          radius: "47",
+                          dataSource: _stackData,
+                          pointColorMapper:(StackStatisticData data,  _) => data.color,
+                          xValueMapper: (StackStatisticData data, _) => data.stackName,
+                          yValueMapper: (StackStatisticData data, _) => data.memorized,
+                          innerRadius: '67%',
+                          animationDuration: 0,
+                      )
+                    ],
+                  ),
                 ),
-              ),
-            ],
+
+              ],
+            ),
           ),
         ),
       ),
