@@ -62,9 +62,17 @@ class _StatisticCardState extends State<StatisticCard> {
       notNoticed = 1;
     }
 
+    Color originalColor = Color(int.parse("0xFF${widget.color}"));
+    Color darkerColor = Color.fromARGB(
+      originalColor.alpha,
+      (originalColor.red * 0.7).round(),
+      (originalColor.green * 0.7).round(),
+      (originalColor.blue * 0.7).round(),
+    );
+
     final List<StackStatisticData> stackData = [
-      StackStatisticData("Noticed", widget.noticed, Colors.white),
-      StackStatisticData("Noticed", notNoticed, Color(0xFFD1D1D1)),
+      StackStatisticData("Noticed", widget.noticed, originalColor),
+      StackStatisticData("Noticed", notNoticed, darkerColor),
     ];
 
     return stackData;
@@ -84,7 +92,7 @@ class _StatisticCardState extends State<StatisticCard> {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(10)),
-          color: Color(int.parse("0xFF${widget.color}")),
+          color: Colors.white, /*Color(int.parse("0xFF${widget.color}")),*/
           boxShadow: [
             BoxShadow(
               color: Color.fromRGBO(0, 0, 0, 0.15),
@@ -131,7 +139,7 @@ class _StatisticCardState extends State<StatisticCard> {
                                     Text(
                                       '${progressValue.toInt()}',
                                       style: TextStyle(
-                                        color: Colors.white,
+                                        color: Colors.black,
                                         fontSize: 22,
                                         fontFamily: "Inter",
                                         fontWeight: FontWeight.w700,
@@ -142,7 +150,7 @@ class _StatisticCardState extends State<StatisticCard> {
                                       child: const Text(
                                         '%',
                                         style: TextStyle(
-                                          color: Colors.white,
+                                          color: Colors.black,
                                           fontSize: 12,
                                           fontFamily: "Inter",
                                           fontWeight: FontWeight.w500,
@@ -182,7 +190,7 @@ class _StatisticCardState extends State<StatisticCard> {
                                     child: Text(
                                       Trim().trimText(widget.stackName, 14),
                                       style: TextStyle(
-                                        color: Colors.white,
+                                        color: Colors.black,
                                         fontSize: 22,
                                         fontFamily: "Inter",
                                         fontWeight: FontWeight.w600,
@@ -192,7 +200,7 @@ class _StatisticCardState extends State<StatisticCard> {
                                   Icon(
                                     Icons.arrow_forward_ios_rounded,
                                     size: 25.0,
-                                    color: Colors.white, // Ändere diese Farbe nach deinen Wünschen
+                                    color: Color(0xFF8597A1), // Ändere diese Farbe nach deinen Wünschen
                                   ),
                                 ],
                               ),

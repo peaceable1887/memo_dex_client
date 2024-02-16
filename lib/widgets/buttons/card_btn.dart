@@ -74,11 +74,16 @@ class _CardBtnState extends State<CardBtn> {
       child: ElevatedButton(
         onPressed: pushToCardContent,
         style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          padding: EdgeInsets.fromLTRB(10, 10, 10, 10)
+            backgroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                  topRight: Radius.circular(10),
+                  topLeft: Radius.circular(10),
+                  bottomRight: Radius.circular(10),
+                  bottomLeft: Radius.circular(10)
+              ),
+            ),
+            padding: EdgeInsets.fromLTRB(10, 10, 10, 10)
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -98,7 +103,7 @@ class _CardBtnState extends State<CardBtn> {
                         color: Colors.black,
                         fontSize: 18,
                         fontFamily: "Inter",
-                        fontWeight: FontWeight.w600,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
                   ),
@@ -108,13 +113,13 @@ class _CardBtnState extends State<CardBtn> {
             Row(
               children: [
                 Icon(
-                  Icons.lightbulb,
-                  size: showIcon == true ? 28.0 : 0.0,
+                  Icons.lightbulb_rounded,
+                  size: showIcon == true ? 22.0 : 0.0,
                   color: Color(0xFF8597A1),
                 ),
                 Icon(
                   Icons.arrow_forward_ios_rounded,
-                  size: 28.0,
+                  size: 22.0,
                   color: Color(0xFF8597A1),
                 ),
               ],

@@ -86,7 +86,6 @@ class UserApi
   Future<void> logoutUser() async
   {
     String? accessToken = await storage.read(key: 'accessToken');
-    bool userLoggedOut;
 
     try
     {

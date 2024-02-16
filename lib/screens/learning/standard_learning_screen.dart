@@ -290,7 +290,6 @@ class _CardLearningScreenState extends State<StandardLearningScreen> with Ticker
 
               //sort by the fastest time
               total.sort();
-              print(total);
               final int fastestTime = total[0];
 
               List<String> splitFormatTime = formatTime().split(":");
@@ -299,9 +298,6 @@ class _CardLearningScreenState extends State<StandardLearningScreen> with Ticker
               int seconds = int.parse(splitFormatTime[2]);
 
               int formatTimeInteger = (hours * 3600) + (minutes * 60) + seconds;
-
-              print("STACKRUNTIME: ${fastestTime}");
-              print("FORMATTIME: ${formatTimeInteger}");
 
               setState(() async
               {

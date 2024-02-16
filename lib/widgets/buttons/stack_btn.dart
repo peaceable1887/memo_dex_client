@@ -57,7 +57,7 @@ class _StackBtnState extends State<StackBtn> {
                 Trim().trimText(widget.stackName, 10),
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                    color: Colors.black,
+                  color: Colors.black,
                   fontSize: 16,
                   fontFamily: "Inter",
                   fontWeight: FontWeight.w700,

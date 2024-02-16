@@ -45,19 +45,18 @@ class _EditMessageBoxState extends State<EditMessageBox>
 
   Future<void> verifyPassword() async
   {
-      bool isPasswordVerified = await ApiClient(context).userApi.verifyUserPassword(_password.text);
+    bool isPasswordVerified = await ApiClient(context).userApi.verifyUserPassword(_password.text);
 
-      if(isPasswordVerified == true)
+    if(isPasswordVerified == true)
+    {
+      widget.onEdit();
+    }else
+    {
+      setState(()
       {
-        widget.onEdit();
-      }else
-      {
-        setState(()
-        {
-          _showValidationMessage = true;
-        });
-      }
-
+        _showValidationMessage = true;
+      });
+    }
   }
 
   @override

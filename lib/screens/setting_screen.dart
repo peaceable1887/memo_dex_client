@@ -7,6 +7,7 @@ import 'package:memo_dex_prototyp/screens/setting/datamanagement/trash_setting_s
 import 'package:memo_dex_prototyp/screens/welcome_screen.dart';
 import 'package:memo_dex_prototyp/services/api/api_client.dart';
 import 'package:memo_dex_prototyp/widgets/buttons/setting_btn.dart';
+import 'package:memo_dex_prototyp/widgets/dialogs/decision_message_box.dart';
 
 import '../widgets/buttons/button.dart';
 import '../widgets/dialogs/custom_snackbar.dart';
@@ -68,7 +69,28 @@ class _SettingScreenState extends State<SettingScreen> {
 
   Future<void>logoutUser() async
   {
-    await ApiClient(context).userApi.logoutUser();
+    showDialog(
+      context: context,
+      builder: (BuildContext context)
+      {
+        return DecisionMessageBox(
+          headline: "Ausloggen?",
+          message: "Möchtest du dich wirklich ausloggen?",
+          firstButtonText: "JA",
+          secondButtonText: "NEIN",
+          onPressed: (bool value)
+          {
+            if(value == true)
+            {
+              ApiClient(context).userApi.logoutUser();
+            }else
+            {
+              Navigator.of(context).pop();
+            }
+          },
+        );
+      },
+    );
   }
 
   @override

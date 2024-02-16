@@ -79,6 +79,7 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
       bottomNavigationBar: Padding(
         padding: snackbarIsDisplayed ? const EdgeInsets.fromLTRB(0, 0, 0, 0) : const EdgeInsets.fromLTRB(0, 0, 0, 52),
         child: BottomNavigationBar(
+          backgroundColor: Colors.white,
           currentIndex: currentIndex,
           onTap: (index) => setState(() => currentIndex = index),
           iconSize: 50,

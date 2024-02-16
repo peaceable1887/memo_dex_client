@@ -73,7 +73,7 @@ class _SettingBtnState extends State<SettingBtn>
     return ElevatedButton(
       onPressed: showSwitch(widget.showSwitch) ? (){} : pushToContent,
       style: ElevatedButton.styleFrom(
-          backgroundColor: Color(0xFF33363F),
+          backgroundColor: Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
                 topRight: Radius.circular(widget.buttonBorderRadius[0]),
@@ -90,7 +90,7 @@ class _SettingBtnState extends State<SettingBtn>
           Text(
             widget.buttonText,
             style: TextStyle(
-              color: Colors.white,
+              color: Colors.black,
               fontSize: 18,
               fontFamily: "Inter",
               fontWeight: FontWeight.w500,
