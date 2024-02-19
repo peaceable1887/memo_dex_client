@@ -375,9 +375,9 @@ class _SignUpFormState extends State<SignUpForm> {
                   ),
                   Button(
                     text: "Continue with Google",
-                    backgroundColor: "FFFFFF",
-                    borderColor: "FFFFFF",
-                    textColor: "8597A1",
+                    backgroundColor: Colors.white,
+                    borderColor: Colors.white,
+                    textColor: Color(0xFF8597A1),
                     onPressed: ()
                     {
                       Navigator.pushReplacement(

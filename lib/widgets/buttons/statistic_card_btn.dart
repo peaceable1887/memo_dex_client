@@ -62,7 +62,7 @@ class _StatisticCardState extends State<StatisticCard> {
       notNoticed = 1;
     }
 
-    Color originalColor = Color(int.parse("0xFF${widget.color}"));
+    Color originalColor = Colors.white;
     Color darkerColor = Color.fromARGB(
       originalColor.alpha,
       (originalColor.red * 0.7).round(),
@@ -92,7 +92,7 @@ class _StatisticCardState extends State<StatisticCard> {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(10)),
-          color: Colors.white, /*Color(int.parse("0xFF${widget.color}")),*/
+          color: Color(int.parse("0xFF${widget.color}")), /*Color(int.parse("0xFF${widget.color}")),*/
           boxShadow: [
             BoxShadow(
               color: Color.fromRGBO(0, 0, 0, 0.15),
@@ -135,14 +135,14 @@ class _StatisticCardState extends State<StatisticCard> {
                             Icon(
                               CupertinoIcons.square_stack_3d_up_fill,
                               size: 28.0,
-                              color: Color(int.parse("0xFF${widget.color}")), // Ändere diese Farbe nach deinen Wünschen
+                              color: Colors.white, // Ändere diese Farbe nach deinen Wünschen
                             ),
                             Padding(
                               padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
                               child: Text(
                                 Trim().trimText(widget.stackName, 14),
                                 style: TextStyle(
-                                  color: Colors.black,
+                                  color: Colors.white,
                                   fontSize: 22,
                                   fontFamily: "Inter",
                                   fontWeight: FontWeight.w600,
@@ -160,7 +160,7 @@ class _StatisticCardState extends State<StatisticCard> {
                             Text(
                               "Click to see more details",
                               style: TextStyle(
-                                color: Colors.black,
+                                color: Colors.white,
                                 fontSize: 12,
                                 fontFamily: "Inter",
                                 fontWeight: FontWeight.w400,
@@ -170,7 +170,7 @@ class _StatisticCardState extends State<StatisticCard> {
                             Icon(
                               Icons.arrow_forward_ios_rounded,
                               size: 14.0,
-                              color: Color(0xFF8597A1), // Ändere diese Farbe nach deinen Wünschen
+                              color: Colors.white, // Ändere diese Farbe nach deinen Wünschen
                             ),
                           ],
                         ),
@@ -192,7 +192,7 @@ class _StatisticCardState extends State<StatisticCard> {
                                 Text(
                                   '${progressValue.toInt()}',
                                   style: TextStyle(
-                                    color: Colors.black,
+                                    color: Colors.white,
                                     fontSize: 22,
                                     fontFamily: "Inter",
                                     fontWeight: FontWeight.w700,
@@ -203,7 +203,7 @@ class _StatisticCardState extends State<StatisticCard> {
                                   child: const Text(
                                     '%',
                                     style: TextStyle(
-                                      color: Colors.black,
+                                      color: Colors.white,
                                       fontSize: 12,
                                       fontFamily: "Inter",
                                       fontWeight: FontWeight.w500,
@@ -229,7 +229,6 @@ class _StatisticCardState extends State<StatisticCard> {
                     ],
                   ),
                 ),
-
               ],
             ),
           ),

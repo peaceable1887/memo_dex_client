@@ -16,11 +16,10 @@ class StackBtn extends StatefulWidget {
   State<StackBtn> createState() => _StackBtnState();
 }
 
-class _StackBtnState extends State<StackBtn> {
-
-  late bool isTooLong;
-
-  void pushToStackContent(){
+class _StackBtnState extends State<StackBtn>
+{
+  void pushToStackContent()
+  {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
@@ -30,11 +29,12 @@ class _StackBtnState extends State<StackBtn> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context)
+  {
     return ElevatedButton(
       onPressed: pushToStackContent,
       style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.white,
+        backgroundColor: Color(int.parse("0xFF${widget.iconColor}")),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
@@ -47,7 +47,7 @@ class _StackBtnState extends State<StackBtn> {
             child: Icon(
               CupertinoIcons.square_stack_3d_up_fill,
               size: 85.0,
-              color: Color(int.parse("0xFF${widget.iconColor}")), // Ändere diese Farbe nach deinen Wünschen
+              color: Colors.white, // Ändere diese Farbe nach deinen Wünschen
             ),
           ),
           Container(
@@ -57,10 +57,10 @@ class _StackBtnState extends State<StackBtn> {
                 Trim().trimText(widget.stackName, 10),
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: Colors.black,
+                  color: Colors.white,
                   fontSize: 16,
                   fontFamily: "Inter",
-                  fontWeight: FontWeight.w600,
+                  fontWeight: FontWeight.w700,
                 ),
               ),
             ),

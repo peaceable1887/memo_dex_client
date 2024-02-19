@@ -222,6 +222,39 @@ class StackApi
     }else{}
   }
 
+  Future<void> undoStack(stackId) async {
+
+    String? accessToken = await storage.read(key: 'accessToken');
+
+    if (accessToken != null) {
+      final response = await http.post(
+        Uri.parse('http://10.0.2.2:3000/undoStack'),
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization': "Bearer " + accessToken,
+        },
+        body: jsonEncode(<String, dynamic>{
+          "stack_id": stackId,
+          "is_deleted": 0
+        }),
+      );
+
+      if (response.statusCode == 200)
+      {
+        print("Stack aus dem Papierkorb geholt");
+      } else
+      {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return ValidationMessageBox(message: "Stack konnte nicht zurückgeholt werden");
+          },
+        );
+        throw Exception('Failed to delete stack.');
+      }
+    }else{}
+  }
+
   Future<dynamic> insertStackRun(time, stackId) async {
 
     String? accessToken = await storage.read(key: 'accessToken');
@@ -332,6 +365,56 @@ class StackApi
           await fileHandler.saveJsonToLocalFile(jsonResponse, "stackRuns");
           print("test getAllStackRuns: $jsonResponse");
           return jsonResponse;
+        }else
+        {
+          throw http.ClientException('hat nicht geklappt. Statuscode: ${response.statusCode}');
+        }
+      }else
+      {
+        print("Token existiert nicht!");
+      }
+    }on TimeoutException catch (e)
+    {
+      print('Zeitüberschreitung: $e');
+      //var auf grad kein netz einbauen
+      return null;
+    }on http.ClientException catch (e)
+    {
+      print('Clientfehler: $e');
+      return null;
+    }catch (e)
+    {
+      print('Allgemeiner Fehler: $e');
+      return null;
+    }
+  }
+
+  Future<void> deleteStackFromDatabase(dynamic stackId) async
+  {
+    String? accessToken = await storage.read(key: 'accessToken');
+    String? userId = await storage.read(key: 'user_id');
+    try
+    {
+      if (accessToken != null)
+      {
+        final response = await http.post(
+          Uri.parse('http://10.0.2.2:3000/deleteStackFromDatabase'),
+          headers: <String, String>
+          {
+            'Content-Type': 'application/json',
+            'Authorization': "Bearer " + accessToken,
+          },
+          body: jsonEncode(<String, dynamic>
+          {
+            "user_id": userId,
+            "stack_id": stackId,
+            "is_deleted": 1
+          }),
+        ).timeout(Duration(seconds: 10));
+        if (response.statusCode == 200)
+        {
+          print("Delete Stack with the ID: ${stackId}");
+
         }else
         {
           throw http.ClientException('hat nicht geklappt. Statuscode: ${response.statusCode}');

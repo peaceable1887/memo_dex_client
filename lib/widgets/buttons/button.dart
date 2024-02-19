@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 class Button extends StatelessWidget {
 
   final String text;
-  final String backgroundColor;
-  final String borderColor;
-  final String textColor;
+  final Color backgroundColor;
+  final Color borderColor;
+  final Color textColor;
   final VoidCallback onPressed;
   final String? iconPath;
 
@@ -25,13 +25,13 @@ class Button extends StatelessWidget {
         children: [
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: Color(int.parse("0xFF$backgroundColor")),
+              backgroundColor: backgroundColor,
               minimumSize: Size(double.infinity, 55),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10)),
               ),
               side: BorderSide(
-                color: Color(int.parse("0xFF$borderColor")),
+                color: borderColor,
                 width: 2.0,
               ),
               elevation: 0,
@@ -51,7 +51,7 @@ class Button extends StatelessWidget {
                 Text(
                   text,
                   style: TextStyle(
-                    color: Color(int.parse("0xFF$textColor")),
+                    color: textColor,
                     fontSize: 20,
                     fontFamily: "Inter",
                     fontWeight: FontWeight.w600,

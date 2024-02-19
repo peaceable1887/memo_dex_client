@@ -35,9 +35,9 @@ class WelcomeScreen extends StatelessWidget {
                       children: [
                         Button(
                           text: "Login",
-                          backgroundColor: "E59113",
-                          borderColor: "E59113",
-                          textColor: "00324E",
+                          backgroundColor: Color(0xFFE59113),
+                          borderColor: Color(0xFFE59113),
+                          textColor: Color(0xFF00324E),
                           onPressed: ()
                           {
                             Navigator.pushReplacement(
@@ -50,9 +50,9 @@ class WelcomeScreen extends StatelessWidget {
                         ),
                         Button(
                           text: "Sign up",
-                          backgroundColor: "00324E",
-                          borderColor: "E59113",
-                          textColor: "E59113",
+                          backgroundColor: Color(0xFF00324E),
+                          borderColor: Color(0xFFE59113),
+                          textColor: Color(0xFFE59113),
                           onPressed: ()
                           {
                             Navigator.pushReplacement(
