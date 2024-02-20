@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:memo_dex_prototyp/screens/welcome_screen.dart';
-import 'package:memo_dex_prototyp/widgets/header/headline.dart';
+import 'package:memo_dex_prototyp/widgets/text/headlines/headline_large.dart';
 import 'package:memo_dex_prototyp/widgets/forms/login_form.dart';
 import 'package:memo_dex_prototyp/widgets/header/top_navigation_bar.dart';
 import '../../widgets/dialogs/custom_snackbar.dart';
@@ -55,7 +55,7 @@ class _LoginScreenState extends State<LoginScreen> {
         body: Stack(
           children: [
             Container(
-              color: Color(0xFF00324E),
+              color: Theme.of(context).scaffoldBackgroundColor,
               child: ListView(
                 physics: NeverScrollableScrollPhysics(),
                 children: [
@@ -65,7 +65,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Headline(
+                        const HeadlineLarge(
                             text: "Login"
                         ),
                       ],

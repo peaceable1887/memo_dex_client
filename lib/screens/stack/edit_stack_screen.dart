@@ -8,7 +8,7 @@ import 'package:memo_dex_prototyp/services/api/api_client.dart';
 import '../../services/local/file_handler.dart';
 import '../../widgets/dialogs/delete_message_box.dart';
 import '../../widgets/forms/edit_stack_form.dart';
-import '../../widgets/header/headline.dart';
+import '../../widgets/text/headlines/headline_large.dart';
 import '../../widgets/header/top_navigation_bar.dart';
 
 class EditStackScreen extends StatefulWidget {
@@ -103,7 +103,7 @@ class _EditStackScreenState extends State<EditStackScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF00324E),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Column(
         children: [
           Row(
@@ -142,14 +142,14 @@ class _EditStackScreenState extends State<EditStackScreen> {
             ],
           ),
           Container(
-            color: Color(0xFF00324E),
+            color: Theme.of(context).scaffoldBackgroundColor,
             child: Column(
               children: [
                 Container(
                   child:
                     Padding(
                       padding: const EdgeInsets.fromLTRB(0,15,0,50),
-                      child: Headline(
+                      child: const HeadlineLarge(
                           text: "Edit Stack"
                       ),
                     ),

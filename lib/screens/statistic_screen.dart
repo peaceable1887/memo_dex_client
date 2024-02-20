@@ -6,9 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:memo_dex_prototyp/services/api/api_client.dart';
 import 'package:memo_dex_prototyp/widgets/buttons/statistic_card_btn.dart';
+import 'package:memo_dex_prototyp/widgets/text/headlines/headline_medium.dart';
 import '../utils/filters.dart';
 import '../services/local/file_handler.dart';
-import '../widgets/header/headline.dart';
+import '../widgets/text/headlines/headline_large.dart';
 import 'bottom_navigation_screen.dart';
 
 class StatisticScreen extends StatefulWidget
@@ -189,7 +190,7 @@ class _StatisticScreenState extends State<StatisticScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF00324E),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Column(
         children: [
           Padding(
@@ -198,7 +199,7 @@ class _StatisticScreenState extends State<StatisticScreen>
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Headline(text: "Statistic"),
+                  const HeadlineLarge(text: "Statistic"),
                 ],
               ),
             ),
@@ -210,15 +211,7 @@ class _StatisticScreenState extends State<StatisticScreen>
               children: [
                 Row(
                   children: [
-                    Text(
-                      selectedOption,
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontFamily: "Inter",
-                          fontWeight: FontWeight.w600
-                      ),
-                    ),
+                    HeadlineMedium(text: selectedOption),
                     InkWell(
                       onTap: ()
                       {
@@ -231,11 +224,11 @@ class _StatisticScreenState extends State<StatisticScreen>
                       child: sortValue == false ? Icon(
                         Icons.arrow_downward_rounded,
                         size: selectedOption == "ALL STACKS" ? 0.0 : 28.0,
-                        color: Color(0xFFE59113),
+                        color: Theme.of(context).colorScheme.secondary,
                       ) : Icon(
                         Icons.arrow_upward_rounded,
                         size: selectedOption == "ALL STACKS" ? 0.0 : 28.0,
-                        color: Color(0xFFE59113),
+                        color: Theme.of(context).colorScheme.secondary,
                       ),
                     ),
                   ],
@@ -263,8 +256,8 @@ class _StatisticScreenState extends State<StatisticScreen>
                                 "Stackname",
                                 style: TextStyle(
                                   color: selectedOption == "STACKNAME"
-                                      ? Color(0xFFE59113)
-                                      : Colors.black,
+                                      ? Theme.of(context).colorScheme.secondary
+                                      : Theme.of(context).colorScheme.onSurface,
                                   fontWeight: selectedOption == "STACKNAME"
                                       ?  FontWeight.w600
                                       :  FontWeight.w400,
@@ -274,8 +267,8 @@ class _StatisticScreenState extends State<StatisticScreen>
                                 Icons.sort_by_alpha_rounded,
                                 size: 20.0,
                                 color: selectedOption == "STACKNAME"
-                                    ? Color(0xFFE59113)
-                                    : Colors.black,
+                                    ? Theme.of(context).colorScheme.secondary
+                                    : Theme.of(context).colorScheme.onSurface,
                               ),
                             ],
                           ),
@@ -289,8 +282,8 @@ class _StatisticScreenState extends State<StatisticScreen>
                                 "Creation Date",
                                 style: TextStyle(
                                   color: selectedOption == "CREATION DATE"
-                                      ? Color(0xFFE59113)
-                                      : Colors.black,
+                                      ? Theme.of(context).colorScheme.secondary
+                                      : Theme.of(context).colorScheme.onSurface,
                                   fontWeight: selectedOption == "CREATION DATE"
                                       ?  FontWeight.w600
                                       :  FontWeight.w400,
@@ -300,8 +293,8 @@ class _StatisticScreenState extends State<StatisticScreen>
                                 Icons.date_range_rounded,
                                 size: 20.0,
                                 color: selectedOption == "CREATION DATE"
-                                    ? Color(0xFFE59113)
-                                    : Colors.black,
+                                    ? Theme.of(context).colorScheme.secondary
+                                    : Theme.of(context).colorScheme.onSurface,
                               ),
                             ],
                           ),
@@ -321,7 +314,7 @@ class _StatisticScreenState extends State<StatisticScreen>
                                 Text(
                                   "Reset",
                                   style: TextStyle(
-                                    color: Colors.grey,
+                                    color: Theme.of(context).colorScheme.tertiary,
                                     fontFamily: "Inter",
                                     fontWeight: FontWeight.w400,
                                   ),
@@ -329,7 +322,7 @@ class _StatisticScreenState extends State<StatisticScreen>
                                 Icon(
                                   Icons.refresh_rounded,
                                   size: 20.0,
-                                  color: Colors.grey,
+                                  color: Theme.of(context).colorScheme.tertiary,
                                 ),
                               ],
                             ),
@@ -348,8 +341,8 @@ class _StatisticScreenState extends State<StatisticScreen>
                         Icons.filter_alt,
                         size: 32.0,
                         color: selectedOption == "STACKNAME" || selectedOption == "CREATION DATE"
-                            ? Color(0xFFE59113)
-                            : Colors.white,
+                            ? Theme.of(context).colorScheme.secondary
+                            : Theme.of(context).colorScheme.surface,
                         /*selectedOption == "STACKNAME" || selectedOption == "CREATION DATE"
                                 ? Icons.filter_alt : Icons.filter_alt_outlined,
                             size: 32.0,
@@ -372,7 +365,7 @@ class _StatisticScreenState extends State<StatisticScreen>
                       width: 50,
                       height: 50,
                       child: CircularProgressIndicator(
-                        color: Colors.white,
+                        color: Theme.of(context).colorScheme.surface,
                       ),
                     ),
                   ],

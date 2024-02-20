@@ -13,7 +13,7 @@ class WelcomeScreen extends StatelessWidget {
     return Scaffold(
       resizeToAvoidBottomInset: false,
         body: Container(
-          color: Color(0xFF00324E),
+          color: Theme.of(context).scaffoldBackgroundColor,
           child: Padding(
             padding: EdgeInsets.fromLTRB(0, MediaQuery.of(context).size.height/8, 0, 0),
             child: Column(
@@ -35,9 +35,9 @@ class WelcomeScreen extends StatelessWidget {
                       children: [
                         Button(
                           text: "Login",
-                          backgroundColor: Color(0xFFE59113),
-                          borderColor: Color(0xFFE59113),
-                          textColor: Color(0xFF00324E),
+                          backgroundColor: Theme.of(context).colorScheme.secondary,
+                          borderColor: Theme.of(context).colorScheme.secondary,
+                          textColor: Theme.of(context).scaffoldBackgroundColor,
                           onPressed: ()
                           {
                             Navigator.pushReplacement(
@@ -50,9 +50,9 @@ class WelcomeScreen extends StatelessWidget {
                         ),
                         Button(
                           text: "Sign up",
-                          backgroundColor: Color(0xFF00324E),
-                          borderColor: Color(0xFFE59113),
-                          textColor: Color(0xFFE59113),
+                          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                          borderColor: Theme.of(context).colorScheme.secondary,
+                          textColor: Theme.of(context).colorScheme.secondary,
                           onPressed: ()
                           {
                             Navigator.pushReplacement(
@@ -75,7 +75,7 @@ class WelcomeScreen extends StatelessWidget {
                         child: Text(
                           "Indem Sie fortfahren, stimmen Sie den Nutzerbedinungen und der Datenschutzrichtlinie zu.",
                           style: TextStyle(
-                            color: Colors.white,
+                            color: Theme.of(context).colorScheme.onSurfaceVariant,
                             fontSize: 13,
                           ),
                           textAlign: TextAlign.center,

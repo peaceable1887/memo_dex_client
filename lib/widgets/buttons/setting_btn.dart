@@ -35,8 +35,6 @@ class _SettingBtnState extends State<SettingBtn>
       return value;
     }catch(error)
     {
-      print("showSwitch is empty. Error: $error");
-
       value = false;
       return value;
     }
@@ -53,12 +51,13 @@ class _SettingBtnState extends State<SettingBtn>
   }
 
   final MaterialStateProperty<Icon?> thumbIcon =
-  MaterialStateProperty.resolveWith<Icon?>(
-        (Set<MaterialState> states) {
-      if (states.contains(MaterialState.selected)) {
+  MaterialStateProperty.resolveWith<Icon?>((Set<MaterialState> states)
+    {
+      if (states.contains(MaterialState.selected))
+      {
         return const Icon(Icons.check, color: Color(0xFFE59113));
       }
-      return const Icon(Icons.close);
+      return const Icon(Icons.close, color: Color(0xFF8597A1));
     },
   );
 
@@ -73,7 +72,7 @@ class _SettingBtnState extends State<SettingBtn>
     return ElevatedButton(
       onPressed: showSwitch(widget.showSwitch) ? (){} : pushToContent,
       style: ElevatedButton.styleFrom(
-          backgroundColor: Color(0xFF33363F),
+          backgroundColor: Theme.of(context).colorScheme.primary,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
                 topRight: Radius.circular(widget.buttonBorderRadius[0]),
@@ -90,7 +89,7 @@ class _SettingBtnState extends State<SettingBtn>
           Text(
             widget.buttonText,
             style: TextStyle(
-              color: Colors.white,
+              color: Theme.of(context).colorScheme.onSurface,
               fontSize: 18,
               fontFamily: "Inter",
               fontWeight: FontWeight.w500,
@@ -101,9 +100,23 @@ class _SettingBtnState extends State<SettingBtn>
             child: Switch(
                 thumbIcon: thumbIcon,
                 value: _autocorrectDisabled,
-                activeColor: Colors.white,
-                activeTrackColor: Color(0xFFE59113),
-                inactiveTrackColor: Colors.grey,
+                activeColor: Theme.of(context).colorScheme.primary,
+                activeTrackColor: Theme.of(context).colorScheme.secondary,
+                inactiveTrackColor: Theme.of(context).colorScheme.tertiary,
+                trackOutlineColor: MaterialStateProperty.resolveWith<Color?>((Set<MaterialState> states)
+                {
+                  if (states.contains(MaterialState.selected)) {
+                    return Theme.of(context).colorScheme.secondary;
+                  }
+                  return Theme.of(context).colorScheme.tertiary;
+                }),
+                thumbColor: MaterialStateProperty.resolveWith<Color?>((Set<MaterialState> states)
+                {
+                  if (states.contains(MaterialState.disabled)) {
+                    return Theme.of(context).colorScheme.tertiary;
+                  }
+                  return Theme.of(context).colorScheme.primary;
+                }),
                 materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 onChanged: (bool value)
                 {
@@ -117,7 +130,7 @@ class _SettingBtnState extends State<SettingBtn>
               Icon(
                 Icons.arrow_forward_ios_rounded,
                 size: 22.0,
-                color: Color(0xFF8597A1),
+                color: Theme.of(context).colorScheme.tertiary,
               ),
             ],
           ),

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:memo_dex_prototyp/screens/welcome_screen.dart';
 import 'package:memo_dex_prototyp/widgets/header/top_navigation_bar.dart';
 
-import '../../widgets/header/headline.dart';
+import '../../widgets/text/headlines/headline_large.dart';
 import '../../widgets/forms/sign_up_form.dart';
 
 class SignUpScreen extends StatelessWidget {
@@ -15,7 +15,7 @@ class SignUpScreen extends StatelessWidget {
         body: Stack(
           children: [
             Container(
-              color: Color(0xFF00324E),
+              color: Theme.of(context).scaffoldBackgroundColor,
               child: ListView(
                 physics: NeverScrollableScrollPhysics(),
                 children: [
@@ -25,7 +25,7 @@ class SignUpScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Headline(
+                        const HeadlineLarge(
                             text: "Sign up"
                         ),
                       ],
@@ -42,7 +42,7 @@ class SignUpScreen extends StatelessWidget {
                       child: Text(
                         "Indem Sie fortfahren, stimmen Sie den Nutzerbedinungen und der Datenschutzrichtlinie zu.",
                         style: TextStyle(
-                          color: Colors.white,
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
                           fontSize: 13,
                         ),
                         textAlign: TextAlign.center,

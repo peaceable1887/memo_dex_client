@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:memo_dex_prototyp/screens/stack/stack_content_screen.dart';
 import 'package:memo_dex_prototyp/widgets/forms/create_card_form.dart';
-import '../../widgets/header/headline.dart';
+import '../../widgets/text/headlines/headline_large.dart';
 import '../../widgets/header/top_navigation_bar.dart';
 
 class AddCardScreen extends StatefulWidget {
@@ -51,7 +51,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
           ),
           Padding(
             padding: const EdgeInsets.fromLTRB(0,10,0,0),
-            child: Headline(
+            child: const HeadlineLarge(
                 text: "Add Card"
             ),
           ),

@@ -5,7 +5,7 @@ import 'package:memo_dex_prototyp/screens/bottom_navigation_screen.dart';
 import '../../../services/api/api_client.dart';
 import '../../../widgets/dialogs/edit_message_box.dart';
 import '../../../widgets/dialogs/validation_message_box.dart';
-import '../../../widgets/header/headline.dart';
+import '../../../widgets/text/headlines/headline_large.dart';
 import '../../../widgets/header/top_navigation_bar.dart';
 
 class EmailSettingScreen extends StatefulWidget
@@ -141,7 +141,7 @@ class _EmailSettingScreenState extends State<EmailSettingScreen>
   Widget build(BuildContext context)
   {
     return Scaffold(
-      backgroundColor: Color(0xFF00324E),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Column(
         children: [
           Padding(
@@ -175,7 +175,7 @@ class _EmailSettingScreenState extends State<EmailSettingScreen>
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Headline(text: "E-Mail"),
+                  const HeadlineLarge(text: "E-Mail"),
                 ],
               ),
             ),
@@ -202,7 +202,7 @@ class _EmailSettingScreenState extends State<EmailSettingScreen>
                           fontFamily: "Inter",
                           fontWeight: FontWeight.w600,
                         ),
-                        prefixIcon: Icon(Icons.mail, color: Colors.white, size: 28,),
+                        prefixIcon: Icon(Icons.mail, color: Theme.of(context).colorScheme.onSurfaceVariant, size: 28,),
                         suffixIcon: GestureDetector(
                           onTap: () {
                             setState(() {
@@ -216,23 +216,23 @@ class _EmailSettingScreenState extends State<EmailSettingScreen>
                         ),// Icon hinzufügen
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(
-                            color: Color(0xFF8597A1),
+                            color: Theme.of(context).colorScheme.tertiary,
                             width: 2.0,
                           ),
                           borderRadius: BorderRadius.all(Radius.circular(10.0)),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(
-                            color: Colors.white, // Ändern Sie hier die Farbe des Rahmens im Fokus
+                            color: Theme.of(context).colorScheme.onSurfaceVariant, // Ändern Sie hier die Farbe des Rahmens im Fokus
                             width: 2.0,
                           ),
                           borderRadius: BorderRadius.all(Radius.circular(10.0)),
                         ),
                         filled: true,
-                        fillColor: Color(0xFF33363F),
+                        fillColor: Theme.of(context).colorScheme.primary,
                       ),
                       style: TextStyle(
-                        color: Colors.white, // Ändern Sie die Textfarbe auf Weiß
+                        color: Theme.of(context).colorScheme.onSurfaceVariant, // Ändern Sie die Textfarbe auf Weiß
                         fontSize: 16,
                         fontFamily: "Inter",
                         fontWeight: FontWeight.w600,

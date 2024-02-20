@@ -74,12 +74,12 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF00324E),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: screens[currentIndex],
       bottomNavigationBar: Padding(
         padding: snackbarIsDisplayed ? const EdgeInsets.fromLTRB(0, 0, 0, 0) : const EdgeInsets.fromLTRB(0, 0, 0, 52),
         child: BottomNavigationBar(
-          backgroundColor: Colors.white,
+          backgroundColor: Theme.of(context).colorScheme.primary,
           currentIndex: currentIndex,
           onTap: (index) => setState(() => currentIndex = index),
           iconSize: 50,
@@ -87,8 +87,8 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
           unselectedFontSize: 14,
           selectedLabelStyle: TextStyle(fontFamily: "Inter", fontWeight: FontWeight.w600,),
           unselectedLabelStyle: TextStyle(fontFamily: "Inter", fontWeight: FontWeight.w600,),
-          selectedItemColor: Color(0xFFE59113),
-          unselectedItemColor: Color(0xFF8597A1),
+          selectedItemColor: Theme.of(context).colorScheme.secondary,
+          unselectedItemColor: Theme.of(context).colorScheme.tertiary,
           items:[
             BottomNavigationBarItem(
                 icon: Icon(Icons.home_rounded),

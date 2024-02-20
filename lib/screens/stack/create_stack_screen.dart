@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:memo_dex_prototyp/screens/bottom_navigation_screen.dart';
 import '../../widgets/forms/create_stack_form.dart';
-import '../../widgets/header/headline.dart';
+import '../../widgets/text/headlines/headline_large.dart';
 import '../../widgets/header/top_navigation_bar.dart';
 
 class CreateStackScreen extends StatefulWidget {
@@ -19,7 +19,7 @@ class _CreateStackScreenState extends State<CreateStackScreen> {
       body: Stack(
         children: [
           Container(
-            color: Color(0xFF00324E),
+            color: Theme.of(context).scaffoldBackgroundColor,
             child: ListView(
               physics: NeverScrollableScrollPhysics(),
               children: [
@@ -31,7 +31,7 @@ class _CreateStackScreenState extends State<CreateStackScreen> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.fromLTRB(0,20,0,0),
-                        child: Headline(
+                        child: const HeadlineLarge(
                             text: "Create Stack"
                         ),
                       ),

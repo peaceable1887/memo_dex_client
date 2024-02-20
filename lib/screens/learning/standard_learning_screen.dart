@@ -14,7 +14,7 @@ import '../../services/local/upload_to_database.dart';
 import '../../services/local/write_to_device_storage.dart';
 import '../../widgets/dialogs/custom_snackbar.dart';
 import '../../widgets/dialogs/message_box.dart';
-import '../../widgets/header/headline.dart';
+import '../../widgets/text/headlines/headline_large.dart';
 import '../../widgets/components/learning_card.dart';
 import '../../widgets/header/top_navigation_bar.dart';
 import '../bottom_navigation_screen.dart';
@@ -520,7 +520,7 @@ class _CardLearningScreenState extends State<StandardLearningScreen> with Ticker
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(0,10,0,0),
-              child: Headline(
+              child: HeadlineLarge(
                   text: stackname,
               ),
             ),

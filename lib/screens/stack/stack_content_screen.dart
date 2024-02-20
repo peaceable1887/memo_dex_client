@@ -15,8 +15,9 @@ import '../../utils/filters.dart';
 import '../../services/local/file_handler.dart';
 import '../../widgets/buttons/card_btn.dart';
 import '../../widgets/dialogs/custom_snackbar.dart';
-import '../../widgets/header/headline.dart';
+import '../../widgets/text/headlines/headline_large.dart';
 import '../../widgets/header/top_navigation_bar.dart';
+import '../../widgets/text/headlines/headline_medium.dart';
 import '../learning/individual_learning_screen.dart';
 
 class StackContentScreen extends StatefulWidget {
@@ -330,7 +331,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF00324E),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: showLoadingCircular ? Container(
           height: MediaQuery.of(context).size.height,
           child: Row(
@@ -340,7 +341,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
                 width: 50,
                 height: 50,
                 child: CircularProgressIndicator(
-                  color: Colors.white,
+                  color: Theme.of(context).colorScheme.primary,
                 ),
               ),
             ],
@@ -385,7 +386,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
                             child: Icon(
                               Icons.add_rounded,
                               size: 38.0,
-                              color: Colors.white,
+                              color: Theme.of(context).colorScheme.onSurfaceVariant,
                             ), // Icon als klickbares Element
                           ),
                           InkWell(
@@ -393,7 +394,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
                             child: Icon(
                               Icons.edit_outlined,
                               size: 32.0,
-                              color: Colors.white,
+                              color: Theme.of(context).colorScheme.onSurfaceVariant,
                             ), // Icon als klickbares Element
                           ),
                         ],
@@ -406,7 +407,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
           ),
           Padding(
             padding: const EdgeInsets.fromLTRB(0,10,0,0),
-            child: Headline(
+            child: HeadlineLarge(
                 text: stackname
             ),
           ),
@@ -415,15 +416,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  "START LEARNING",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontFamily: "Inter",
-                      fontWeight: FontWeight.w600
-                  ),
-                ),
+                const HeadlineMedium(text: "START LEARNING"),
                 InkWell(
                   onTap: (){
                     setState(() {
@@ -434,7 +427,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
                             context,
                             Icons.warning_amber_rounded,
                             "The cards are being shuffled.",
-                            Color(0xFFE59113),
+                            Theme.of(context).colorScheme.secondary,
                             Duration(seconds: 0),
                             Duration(milliseconds: 1500)
                         );
@@ -443,7 +436,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
                             context,
                             Icons.warning_amber_rounded,
                             "The cards are no longer shuffled.",
-                            Color(0xFFE59113),
+                            Theme.of(context).colorScheme.secondary,
                             Duration(seconds: 0),
                             Duration(milliseconds: 1500)
                         );
@@ -453,11 +446,11 @@ class _StackContentScreenState extends State<StackContentScreen> {
                   child: isMixed ? Icon(
                     Icons.shuffle_rounded,
                     size: 32.0,
-                    color: Color(0xFFE59113),
+                    color: Theme.of(context).colorScheme.secondary,
                   ): Icon(
                     Icons.shuffle_rounded,
                     size: 32.0,
-                    color: Colors.white,// Icon als klickbares Element
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,// Icon als klickbares Element
                   ),
                 ),
               ],
@@ -487,15 +480,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
               children: [
                 Row(
                   children: [
-                    Text(
-                      selectedOption,
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontFamily: "Inter",
-                          fontWeight: FontWeight.w600
-                      ),
-                    ),
+                    HeadlineMedium(text: selectedOption),
                     InkWell(
                       onTap: ()
                       {
@@ -508,11 +493,11 @@ class _StackContentScreenState extends State<StackContentScreen> {
                       child: sortValue == false ? Icon(
                         Icons.arrow_downward_rounded,
                         size: selectedOption == "ALL CARDS" ? 0.0 : 28.0,
-                        color: Color(0xFFE59113),
+                        color: Theme.of(context).colorScheme.secondary
                       ) : Icon(
                         Icons.arrow_upward_rounded,
                         size: selectedOption == "ALL CARDS" ? 0.0 : 28.0,
-                        color: Color(0xFFE59113),
+                        color: Theme.of(context).colorScheme.secondary,
                       ),
                     ),
                   ],
@@ -540,8 +525,8 @@ class _StackContentScreenState extends State<StackContentScreen> {
                                 "Question",
                                 style: TextStyle(
                                   color: selectedOption == "QUESTION"
-                                      ? Color(0xFFE59113)
-                                      : Colors.black,
+                                      ? Theme.of(context).colorScheme.secondary
+                                      : Theme.of(context).colorScheme.onSurface,
                                   fontWeight: selectedOption == "QUESTION"
                                       ?  FontWeight.w600
                                       :  FontWeight.w400,
@@ -551,8 +536,8 @@ class _StackContentScreenState extends State<StackContentScreen> {
                                 Icons.sort_by_alpha_rounded,
                                 size: 20.0,
                                 color: selectedOption == "QUESTION"
-                                    ? Color(0xFFE59113)
-                                    : Colors.black,
+                                    ? Theme.of(context).colorScheme.secondary
+                                    : Theme.of(context).colorScheme.onSurface,
                               ),
                             ],
                           ),
@@ -572,8 +557,8 @@ class _StackContentScreenState extends State<StackContentScreen> {
                                 "Creation Date",
                                 style: TextStyle(
                                   color: selectedOption == "CREATION DATE"
-                                      ? Color(0xFFE59113)
-                                      : Colors.black,
+                                      ? Theme.of(context).colorScheme.primary
+                                      : Theme.of(context).colorScheme.onSurface,
                                   fontWeight: selectedOption == "CREATION DATE"
                                       ?  FontWeight.w600
                                       :  FontWeight.w400,
@@ -583,8 +568,8 @@ class _StackContentScreenState extends State<StackContentScreen> {
                                 Icons.date_range_rounded,
                                 size: 20.0,
                                 color: selectedOption == "CREATION DATE"
-                                    ? Color(0xFFE59113)
-                                    : Colors.black,
+                                    ? Theme.of(context).colorScheme.primary
+                                    : Theme.of(context).colorScheme.onSurface,
                               ),
                             ],
                           ),
@@ -604,8 +589,8 @@ class _StackContentScreenState extends State<StackContentScreen> {
                                 "Noticed",
                                 style: TextStyle(
                                   color: selectedOption == "NOTICED"
-                                      ? Color(0xFFE59113)
-                                      : Colors.black,
+                                      ? Theme.of(context).colorScheme.primary
+                                      : Theme.of(context).colorScheme.onSurface,
                                   fontWeight: selectedOption == "NOTICED"
                                       ?  FontWeight.w600
                                       :  FontWeight.w400,
@@ -615,8 +600,8 @@ class _StackContentScreenState extends State<StackContentScreen> {
                                 Icons.lightbulb_outline,
                                 size: 20.0,
                                 color: selectedOption == "NOTICED"
-                                    ? Color(0xFFE59113)
-                                    : Colors.black,
+                                    ? Theme.of(context).colorScheme.primary
+                                    : Theme.of(context).colorScheme.onSurface,
                               ),
                             ],
                           ),
@@ -636,7 +621,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
                                 Text(
                                   "Reset",
                                   style: TextStyle(
-                                    color: Colors.grey,
+                                    color: Theme.of(context).colorScheme.tertiary,
                                     fontFamily: "Inter",
                                     fontWeight: FontWeight.w400,
                                   ),
@@ -644,7 +629,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
                                 Icon(
                                   Icons.refresh_rounded,
                                   size: 20.0,
-                                  color: Colors.grey,
+                                  color: Theme.of(context).colorScheme.tertiary,
                                 ),
                               ],
                             ),
@@ -661,8 +646,8 @@ class _StackContentScreenState extends State<StackContentScreen> {
                     Icons.filter_alt,
                     size: 32.0,
                     color: selectedOption == "QUESTION" || selectedOption == "CREATION DATE" || selectedOption == "NOTICED"
-                        ? Color(0xFFE59113)
-                        : Colors.white,
+                        ? Theme.of(context).colorScheme.primary
+                        : Theme.of(context).colorScheme.onSurfaceVariant,
                   ),
                 ),
               ],
@@ -678,7 +663,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
                     "No cards available.",
                     style: TextStyle(
                       fontSize: 20,
-                      color: Colors.white,
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
                       fontFamily: "Inter",
                       fontWeight: FontWeight.w400,
                     ),

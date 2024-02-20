@@ -4,14 +4,14 @@ import 'package:memo_dex_prototyp/screens/setting/account/email_setting_screen.d
 import 'package:memo_dex_prototyp/screens/setting/account/password_setting_screen.dart';
 import 'package:memo_dex_prototyp/screens/setting/configuration/language_setting_screen.dart';
 import 'package:memo_dex_prototyp/screens/setting/datamanagement/trash_setting_screen.dart';
-import 'package:memo_dex_prototyp/screens/welcome_screen.dart';
 import 'package:memo_dex_prototyp/services/api/api_client.dart';
 import 'package:memo_dex_prototyp/widgets/buttons/setting_btn.dart';
 import 'package:memo_dex_prototyp/widgets/dialogs/decision_message_box.dart';
 
 import '../widgets/buttons/button.dart';
 import '../widgets/dialogs/custom_snackbar.dart';
-import '../widgets/header/headline.dart';
+import '../widgets/text/headlines/headline_large.dart';
+import '../widgets/text/headlines/headline_medium.dart';
 import 'bottom_navigation_screen.dart';
 
 class SettingScreen extends StatefulWidget {
@@ -96,7 +96,7 @@ class _SettingScreenState extends State<SettingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF00324E),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Column(
         children: [
           Padding(
@@ -105,7 +105,7 @@ class _SettingScreenState extends State<SettingScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Headline(text: "Settings"),
+                  const HeadlineLarge(text: "Settings"),
                 ],
               ),
             ),
@@ -120,15 +120,7 @@ class _SettingScreenState extends State<SettingScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Text(
-                            "EDIT ACCOUNT",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontFamily: "Inter",
-                                fontWeight: FontWeight.w600
-                            ),
-                          ),
+                          const HeadlineMedium(text: "EDIT ACCOUNT"),
                         ],
                       ),
                       SizedBox(height: 15,),
@@ -150,15 +142,7 @@ class _SettingScreenState extends State<SettingScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Text(
-                            "CONFIGURATION",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontFamily: "Inter",
-                                fontWeight: FontWeight.w600
-                            ),
-                          ),
+                          const HeadlineMedium(text: "CONFIGURATION"),
                         ],
                       ),
                       SizedBox(height: 15,),
@@ -181,15 +165,31 @@ class _SettingScreenState extends State<SettingScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Text(
-                            "DATAMANAGEMENT",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontFamily: "Inter",
-                                fontWeight: FontWeight.w600,
-                            ),
-                          ),
+                          const HeadlineMedium(text: "INTERFACE"),
+                        ],
+                      ),
+                      SizedBox(height: 15,),
+                      SettingBtn(
+                        buttonText: "Button Color",
+                        buttonBorderRadius: [10,10,0,0],
+                        pushToContent: LanguageSettingScreen(),
+                        showSwitch: true,
+                      ),
+                      SettingBtn(
+                        buttonText: "Dark Mode",
+                        buttonBorderRadius: [0,0,10,10],
+                        pushToContent: BottomNavigationScreen(),
+                        showSwitch: true,
+                      ),
+                      SizedBox(height: 15,),
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          const HeadlineMedium(text: "DATAMANAGEMENT"),
                         ],
                       ),
                       SizedBox(height: 15,),
@@ -197,6 +197,28 @@ class _SettingScreenState extends State<SettingScreen> {
                           buttonText: "Trash",
                           buttonBorderRadius: [10,10,10,10],
                           pushToContent: TrashSettingScreen(),
+                      ),
+                      SizedBox(height: 15,),
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          const HeadlineMedium(text: "SUPPORT"),
+                        ],
+                      ),
+                      SizedBox(height: 15,),
+                      SettingBtn(
+                        buttonText: "Contact",
+                        buttonBorderRadius: [10,10,0,0],
+                        pushToContent: TrashSettingScreen(),
+                      ),
+                      SettingBtn(
+                        buttonText: "Donation",
+                        buttonBorderRadius: [0,0,10,10],
+                        pushToContent: TrashSettingScreen(),
                       ),
                     ],
                   ),
@@ -208,6 +230,7 @@ class _SettingScreenState extends State<SettingScreen> {
                     textColor: Color(0xFFE59113),
                     onPressed: logoutUser, // Übergeben Sie die Rückruffunktion anstelle sie sofort aufzurufen
                   ),
+                  SizedBox(height: 30,),
                 ],
               ),
             )

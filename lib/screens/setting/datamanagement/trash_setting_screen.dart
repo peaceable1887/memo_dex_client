@@ -5,7 +5,7 @@ import 'package:memo_dex_prototyp/widgets/buttons/trash_stack_btn.dart';
 
 import '../../../services/api/api_client.dart';
 import '../../../services/local/file_handler.dart';
-import '../../../widgets/header/headline.dart';
+import '../../../widgets/text/headlines/headline_large.dart';
 import '../../../widgets/header/top_navigation_bar.dart';
 import '../../bottom_navigation_screen.dart';
 
@@ -177,7 +177,7 @@ class _TrashSettingScreenState extends State<TrashSettingScreen>
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Headline(text: "Trash"),
+                  const HeadlineLarge(text: "Trash"),
                 ],
               ),
             ),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../widgets/header/headline.dart';
+import '../../../widgets/text/headlines/headline_large.dart';
 import '../../../widgets/header/top_navigation_bar.dart';
 import '../../bottom_navigation_screen.dart';
 import '../../setting_screen.dart';
@@ -53,7 +53,7 @@ class _LanguageSettingScreenState extends State<LanguageSettingScreen>
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Headline(text: "Language"),
+                  const HeadlineLarge(text: "Language"),
                 ],
               ),
             ),

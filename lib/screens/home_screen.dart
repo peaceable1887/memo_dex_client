@@ -1,12 +1,10 @@
-import 'dart:async';
-
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:memo_dex_prototyp/widgets/stack_grid.dart';
+import 'package:memo_dex_prototyp/widgets/text/headlines/headline_medium.dart';
 import '../widgets/dialogs/custom_snackbar.dart';
 import '../widgets/custom_search_delegate.dart';
-import '../widgets/header/headline.dart';
+import '../widgets/text/headlines/headline_large.dart';
 import '../widgets/header/top_search_bar.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -57,7 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return WillPopScope(
         onWillPop: () async => false,
         child: Scaffold(
-          backgroundColor: Color(0xFF00324E),
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           body: Column(
             children: [
               TopSearchBar(
@@ -72,7 +70,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Headline(text: "Home"),
+                    const HeadlineLarge(text: "Home"),
                   ],
                 ),
               ),
@@ -83,15 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     Row(
                       children: [
-                        Text(
-                          selectedOption,
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontFamily: "Inter",
-                              fontWeight: FontWeight.w600
-                          ),
-                        ),
+                        HeadlineMedium(text: selectedOption),
                         InkWell(
                           onTap: ()
                           {
@@ -103,11 +93,11 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: asc == false ? Icon(
                             Icons.arrow_downward_rounded,
                             size: selectedOption == "ALL STACKS" ? 0.0 : 28.0,
-                            color: Color(0xFFE59113),
+                            color: Theme.of(context).colorScheme.secondary,
                           ) : Icon(
                             Icons.arrow_upward_rounded,
                             size: selectedOption == "ALL STACKS" ? 0.0 : 28.0,
-                            color: Color(0xFFE59113),
+                            color: Theme.of(context).colorScheme.secondary,
                           ),
                         ),
                       ],
@@ -115,6 +105,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     InkWell(
                       onTap: () {
                         showMenu(
+                          color: Theme.of(context).colorScheme.surface,
                           context: context,
                           position: RelativeRect.fromLTRB(1, 220, 0, 0),
                           shape: RoundedRectangleBorder(
@@ -134,8 +125,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                     "Stackname",
                                     style: TextStyle(
                                       color: selectedOption == "STACKNAME"
-                                          ? Color(0xFFE59113)
-                                          : Colors.black,
+                                          ? Theme.of(context).colorScheme.secondary
+                                          : Theme.of(context).colorScheme.onSurfaceVariant,
                                       fontWeight: selectedOption == "STACKNAME"
                                           ?  FontWeight.w600
                                           :  FontWeight.w400,
@@ -145,8 +136,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                     Icons.sort_by_alpha_rounded,
                                     size: 20.0,
                                     color: selectedOption == "STACKNAME"
-                                        ? Color(0xFFE59113)
-                                        : Colors.black,
+                                        ? Theme.of(context).colorScheme.secondary
+                                        : Theme.of(context).colorScheme.onSurfaceVariant,
                                   ),
                                 ],
                               ),
@@ -160,8 +151,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                     "Creation Date",
                                     style: TextStyle(
                                       color: selectedOption == "CREATION DATE"
-                                          ? Color(0xFFE59113)
-                                          : Colors.black,
+                                          ? Theme.of(context).colorScheme.secondary
+                                          : Theme.of(context).colorScheme.onSurfaceVariant,
                                       fontWeight: selectedOption == "CREATION DATE"
                                           ?  FontWeight.w600
                                           :  FontWeight.w400,
@@ -171,8 +162,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                     Icons.date_range_rounded,
                                     size: 20.0,
                                     color: selectedOption == "CREATION DATE"
-                                        ? Color(0xFFE59113)
-                                        : Colors.black,
+                                        ? Theme.of(context).colorScheme.secondary
+                                        : Theme.of(context).colorScheme.onSurfaceVariant,
                                   ),
                                 ],
                               ),
@@ -191,7 +182,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     Text(
                                       "Reset",
                                       style: TextStyle(
-                                        color: Colors.grey,
+                                        color: Theme.of(context).colorScheme.tertiary,
                                         fontFamily: "Inter",
                                         fontWeight: FontWeight.w400,
                                       ),
@@ -199,7 +190,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     Icon(
                                       Icons.refresh_rounded,
                                       size: 20.0,
-                                      color: Colors.grey,
+                                      color: Theme.of(context).colorScheme.tertiary,
                                     ),
                                   ],
                                 ),
@@ -219,8 +210,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             Icons.filter_alt,
                             size: 32.0,
                             color: selectedOption == "STACKNAME" || selectedOption == "CREATION DATE"
-                                ? Color(0xFFE59113)
-                                : Colors.white,
+                                ? Theme.of(context).colorScheme.secondary
+                                : Theme.of(context).colorScheme.surface,
                             /*selectedOption == "STACKNAME" || selectedOption == "CREATION DATE"
                                 ? Icons.filter_alt : Icons.filter_alt_outlined,
                             size: 32.0,

@@ -3,7 +3,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../../../services/api/api_client.dart';
 import '../../../widgets/dialogs/edit_message_box.dart';
 import '../../../widgets/dialogs/validation_message_box.dart';
-import '../../../widgets/header/headline.dart';
+import '../../../widgets/text/headlines/headline_large.dart';
 import '../../../widgets/header/top_navigation_bar.dart';
 import '../../bottom_navigation_screen.dart';
 
@@ -138,7 +138,7 @@ class _PasswordSettingScreenState extends State<PasswordSettingScreen>
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Headline(text: "Password"),
+                  const HeadlineLarge(text: "Password"),
                 ],
               ),
             ),

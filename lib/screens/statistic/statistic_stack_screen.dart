@@ -10,12 +10,14 @@ import 'package:memo_dex_prototyp/models/stack_statistic_data.dart';
 import 'package:memo_dex_prototyp/services/api/api_client.dart';
 import 'package:memo_dex_prototyp/widgets/buttons/date_picker_btn.dart';
 import 'package:memo_dex_prototyp/widgets/components/statistic/statistic_line_chart.dart';
+import 'package:memo_dex_prototyp/widgets/text/headlines/headline_small.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import '../../utils/divide_painter.dart';
 import '../../utils/trim.dart';
 import '../../services/local/file_handler.dart';
-import '../../widgets/header/headline.dart';
+import '../../widgets/text/headlines/headline_large.dart';
 import '../../widgets/header/top_navigation_bar.dart';
+import '../../widgets/text/headlines/headline_medium.dart';
 import '../bottom_navigation_screen.dart';
 
 class StatisticStackScreen extends StatefulWidget {
@@ -559,7 +561,7 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF00324E),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -590,7 +592,7 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
           ),
           Padding(
             padding: const EdgeInsets.fromLTRB(0,10,0,0),
-            child: Headline(
+            child: HeadlineLarge(
                 text: widget.stackname
             ),
           ),
@@ -605,15 +607,7 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Text(
-                      "OVERVIEW",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontFamily: "Inter",
-                          fontWeight: FontWeight.w600
-                      ),
-                    ),
+                    const HeadlineMedium(text: "OVERVIEW"),
                   ],
                 ),
               ),
@@ -651,7 +645,7 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
                                           Text(
                                             '${progressValue.toInt()}',
                                             style: TextStyle(
-                                              color: Colors.white,
+                                              color: Theme.of(context).colorScheme.onSurfaceVariant,
                                               fontSize: 40,
                                               fontFamily: "Inter",
                                               fontWeight: FontWeight.w700,
@@ -659,10 +653,10 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
                                           ),
                                           Padding(
                                             padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
-                                            child: const Text(
+                                            child: Text(
                                               '%',
                                               style: TextStyle(
-                                                color: Colors.white,
+                                                color: Theme.of(context).colorScheme.onSurfaceVariant,
                                                 fontSize: 16,
                                                 fontFamily: "Inter",
                                                 fontWeight: FontWeight.w700,
@@ -690,7 +684,7 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
                             padding: const EdgeInsets.fromLTRB(0, 45, 0, 0),
                             child: Container(
                               decoration: BoxDecoration(
-                                color: Color(0xFF00324E),
+                                color: Theme.of(context).scaffoldBackgroundColor,
                                 borderRadius: BorderRadius.only(
                                     topRight: Radius.circular(10),
                                     topLeft: Radius.circular(10),
@@ -831,14 +825,7 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
                     padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                     child: Row(
                       children: [
-                        Text("RUN DETAILS",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                            fontFamily: "Inter",
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
+                        const HeadlineSmall(text: "RUN DETAILS"),
                       ],
                     ),
                   ),
@@ -944,7 +931,7 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
                                       Icon(
                                         Icons.av_timer_rounded,
                                         size: 22.0,
-                                        color: Color(0xFFE59113),
+                                        color: Theme.of(context).colorScheme.secondary,
                                       )
                                     ],
                                   ),
@@ -974,7 +961,7 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
                                       Text(
                                         "LATEST RUN",
                                         style: TextStyle(
-                                          color: Colors.grey,
+                                          color: Theme.of(context).colorScheme.tertiary,
                                           fontSize: 12,
                                           fontFamily: "Inter",
                                           fontWeight: FontWeight.w500,
@@ -1044,7 +1031,7 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
                                       Text(
                                         "AVERAGE",
                                         style: TextStyle(
-                                          color: Colors.grey,
+                                          color: Theme.of(context).colorScheme.tertiary,
                                           fontSize: 12,
                                           fontFamily: "Inter",
                                           fontWeight: FontWeight.w500,
@@ -1146,7 +1133,7 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
                     child: Container(
                       padding:  const EdgeInsets.fromLTRB(20, 5, 20, 5),
                       decoration: BoxDecoration(
-                        color: Color(0xFF00324E),
+                        color: Theme.of(context).scaffoldBackgroundColor,
                         borderRadius: BorderRadius.circular(10),
                         boxShadow: [
                           BoxShadow(
@@ -1162,14 +1149,7 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
                             padding: const EdgeInsets.fromLTRB(0, 15, 0, 15),
                             child: Row(
                               children: [
-                                Text("COMMONLY ANSWERED WRONG",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 18,
-                                    fontFamily: "Inter",
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
+                                const HeadlineSmall(text: "COMMONLY ANSWERED WRONG"),
                               ],
                             ),
                           ),
@@ -1182,7 +1162,7 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
                                   Icon(
                                     Icons.format_list_numbered,
                                     size: 22.0,
-                                    color: Color(0xFFE59113),
+                                    color: Theme.of(context).colorScheme.secondary,
                                   ),
                                   SizedBox(height: 5),
                                   Padding(
@@ -1234,7 +1214,7 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
                                   Icon(
                                     Icons.question_answer_rounded,
                                     size: 22.0,
-                                    color: Color(0xFFE59113),
+                                    color: Theme.of(context).colorScheme.secondary,
                                   ),
                                   SizedBox(height: 5),
                                   Padding(
@@ -1286,7 +1266,7 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
                                   Icon(
                                     Icons.error_outline_rounded,
                                     size: 22.0,
-                                    color: Color(0xFFE59113),
+                                    color: Theme.of(context).colorScheme.secondary,
                                   ),
                                   SizedBox(height: 5),
                                   Padding(

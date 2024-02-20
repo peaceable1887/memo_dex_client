@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:memo_dex_prototyp/screens/welcome_screen.dart';
+import 'package:memo_dex_prototyp/themes/themes.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -8,7 +9,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      title: 'Flutter Demo',
+      title: 'MemoDex App',
+      theme: Themes().lightTheme(),
       home: const WelcomeScreen(),
     );
   }
