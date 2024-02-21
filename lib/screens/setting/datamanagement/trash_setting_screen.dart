@@ -7,6 +7,7 @@ import '../../../services/api/api_client.dart';
 import '../../../services/local/file_handler.dart';
 import '../../../widgets/text/headlines/headline_large.dart';
 import '../../../widgets/header/top_navigation_bar.dart';
+import '../../../widgets/text/headlines/headline_medium.dart';
 import '../../bottom_navigation_screen.dart';
 
 class TrashSettingScreen extends StatefulWidget
@@ -189,15 +190,7 @@ class _TrashSettingScreenState extends State<TrashSettingScreen>
               children: [
                 Row(
                   children: [
-                    Text(
-                      "DELETED STACKS",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontFamily: "Inter",
-                          fontWeight: FontWeight.w600
-                      ),
-                    ),
+                    const HeadlineMedium(text: "DELETED STACKS"),
                   ],
                 ),
                 InkWell(
@@ -272,7 +265,7 @@ class _TrashSettingScreenState extends State<TrashSettingScreen>
                       Icon(
                         Icons.keyboard_control_rounded,
                         size: 32.0,
-                        color: Colors.white,
+                        color: Theme.of(context).colorScheme.surface,
                       ),
                     ],
                   ),

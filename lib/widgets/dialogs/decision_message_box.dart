@@ -18,7 +18,7 @@ class DecisionMessageBox extends StatelessWidget
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      backgroundColor: Color(0xFF00324E),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
       ),
@@ -72,7 +72,7 @@ class DecisionMessageBox extends StatelessWidget
                   bottomRight: Radius.circular(10),
                   bottomLeft:  Radius.circular(10),
                 ),
-                color: Colors.white,
+                color: Theme.of(context).colorScheme.surface,
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -81,13 +81,10 @@ class DecisionMessageBox extends StatelessWidget
                     width: 140,
                     child: TextButton(
                       onPressed: () => onPressed(true),
-                      style: TextButton.styleFrom(
-                        backgroundColor: Colors.white,
-                      ),
                       child: Text(
                         firstButtonText,
                         style: TextStyle(
-                          color:  Colors.green,
+                          color: Theme.of(context).colorScheme.primary,
                           fontSize: 18,
                           fontFamily: "Inter",
                           fontWeight: FontWeight.w600,
@@ -102,7 +99,7 @@ class DecisionMessageBox extends StatelessWidget
                       child: Text(
                         secondButtonText,
                         style: TextStyle(
-                          color: Colors.red,
+                          color: Theme.of(context).colorScheme.tertiary,
                           fontSize: 18,
                           fontFamily: "Inter",
                           fontWeight: FontWeight.w600,

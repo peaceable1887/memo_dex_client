@@ -35,8 +35,8 @@ class WelcomeScreen extends StatelessWidget {
                       children: [
                         Button(
                           text: "Login",
-                          backgroundColor: Theme.of(context).colorScheme.secondary,
-                          borderColor: Theme.of(context).colorScheme.secondary,
+                          backgroundColor: Theme.of(context).colorScheme.primary,
+                          borderColor: Theme.of(context).colorScheme.primary,
                           textColor: Theme.of(context).scaffoldBackgroundColor,
                           onPressed: ()
                           {
@@ -51,8 +51,8 @@ class WelcomeScreen extends StatelessWidget {
                         Button(
                           text: "Sign up",
                           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                          borderColor: Theme.of(context).colorScheme.secondary,
-                          textColor: Theme.of(context).colorScheme.secondary,
+                          borderColor: Theme.of(context).colorScheme.primary,
+                          textColor: Theme.of(context).colorScheme.primary,
                           onPressed: ()
                           {
                             Navigator.pushReplacement(
@@ -74,10 +74,7 @@ class WelcomeScreen extends StatelessWidget {
                         alignment: Alignment.bottomCenter,
                         child: Text(
                           "Indem Sie fortfahren, stimmen Sie den Nutzerbedinungen und der Datenschutzrichtlinie zu.",
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.onSurfaceVariant,
-                            fontSize: 13,
-                          ),
+                          style: Theme.of(context).textTheme.bodySmall,
                           textAlign: TextAlign.center,
                         ),
                       ),

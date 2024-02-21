@@ -72,7 +72,7 @@ class _SettingBtnState extends State<SettingBtn>
     return ElevatedButton(
       onPressed: showSwitch(widget.showSwitch) ? (){} : pushToContent,
       style: ElevatedButton.styleFrom(
-          backgroundColor: Theme.of(context).colorScheme.primary,
+          backgroundColor: Theme.of(context).colorScheme.secondary,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
                 topRight: Radius.circular(widget.buttonBorderRadius[0]),
@@ -88,25 +88,20 @@ class _SettingBtnState extends State<SettingBtn>
         children: [
           Text(
             widget.buttonText,
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.onSurface,
-              fontSize: 18,
-              fontFamily: "Inter",
-              fontWeight: FontWeight.w500,
-            ),
+            style: Theme.of(context).textTheme.bodyMedium,
           ),
           showSwitch(widget.showSwitch) ? Container(
             height: 5,
             child: Switch(
                 thumbIcon: thumbIcon,
                 value: _autocorrectDisabled,
-                activeColor: Theme.of(context).colorScheme.primary,
-                activeTrackColor: Theme.of(context).colorScheme.secondary,
+                activeColor: Theme.of(context).colorScheme.secondary,
+                activeTrackColor: Theme.of(context).colorScheme.primary,
                 inactiveTrackColor: Theme.of(context).colorScheme.tertiary,
                 trackOutlineColor: MaterialStateProperty.resolveWith<Color?>((Set<MaterialState> states)
                 {
                   if (states.contains(MaterialState.selected)) {
-                    return Theme.of(context).colorScheme.secondary;
+                    return Theme.of(context).colorScheme.primary;
                   }
                   return Theme.of(context).colorScheme.tertiary;
                 }),
@@ -115,7 +110,7 @@ class _SettingBtnState extends State<SettingBtn>
                   if (states.contains(MaterialState.disabled)) {
                     return Theme.of(context).colorScheme.tertiary;
                   }
-                  return Theme.of(context).colorScheme.primary;
+                  return Theme.of(context).colorScheme.secondary;
                 }),
                 materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 onChanged: (bool value)

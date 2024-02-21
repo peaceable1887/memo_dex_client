@@ -277,7 +277,7 @@ class _SingleCardScreenState extends State<SingleCardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF00324E),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Column(
         mainAxisSize: MainAxisSize.min,
         children: [

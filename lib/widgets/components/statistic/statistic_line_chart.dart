@@ -118,7 +118,7 @@ class _StatisticLineChartState extends State<StatisticLineChart>
               spots: getFlSpots(),
               isCurved: true,
               dotData: FlDotData(show: true),
-              color: Color(0xFFE59113),
+              color: Theme.of(context).colorScheme.primary,
               barWidth: 4,
               belowBarData: BarAreaData(
                 show: true,
@@ -130,7 +130,7 @@ class _StatisticLineChartState extends State<StatisticLineChart>
           maxX: getMonthLength(widget.month).toDouble(),
           minY: 0,
           maxY: _maxNumberOfRuns,
-          backgroundColor: Color(0xFF00324E),
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           titlesData: FlTitlesData(
             show: true,
             topTitles: AxisTitles(
@@ -154,9 +154,8 @@ class _StatisticLineChartState extends State<StatisticLineChart>
                   return Text(
                     text,
                     style: TextStyle(
-                        color: Colors.white,
+                        color: Theme.of(context).colorScheme.surface,
                         fontSize: 14,
-                        fontFamily: "Inter",
                         fontWeight: FontWeight.w500
                     ),
                   );
@@ -164,10 +163,10 @@ class _StatisticLineChartState extends State<StatisticLineChart>
               ),
             ),
             bottomTitles: AxisTitles(
-              axisNameWidget: const Text(
+              axisNameWidget: Text(
                 "Day",
                 style: TextStyle(
-                    color: Colors.white,
+                    color: Theme.of(context).colorScheme.surface,
                     fontSize: 12,
                     fontFamily: "Inter",
                     fontWeight: FontWeight.w500
@@ -184,9 +183,8 @@ class _StatisticLineChartState extends State<StatisticLineChart>
                   return Text(
                     text,
                     style: TextStyle(
-                        color: Colors.white,
+                        color: Theme.of(context).colorScheme.surface,
                         fontSize: 14,
-                        fontFamily: "Inter",
                         fontWeight: FontWeight.w500
                     ),
                   );
@@ -198,19 +196,19 @@ class _StatisticLineChartState extends State<StatisticLineChart>
             show: true,
             drawHorizontalLine: true,
             getDrawingHorizontalLine: (value) => FlLine(
-              color: Colors.white.withOpacity(0.5),
+              color: Theme.of(context).colorScheme.surface.withOpacity(0.5),
               strokeWidth: 0.2,
             ),
             drawVerticalLine: true,
             getDrawingVerticalLine: (value) => FlLine(
-              color: Colors.white.withOpacity(0.5),
+              color: Theme.of(context).colorScheme.surface.withOpacity(0.5),
               strokeWidth: 0.2,
             ),
           ),
           borderData: FlBorderData(
             show: true,
             border: Border.all(
-              color: Colors.white,
+              color: Theme.of(context).colorScheme.surface,
               width: 0,
             ),
           ),

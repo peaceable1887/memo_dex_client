@@ -156,13 +156,8 @@ class _PasswordSettingScreenState extends State<PasswordSettingScreen>
                       decoration: InputDecoration(
                         labelText: "Password",
                         contentPadding: EdgeInsets.symmetric(vertical: 17, horizontal: 20),
-                        labelStyle: TextStyle(
-                          color: Colors.white.withOpacity(0.50),
-                          fontSize: 16,
-                          fontFamily: "Inter",
-                          fontWeight: FontWeight.w600,
-                        ),
-                        prefixIcon: Icon(Icons.lock_rounded, color: Colors.white, size: 28,),
+                        labelStyle: Theme.of(context).textTheme.labelMedium,
+                        prefixIcon: Icon(Icons.lock_rounded, color: Theme.of(context).inputDecorationTheme.iconColor, size: 28,),
                         suffixIcon: GestureDetector(
                           onTap: () {
                             setState(() {
@@ -171,32 +166,15 @@ class _PasswordSettingScreenState extends State<PasswordSettingScreen>
                           },
                           child: Icon(
                             _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
-                            color: Colors.white.withOpacity(0.50),
+                            color: Theme.of(context).colorScheme.tertiary,
                           ),
                         ),// Icon hinzufügen
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Color(0xFF8597A1),
-                            width: 2.0,
-                          ),
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Colors.white, // Ändern Sie hier die Farbe des Rahmens im Fokus
-                            width: 2.0,
-                          ),
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        ),
+                        enabledBorder: Theme.of(context).inputDecorationTheme.enabledBorder,
+                        focusedBorder: Theme.of(context).inputDecorationTheme.focusedBorder,
                         filled: true,
-                        fillColor: Color(0xFF33363F),
+                        fillColor: Theme.of(context).colorScheme.secondary,
                       ),
-                      style: TextStyle(
-                        color: Colors.white, // Ändern Sie die Textfarbe auf Weiß
-                        fontSize: 16,
-                        fontFamily: "Inter",
-                        fontWeight: FontWeight.w600,
-                      ),
+                      style: Theme.of(context).textTheme.bodyMedium,
                     ),
                   ),
                   Padding(
@@ -207,13 +185,8 @@ class _PasswordSettingScreenState extends State<PasswordSettingScreen>
                       decoration: InputDecoration(
                         labelText: "Password repeat",
                         contentPadding: EdgeInsets.symmetric(vertical: 17, horizontal: 20),
-                        labelStyle: TextStyle(
-                          color: Colors.white.withOpacity(0.50),
-                          fontSize: 16,
-                          fontFamily: "Inter",
-                          fontWeight: FontWeight.w600,
-                        ),
-                        prefixIcon: Icon(Icons.safety_check_rounded, color: Colors.white, size: 28,),
+                        labelStyle: Theme.of(context).textTheme.labelMedium,
+                        prefixIcon: Icon(Icons.safety_check_rounded, color: Theme.of(context).inputDecorationTheme.iconColor, size: 28,),
                         suffixIcon: GestureDetector(
                           onTap: () {
                             setState(() {
@@ -222,47 +195,30 @@ class _PasswordSettingScreenState extends State<PasswordSettingScreen>
                           },
                           child: Icon(
                             _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
-                            color: Colors.white.withOpacity(0.50),
+                            color: Theme.of(context).colorScheme.tertiary,
                           ),
                         ),// Icon hinzufügen
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Color(0xFF8597A1),
-                            width: 2.0,
-                          ),
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Colors.white, // Ändern Sie hier die Farbe des Rahmens im Fokus
-                            width: 2.0,
-                          ),
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        ),
+                        enabledBorder: Theme.of(context).inputDecorationTheme.enabledBorder,
+                        focusedBorder: Theme.of(context).inputDecorationTheme.focusedBorder,
                         filled: true,
-                        fillColor: Color(0xFF33363F),
+                        fillColor: Theme.of(context).colorScheme.secondary,
                       ),
-                      style: TextStyle(
-                        color: Colors.white, // Ändern Sie die Textfarbe auf Weiß
-                        fontSize: 16,
-                        fontFamily: "Inter",
-                        fontWeight: FontWeight.w600,
-                      ),
+                      style: Theme.of(context).textTheme.bodyMedium,
                     ),
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0, 25, 0, 25),
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(int.parse("0xFFE59113")),
+                        backgroundColor: Theme.of(context).colorScheme.primary,
                         minimumSize: Size(double.infinity, 55),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(10)),
                         ),
                         side: BorderSide(
                           color:  _isButtonEnabled
-                              ? Color(int.parse("0xFF00324E"))
-                              : Color(0xFF8597A1),
+                              ? Theme.of(context).colorScheme.primary
+                              : Theme.of(context).colorScheme.tertiary,
                           width: 2.0,
                         ),
                         elevation: 0,
@@ -280,10 +236,9 @@ class _PasswordSettingScreenState extends State<PasswordSettingScreen>
                             "Update Password",
                             style: TextStyle(
                               color:  _isButtonEnabled
-                                  ? Color(int.parse("0xFF00324E"))
-                                  : Color(0xFF8597A1),
+                                  ? Theme.of(context).scaffoldBackgroundColor
+                                  : Theme.of(context).colorScheme.tertiary,
                               fontSize: 20,
-                              fontFamily: "Inter",
                               fontWeight: FontWeight.w600,
                             ),
                           ),

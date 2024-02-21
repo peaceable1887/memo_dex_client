@@ -62,7 +62,7 @@ class _StatisticCardState extends State<StatisticCard> {
       notNoticed = 1;
     }
 
-    Color originalColor = Colors.white;
+    Color originalColor = Color(int.parse("0xFF${widget.color}"));
     Color darkerColor = Color.fromARGB(
       originalColor.alpha,
       (originalColor.red * 0.7).round(),
@@ -72,7 +72,7 @@ class _StatisticCardState extends State<StatisticCard> {
 
     final List<StackStatisticData> stackData = [
       StackStatisticData("Noticed", widget.noticed, originalColor),
-      StackStatisticData("Noticed", notNoticed, darkerColor),
+      StackStatisticData("Noticed", notNoticed, Colors.white),
     ];
 
     return stackData;
@@ -92,7 +92,8 @@ class _StatisticCardState extends State<StatisticCard> {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(10)),
-          color: Color(int.parse("0xFF${widget.color}")), /*Color(int.parse("0xFF${widget.color}")),*/
+          //color: Color(int.parse("0xFF${widget.color}")), /*Color(int.parse("0xFF${widget.color}")),*/
+          color: Theme.of(context).colorScheme.secondary, /*Color(int.parse("0xFF${widget.color}")),*/
           boxShadow: [
             BoxShadow(
               color: Color.fromRGBO(0, 0, 0, 0.15),
@@ -135,18 +136,13 @@ class _StatisticCardState extends State<StatisticCard> {
                             Icon(
                               CupertinoIcons.square_stack_3d_up_fill,
                               size: 28.0,
-                              color: Colors.white, // Ändere diese Farbe nach deinen Wünschen
+                              color: Color(int.parse("0xFF${widget.color}")), // Ändere diese Farbe nach deinen Wünschen
                             ),
                             Padding(
                               padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
                               child: Text(
                                 Trim().trimText(widget.stackName, 14),
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 22,
-                                  fontFamily: "Inter",
-                                  fontWeight: FontWeight.w600,
-                                ),
+                                style: Theme.of(context).textTheme.headlineMedium,
                               ),
                             ),
                           ],
@@ -159,18 +155,13 @@ class _StatisticCardState extends State<StatisticCard> {
                           children: [
                             Text(
                               "Click to see more details",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 12,
-                                fontFamily: "Inter",
-                                fontWeight: FontWeight.w400,
-                              ),
+                              style: Theme.of(context).textTheme.bodySmall,
                             ),
                             SizedBox(width: 2,),
                             Icon(
                               Icons.arrow_forward_ios_rounded,
                               size: 14.0,
-                              color: Colors.white, // Ändere diese Farbe nach deinen Wünschen
+                              color: Theme.of(context).inputDecorationTheme.iconColor, // Ändere diese Farbe nach deinen Wünschen
                             ),
                           ],
                         ),
@@ -192,20 +183,18 @@ class _StatisticCardState extends State<StatisticCard> {
                                 Text(
                                   '${progressValue.toInt()}',
                                   style: TextStyle(
-                                    color: Colors.white,
+                                    color: Theme.of(context).colorScheme.surface,
                                     fontSize: 22,
-                                    fontFamily: "Inter",
                                     fontWeight: FontWeight.w700,
                                   ),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.fromLTRB(0, 6, 0, 0),
-                                  child: const Text(
+                                  child: Text(
                                     '%',
                                     style: TextStyle(
-                                      color: Colors.white,
+                                      color: Theme.of(context).colorScheme.surface,
                                       fontSize: 12,
-                                      fontFamily: "Inter",
                                       fontWeight: FontWeight.w500,
                                     ),
                                   ),

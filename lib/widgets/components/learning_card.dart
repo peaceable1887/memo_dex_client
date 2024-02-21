@@ -125,7 +125,7 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
             context,
             Icons.warning_amber_rounded,
             "You marked the card as memorized.",
-            Color(0xFFE59113),
+            Theme.of(context).colorScheme.primary,
             Duration(seconds: 0),
             Duration(milliseconds: 1500)
         );
@@ -144,7 +144,7 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
             context,
             Icons.warning_amber_rounded,
             "You marked the card as unmemorized",
-            Color(0xFFE59113),
+            Theme.of(context).colorScheme.primary,
             Duration(seconds: 0),
             Duration(milliseconds: 1500)
         );
@@ -164,7 +164,7 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
             context,
             Icons.warning_amber_rounded,
             "You marked the card as memorized.",
-            Color(0xFFE59113),
+            Theme.of(context).colorScheme.primary,
             Duration(seconds: 0),
             Duration(milliseconds: 1500)
         );
@@ -176,7 +176,7 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
             context,
             Icons.warning_amber_rounded,
             "You marked the card as unmemorized",
-            Color(0xFFE59113),
+            Theme.of(context).colorScheme.primary,
             Duration(seconds: 0),
             Duration(milliseconds: 1500)
         );
@@ -216,11 +216,6 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
               setState(() {
                 if(answeredCorrectly == false)
                 {
-                  print(card);
-                  print("IncorrectAnswer: ${card['answered_incorrectly']}");
-                  print("widget.cardIndex: ${widget.cardIndex}");
-                  print("cardid: ${card["card_id"]}");
-
                   fileHandler.editItemById(
                       "allStacks", "stack_id", widget.stackId,
                       {"is_updated": 1});
@@ -230,12 +225,6 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
                       {"answered_incorrectly": card['answered_incorrectly'] + 1, "is_updated": 1});
                 }else
                 {
-                  print(card);
-                  print("CorrectAnswer: ${card['answered_correctly']}");
-                  print("widget.cardIndex: ${widget.cardIndex}");
-                  print("cardid: ${card["card_id"]}");
-
-
                   fileHandler.editItemById(
                       "allStacks", "stack_id", widget.stackId,
                       {"is_updated": 1});
@@ -244,7 +233,6 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
                       "allCards", "card_id", widget.cardIndex,
                       {"answered_correctly": card['answered_correctly'] + 1, "is_updated": 1});
                 }
-
               });
             }
           }
@@ -261,9 +249,8 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
         text,
         textAlign: TextAlign.center,
         style: TextStyle(
-          color: Colors.black,
+          color: Theme.of(context).colorScheme.surface,
           fontSize: 14,
-          fontFamily: "Inter",
           fontWeight: FontWeight.w500,
         ),
       );
@@ -273,9 +260,8 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
         text,
         textAlign: TextAlign.center,
         style: TextStyle(
-          color: Colors.black,
+          color: Theme.of(context).colorScheme.surface,
           fontSize: 17,
-          fontFamily: "Inter",
           fontWeight: FontWeight.w500,
           ),
         );
@@ -310,7 +296,7 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
                     ? ClipRRect(
                       borderRadius: BorderRadius.circular(10.0),
                       child: Container(
-                      color: Colors.white,
+                      color: Theme.of(context).colorScheme.secondary,
                       width: MediaQuery.of(context).size.width/1.15,
                       height: MediaQuery.of(context).size.height/2.085,
                       child: Column(
@@ -324,7 +310,7 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
                             ),
                           ),
                           Container(
-                            color: Colors.white,
+                            color: Theme.of(context).colorScheme.secondary,
                             width: MediaQuery.of(context).size.width/1.35,
                             height: MediaQuery.of(context).size.height/2.8,
                             child: Center(
@@ -341,7 +327,7 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
                     : ClipRRect(
                   borderRadius: BorderRadius.circular(10.0),
                   child: Container(
-                    color: Colors.white,
+                    color: Theme.of(context).colorScheme.secondary,
                     width: MediaQuery.of(context).size.width/1.35,
                     height: MediaQuery.of(context).size.height/2.085,
                     child: Column(
@@ -358,11 +344,11 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
                                   child: isCardNoticed ? Icon(
                                     Icons.lightbulb_rounded,
                                     size: 32.0,
-                                    color: Color(0xFFE59113),
+                                    color: Theme.of(context).colorScheme.primary,
                                   ) : Icon(
                                     Icons.lightbulb_outline_rounded,
                                     size: 32.0,
-                                    color: Color(0xFFE59113),
+                                    color: Theme.of(context).colorScheme.primary,
                                   ), // Icon als klickbares Element
                                 ),
                               ),
@@ -392,11 +378,11 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
             Container(
               width: 75,
               decoration: BoxDecoration(
-                  color: Colors.grey,
+                color: Theme.of(context).colorScheme.tertiary,
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.15),
+                      color: Theme.of(context).colorScheme.shadow,
                       blurRadius: 10,
                       offset: Offset(1,5),
                     ),
@@ -404,7 +390,7 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
               ),
               child: IconButton(
                 icon: const Icon(Icons.redo_rounded),
-                color: Colors.white,
+                color: Theme.of(context).colorScheme.surface,
                 iconSize: 40,
                 onPressed: (){
                   if(animationStatus == AnimationStatus.dismissed){
@@ -426,7 +412,7 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
                         borderRadius: BorderRadius.all(Radius.circular(10)),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.15),
+                            color: Theme.of(context).colorScheme.shadow,
                             blurRadius: 10,
                             offset: Offset(1,5),
                           ),
@@ -437,7 +423,7 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
                       children: [
                         IconButton(
                           icon: const Icon(Icons.check_rounded),
-                          color: Colors.white,
+                          color: Theme.of(context).colorScheme.surface,
                           iconSize: 40,
                           onPressed: ()
                           {
@@ -459,7 +445,7 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
                         borderRadius: BorderRadius.all(Radius.circular(10)),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.15),
+                            color: Theme.of(context).colorScheme.shadow,
                             blurRadius: 10,
                             offset: Offset(1,5),
                           ),
@@ -470,7 +456,7 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
                       children: [
                         IconButton(
                           icon: const Icon(Icons.cancel_outlined),
-                          color: Colors.white,
+                          color: Theme.of(context).colorScheme.surface,
                           iconSize: 40,
                           onPressed: ()
                           {
@@ -491,7 +477,7 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
             Container(
               width: 75,
               decoration: BoxDecoration(
-                color: Colors.grey,
+                color: Theme.of(context).colorScheme.tertiary,
                 borderRadius: BorderRadius.all(Radius.circular(10)),
                 boxShadow: [
                   BoxShadow(
@@ -503,7 +489,7 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
               ),
               child: IconButton(
                 icon: const Icon(Icons.redo_rounded),
-                color: Colors.white,
+                color: Theme.of(context).colorScheme.surface,
                 iconSize: 40,
                 onPressed: (){
                   if(animationStatus == AnimationStatus.dismissed){

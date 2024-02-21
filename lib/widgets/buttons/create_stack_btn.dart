@@ -16,7 +16,7 @@ class CreateStackBtn extends StatelessWidget {
           );
         },
         style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.white,
+          backgroundColor: Theme.of(context).colorScheme.secondary,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(10)),
           ),
@@ -24,7 +24,7 @@ class CreateStackBtn extends StatelessWidget {
         child: Icon(
           Icons.add_rounded,
           size: 100.0,
-          color: Color(0xFF8597A1),
+          color: Theme.of(context).colorScheme.tertiary,
         ),
     );
   }

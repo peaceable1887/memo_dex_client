@@ -229,7 +229,7 @@ class _CardLearningScreenState extends State<IndividualLearningScreen> with Tick
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF00324E),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -274,8 +274,8 @@ class _CardLearningScreenState extends State<IndividualLearningScreen> with Tick
                     borderRadius: BorderRadius.circular(8),
                     child: LinearProgressIndicator(
                       minHeight: 10,
-                      backgroundColor: Colors.white,
-                      color: Color(0xFFE59113),
+                      backgroundColor: Theme.of(context).colorScheme.surface,
+                      color: Theme.of(context).colorScheme.primary,
                       value: (() {
                         double progressValue = (activeIndex + 1) / indexCards.length;
                         if (progressValue.isNaN || progressValue.isInfinite) {
@@ -296,27 +296,24 @@ class _CardLearningScreenState extends State<IndividualLearningScreen> with Tick
                         Text(
                           "${activeIndex + 1}",
                           style: TextStyle(
-                            color: Color(0xFFE59113),
+                            color: Theme.of(context).colorScheme.primary,
                             fontSize: 14,
-                            fontFamily: "Inter",
                             fontWeight: FontWeight.w700,
                           ),
                         ),
                         Text(
                           " / ",
                           style: TextStyle(
-                            color: Colors.white,
+                            color: Theme.of(context).colorScheme.surface,
                             fontSize: 14,
-                            fontFamily: "Inter",
                             fontWeight: FontWeight.w700,
                           ),
                         ),
                         Text(
                           "${indexCards.length}",
                           style: TextStyle(
-                            color: Colors.white,
+                            color: Theme.of(context).colorScheme.surface,
                             fontSize: 14,
-                            fontFamily: "Inter",
                             fontWeight: FontWeight.w700,
                           ),
                         ),

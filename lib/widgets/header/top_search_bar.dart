@@ -17,7 +17,7 @@ class TopSearchBar extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.fromLTRB(15,0,15,0),
           child: IconButton(
-            color: Colors.white,
+            color: Theme.of(context).colorScheme.surface,
             icon: Icon(Icons.search, size: 32.0,),
             onPressed: onPressed,
           ),

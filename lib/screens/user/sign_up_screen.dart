@@ -41,10 +41,7 @@ class SignUpScreen extends StatelessWidget {
                       alignment: Alignment.bottomCenter,
                       child: Text(
                         "Indem Sie fortfahren, stimmen Sie den Nutzerbedinungen und der Datenschutzrichtlinie zu.",
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
-                          fontSize: 13,
-                        ),
+                        style: Theme.of(context).textTheme.bodySmall,
                         textAlign: TextAlign.center,
                       ),
                     ),

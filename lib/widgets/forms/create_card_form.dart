@@ -114,13 +114,11 @@ class _CreateCardFormState extends State<CreateCardForm>
                 labelText: "Question",
                 contentPadding: EdgeInsets.symmetric(vertical: 17, horizontal: 20),
                 counterText: "",
-                labelStyle: TextStyle(
-                  color: Colors.white.withOpacity(0.50),
-                  fontSize: 16,
-                  fontFamily: "Inter",
-                  fontWeight: FontWeight.w600,
-                ),
-                prefixIcon: Icon(Icons.question_mark_rounded, color: Colors.white, size: 28,),
+                labelStyle: Theme.of(context).textTheme.labelMedium,
+                prefixIcon: Icon(
+                  Icons.question_mark_rounded,
+                  color: Theme.of(context).inputDecorationTheme.iconColor,
+                  size: 28,),
                 suffixIcon: GestureDetector(
                   onTap: () {
                     setState(() {
@@ -129,32 +127,15 @@ class _CreateCardFormState extends State<CreateCardForm>
                   },
                   child: Icon(
                     _question.text.isNotEmpty ? Icons.cancel : null,
-                    color: Colors.white.withOpacity(0.50),
+                    color: Theme.of(context).colorScheme.tertiary,
                   ),
                 ),// Icon hinzufügen
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Color(0xFF8597A1),
-                    width: 2.0,
-                  ),
-                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Colors.white, // Ändern Sie hier die Farbe des Rahmens im Fokus
-                    width: 2.0,
-                  ),
-                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                ),
+                enabledBorder: Theme.of(context).inputDecorationTheme.enabledBorder,
+                focusedBorder: Theme.of(context).inputDecorationTheme.focusedBorder,
                 filled: true,
-                fillColor: Color(0xFF33363F),
+                fillColor: Theme.of(context).colorScheme.secondary,
               ),
-              style: TextStyle(
-                color: Colors.white, // Ändern Sie die Textfarbe auf Weiß
-                fontSize: 16,
-                fontFamily: "Inter",
-                fontWeight: FontWeight.w600,
-              ),
+              style: Theme.of(context).textTheme.bodyMedium,
             ),
           ),
           Padding(
@@ -168,13 +149,11 @@ class _CreateCardFormState extends State<CreateCardForm>
                 labelText: "Answer",
                 contentPadding: EdgeInsets.symmetric(vertical: 17, horizontal: 20),
                 counterText: "",
-                labelStyle: TextStyle(
-                  color: Colors.white.withOpacity(0.50),
-                  fontSize: 16,
-                  fontFamily: "Inter",
-                  fontWeight: FontWeight.w600,
-                ),
-                prefixIcon: Icon(Icons.question_answer_outlined, color: Colors.white, size: 30,),
+                labelStyle: Theme.of(context).textTheme.labelMedium,
+                prefixIcon: Icon(
+                  Icons.question_answer_outlined,
+                  color: Theme.of(context).inputDecorationTheme.iconColor,
+                  size: 30,),
                 suffixIcon: GestureDetector(
                   onTap: () {
                     setState(() {
@@ -183,47 +162,30 @@ class _CreateCardFormState extends State<CreateCardForm>
                   },
                   child: Icon(
                     _answer.text.isNotEmpty ? Icons.cancel : null,
-                    color: Colors.white.withOpacity(0.50),
+                    color: Theme.of(context).colorScheme.tertiary,
                   ),
                 ),// Icon hinzufügen
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Color(0xFF8597A1),
-                    width: 2.0,
-                  ),
-                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Colors.white, // Ändern Sie hier die Farbe des Rahmens im Fokus
-                    width: 2.0,
-                  ),
-                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                ),
+                enabledBorder: Theme.of(context).inputDecorationTheme.enabledBorder,
+                focusedBorder: Theme.of(context).inputDecorationTheme.focusedBorder,
                 filled: true,
-                fillColor: Color(0xFF33363F),
+                fillColor: Theme.of(context).colorScheme.secondary,
               ),
-              style: TextStyle(
-                color: Colors.white, // Ändern Sie die Textfarbe auf Weiß
-                fontSize: 16,
-                fontFamily: "Inter",
-                fontWeight: FontWeight.w600,
-              ),
+              style: Theme.of(context).textTheme.bodyMedium,
             ),
           ),
           Padding(
             padding: const EdgeInsets.fromLTRB(0, 25, 0, 0),
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: Color(int.parse("0xFFE59113")),
+                backgroundColor: Theme.of(context).colorScheme.primary,
                 minimumSize: Size(double.infinity, 55),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                 ),
                 side: BorderSide(
                   color:  _isButtonEnabled
-                      ? Color(int.parse("0xFF00324E"))
-                      : Color(0xFF8597A1),
+                      ? Theme.of(context).colorScheme.primary
+                      : Theme.of(context).colorScheme.tertiary,
                   width: 2.0,
                 ),
                 elevation: 0,
@@ -239,7 +201,6 @@ class _CreateCardFormState extends State<CreateCardForm>
                   await ApiClient(context).cardApi.addCard(_question.text, _answer.text, 0, 0, widget.stackId);
                 }else
                 {
-                  print("WIDGET STACKID: ${widget.stackId}");
                   fileHandler.editItemById("allStacks", "stack_id", widget.stackId, {"is_updated": 1});
 
                   await WriteToDeviceStorage().addCard(
@@ -268,10 +229,9 @@ class _CreateCardFormState extends State<CreateCardForm>
                     "Add Card",
                     style: TextStyle(
                       color:  _isButtonEnabled
-                          ? Color(int.parse("0xFF00324E"))
-                          : Color(0xFF8597A1),
+                          ? Theme.of(context).scaffoldBackgroundColor
+                          : Theme.of(context).colorScheme.tertiary,
                       fontSize: 20,
-                      fontFamily: "Inter",
                       fontWeight: FontWeight.w600,
                     ),
                   ),

@@ -101,26 +101,16 @@ class _DatePickerBtnState extends State<DatePickerBtn>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text("MONTH",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 12,
-                    fontFamily: "Inter",
-                    fontWeight: FontWeight.w400
-                ),
+                style: Theme.of(context).textTheme.bodySmall,
               ),
               DropdownButton<int>(
                 underline: Container(
                   height: 0,
                 ),
                 isDense: true,
-                dropdownColor: Color(0xFF00324E),
-                iconEnabledColor: Colors.white,
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontFamily: "Inter",
-                    fontWeight: FontWeight.w500
-                ),
+                dropdownColor: Theme.of(context).scaffoldBackgroundColor,
+                iconEnabledColor: Theme.of(context).inputDecorationTheme.iconColor,
+                style: Theme.of(context).textTheme.bodyMedium,
                 value: selectedMonth,
                 items: List.generate(
                   12, (index) => DropdownMenuItem<int>(
@@ -147,26 +137,16 @@ class _DatePickerBtnState extends State<DatePickerBtn>
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text("YEAR",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 12,
-                    fontFamily: "Inter",
-                    fontWeight: FontWeight.w400
-                  ),
+                  style:  Theme.of(context).textTheme.bodySmall,
                 ),
                 DropdownButton<int>(
                   underline: Container(
                     height: 0,
                   ),
                   isDense: true,
-                  dropdownColor: Color(0xFF00324E),
-                  iconEnabledColor: Colors.white,
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontFamily: "Inter",
-                      fontWeight: FontWeight.w500
-                  ),
+                  dropdownColor: Theme.of(context).scaffoldBackgroundColor,
+                  iconEnabledColor: Theme.of(context).inputDecorationTheme.iconColor,
+                  style: Theme.of(context).textTheme.bodyMedium,
                   value: selectedYear,
                   items: List.generate(
                     101, (index) => DropdownMenuItem<int>(

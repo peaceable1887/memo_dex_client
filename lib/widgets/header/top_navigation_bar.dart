@@ -49,15 +49,10 @@ class _TopNavigationBarState extends State<TopNavigationBar> {
             leadingWidth: 15,
             title: Text(
               widget.btnText,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-                fontFamily: "Inter",
-                fontWeight: FontWeight.w500,
-              ),
+              style: Theme.of(context).textTheme.headlineSmall,
             ),
             leading: IconButton(
-              color: Colors.white,
+              color: Theme.of(context).colorScheme.surface,
               icon: Icon(Icons.arrow_back_ios),
               onPressed: widget.onPressed,
             ),

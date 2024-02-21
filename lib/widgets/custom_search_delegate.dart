@@ -40,18 +40,13 @@ class CustomSearchDelegate extends SearchDelegate
   ThemeData appBarTheme(BuildContext context) {
     return ThemeData(
       appBarTheme: AppBarTheme(
-        color: Color(0xFF00324E),
+        color: Theme.of(context).scaffoldBackgroundColor,
         elevation: 0,
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: Color(0xFF00324E),
-        hintStyle: TextStyle(
-          color: Colors.white.withOpacity(0.50),
-          fontSize: 16,
-          fontFamily: "Inter",
-          fontWeight: FontWeight.w400,
-        ),
+        fillColor: Theme.of(context).scaffoldBackgroundColor,
+        hintStyle: Theme.of(context).textTheme.labelSmall,
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10.0),
           borderSide: BorderSide.none,
@@ -70,7 +65,6 @@ class CustomSearchDelegate extends SearchDelegate
   TextStyle get queryStyle => TextStyle(
     color: Colors.white,
     fontSize: 16,
-    fontFamily: "Inter",
     fontWeight: FontWeight.w400
   );
 
@@ -78,7 +72,6 @@ class CustomSearchDelegate extends SearchDelegate
   TextStyle get searchFieldStyle => TextStyle(
     color: Colors.white,
     fontSize: 16,
-    fontFamily: "Inter",
     fontWeight: FontWeight.w400, // Textfarbe im Suchfeld ändern
   );
 
@@ -88,7 +81,7 @@ class CustomSearchDelegate extends SearchDelegate
       Padding(
         padding: const EdgeInsets.fromLTRB(0,0,10,0),
         child: IconButton(
-          color: Colors.white,
+          color: Theme.of(context).colorScheme.surface,
           icon: const Icon(Icons.clear_rounded),
           onPressed: (){
             query = "";
@@ -103,7 +96,7 @@ class CustomSearchDelegate extends SearchDelegate
     return Padding(
       padding: const EdgeInsets.fromLTRB(10,0,0,0),
       child: IconButton(
-          color: Colors.white,
+          color: Theme.of(context).colorScheme.surface,
           icon: const Icon(Icons.arrow_back_ios),
           onPressed: (){
             close(context, null);
@@ -138,7 +131,7 @@ class CustomSearchDelegate extends SearchDelegate
       }
     }
     return Scaffold(
-      backgroundColor: Color(0xFF00324E),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: GridView.builder(
         padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

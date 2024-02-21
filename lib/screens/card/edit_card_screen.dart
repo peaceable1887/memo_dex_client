@@ -182,7 +182,7 @@ class _EditCardScreenState extends State<EditCardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF00324E),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -216,7 +216,7 @@ class _EditCardScreenState extends State<EditCardScreen> {
                       child: Icon(
                         Icons.delete_forever_rounded,
                         size: 35.0,
-                        color: Colors.white,
+                        color: Theme.of(context).colorScheme.surface,
                       ), // Icon als klickbares Element
                     ),
                   ),
@@ -246,13 +246,11 @@ class _EditCardScreenState extends State<EditCardScreen> {
                         labelText: "Question",
                         contentPadding: EdgeInsets.symmetric(vertical: 17, horizontal: 20),
                         counterText: "",
-                        labelStyle: TextStyle(
-                          color: Colors.white.withOpacity(0.50),
-                          fontSize: 16,
-                          fontFamily: "Inter",
-                          fontWeight: FontWeight.w600,
-                        ),
-                        prefixIcon: Icon(Icons.question_mark_rounded, color: Colors.white, size: 28,),
+                        labelStyle: Theme.of(context).textTheme.labelMedium,
+                        prefixIcon: Icon(
+                          Icons.question_mark_rounded,
+                          color: Theme.of(context).inputDecorationTheme.iconColor,
+                          size: 28,),
                         suffixIcon: GestureDetector(
                           onTap: () {
                             setState(() {
@@ -261,32 +259,15 @@ class _EditCardScreenState extends State<EditCardScreen> {
                           },
                           child: Icon(
                             _question.text.isNotEmpty ? Icons.cancel : null,
-                            color: Colors.white.withOpacity(0.50),
+                            color: Theme.of(context).colorScheme.tertiary,
                           ),
                         ),// Icon hinzufügen
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Color(0xFF8597A1),
-                            width: 2.0,
-                          ),
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Colors.white, // Ändern Sie hier die Farbe des Rahmens im Fokus
-                            width: 2.0,
-                          ),
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        ),
+                        enabledBorder: Theme.of(context).inputDecorationTheme.enabledBorder,
+                        focusedBorder: Theme.of(context).inputDecorationTheme.focusedBorder,
                         filled: true,
-                        fillColor: Color(0xFF33363F),
+                        fillColor: Theme.of(context).colorScheme.secondary,
                       ),
-                      style: TextStyle(
-                        color: Colors.white, // Ändern Sie die Textfarbe auf Weiß
-                        fontSize: 16,
-                        fontFamily: "Inter",
-                        fontWeight: FontWeight.w600,
-                      ),
+                      style: Theme.of(context).textTheme.bodyMedium,
                     ),
                   ),
                   Padding(
@@ -300,13 +281,11 @@ class _EditCardScreenState extends State<EditCardScreen> {
                         labelText: "Answer",
                         contentPadding: EdgeInsets.symmetric(vertical: 17, horizontal: 20),
                         counterText: "",
-                        labelStyle: TextStyle(
-                          color: Colors.white.withOpacity(0.50),
-                          fontSize: 16,
-                          fontFamily: "Inter",
-                          fontWeight: FontWeight.w600,
-                        ),
-                        prefixIcon: Icon(Icons.question_answer_outlined, color: Colors.white, size: 30,),
+                        labelStyle: Theme.of(context).textTheme.labelMedium,
+                        prefixIcon: Icon(
+                          Icons.question_answer_outlined,
+                          color: Theme.of(context).inputDecorationTheme.iconColor,
+                          size: 30,),
                         suffixIcon: GestureDetector(
                           onTap: () {
                             setState(() {
@@ -315,32 +294,15 @@ class _EditCardScreenState extends State<EditCardScreen> {
                           },
                           child: Icon(
                             _answer.text.isNotEmpty ? Icons.cancel : null,
-                            color: Colors.white.withOpacity(0.50),
+                            color: Theme.of(context).colorScheme.tertiary,
                           ),
                         ),// Icon hinzufügen
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Color(0xFF8597A1),
-                            width: 2.0,
-                          ),
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Colors.white, // Ändern Sie hier die Farbe des Rahmens im Fokus
-                            width: 2.0,
-                          ),
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        ),
+                        enabledBorder: Theme.of(context).inputDecorationTheme.enabledBorder,
+                        focusedBorder: Theme.of(context).inputDecorationTheme.focusedBorder,
                         filled: true,
-                        fillColor: Color(0xFF33363F),
+                        fillColor: Theme.of(context).colorScheme.secondary,
                       ),
-                      style: TextStyle(
-                        color: Colors.white, // Ändern Sie die Textfarbe auf Weiß
-                        fontSize: 16,
-                        fontFamily: "Inter",
-                        fontWeight: FontWeight.w600,
-                      ),
+                      style: Theme.of(context).textTheme.bodyMedium,
                     ),
                   ),
                   Padding(
@@ -348,7 +310,7 @@ class _EditCardScreenState extends State<EditCardScreen> {
                     child: Container(
                       height: 55,
                       decoration: BoxDecoration(
-                        color: Color(0xFF33363F),
+                        color: Theme.of(context).colorScheme.secondary,
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Padding(
@@ -358,19 +320,28 @@ class _EditCardScreenState extends State<EditCardScreen> {
                           children: [
                             Text(
                               "Memorized",
-                              style: TextStyle(
-                                color: Colors.white, // Ändern Sie die Textfarbe auf Weiß
-                                fontSize: 18,
-                                fontFamily: "Inter",
-                                fontWeight: FontWeight.w500,
-                              ),
+                              style: Theme.of(context).textTheme.bodyMedium,
                             ),
                             Switch(
                               thumbIcon: thumbIcon,
                               value: isNoticed,
-                              activeColor: Colors.white,
-                              activeTrackColor: Color(0xFFE59113),
-                              inactiveTrackColor: Colors.grey,
+                              activeColor: Theme.of(context).colorScheme.surface,
+                              activeTrackColor: Theme.of(context).colorScheme.primary,
+                              inactiveTrackColor: Theme.of(context).colorScheme.tertiary,
+                                trackOutlineColor: MaterialStateProperty.resolveWith<Color?>((Set<MaterialState> states)
+                                {
+                                  if (states.contains(MaterialState.selected)) {
+                                    return Theme.of(context).colorScheme.primary;
+                                  }
+                                  return Theme.of(context).colorScheme.tertiary;
+                                }),
+                                thumbColor: MaterialStateProperty.resolveWith<Color?>((Set<MaterialState> states)
+                                {
+                                  if (states.contains(MaterialState.disabled)) {
+                                    return Theme.of(context).colorScheme.tertiary;
+                                  }
+                                  return Theme.of(context).colorScheme.secondary;
+                                }),
                               onChanged: (bool value)
                               {
                                 setState(() {
@@ -387,15 +358,15 @@ class _EditCardScreenState extends State<EditCardScreen> {
                     padding: online ? const EdgeInsets.fromLTRB(0, 25, 0, 25) : const EdgeInsets.fromLTRB(0, 25, 0, 70) ,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(int.parse("0xFFE59113")),
+                        backgroundColor: Theme.of(context).colorScheme.primary,
                         minimumSize: Size(double.infinity, 55),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(10)),
                         ),
                         side: BorderSide(
                           color:  _isButtonEnabled
-                              ? Color(int.parse("0xFF00324E"))
-                              : Color(0xFF8597A1),
+                              ? Theme.of(context).colorScheme.primary
+                              : Theme.of(context).colorScheme.tertiary,
                           width: 2.0,
                         ),
                         elevation: 0,
@@ -409,10 +380,9 @@ class _EditCardScreenState extends State<EditCardScreen> {
                             "Update Card",
                             style: TextStyle(
                               color:  _isButtonEnabled
-                                  ? Color(int.parse("0xFF00324E"))
-                                  : Color(0xFF8597A1),
+                                  ? Theme.of(context).scaffoldBackgroundColor
+                                  : Theme.of(context).colorScheme.tertiary,
                               fontSize: 20,
-                              fontFamily: "Inter",
                               fontWeight: FontWeight.w600,
                             ),
                           ),

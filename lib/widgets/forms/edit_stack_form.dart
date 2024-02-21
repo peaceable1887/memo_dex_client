@@ -195,13 +195,11 @@ class _EditStackFormState extends State<EditStackForm> {
               decoration: InputDecoration(
                 labelText: "Stackname",
                 contentPadding: EdgeInsets.symmetric(vertical: 17, horizontal: 20),
-                labelStyle: TextStyle(
-                  color: Colors.white.withOpacity(0.50),
-                  fontSize: 16,
-                  fontFamily: "Inter",
-                  fontWeight: FontWeight.w600,
-                ),
-                prefixIcon: Icon(Icons.folder_outlined, color: Colors.white, size: 30,),
+                labelStyle: Theme.of(context).textTheme.labelMedium,
+                prefixIcon: Icon(
+                  Icons.folder_outlined,
+                  color: Theme.of(context).inputDecorationTheme.iconColor,
+                  size: 30,),
                 suffixIcon: GestureDetector(
                   onTap: () {
                     setState(() {
@@ -210,32 +208,15 @@ class _EditStackFormState extends State<EditStackForm> {
                   },
                   child: Icon(
                     _stackname.text.isNotEmpty ? Icons.cancel : null,
-                    color: Colors.white.withOpacity(0.50),
+                    color: Theme.of(context).colorScheme.tertiary,
                   ),
                 ),// Icon hinzufügen
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Color(0xFF8597A1),
-                    width: 2.0,
-                  ),
-                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Colors.white, // Ändern Sie hier die Farbe des Rahmens im Fokus
-                    width: 2.0,
-                  ),
-                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                ),
+                enabledBorder: Theme.of(context).inputDecorationTheme.enabledBorder,
+                focusedBorder: Theme.of(context).inputDecorationTheme.focusedBorder,
                 filled: true,
-                fillColor: Color(0xFF33363F),
+                fillColor: Theme.of(context).colorScheme.secondary,
               ),
-              style: TextStyle(
-                color: Colors.white, // Ändern Sie die Textfarbe auf Weiß
-                fontSize: 16,
-                fontFamily: "Inter",
-                fontWeight: FontWeight.w600,
-              ),
+              style: Theme.of(context).textTheme.bodyMedium,
             ),
           ),
           Padding(
@@ -243,14 +224,14 @@ class _EditStackFormState extends State<EditStackForm> {
             child: Container(
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFF33363F), // Verwenden Sie die ausgewählte Farbe
+                  backgroundColor: Theme.of(context).colorScheme.secondary, // Verwenden Sie die ausgewählte Farbe
                   minimumSize: Size(double.infinity, 55),
                   padding: EdgeInsets.fromLTRB(11, 0, 13, 0),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(10)),
                   ),
                   side: BorderSide(
-                    color: Color(0xFF8597A1),
+                    color: Theme.of(context).colorScheme.tertiary,
                     width: 2.0,
                   ),
                   elevation: 0,
@@ -269,12 +250,7 @@ class _EditStackFormState extends State<EditStackForm> {
                         SizedBox(width: 8),
                         Text(
                           "#${newColor.value.toRadixString(16).substring(2)}",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontFamily: "Inter",
-                            fontWeight: FontWeight.w600,
-                          ),
+                          style: Theme.of(context).textTheme.bodyMedium,
                         ),
                         SizedBox(width: 8),
                       ],
@@ -300,16 +276,16 @@ class _EditStackFormState extends State<EditStackForm> {
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: _isButtonEnabled
-                      ? Color(int.parse("0xFFE59113"))
-                      : Color(0xFF8597A1),
+                      ? Theme.of(context).colorScheme.primary
+                      : Theme.of(context).colorScheme.tertiary,
                   minimumSize: Size(double.infinity, 55),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(10)),
                   ),
                   side: BorderSide(
                     color: _isButtonEnabled
-                        ? Color(int.parse("0xFFE59113"))
-                        : Color(0xFF8597A1), // Button-Rahmenfarbe ändern, wenn nicht aktiviert
+                        ? Theme.of(context).colorScheme.primary
+                        : Theme.of(context).colorScheme.tertiary, // Button-Rahmenfarbe ändern, wenn nicht aktiviert
                     width: 2.0,
                   ),
                   elevation: 0,
@@ -324,10 +300,9 @@ class _EditStackFormState extends State<EditStackForm> {
                       "Update Stack",
                       style: TextStyle(
                         color: _isButtonEnabled
-                            ? Color(int.parse("0xFF00324E"))
-                            : Color(0xFF8597A1), // Textfarbe ändern, wenn nicht aktiviert
+                            ? Theme.of(context).scaffoldBackgroundColor
+                            : Theme.of(context).colorScheme.tertiary, // Textfarbe ändern, wenn nicht aktiviert
                         fontSize: 20,
-                        fontFamily: "Inter",
                         fontWeight: FontWeight.w600,
                       ),
                     ),

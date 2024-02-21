@@ -117,13 +117,8 @@ class _SignUpFormState extends State<SignUpForm> {
               decoration: InputDecoration(
                 labelText: "E-Mail",
                 contentPadding: EdgeInsets.symmetric(vertical: 17, horizontal: 20),
-                labelStyle: TextStyle(
-                  color: Colors.white.withOpacity(0.50),
-                  fontSize: 16,
-                  fontFamily: "Inter",
-                  fontWeight: FontWeight.w600,
-                ),
-                prefixIcon: Icon(Icons.email, color: Colors.white,size: 30),
+                labelStyle: Theme.of(context).textTheme.labelMedium,
+                prefixIcon: Icon(Icons.email, color: Theme.of(context).inputDecorationTheme.iconColor, size: 30),
                 suffixIcon: GestureDetector(
                   onTap: () {
                     setState(() {
@@ -132,32 +127,15 @@ class _SignUpFormState extends State<SignUpForm> {
                   },
                   child: Icon(
                     _eMail.text.isNotEmpty ? Icons.cancel : null,
-                    color: Colors.white.withOpacity(0.50),
+                    color: Theme.of(context).colorScheme.tertiary,
                   ),
                 ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Color(0xFF8597A1),
-                    width: 2.0,
-                  ),
-                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Colors.white, // Ändern Sie hier die Farbe des Rahmens im Fokus
-                    width: 2.0,
-                  ),
-                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                ),
+                enabledBorder: Theme.of(context).inputDecorationTheme.enabledBorder,
+                focusedBorder: Theme.of(context).inputDecorationTheme.focusedBorder,
                 filled: true,
-                fillColor: Color(0xFF33363F),
+                fillColor: Theme.of(context).colorScheme.secondary,
               ),
-              style: TextStyle(
-                color: Colors.white, // Ändern Sie die Textfarbe auf Weiß
-                fontSize: 16,
-                fontFamily: "Inter",
-                fontWeight: FontWeight.w600,
-              ),
+              style: Theme.of(context).textTheme.bodyMedium,
             ),
           ),
           Padding(
@@ -168,13 +146,8 @@ class _SignUpFormState extends State<SignUpForm> {
               decoration: InputDecoration(
                 labelText: "Password",
                 contentPadding: EdgeInsets.symmetric(vertical: 17, horizontal: 20),
-                labelStyle: TextStyle(
-                  color: Colors.white.withOpacity(0.50),
-                  fontSize: 16,
-                  fontFamily: "Inter",
-                  fontWeight: FontWeight.w600,
-                ),
-                prefixIcon: Icon(Icons.lock, color: Colors.white,size: 30),
+                labelStyle: Theme.of(context).textTheme.labelMedium,
+                prefixIcon: Icon(Icons.lock, color: Theme.of(context).inputDecorationTheme.iconColor,size: 30),
                 suffixIcon: GestureDetector(
                   onTap: () {
                     setState(() {
@@ -183,32 +156,15 @@ class _SignUpFormState extends State<SignUpForm> {
                   },
                   child: Icon(
                     _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
-                    color: Colors.white.withOpacity(0.50),
+                    color: Theme.of(context).colorScheme.tertiary,
                   ),
                 ),// Icon hinzufügen
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Color(0xFF8597A1),
-                    width: 2.0,
-                  ),
-                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Colors.white, // Ändern Sie hier die Farbe des Rahmens im Fokus
-                    width: 2.0,
-                  ),
-                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                ),
+                enabledBorder: Theme.of(context).inputDecorationTheme.enabledBorder,
+                focusedBorder: Theme.of(context).inputDecorationTheme.focusedBorder,
                 filled: true,
-                fillColor: Color(0xFF33363F),
+                fillColor: Theme.of(context).colorScheme.secondary,
               ),
-              style: TextStyle(
-                color: Colors.white, // Ändern Sie die Textfarbe auf Weiß
-                fontSize: 16,
-                fontFamily: "Inter",
-                fontWeight: FontWeight.w600,
-              ),
+              style: Theme.of(context).textTheme.bodyMedium,
             ),
           ),
           Padding(
@@ -219,13 +175,8 @@ class _SignUpFormState extends State<SignUpForm> {
               decoration: InputDecoration(
                 labelText: "repeat Password",
                 contentPadding: EdgeInsets.symmetric(vertical: 17, horizontal: 20),
-                labelStyle: TextStyle(
-                  color: Colors.white.withOpacity(0.50),
-                  fontSize: 16,
-                  fontFamily: "Inter",
-                  fontWeight: FontWeight.w600,
-                ),
-                prefixIcon: Icon(Icons.safety_check, color: Colors.white,size: 30),
+                labelStyle: Theme.of(context).textTheme.labelMedium,
+                prefixIcon: Icon(Icons.safety_check, color: Theme.of(context).inputDecorationTheme.iconColor,size: 30),
                 suffixIcon: GestureDetector(
                   onTap: () {
                     setState(() {
@@ -234,32 +185,15 @@ class _SignUpFormState extends State<SignUpForm> {
                   },
                   child: Icon(
                     _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
-                    color: Colors.white.withOpacity(0.50),
+                    color:Theme.of(context).colorScheme.tertiary,
                   ),
                 ),// Icon hinzufügen
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Color(0xFF8597A1),
-                    width: 2.0,
-                  ),
-                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Colors.white, // Ändern Sie hier die Farbe des Rahmens im Fokus
-                    width: 2.0,
-                  ),
-                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                ),
+                enabledBorder: Theme.of(context).inputDecorationTheme.enabledBorder,
+                focusedBorder: Theme.of(context).inputDecorationTheme.focusedBorder,
                 filled: true,
-                fillColor: Color(0xFF33363F),
+                fillColor: Theme.of(context).colorScheme.secondary,
               ),
-              style: TextStyle(
-                color: Colors.white, // Ändern Sie die Textfarbe auf Weiß
-                fontSize: 16,
-                fontFamily: "Inter",
-                fontWeight: FontWeight.w600,
-              ),
+              style: Theme.of(context).textTheme.bodyMedium,
             ),
           ),
           Padding(
@@ -269,6 +203,7 @@ class _SignUpFormState extends State<SignUpForm> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
+                  //TODO Style eventuell noch in ThemeData auslagern
                   Checkbox(
                     side: BorderSide(color: Colors.white, width: 2),
                     activeColor: Color(int.parse("0xFFE59113")),
@@ -285,16 +220,11 @@ class _SignUpFormState extends State<SignUpForm> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(0,0,5,3),
+                    padding: const EdgeInsets.fromLTRB(0,0,5,0),
                     child: Text(
                       "Agree with Terms & Conditions",
                       textAlign: TextAlign.right,
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontFamily: "Inter",
-                          fontWeight: FontWeight.w700
-                      ),
+                      style: Theme.of(context).textTheme.bodyMedium,
                     ),
                   ),
                 ],
@@ -307,16 +237,16 @@ class _SignUpFormState extends State<SignUpForm> {
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: _isEnabled
-                          ? Color(int.parse("0xFFE59113"))
-                          : Color(0xFF8597A1),
+                          ? Theme.of(context).colorScheme.primary
+                          : Theme.of(context).colorScheme.tertiary,
                       minimumSize: Size(double.infinity, 55),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(10)),
                       ),
                       side: BorderSide(
                         color: _isEnabled
-                            ? Color(int.parse("0xFFE59113"))
-                            : Color(0xFF8597A1), // Button-Rahmenfarbe ändern, wenn nicht aktiviert
+                            ? Theme.of(context).colorScheme.primary
+                            : Theme.of(context).colorScheme.tertiary,
                         width: 2.0,
                       ),
                       elevation: 0,
@@ -332,13 +262,13 @@ class _SignUpFormState extends State<SignUpForm> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          "Login",
+                          "Sign Up",
+                          //TODO Style eventuell noch in ThemeData auslagern
                           style: TextStyle(
                             color: _isEnabled
-                                ? Color(int.parse("0xFF00324E"))
-                                : Color(0xFF8597A1), // Textfarbe ändern, wenn nicht aktiviert
+                                ? Theme.of(context).scaffoldBackgroundColor
+                                : Theme.of(context).colorScheme.tertiary,
                             fontSize: 20,
-                            fontFamily: "Inter",
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -346,7 +276,7 @@ class _SignUpFormState extends State<SignUpForm> {
                     ),
                   ),
                   Container(
-                    padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                    padding: EdgeInsets.fromLTRB(0, 10, 0, 5),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -358,12 +288,7 @@ class _SignUpFormState extends State<SignUpForm> {
                           padding: EdgeInsets.symmetric(horizontal: 20.0), // Füge horizontalen Abstand hinzu
                           child: Text(
                             "or",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                              fontFamily: "Inter",
-                              fontWeight: FontWeight.w600,
-                            ),
+                            style: Theme.of(context).textTheme.bodyMedium,
                           ),
                         ),
                         CustomPaint(
@@ -375,9 +300,9 @@ class _SignUpFormState extends State<SignUpForm> {
                   ),
                   Button(
                     text: "Continue with Google",
-                    backgroundColor: Colors.white,
-                    borderColor: Colors.white,
-                    textColor: Color(0xFF8597A1),
+                    backgroundColor: Theme.of(context).colorScheme.surface,
+                    borderColor: Theme.of(context).colorScheme.surface,
+                    textColor: Theme.of(context).colorScheme.tertiary,
                     onPressed: ()
                     {
                       Navigator.pushReplacement(

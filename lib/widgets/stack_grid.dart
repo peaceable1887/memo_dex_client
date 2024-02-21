@@ -155,7 +155,7 @@ class _StackViewGridState extends State<StackGrid> {
                 width: 50,
                 height: 50,
                 child: CircularProgressIndicator(
-                  color: Colors.white,
+                  color: Theme.of(context).colorScheme.surface,
                 ),
               ),
             ],

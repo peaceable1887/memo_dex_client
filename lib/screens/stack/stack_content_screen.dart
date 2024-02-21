@@ -341,7 +341,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
                 width: 50,
                 height: 50,
                 child: CircularProgressIndicator(
-                  color: Theme.of(context).colorScheme.primary,
+                  color: Theme.of(context).colorScheme.surface,
                 ),
               ),
             ],
@@ -386,7 +386,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
                             child: Icon(
                               Icons.add_rounded,
                               size: 38.0,
-                              color: Theme.of(context).colorScheme.onSurfaceVariant,
+                              color: Theme.of(context).colorScheme.surface
                             ), // Icon als klickbares Element
                           ),
                           InkWell(
@@ -394,7 +394,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
                             child: Icon(
                               Icons.edit_outlined,
                               size: 32.0,
-                              color: Theme.of(context).colorScheme.onSurfaceVariant,
+                              color: Theme.of(context).colorScheme.surface,
                             ), // Icon als klickbares Element
                           ),
                         ],
@@ -427,7 +427,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
                             context,
                             Icons.warning_amber_rounded,
                             "The cards are being shuffled.",
-                            Theme.of(context).colorScheme.secondary,
+                            Theme.of(context).colorScheme.primary,
                             Duration(seconds: 0),
                             Duration(milliseconds: 1500)
                         );
@@ -436,7 +436,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
                             context,
                             Icons.warning_amber_rounded,
                             "The cards are no longer shuffled.",
-                            Theme.of(context).colorScheme.secondary,
+                            Theme.of(context).colorScheme.primary,
                             Duration(seconds: 0),
                             Duration(milliseconds: 1500)
                         );
@@ -446,11 +446,11 @@ class _StackContentScreenState extends State<StackContentScreen> {
                   child: isMixed ? Icon(
                     Icons.shuffle_rounded,
                     size: 32.0,
-                    color: Theme.of(context).colorScheme.secondary,
+                    color: Theme.of(context).colorScheme.primary,
                   ): Icon(
                     Icons.shuffle_rounded,
                     size: 32.0,
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,// Icon als klickbares Element
+                    color: Theme.of(context).colorScheme.surface,// Icon als klickbares Element
                   ),
                 ),
               ],
@@ -493,11 +493,11 @@ class _StackContentScreenState extends State<StackContentScreen> {
                       child: sortValue == false ? Icon(
                         Icons.arrow_downward_rounded,
                         size: selectedOption == "ALL CARDS" ? 0.0 : 28.0,
-                        color: Theme.of(context).colorScheme.secondary
+                        color: Theme.of(context).colorScheme.primary
                       ) : Icon(
                         Icons.arrow_upward_rounded,
                         size: selectedOption == "ALL CARDS" ? 0.0 : 28.0,
-                        color: Theme.of(context).colorScheme.secondary,
+                        color: Theme.of(context).colorScheme.primary,
                       ),
                     ),
                   ],
@@ -505,6 +505,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
                 InkWell(
                   onTap: () {
                     showMenu(
+                      color: Theme.of(context).colorScheme.secondary,
                       context: context,
                       position: RelativeRect.fromLTRB(1, 445, 0, 0),
                       shape: RoundedRectangleBorder(
@@ -525,8 +526,8 @@ class _StackContentScreenState extends State<StackContentScreen> {
                                 "Question",
                                 style: TextStyle(
                                   color: selectedOption == "QUESTION"
-                                      ? Theme.of(context).colorScheme.secondary
-                                      : Theme.of(context).colorScheme.onSurface,
+                                      ? Theme.of(context).colorScheme.primary
+                                      : Theme.of(context).colorScheme.surface,
                                   fontWeight: selectedOption == "QUESTION"
                                       ?  FontWeight.w600
                                       :  FontWeight.w400,
@@ -536,8 +537,8 @@ class _StackContentScreenState extends State<StackContentScreen> {
                                 Icons.sort_by_alpha_rounded,
                                 size: 20.0,
                                 color: selectedOption == "QUESTION"
-                                    ? Theme.of(context).colorScheme.secondary
-                                    : Theme.of(context).colorScheme.onSurface,
+                                    ? Theme.of(context).colorScheme.primary
+                                    : Theme.of(context).colorScheme.surface,
                               ),
                             ],
                           ),
@@ -558,7 +559,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
                                 style: TextStyle(
                                   color: selectedOption == "CREATION DATE"
                                       ? Theme.of(context).colorScheme.primary
-                                      : Theme.of(context).colorScheme.onSurface,
+                                      : Theme.of(context).colorScheme.surface,
                                   fontWeight: selectedOption == "CREATION DATE"
                                       ?  FontWeight.w600
                                       :  FontWeight.w400,
@@ -569,7 +570,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
                                 size: 20.0,
                                 color: selectedOption == "CREATION DATE"
                                     ? Theme.of(context).colorScheme.primary
-                                    : Theme.of(context).colorScheme.onSurface,
+                                    : Theme.of(context).colorScheme.surface,
                               ),
                             ],
                           ),
@@ -590,7 +591,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
                                 style: TextStyle(
                                   color: selectedOption == "NOTICED"
                                       ? Theme.of(context).colorScheme.primary
-                                      : Theme.of(context).colorScheme.onSurface,
+                                      : Theme.of(context).colorScheme.surface,
                                   fontWeight: selectedOption == "NOTICED"
                                       ?  FontWeight.w600
                                       :  FontWeight.w400,
@@ -601,7 +602,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
                                 size: 20.0,
                                 color: selectedOption == "NOTICED"
                                     ? Theme.of(context).colorScheme.primary
-                                    : Theme.of(context).colorScheme.onSurface,
+                                    : Theme.of(context).colorScheme.surface,
                               ),
                             ],
                           ),
@@ -647,7 +648,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
                     size: 32.0,
                     color: selectedOption == "QUESTION" || selectedOption == "CREATION DATE" || selectedOption == "NOTICED"
                         ? Theme.of(context).colorScheme.primary
-                        : Theme.of(context).colorScheme.onSurfaceVariant,
+                        : Theme.of(context).colorScheme.surface,
                   ),
                 ),
               ],
@@ -661,12 +662,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
                 children: [
                   Text(
                     "No cards available.",
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                      fontFamily: "Inter",
-                      fontWeight: FontWeight.w400,
-                    ),
+                    style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ],
               ),

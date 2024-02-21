@@ -74,7 +74,7 @@ class _CardBtnState extends State<CardBtn> {
       child: ElevatedButton(
         onPressed: pushToCardContent,
         style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.white,
+            backgroundColor: Theme.of(context).colorScheme.secondary,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.only(
                   topRight: Radius.circular(10),
@@ -99,12 +99,7 @@ class _CardBtnState extends State<CardBtn> {
                     padding: const EdgeInsets.fromLTRB(10,0,0,0),
                     child: Text(
                       trimText(widget.btnText, 25),
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 18,
-                        fontFamily: "Inter",
-                        fontWeight: FontWeight.w500,
-                      ),
+                      style: Theme.of(context).textTheme.bodyMedium,
                     ),
                   ),
                 ],
@@ -115,12 +110,12 @@ class _CardBtnState extends State<CardBtn> {
                 Icon(
                   Icons.lightbulb_rounded,
                   size: showIcon == true ? 22.0 : 0.0,
-                  color: Color(0xFF8597A1),
+                  color: Theme.of(context).colorScheme.primary,
                 ),
                 Icon(
                   Icons.arrow_forward_ios_rounded,
                   size: 22.0,
-                  color: Color(0xFF8597A1),
+                  color: Theme.of(context).colorScheme.tertiary,
                 ),
               ],
             ),

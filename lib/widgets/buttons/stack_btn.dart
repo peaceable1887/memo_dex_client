@@ -34,7 +34,8 @@ class _StackBtnState extends State<StackBtn>
     return ElevatedButton(
       onPressed: pushToStackContent,
       style: ElevatedButton.styleFrom(
-        backgroundColor: Color(int.parse("0xFF${widget.iconColor}")),
+        //backgroundColor: Color(int.parse("0xFF${widget.iconColor}")),
+        backgroundColor: Theme.of(context).colorScheme.secondary,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
@@ -47,7 +48,7 @@ class _StackBtnState extends State<StackBtn>
             child: Icon(
               CupertinoIcons.square_stack_3d_up_fill,
               size: 85.0,
-              color: Colors.white, // Ändere diese Farbe nach deinen Wünschen
+              color: Color(int.parse("0xFF${widget.iconColor}")), // Ändere diese Farbe nach deinen Wünschen
             ),
           ),
           Container(
@@ -56,12 +57,7 @@ class _StackBtnState extends State<StackBtn>
               child: Text(
                 Trim().trimText(widget.stackName, 10),
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontFamily: "Inter",
-                  fontWeight: FontWeight.w700,
-                ),
+                style: Theme.of(context).textTheme.bodyMedium,
               ),
             ),
           ),

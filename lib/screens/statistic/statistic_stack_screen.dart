@@ -453,7 +453,7 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
       notNoticed = 1;
     }
 
-    Color originalColor = Color(0xFFE59113);
+    Color originalColor = Color(int.parse("0xFF${widget.color}"));
     Color darkerColor = Color.fromARGB(
       originalColor.alpha,
       (originalColor.red * 0.7).round(),
@@ -644,23 +644,13 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
                                         children: [
                                           Text(
                                             '${progressValue.toInt()}',
-                                            style: TextStyle(
-                                              color: Theme.of(context).colorScheme.onSurfaceVariant,
-                                              fontSize: 40,
-                                              fontFamily: "Inter",
-                                              fontWeight: FontWeight.w700,
-                                            ),
+                                            style: Theme.of(context).textTheme.headlineLarge,
                                           ),
                                           Padding(
                                             padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
                                             child: Text(
                                               '%',
-                                              style: TextStyle(
-                                                color: Theme.of(context).colorScheme.onSurfaceVariant,
-                                                fontSize: 16,
-                                                fontFamily: "Inter",
-                                                fontWeight: FontWeight.w700,
-                                              ),
+                                              style: Theme.of(context).textTheme.headlineSmall,
                                             ),
                                           ),
                                         ],
@@ -712,12 +702,7 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
                                           children: [
                                             Text(
                                               "TOTAL CARDS",
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 12,
-                                                fontFamily: "Inter",
-                                                fontWeight: FontWeight.w400,
-                                              ),
+                                              style: Theme.of(context).textTheme.bodySmall,
                                             )
                                           ],
                                         ),
@@ -728,12 +713,7 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
                                               padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
                                               child: Text(
                                                 '${widget.noticed.toInt() + widget.notNoticed.toInt()}',
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 24,
-                                                  fontFamily: "Inter",
-                                                  fontWeight: FontWeight.w600,
-                                                ),
+                                                style: Theme.of(context).textTheme.bodyLarge,
                                               ),
                                             )
                                           ],
@@ -748,12 +728,7 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
                                           children: [
                                             Text(
                                               "NOTICED",
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 12,
-                                                fontFamily: "Inter",
-                                                fontWeight: FontWeight.w400,
-                                              ),
+                                              style: Theme.of(context).textTheme.bodySmall,
                                             )
                                           ],
                                         ),
@@ -764,12 +739,7 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
                                               padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
                                               child: Text(
                                                 '${widget.noticed.toInt()}',
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 24,
-                                                  fontFamily: "Inter",
-                                                  fontWeight: FontWeight.w600,
-                                                ),
+                                                style: Theme.of(context).textTheme.bodyLarge,
                                               ),
                                             )
                                           ],
@@ -784,12 +754,7 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
                                           children: [
                                             Text(
                                               "NOT NOTICED",
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 12,
-                                                fontFamily: "Inter",
-                                                fontWeight: FontWeight.w400,
-                                              ),
+                                              style: Theme.of(context).textTheme.bodySmall,
                                             )
                                           ],
                                         ),
@@ -800,12 +765,7 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
                                               padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
                                               child: Text(
                                                 '${widget.notNoticed.toInt()}',
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 24,
-                                                  fontFamily: "Inter",
-                                                  fontWeight: FontWeight.w600,
-                                                ),
+                                                style: Theme.of(context).textTheme.bodyLarge,
                                               ),
                                             )
                                           ],
@@ -840,7 +800,7 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
                             height: MediaQuery.of(context).size.height /6.7,
                             width:  MediaQuery.of(context).size.width /3.6,
                             decoration: BoxDecoration(
-                              color: Colors.white,
+                              color: Theme.of(context).colorScheme.secondary,
                               borderRadius: BorderRadius.circular(10),
                               boxShadow: [
                                 BoxShadow(
@@ -873,12 +833,7 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
                                     children: [
                                       Text(
                                         '${fastestRun}',
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 16,
-                                          fontFamily: "Inter",
-                                          fontWeight: FontWeight.w700,
-                                        ),
+                                        style: Theme.of(context).textTheme.bodyMedium,
                                       )
                                     ],
                                   ),
@@ -890,12 +845,7 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
                                     children: [
                                       Text(
                                         "FASTEST RUN",
-                                        style: TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: 12,
-                                          fontFamily: "Inter",
-                                          fontWeight: FontWeight.w500,
-                                        ),
+                                        style: Theme.of(context).textTheme.titleSmall,
                                       )
                                     ],
                                   ),
@@ -910,7 +860,7 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
                             height: MediaQuery.of(context).size.height /6.7,
                             width:  MediaQuery.of(context).size.width /3.6,
                             decoration: BoxDecoration(
-                              color: Colors.white,
+                              color: Theme.of(context).colorScheme.secondary,
                               borderRadius: BorderRadius.circular(10),
                               boxShadow: [
                                 BoxShadow(
@@ -931,7 +881,7 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
                                       Icon(
                                         Icons.av_timer_rounded,
                                         size: 22.0,
-                                        color: Theme.of(context).colorScheme.secondary,
+                                        color: Theme.of(context).colorScheme.primary,
                                       )
                                     ],
                                   ),
@@ -943,12 +893,7 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
                                     children: [
                                       Text(
                                         '${latestRun}',
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 16,
-                                          fontFamily: "Inter",
-                                          fontWeight: FontWeight.w700,
-                                        ),
+                                        style: Theme.of(context).textTheme.bodyMedium,
                                       )
                                     ],
                                   ),
@@ -960,12 +905,7 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
                                     children: [
                                       Text(
                                         "LATEST RUN",
-                                        style: TextStyle(
-                                          color: Theme.of(context).colorScheme.tertiary,
-                                          fontSize: 12,
-                                          fontFamily: "Inter",
-                                          fontWeight: FontWeight.w500,
-                                        ),
+                                        style: Theme.of(context).textTheme.titleSmall,
                                       )
                                     ],
                                   ),
@@ -980,7 +920,7 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
                             height: MediaQuery.of(context).size.height /6.7,
                             width:  MediaQuery.of(context).size.width /3.6,
                             decoration: BoxDecoration(
-                              color: Colors.white,
+                              color: Theme.of(context).colorScheme.secondary,
                               borderRadius: BorderRadius.circular(10),
                               boxShadow: [
                                 BoxShadow(
@@ -1013,12 +953,7 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
                                     children: [
                                       Text(
                                         averageTime,
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 16,
-                                          fontFamily: "Inter",
-                                          fontWeight: FontWeight.w700,
-                                        ),
+                                        style: Theme.of(context).textTheme.bodyMedium,
                                       )
                                     ],
                                   ),
@@ -1030,12 +965,7 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
                                     children: [
                                       Text(
                                         "AVERAGE",
-                                        style: TextStyle(
-                                          color: Theme.of(context).colorScheme.tertiary,
-                                          fontSize: 12,
-                                          fontFamily: "Inter",
-                                          fontWeight: FontWeight.w500,
-                                        ),
+                                        style: Theme.of(context).textTheme.titleSmall,
                                       )
                                     ],
                                   ),
@@ -1069,12 +999,7 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
                                             children: [
                                               Text(
                                                 "TOTAL RUNS",
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 12,
-                                                  fontFamily: "Inter",
-                                                  fontWeight: FontWeight.w400,
-                                                ),
+                                                style: Theme.of(context).textTheme.bodySmall,
                                               )
                                             ],
                                           ),
@@ -1084,12 +1009,7 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
                                                 padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                                                 child: Text(
                                                   '$_totalRuns',
-                                                  style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 24,
-                                                    fontFamily: "Inter",
-                                                    fontWeight: FontWeight.w600,
-                                                  ),
+                                                  style:  Theme.of(context).textTheme.bodyLarge,
                                                 ),
                                               )
                                             ],
@@ -1162,49 +1082,29 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
                                   Icon(
                                     Icons.format_list_numbered,
                                     size: 22.0,
-                                    color: Theme.of(context).colorScheme.secondary,
+                                    color: Theme.of(context).colorScheme.primary,
                                   ),
                                   SizedBox(height: 5),
                                   Padding(
                                     padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
                                     child: Text(
                                       "Place",
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 15,
-                                          fontFamily: "Inter",
-                                          fontWeight: FontWeight.w500
-                                      ),
+                                      style: Theme.of(context).textTheme.bodyMedium,
                                     ),
                                   ),
                                   Text(
                                     "1.",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 14,
-                                        fontFamily: "Inter",
-                                        fontWeight: FontWeight.w400
-                                    ),
+                                    style: Theme.of(context).textTheme.bodySmall,
                                   ),
                                   SizedBox(height: 10),
                                   Text(
                                     "2.",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 14,
-                                        fontFamily: "Inter",
-                                        fontWeight: FontWeight.w400
-                                    ),
+                                    style: Theme.of(context).textTheme.bodySmall,
                                   ),
                                   SizedBox(height: 10),
                                   Text(
                                     "3.",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 14,
-                                        fontFamily: "Inter",
-                                        fontWeight: FontWeight.w400
-                                    ),
+                                    style: Theme.of(context).textTheme.bodySmall,
                                   ),
                                 ],
                               ),
@@ -1214,49 +1114,29 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
                                   Icon(
                                     Icons.question_answer_rounded,
                                     size: 22.0,
-                                    color: Theme.of(context).colorScheme.secondary,
+                                    color: Theme.of(context).colorScheme.primary,
                                   ),
                                   SizedBox(height: 5),
                                   Padding(
                                     padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
                                     child: Text(
                                       "Question",
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 15,
-                                          fontFamily: "Inter",
-                                          fontWeight: FontWeight.w500
-                                      ),
+                                      style: Theme.of(context).textTheme.bodyMedium,
                                     ),
                                   ),
                                   Text(
                                     '${Trim().trimText(combinedData[0]['question'], 15)}',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 14,
-                                        fontFamily: "Inter",
-                                        fontWeight: FontWeight.w400
-                                    ),
+                                    style: Theme.of(context).textTheme.bodySmall,
                                   ),
                                   SizedBox(height: 10),
                                   Text(
                                     '${Trim().trimText(combinedData[1]['question'], 15)}',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 14,
-                                        fontFamily: "Inter",
-                                        fontWeight: FontWeight.w400
-                                    ),
+                                    style: Theme.of(context).textTheme.bodySmall,
                                   ),
                                   SizedBox(height: 10),
                                   Text(
                                     '${Trim().trimText(combinedData[2]['question'], 15)}',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 14,
-                                        fontFamily: "Inter",
-                                        fontWeight: FontWeight.w400
-                                    ),
+                                    style: Theme.of(context).textTheme.bodySmall,
                                   ),
                                 ],
                               ),
@@ -1266,49 +1146,29 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
                                   Icon(
                                     Icons.error_outline_rounded,
                                     size: 22.0,
-                                    color: Theme.of(context).colorScheme.secondary,
+                                    color: Theme.of(context).colorScheme.primary,
                                   ),
                                   SizedBox(height: 5),
                                   Padding(
                                     padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
                                     child: Text(
                                       "Number",
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 15,
-                                          fontFamily: "Inter",
-                                          fontWeight: FontWeight.w500
-                                      ),
+                                      style: Theme.of(context).textTheme.bodyMedium,
                                     ),
                                   ),
                                   Text(
                                     '${combinedData[0]['answered_incorrectly'].toInt()}',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 14,
-                                        fontFamily: "Inter",
-                                        fontWeight: FontWeight.w400
-                                    ),
+                                    style: Theme.of(context).textTheme.bodySmall,
                                   ),
                                   SizedBox(height: 10),
                                   Text(
                                     '${combinedData[1]['answered_incorrectly'].toInt()}',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 14,
-                                        fontFamily: "Inter",
-                                        fontWeight: FontWeight.w400
-                                    ),
+                                    style: Theme.of(context).textTheme.bodySmall,
                                   ),
                                   SizedBox(height: 10),
                                   Text(
                                     '${combinedData[2]['answered_incorrectly'].toInt()}',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 14,
-                                        fontFamily: "Inter",
-                                        fontWeight: FontWeight.w400
-                                    ),
+                                    style: Theme.of(context).textTheme.bodySmall,
                                   ),
                                 ],
                               ),

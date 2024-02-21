@@ -225,9 +225,9 @@ class _SettingScreenState extends State<SettingScreen> {
                   SizedBox(height: 30,),
                   Button(
                     text: "Logout",
-                    backgroundColor: Color(0xFF00324E),
-                    borderColor: Color(0xFFE59113),
-                    textColor: Color(0xFFE59113),
+                    backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                    borderColor: Theme.of(context).colorScheme.primary,
+                    textColor: Theme.of(context).colorScheme.primary,
                     onPressed: logoutUser, // Übergeben Sie die Rückruffunktion anstelle sie sofort aufzurufen
                   ),
                   SizedBox(height: 30,),

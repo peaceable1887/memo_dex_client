@@ -79,15 +79,15 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
       bottomNavigationBar: Padding(
         padding: snackbarIsDisplayed ? const EdgeInsets.fromLTRB(0, 0, 0, 0) : const EdgeInsets.fromLTRB(0, 0, 0, 52),
         child: BottomNavigationBar(
-          backgroundColor: Theme.of(context).colorScheme.primary,
+          backgroundColor: Theme.of(context).colorScheme.secondary,
           currentIndex: currentIndex,
           onTap: (index) => setState(() => currentIndex = index),
           iconSize: 50,
           selectedFontSize: 14,
           unselectedFontSize: 14,
-          selectedLabelStyle: TextStyle(fontFamily: "Inter", fontWeight: FontWeight.w600,),
-          unselectedLabelStyle: TextStyle(fontFamily: "Inter", fontWeight: FontWeight.w600,),
-          selectedItemColor: Theme.of(context).colorScheme.secondary,
+          selectedLabelStyle: TextStyle(fontWeight: FontWeight.w600,),
+          unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w600,),
+          selectedItemColor: Theme.of(context).colorScheme.primary,
           unselectedItemColor: Theme.of(context).colorScheme.tertiary,
           items:[
             BottomNavigationBarItem(
