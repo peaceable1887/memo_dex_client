@@ -104,7 +104,7 @@ class _PasswordSettingScreenState extends State<PasswordSettingScreen>
   Widget build(BuildContext context)
   {
     return Scaffold(
-      backgroundColor: Color(0xFF00324E),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Column(
         children: [
           Padding(

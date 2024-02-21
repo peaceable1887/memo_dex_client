@@ -236,7 +236,7 @@ class _StatisticScreenState extends State<StatisticScreen>
                 InkWell(
                   onTap: () {
                     showMenu(
-                      color: Theme.of(context).colorScheme.secondary,
+                      color: Theme.of(context).colorScheme.surfaceVariant,
                       context: context,
                       position: RelativeRect.fromLTRB(1, 220, 0, 0),
                       shape: RoundedRectangleBorder(

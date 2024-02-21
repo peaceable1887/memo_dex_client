@@ -71,55 +71,67 @@ class _CardBtnState extends State<CardBtn> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0,0,0,15),
-      child: ElevatedButton(
-        onPressed: pushToCardContent,
-        style: ElevatedButton.styleFrom(
-            backgroundColor: Theme.of(context).colorScheme.secondary,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.only(
-                  topRight: Radius.circular(10),
-                  topLeft: Radius.circular(10),
-                  bottomRight: Radius.circular(10),
-                  bottomLeft: Radius.circular(10)
-              ),
+      child: Container(
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Color.fromRGBO(0, 0, 0, 0.15),
+              blurRadius: 15.0,
+              offset: Offset(4, 10),
             ),
-            padding: EdgeInsets.fromLTRB(10, 10, 10, 10)
+          ],
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(4, 0, 0, 0),
-              child: Row(
-                children: [
-                  Image(
-                    image: AssetImage("assets/images/card_btn_icon.png"),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(10,0,0,0),
-                    child: Text(
-                      trimText(widget.btnText, 25),
-                      style: Theme.of(context).textTheme.bodyMedium,
+        child: ElevatedButton(
+          onPressed: pushToCardContent,
+          style: ElevatedButton.styleFrom(
+              backgroundColor: Theme.of(context).colorScheme.secondary,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(10),
+                    topLeft: Radius.circular(10),
+                    bottomRight: Radius.circular(10),
+                    bottomLeft: Radius.circular(10)
+                ),
+              ),
+              padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+              elevation: 0
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(4, 0, 0, 0),
+                child: Row(
+                  children: [
+                    Image(
+                      image: AssetImage("assets/images/card_btn_icon.png"),
                     ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(10,0,0,0),
+                      child: Text(
+                        trimText(widget.btnText, 25),
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Row(
+                children: [
+                  Icon(
+                    Icons.lightbulb_rounded,
+                    size: showIcon == true ? 22.0 : 0.0,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                  Icon(
+                    Icons.arrow_forward_ios_rounded,
+                    size: 22.0,
+                    color: Theme.of(context).colorScheme.tertiary,
                   ),
                 ],
               ),
-            ),
-            Row(
-              children: [
-                Icon(
-                  Icons.lightbulb_rounded,
-                  size: showIcon == true ? 22.0 : 0.0,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-                Icon(
-                  Icons.arrow_forward_ios_rounded,
-                  size: 22.0,
-                  color: Theme.of(context).colorScheme.tertiary,
-                ),
-              ],
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

@@ -77,6 +77,7 @@ class Themes
            secondary: Color(0xFF33363F),
            tertiary: Color(0xFF8597A1),
            surface: Colors.white,
+           surfaceVariant: Color(0xFF282F45),
            onSurface: Colors.black,
            shadow: Color(0xFF15171B),
            errorContainer: Colors.red,

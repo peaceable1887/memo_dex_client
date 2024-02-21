@@ -505,7 +505,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
                 InkWell(
                   onTap: () {
                     showMenu(
-                      color: Theme.of(context).colorScheme.secondary,
+                      color: Theme.of(context).colorScheme.surfaceVariant,
                       context: context,
                       position: RelativeRect.fromLTRB(1, 445, 0, 0),
                       shape: RoundedRectangleBorder(

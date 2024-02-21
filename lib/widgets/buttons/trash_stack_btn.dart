@@ -33,42 +33,54 @@ class _TrashStackBtnState extends State<TrashStackBtn>
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            ElevatedButton(
-              onPressed: (){},
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Color(int.parse("0xFF${widget.iconColor}")),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                ),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
-                    child: Icon(
-                      CupertinoIcons.square_stack_3d_up_fill,
-                      size: 85.0,
-                      color: Colors.white, // Ändere diese Farbe nach deinen Wünschen
-                    ),
+            Container(
+              decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                    color: Color.fromRGBO(0, 0, 0, 0.15),
+                    blurRadius: 15.0,
+                    offset: Offset(4, 10),
                   ),
-                  Container(
-                    width: 125,
-                    height: 50,
-                    child: Center(
-                      child: Text(
-                        Trim().trimText(widget.stackName, 10),
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontFamily: "Inter",
-                          fontWeight: FontWeight.w700,
+                ],
+              ),
+              child: ElevatedButton(
+                onPressed: (){},
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Theme.of(context).colorScheme.secondary,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                  ),
+                  elevation: 0
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
+                      child: Icon(
+                        CupertinoIcons.square_stack_3d_up_fill,
+                        size: 85.0,
+                        color: Color(int.parse("0xFF${widget.iconColor}")), // Ändere diese Farbe nach deinen Wünschen
+                      ),
+                    ),
+                    Container(
+                      width: 125,
+                      height: 50,
+                      child: Center(
+                        child: Text(
+                          Trim().trimText(widget.stackName, 10),
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontFamily: "Inter",
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
             Expanded(
@@ -78,7 +90,7 @@ class _TrashStackBtnState extends State<TrashStackBtn>
                   children: [
                     Button(
                       backgroundColor: Colors.green,
-                      textColor: Color(0xFF00324E),
+                      textColor: Theme.of(context).scaffoldBackgroundColor,
                       text: "Undo",
                       onPressed: () async {
                         await ApiClient(context).stackApi.undoStack(widget.stackId);
@@ -87,7 +99,7 @@ class _TrashStackBtnState extends State<TrashStackBtn>
                       borderColor: Colors.green,
                     ),
                     Button(
-                      backgroundColor: Color(0xFF00324E),
+                      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                       textColor: Colors.red,
                       text: "Delete",
                       onPressed: () async

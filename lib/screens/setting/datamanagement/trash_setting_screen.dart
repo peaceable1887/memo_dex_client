@@ -144,7 +144,7 @@ class _TrashSettingScreenState extends State<TrashSettingScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF00324E),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Column(
         children: [
           Padding(
@@ -196,6 +196,7 @@ class _TrashSettingScreenState extends State<TrashSettingScreen>
                 InkWell(
                   onTap: () {
                     showMenu(
+                        color: Theme.of(context).colorScheme.surfaceVariant,
                         context: context,
                         position: RelativeRect.fromLTRB(1, 220, 0, 0),
                         shape: RoundedRectangleBorder(
