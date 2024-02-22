@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:memo_dex_prototyp/screens/bottom_navigation_screen.dart';
-import '../../widgets/forms/create_stack_form.dart';
+import '../../widgets/forms/stack/create_stack_form.dart';
 import '../../widgets/text/headlines/headline_large.dart';
 import '../../widgets/header/top_navigation_bar.dart';
 

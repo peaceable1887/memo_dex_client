@@ -7,7 +7,7 @@ import 'package:memo_dex_prototyp/screens/stack/stack_content_screen.dart';
 import 'package:memo_dex_prototyp/services/api/api_client.dart';
 import '../../services/local/file_handler.dart';
 import '../../widgets/dialogs/delete_message_box.dart';
-import '../../widgets/forms/edit_stack_form.dart';
+import '../../widgets/forms/stack/edit_stack_form.dart';
 import '../../widgets/text/headlines/headline_large.dart';
 import '../../widgets/header/top_navigation_bar.dart';
 

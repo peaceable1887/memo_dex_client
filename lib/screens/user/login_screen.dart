@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:memo_dex_prototyp/screens/welcome_screen.dart';
 import 'package:memo_dex_prototyp/widgets/text/headlines/headline_large.dart';
-import 'package:memo_dex_prototyp/widgets/forms/login_form.dart';
+import 'package:memo_dex_prototyp/widgets/forms/user/login_form.dart';
 import 'package:memo_dex_prototyp/widgets/header/top_navigation_bar.dart';
 import '../../widgets/dialogs/custom_snackbar.dart';
 

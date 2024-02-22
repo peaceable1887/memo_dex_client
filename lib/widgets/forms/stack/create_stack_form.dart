@@ -3,27 +3,22 @@ import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:memo_dex_prototyp/screens/stack/stack_content_screen.dart';
 import 'package:memo_dex_prototyp/services/api/api_client.dart';
-import '../../services/local/file_handler.dart';
-import '../../services/local/upload_to_database.dart';
+import '../../../screens/bottom_navigation_screen.dart';
+import '../../../services/local/file_handler.dart';
+import '../../../services/local/write_to_device_storage.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-class EditStackForm extends StatefulWidget {
-
-  final dynamic stackId;
-  final dynamic stackname;
-  final dynamic color;
-
-  const EditStackForm({Key? key, this.stackId, this.stackname, this.color}) : super(key: key);
+class CreateStackForm extends StatefulWidget {
+  const CreateStackForm({Key? key}) : super(key: key);
 
   @override
-  State<EditStackForm> createState() => _EditStackFormState();
+  State<CreateStackForm> createState() => _CreateStackFormState();
 }
 
-class _EditStackFormState extends State<EditStackForm> {
+class _CreateStackFormState extends State<CreateStackForm> {
 
-  late Color newColor;
+  Color color = Colors.red;
   late TextEditingController _stackname;
   bool _isButtonEnabled = false;
   final storage = FlutterSecureStorage();
@@ -34,21 +29,12 @@ class _EditStackFormState extends State<EditStackForm> {
   @override
   void initState() {
     super.initState();
-    _stackname = TextEditingController(text: widget.stackname);
+    _stackname = TextEditingController();
     _stackname.addListener(updateButtonState);
-    newColor = Color(int.parse("0xFF${widget.color}"));
-    updateButtonState();
     _checkInternetConnection();
     subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result)
-    async {
+    {
       _checkInternetConnection();
-      ConnectivityResult connectivityResult = await Connectivity().checkConnectivity();
-      bool isConnected = (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi);
-      if(isConnected == true)
-      {
-        await UploadToDatabase(context).updateLocalCardContent(widget.stackId);
-      }else{}
-
     });
   }
 
@@ -60,34 +46,12 @@ class _EditStackFormState extends State<EditStackForm> {
     if(isConnected == false)
     {
       online = false;
+      print(online);
     } else
     {
       online = true;
+      print(online);
     }
-  }
-
-  Future<void> updateStack()
-  async {
-
-    if(online)
-    {
-      await ApiClient(context).stackApi.updateStack(_stackname.text, "${newColor.value.toRadixString(16).substring(2)}", 0, widget.stackId);
-    }else
-    {
-      await fileHandler.editItemById(
-          "allStacks", "stack_id", widget.stackId,
-          {"stackname":_stackname.text,"color":"${newColor.value.toRadixString(16).substring(2)}", "is_deleted": 0, "is_updated": 1});
-    }
-
-    storage.write(key: 'stackUpdated', value: "true");
-
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => StackContentScreen(stackId: widget.stackId),
-      ),
-    );
-
   }
 
   void updateButtonState() {
@@ -99,17 +63,18 @@ class _EditStackFormState extends State<EditStackForm> {
       }
     });
   }
+
   Widget buildColorPicker(){
     return Container(
       height: 330,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        color: Colors.white,
+        color: Colors.transparent,
       ),
       padding: EdgeInsets.all(10),
       child: BlockPicker(
-        pickerColor: newColor,
-        onColorChanged: (color) => setState(() => this.newColor = color),
+        pickerColor: color,
+        onColorChanged: (color) => setState(() => this.color = color),
       ),
     );
   }
@@ -123,28 +88,31 @@ class _EditStackFormState extends State<EditStackForm> {
               side: BorderSide(color: Colors.white, width: 2),
               borderRadius: BorderRadius.circular(10.0)),
           title: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                child: Text(
-                  "Select a Color",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 26,
-                    fontFamily: "Inter",
-                    fontWeight: FontWeight.w600,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.color_lens_rounded,
+                  size: 30.0,
+                  color: Colors.white,
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
+                  child: Text(
+                      "Select a Color",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 24,
+                        fontFamily: "Inter",
+                        fontWeight: FontWeight.w600,
+                      ),
                   ),
                 ),
-              ),
-            ],
-          ),
+              ],
+            ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-
               buildColorPicker(),
-
               Container(
                 padding: EdgeInsets.fromLTRB(0, 30, 0, 0),
                 child: TextButton(
@@ -177,8 +145,9 @@ class _EditStackFormState extends State<EditStackForm> {
 
   @override
   void dispose() {
-    _stackname.dispose();
+    _checkInternetConnection();
     subscription.cancel();
+    _stackname.dispose();
     super.dispose();
   }
 
@@ -191,10 +160,12 @@ class _EditStackFormState extends State<EditStackForm> {
           Padding(
             padding: const EdgeInsets.fromLTRB(0, 0, 0, 8),
             child: TextFormField(
+              maxLength: 100,
               controller: _stackname,
               decoration: InputDecoration(
                 labelText: "Stackname",
                 contentPadding: EdgeInsets.symmetric(vertical: 17, horizontal: 20),
+                counterText: "",
                 labelStyle: Theme.of(context).textTheme.labelMedium,
                 prefixIcon: Icon(
                   Icons.folder_outlined,
@@ -231,7 +202,7 @@ class _EditStackFormState extends State<EditStackForm> {
                     borderRadius: BorderRadius.all(Radius.circular(10)),
                   ),
                   side: BorderSide(
-                    color: Theme.of(context).colorScheme.tertiary,
+                    color: Theme.of(context).colorScheme.surface,
                     width: 2.0,
                   ),
                   elevation: 0,
@@ -244,22 +215,27 @@ class _EditStackFormState extends State<EditStackForm> {
                       children: [
                         Icon(
                           Icons.colorize,
-                          color: Colors.white,
+                          color: Theme.of(context).inputDecorationTheme.iconColor,
                           size: 30,
                         ),
                         SizedBox(width: 8),
+                        //TODO ggf noch in ThemeData auslagern
                         Text(
-                          "#${newColor.value.toRadixString(16).substring(2)}",
-                          style: Theme.of(context).textTheme.bodyMedium,
+                          "#${color.value.toRadixString(16).substring(2)}",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                         SizedBox(width: 8),
                       ],
                     ),
                     Container(
-                      width: 22,
-                      height: 22,
+                      width: 22, // Ändern Sie die Breite nach Bedarf
+                      height: 22, // Ändern Sie die Höhe nach Bedarf
                       decoration: BoxDecoration(
-                        color: newColor,
+                        color: color,
                         shape: BoxShape.circle,
                       ),
                     ),
@@ -273,42 +249,75 @@ class _EditStackFormState extends State<EditStackForm> {
             padding: const EdgeInsets.fromLTRB(0, 25, 0, 0),
             child: Container(
               child:
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: _isButtonEnabled
-                      ? Theme.of(context).colorScheme.primary
-                      : Theme.of(context).colorScheme.tertiary,
-                  minimumSize: Size(double.infinity, 55),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                  ),
-                  side: BorderSide(
-                    color: _isButtonEnabled
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: _isButtonEnabled
                         ? Theme.of(context).colorScheme.primary
-                        : Theme.of(context).colorScheme.tertiary, // Button-Rahmenfarbe ändern, wenn nicht aktiviert
-                    width: 2.0,
-                  ),
-                  elevation: 0,
-                ),
-                onPressed: _isButtonEnabled
-                    ? updateStack
-                    : null, // deaktivert den Button, wenn nicht aktiviert
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Update Stack",
-                      style: TextStyle(
-                        color: _isButtonEnabled
-                            ? Theme.of(context).scaffoldBackgroundColor
-                            : Theme.of(context).colorScheme.tertiary, // Textfarbe ändern, wenn nicht aktiviert
-                        fontSize: 20,
-                        fontWeight: FontWeight.w600,
-                      ),
+                        : Theme.of(context).colorScheme.tertiary,
+                    minimumSize: Size(double.infinity, 55),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
                     ),
-                  ],
+                    side: BorderSide(
+                      color: _isButtonEnabled
+                          ? Theme.of(context).colorScheme.primary
+                          : Theme.of(context).colorScheme.tertiary, // Button-Rahmenfarbe ändern, wenn nicht aktiviert
+                      width: 2.0,
+                    ),
+                    elevation: 0,
+                  ),
+                  onPressed: _isButtonEnabled
+                      ? () async
+                      {
+                        if(online == true)
+                        {
+                          await ApiClient(context).stackApi.createStack(_stackname.text, "${color.value.toRadixString(16).substring(2)}", 0);
+                        }else
+                        {
+                          await storage.read(key: 'user_id').then((String? value)
+                          async {
+                            if (value != null)
+                            {
+                              int userId;
+                              userId = int.tryParse(value) ?? 0;
+
+                              await WriteToDeviceStorage().addStack(
+                                  stackname: _stackname.text,
+                                  color: "${color.value.toRadixString(16).substring(2)}",
+                                  userId: userId,
+                                  fileName: "allStacks");
+
+                            } else {}
+                          });
+                        }
+                        //zeige die Snackbar an
+                        storage.write(key: 'stackCreated', value: "true");
+
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => BottomNavigationScreen(),
+                          ),
+                        );
+                      }
+                      : null, // deaktivert den Button, wenn nicht aktiviert
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Create Stack",
+                        style: TextStyle(
+                          color: _isButtonEnabled
+                              ? Theme.of(context).scaffoldBackgroundColor
+                              : Theme.of(context).colorScheme.tertiary, // Textfarbe ändern, wenn nicht aktiviert
+                          fontSize: 20,
+                          fontFamily: "Inter",
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
             ),
           ),// Container Login or Google Login
         ],

@@ -3,7 +3,7 @@ import 'package:memo_dex_prototyp/screens/welcome_screen.dart';
 import 'package:memo_dex_prototyp/widgets/header/top_navigation_bar.dart';
 
 import '../../widgets/text/headlines/headline_large.dart';
-import '../../widgets/forms/sign_up_form.dart';
+import '../../widgets/forms/user/sign_up_form.dart';
 
 class SignUpScreen extends StatelessWidget {
   const SignUpScreen({Key? key}) : super(key: key);

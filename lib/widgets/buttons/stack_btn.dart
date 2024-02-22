@@ -10,7 +10,10 @@ class StackBtn extends StatefulWidget {
   final String iconColor;
   final String stackName;
 
-  const StackBtn({Key? key, required this.iconColor, required this.stackName, this.stackId}) : super(key: key);
+  const StackBtn({Key? key,
+    required this.iconColor,
+    required this.stackName,
+    this.stackId}) : super(key: key);
 
   @override
   State<StackBtn> createState() => _StackBtnState();
@@ -45,7 +48,7 @@ class _StackBtnState extends State<StackBtn>
         onPressed: pushToStackContent,
         style: ElevatedButton.styleFrom(
           //backgroundColor: Color(int.parse("0xFF${widget.iconColor}")),
-          backgroundColor: Theme.of(context).colorScheme.secondary,
+          backgroundColor: Color(0xFF33363F),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(10)),
           ),
@@ -68,7 +71,11 @@ class _StackBtnState extends State<StackBtn>
                 child: Text(
                   Trim().trimText(widget.stackName, 10),
                   textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.bodyMedium,
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600
+                  ),
                 ),
               ),
             ),

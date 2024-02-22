@@ -111,14 +111,16 @@ class _SettingBtnState extends State<SettingBtn>
                   inactiveTrackColor: Theme.of(context).colorScheme.tertiary,
                   trackOutlineColor: MaterialStateProperty.resolveWith<Color?>((Set<MaterialState> states)
                   {
-                    if (states.contains(MaterialState.selected)) {
+                    if (states.contains(MaterialState.selected))
+                    {
                       return Theme.of(context).colorScheme.primary;
                     }
                     return Theme.of(context).colorScheme.tertiary;
                   }),
                   thumbColor: MaterialStateProperty.resolveWith<Color?>((Set<MaterialState> states)
                   {
-                    if (states.contains(MaterialState.disabled)) {
+                    if (states.contains(MaterialState.disabled))
+                    {
                       return Theme.of(context).colorScheme.tertiary;
                     }
                     return Theme.of(context).colorScheme.secondary;
@@ -126,7 +128,9 @@ class _SettingBtnState extends State<SettingBtn>
                   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   onChanged: (bool value)
                   {
-                    setState(() {
+                    setState(()
+                    {
+                      print(value);
                       _autocorrectDisabled = value;
                     });
                   }

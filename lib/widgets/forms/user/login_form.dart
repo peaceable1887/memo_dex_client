@@ -6,8 +6,8 @@ import 'package:memo_dex_prototyp/services/api/api_client.dart';
 import 'package:memo_dex_prototyp/utils/divide_painter.dart';
 import 'package:memo_dex_prototyp/widgets/dialogs/validation_message_box.dart';
 
-import '../../screens/welcome_screen.dart';
-import '../buttons/button.dart';
+import '../../../screens/welcome_screen.dart';
+import '../../buttons/button.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({Key? key}) : super(key: key);

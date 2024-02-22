@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:memo_dex_prototyp/screens/setting/account/email_setting_screen.dart';
-import 'package:memo_dex_prototyp/screens/setting/account/password_setting_screen.dart';
-import 'package:memo_dex_prototyp/screens/setting/configuration/language_setting_screen.dart';
-import 'package:memo_dex_prototyp/screens/setting/datamanagement/trash_setting_screen.dart';
+import 'package:memo_dex_prototyp/screens/settings/account/email_setting_screen.dart';
+import 'package:memo_dex_prototyp/screens/settings/account/password_setting_screen.dart';
+import 'package:memo_dex_prototyp/screens/settings/configuration/language_setting_screen.dart';
+import 'package:memo_dex_prototyp/screens/settings/datamanagement/trash_setting_screen.dart';
 import 'package:memo_dex_prototyp/services/api/api_client.dart';
-import 'package:memo_dex_prototyp/widgets/buttons/setting_btn.dart';
+import 'package:memo_dex_prototyp/widgets/buttons/settings/setting_btn.dart';
 import 'package:memo_dex_prototyp/widgets/dialogs/decision_message_box.dart';
 
 import '../widgets/buttons/button.dart';
+import '../widgets/buttons/settings/interface/switch_theme_btn.dart';
 import '../widgets/dialogs/custom_snackbar.dart';
 import '../widgets/text/headlines/headline_large.dart';
 import '../widgets/text/headlines/headline_medium.dart';
@@ -175,11 +176,9 @@ class _SettingScreenState extends State<SettingScreen> {
                         pushToContent: LanguageSettingScreen(),
                         showSwitch: true,
                       ),
-                      SettingBtn(
-                        buttonText: "Dark Mode",
+                      SwitchBtn(
+                        buttonText: "Theme Mode",
                         buttonBorderRadius: [0,0,10,10],
-                        pushToContent: BottomNavigationScreen(),
-                        showSwitch: true,
                       ),
                       SizedBox(height: 15,),
                     ],

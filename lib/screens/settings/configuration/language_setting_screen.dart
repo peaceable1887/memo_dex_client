@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
 import '../../../widgets/text/headlines/headline_large.dart';
 import '../../../widgets/header/top_navigation_bar.dart';
 import '../../bottom_navigation_screen.dart';
-import '../../setting_screen.dart';
 
 class LanguageSettingScreen extends StatefulWidget
 {
@@ -15,9 +16,11 @@ class LanguageSettingScreen extends StatefulWidget
 
 class _LanguageSettingScreenState extends State<LanguageSettingScreen>
 {
+
   @override
   Widget build(BuildContext context)
   {
+    bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Column(
@@ -57,6 +60,16 @@ class _LanguageSettingScreenState extends State<LanguageSettingScreen>
                 ],
               ),
             ),
+          ),
+          Switch(
+            value: isDarkMode,
+            onChanged: (value)
+            {
+              setState(()
+              {
+                Get.changeThemeMode(value ? ThemeMode.dark : ThemeMode.light);
+              });
+            },
           ),
         ],
       ),

@@ -23,7 +23,7 @@ class WelcomeScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Image(
-                        image: AssetImage("assets/images/logo_alternative.png"),
+                        image: AssetImage("assets/images/logo_dark_theme.png"),
                         ),
                     ],
                   ),

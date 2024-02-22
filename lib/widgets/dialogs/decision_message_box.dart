@@ -22,6 +22,7 @@ class DecisionMessageBox extends StatelessWidget
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
       ),
+      elevation: 0,
       child: Container(
         width: 200.0,
         height: 300.0,
