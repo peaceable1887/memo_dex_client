@@ -70,12 +70,7 @@ class _TrashStackBtnState extends State<TrashStackBtn>
                         child: Text(
                           Trim().trimText(widget.stackName, 10),
                           textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontFamily: "Inter",
-                            fontWeight: FontWeight.w700,
-                          ),
+                          style: Theme.of(context).textTheme.labelMedium,
                         ),
                       ),
                     ),

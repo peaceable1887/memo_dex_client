@@ -114,10 +114,10 @@ class _CreateCardFormState extends State<CreateCardForm>
                 labelText: "Question",
                 contentPadding: EdgeInsets.symmetric(vertical: 17, horizontal: 20),
                 counterText: "",
-                labelStyle: Theme.of(context).textTheme.labelMedium,
+                labelStyle: Theme.of(context).inputDecorationTheme.labelStyle,
                 prefixIcon: Icon(
                   Icons.question_mark_rounded,
-                  color: Theme.of(context).inputDecorationTheme.iconColor,
+                  color: Theme.of(context).inputDecorationTheme.prefixIconColor,
                   size: 28,),
                 suffixIcon: GestureDetector(
                   onTap: () {
@@ -127,15 +127,15 @@ class _CreateCardFormState extends State<CreateCardForm>
                   },
                   child: Icon(
                     _question.text.isNotEmpty ? Icons.cancel : null,
-                    color: Theme.of(context).colorScheme.tertiary,
+                    color: Theme.of(context).inputDecorationTheme.suffixIconColor,
                   ),
                 ),// Icon hinzufügen
                 enabledBorder: Theme.of(context).inputDecorationTheme.enabledBorder,
                 focusedBorder: Theme.of(context).inputDecorationTheme.focusedBorder,
                 filled: true,
-                fillColor: Theme.of(context).colorScheme.secondary,
+                fillColor: Theme.of(context).inputDecorationTheme.fillColor,
               ),
-              style: Theme.of(context).textTheme.bodyMedium,
+              style: Theme.of(context).inputDecorationTheme.floatingLabelStyle,
             ),
           ),
           Padding(
@@ -149,10 +149,10 @@ class _CreateCardFormState extends State<CreateCardForm>
                 labelText: "Answer",
                 contentPadding: EdgeInsets.symmetric(vertical: 17, horizontal: 20),
                 counterText: "",
-                labelStyle: Theme.of(context).textTheme.labelMedium,
+                labelStyle: Theme.of(context).inputDecorationTheme.labelStyle,
                 prefixIcon: Icon(
                   Icons.question_answer_outlined,
-                  color: Theme.of(context).inputDecorationTheme.iconColor,
+                  color: Theme.of(context).inputDecorationTheme.prefixIconColor,
                   size: 30,),
                 suffixIcon: GestureDetector(
                   onTap: () {
@@ -162,15 +162,15 @@ class _CreateCardFormState extends State<CreateCardForm>
                   },
                   child: Icon(
                     _answer.text.isNotEmpty ? Icons.cancel : null,
-                    color: Theme.of(context).colorScheme.tertiary,
+                    color: Theme.of(context).inputDecorationTheme.suffixIconColor,
                   ),
                 ),// Icon hinzufügen
                 enabledBorder: Theme.of(context).inputDecorationTheme.enabledBorder,
                 focusedBorder: Theme.of(context).inputDecorationTheme.focusedBorder,
                 filled: true,
-                fillColor: Theme.of(context).colorScheme.secondary,
+                fillColor: Theme.of(context).inputDecorationTheme.fillColor,
               ),
-              style: Theme.of(context).textTheme.bodyMedium,
+              style: Theme.of(context).inputDecorationTheme.floatingLabelStyle,
             ),
           ),
           Padding(
@@ -226,7 +226,7 @@ class _CreateCardFormState extends State<CreateCardForm>
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "Add Card",
+                    "Create Card",
                     style: TextStyle(
                       color:  _isButtonEnabled
                           ? Theme.of(context).scaffoldBackgroundColor

@@ -236,7 +236,7 @@ class _StatisticScreenState extends State<StatisticScreen>
                 InkWell(
                   onTap: () {
                     showMenu(
-                      color: Theme.of(context).colorScheme.surfaceVariant,
+                      color: Theme.of(context).popupMenuTheme.color,
                       context: context,
                       position: RelativeRect.fromLTRB(1, 220, 0, 0),
                       shape: RoundedRectangleBorder(
@@ -256,9 +256,10 @@ class _StatisticScreenState extends State<StatisticScreen>
                               Text(
                                 "Stackname",
                                 style: TextStyle(
+                                  fontSize: 14,
                                   color: selectedOption == "STACKNAME"
                                       ? Theme.of(context).colorScheme.primary
-                                      : Theme.of(context).colorScheme.surface,
+                                      : Theme.of(context).colorScheme.onSurface,
                                   fontWeight: selectedOption == "STACKNAME"
                                       ?  FontWeight.w600
                                       :  FontWeight.w400,
@@ -269,7 +270,7 @@ class _StatisticScreenState extends State<StatisticScreen>
                                 size: 20.0,
                                 color: selectedOption == "STACKNAME"
                                     ? Theme.of(context).colorScheme.primary
-                                    : Theme.of(context).colorScheme.surface,
+                                    : Theme.of(context).colorScheme.onSurface,
                               ),
                             ],
                           ),
@@ -282,9 +283,10 @@ class _StatisticScreenState extends State<StatisticScreen>
                               Text(
                                 "Creation Date",
                                 style: TextStyle(
+                                  fontSize: 14,
                                   color: selectedOption == "CREATION DATE"
                                       ? Theme.of(context).colorScheme.primary
-                                      : Theme.of(context).colorScheme.surface,
+                                      : Theme.of(context).colorScheme.onSurface,
                                   fontWeight: selectedOption == "CREATION DATE"
                                       ?  FontWeight.w600
                                       :  FontWeight.w400,
@@ -295,7 +297,7 @@ class _StatisticScreenState extends State<StatisticScreen>
                                 size: 20.0,
                                 color: selectedOption == "CREATION DATE"
                                     ? Theme.of(context).colorScheme.primary
-                                    : Theme.of(context).colorScheme.surface,
+                                    : Theme.of(context).colorScheme.onSurface,
                               ),
                             ],
                           ),
@@ -315,6 +317,7 @@ class _StatisticScreenState extends State<StatisticScreen>
                                 Text(
                                   "Reset",
                                   style: TextStyle(
+                                    fontSize: 14,
                                     color: Theme.of(context).colorScheme.tertiary,
                                     fontFamily: "Inter",
                                     fontWeight: FontWeight.w400,

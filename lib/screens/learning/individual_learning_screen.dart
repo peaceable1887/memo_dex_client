@@ -274,7 +274,7 @@ class _CardLearningScreenState extends State<IndividualLearningScreen> with Tick
                     borderRadius: BorderRadius.circular(8),
                     child: LinearProgressIndicator(
                       minHeight: 10,
-                      backgroundColor: Theme.of(context).colorScheme.surface,
+                      backgroundColor: Colors.white,
                       color: Theme.of(context).colorScheme.primary,
                       value: (() {
                         double progressValue = (activeIndex + 1) / indexCards.length;

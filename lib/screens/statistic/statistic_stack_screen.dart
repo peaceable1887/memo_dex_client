@@ -463,7 +463,7 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
 
     final List<StackStatisticData> statisticData = [
       StackStatisticData("Noticed", widget.noticed, originalColor),
-      StackStatisticData("Noticed", notNoticed, Colors.white),
+      StackStatisticData("Noticed", notNoticed, darkerColor),
     ];
 
     return statisticData;
@@ -833,7 +833,7 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
                                     children: [
                                       Text(
                                         '${fastestRun}',
-                                        style: Theme.of(context).textTheme.bodyMedium,
+                                        style: Theme.of(context).textTheme.labelMedium,
                                       )
                                     ],
                                   ),
@@ -893,7 +893,7 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
                                     children: [
                                       Text(
                                         '${latestRun}',
-                                        style: Theme.of(context).textTheme.bodyMedium,
+                                        style: Theme.of(context).textTheme.labelMedium,
                                       )
                                     ],
                                   ),
@@ -953,7 +953,7 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
                                     children: [
                                       Text(
                                         averageTime,
-                                        style: Theme.of(context).textTheme.bodyMedium,
+                                        style: Theme.of(context).textTheme.labelMedium,
                                       )
                                     ],
                                   ),

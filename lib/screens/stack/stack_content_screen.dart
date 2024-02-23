@@ -505,7 +505,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
                 InkWell(
                   onTap: () {
                     showMenu(
-                      color: Theme.of(context).colorScheme.surfaceVariant,
+                      color: Theme.of(context).popupMenuTheme.color,
                       context: context,
                       position: RelativeRect.fromLTRB(1, 445, 0, 0),
                       shape: RoundedRectangleBorder(
@@ -525,9 +525,10 @@ class _StackContentScreenState extends State<StackContentScreen> {
                               Text(
                                 "Question",
                                 style: TextStyle(
+                                  fontSize: 14,
                                   color: selectedOption == "QUESTION"
                                       ? Theme.of(context).colorScheme.primary
-                                      : Theme.of(context).colorScheme.surface,
+                                      : Theme.of(context).colorScheme.onSurface,
                                   fontWeight: selectedOption == "QUESTION"
                                       ?  FontWeight.w600
                                       :  FontWeight.w400,
@@ -538,7 +539,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
                                 size: 20.0,
                                 color: selectedOption == "QUESTION"
                                     ? Theme.of(context).colorScheme.primary
-                                    : Theme.of(context).colorScheme.surface,
+                                    : Theme.of(context).colorScheme.onSurface,
                               ),
                             ],
                           ),
@@ -557,9 +558,10 @@ class _StackContentScreenState extends State<StackContentScreen> {
                               Text(
                                 "Creation Date",
                                 style: TextStyle(
+                                  fontSize: 14,
                                   color: selectedOption == "CREATION DATE"
                                       ? Theme.of(context).colorScheme.primary
-                                      : Theme.of(context).colorScheme.surface,
+                                      : Theme.of(context).colorScheme.onSurface,
                                   fontWeight: selectedOption == "CREATION DATE"
                                       ?  FontWeight.w600
                                       :  FontWeight.w400,
@@ -570,7 +572,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
                                 size: 20.0,
                                 color: selectedOption == "CREATION DATE"
                                     ? Theme.of(context).colorScheme.primary
-                                    : Theme.of(context).colorScheme.surface,
+                                    : Theme.of(context).colorScheme.onSurface,
                               ),
                             ],
                           ),
@@ -589,9 +591,10 @@ class _StackContentScreenState extends State<StackContentScreen> {
                               Text(
                                 "Noticed",
                                 style: TextStyle(
+                                  fontSize: 14,
                                   color: selectedOption == "NOTICED"
                                       ? Theme.of(context).colorScheme.primary
-                                      : Theme.of(context).colorScheme.surface,
+                                      : Theme.of(context).colorScheme.onSurface,
                                   fontWeight: selectedOption == "NOTICED"
                                       ?  FontWeight.w600
                                       :  FontWeight.w400,
@@ -602,7 +605,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
                                 size: 20.0,
                                 color: selectedOption == "NOTICED"
                                     ? Theme.of(context).colorScheme.primary
-                                    : Theme.of(context).colorScheme.surface,
+                                    : Theme.of(context).colorScheme.onSurface,
                               ),
                             ],
                           ),
@@ -622,6 +625,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
                                 Text(
                                   "Reset",
                                   style: TextStyle(
+                                    fontSize: 14,
                                     color: Theme.of(context).colorScheme.tertiary,
                                     fontFamily: "Inter",
                                     fontWeight: FontWeight.w400,

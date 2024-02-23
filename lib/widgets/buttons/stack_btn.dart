@@ -38,7 +38,7 @@ class _StackBtnState extends State<StackBtn>
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
-            color: Color.fromRGBO(0, 0, 0, 0.15),
+            color: Theme.of(context).colorScheme.shadow.withOpacity(0.15),
             blurRadius: 15.0,
             offset: Offset(4, 10),
           ),
@@ -48,7 +48,7 @@ class _StackBtnState extends State<StackBtn>
         onPressed: pushToStackContent,
         style: ElevatedButton.styleFrom(
           //backgroundColor: Color(int.parse("0xFF${widget.iconColor}")),
-          backgroundColor: Color(0xFF33363F),
+          backgroundColor: Theme.of(context).colorScheme.secondary,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(10)),
           ),
@@ -71,11 +71,7 @@ class _StackBtnState extends State<StackBtn>
                 child: Text(
                   Trim().trimText(widget.stackName, 10),
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600
-                  ),
+                  style: Theme.of(context).textTheme.labelMedium,
                 ),
               ),
             ),

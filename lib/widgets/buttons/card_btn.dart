@@ -75,7 +75,7 @@ class _CardBtnState extends State<CardBtn> {
         decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(
-              color: Color.fromRGBO(0, 0, 0, 0.15),
+              color: Theme.of(context).colorScheme.shadow.withOpacity(0.15),
               blurRadius: 15.0,
               offset: Offset(4, 10),
             ),
@@ -110,7 +110,7 @@ class _CardBtnState extends State<CardBtn> {
                       padding: const EdgeInsets.fromLTRB(10,0,0,0),
                       child: Text(
                         trimText(widget.btnText, 25),
-                        style: Theme.of(context).textTheme.bodyMedium,
+                        style: Theme.of(context).textTheme.labelMedium,
                       ),
                     ),
                   ],

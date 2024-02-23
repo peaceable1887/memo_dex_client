@@ -216,6 +216,7 @@ class _TrashSettingScreenState extends State<TrashSettingScreen>
                                 Text(
                                   "Undo All",
                                   style: TextStyle(
+                                    fontSize: 14,
                                     color: Colors.green,
                                     fontWeight: FontWeight.w600,
                                   ),
@@ -242,6 +243,7 @@ class _TrashSettingScreenState extends State<TrashSettingScreen>
                                 Text(
                                   "Delete All",
                                   style: TextStyle(
+                                    fontSize: 14,
                                     color: Colors.red,
                                     fontWeight: FontWeight.w600,
                                   ),

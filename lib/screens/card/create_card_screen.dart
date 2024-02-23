@@ -52,7 +52,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
           Padding(
             padding: const EdgeInsets.fromLTRB(0,10,0,0),
             child: const HeadlineLarge(
-                text: "Add Card"
+                text: "Create Card"
             ),
           ),
           CreateCardForm(stackId: widget.stackId ,stackname: widget.stackname)

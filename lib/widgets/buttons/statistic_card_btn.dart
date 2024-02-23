@@ -72,7 +72,7 @@ class _StatisticCardState extends State<StatisticCard> {
 
     final List<StackStatisticData> stackData = [
       StackStatisticData("Noticed", widget.noticed, originalColor),
-      StackStatisticData("Noticed", notNoticed, Colors.white),
+      StackStatisticData("Noticed", notNoticed, darkerColor),
     ];
 
     return stackData;
@@ -96,7 +96,7 @@ class _StatisticCardState extends State<StatisticCard> {
           color: Theme.of(context).colorScheme.secondary, /*Color(int.parse("0xFF${widget.color}")),*/
           boxShadow: [
             BoxShadow(
-              color: Color.fromRGBO(0, 0, 0, 0.15),
+              color: Theme.of(context).colorScheme.shadow.withOpacity(0.15),
               blurRadius: 15.0,
               offset: Offset(4, 10),
             ),
@@ -142,7 +142,7 @@ class _StatisticCardState extends State<StatisticCard> {
                               padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
                               child: Text(
                                 Trim().trimText(widget.stackName, 14),
-                                style: Theme.of(context).textTheme.headlineMedium,
+                                style: Theme.of(context).textTheme.labelLarge,
                               ),
                             ),
                           ],
@@ -155,7 +155,7 @@ class _StatisticCardState extends State<StatisticCard> {
                           children: [
                             Text(
                               "Click to see more details",
-                              style: Theme.of(context).textTheme.bodySmall,
+                              style: Theme.of(context).textTheme.labelSmall,
                             ),
                             SizedBox(width: 2,),
                             Icon(
@@ -183,7 +183,7 @@ class _StatisticCardState extends State<StatisticCard> {
                                 Text(
                                   '${progressValue.toInt()}',
                                   style: TextStyle(
-                                    color: Theme.of(context).colorScheme.surface,
+                                    color: Theme.of(context).colorScheme.onSurface,
                                     fontSize: 22,
                                     fontWeight: FontWeight.w700,
                                   ),
@@ -193,7 +193,7 @@ class _StatisticCardState extends State<StatisticCard> {
                                   child: Text(
                                     '%',
                                     style: TextStyle(
-                                      color: Theme.of(context).colorScheme.surface,
+                                      color: Theme.of(context).colorScheme.onSurface,
                                       fontSize: 12,
                                       fontWeight: FontWeight.w500,
                                     ),

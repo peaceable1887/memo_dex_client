@@ -41,7 +41,7 @@ class _MyAppState extends State<MyApp>
       title: 'MemoDex App',
       theme: Themes.lightTheme,
       darkTheme: Themes.darkTheme,
-      themeMode: ThemeMode.system,
+      themeMode: ThemeMode.dark,
       home: const WelcomeScreen(),
     );
   }

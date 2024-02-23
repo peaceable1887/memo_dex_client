@@ -46,7 +46,7 @@ class CustomSearchDelegate extends SearchDelegate
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: Theme.of(context).scaffoldBackgroundColor,
-        hintStyle: Theme.of(context).textTheme.labelSmall,
+        hintStyle: Theme.of(context).textTheme.bodySmall,
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10.0),
           borderSide: BorderSide.none,

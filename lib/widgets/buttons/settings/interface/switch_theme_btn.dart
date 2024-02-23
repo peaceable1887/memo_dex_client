@@ -76,7 +76,7 @@ class _SwitchBtnState extends State<SwitchBtn>
         ),
         boxShadow: [
           BoxShadow(
-            color: Color.fromRGBO(0, 0, 0, 0.15),
+            color: Theme.of(context).colorScheme.shadow.withOpacity(0.15),
             blurRadius: 15.0,
             offset: Offset(4, 10),
           ),
@@ -89,7 +89,7 @@ class _SwitchBtnState extends State<SwitchBtn>
             children: [
               Text(
                 widget.buttonText,
-                style: Theme.of(context).textTheme.bodyMedium,
+                style: Theme.of(context).textTheme.labelMedium,
               ),
               Container(
                 height: 5,

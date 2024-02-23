@@ -83,10 +83,11 @@ class _CreateStackFormState extends State<CreateStackForm> {
     showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          backgroundColor: Color(0xFF00324E),
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           shape: RoundedRectangleBorder(
-              side: BorderSide(color: Colors.white, width: 2),
+              side: BorderSide(color: Theme.of(context).colorScheme.tertiary, width: 2),
               borderRadius: BorderRadius.circular(10.0)),
+          elevation: 0,
           title: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -100,7 +101,7 @@ class _CreateStackFormState extends State<CreateStackForm> {
                   child: Text(
                       "Select a Color",
                       style: TextStyle(
-                        color: Colors.white,
+                        color: Theme.of(context).colorScheme.surface,
                         fontSize: 24,
                         fontFamily: "Inter",
                         fontWeight: FontWeight.w600,
@@ -128,7 +129,7 @@ class _CreateStackFormState extends State<CreateStackForm> {
                   child: Text(
                     "Select",
                     style: TextStyle(
-                      color: Color(0xFF00324E),
+                      color: Theme.of(context).scaffoldBackgroundColor,
                       fontSize: 20,
                       fontFamily: "Inter",
                       fontWeight: FontWeight.w600,
@@ -166,10 +167,10 @@ class _CreateStackFormState extends State<CreateStackForm> {
                 labelText: "Stackname",
                 contentPadding: EdgeInsets.symmetric(vertical: 17, horizontal: 20),
                 counterText: "",
-                labelStyle: Theme.of(context).textTheme.labelMedium,
+                labelStyle: Theme.of(context).inputDecorationTheme.labelStyle,
                 prefixIcon: Icon(
                   Icons.folder_outlined,
-                  color: Theme.of(context).inputDecorationTheme.iconColor,
+                  color: Theme.of(context).inputDecorationTheme.prefixIconColor,
                   size: 30,),
                 suffixIcon: GestureDetector(
                   onTap: () {
@@ -179,15 +180,15 @@ class _CreateStackFormState extends State<CreateStackForm> {
                   },
                   child: Icon(
                     _stackname.text.isNotEmpty ? Icons.cancel : null,
-                    color: Theme.of(context).colorScheme.tertiary,
+                    color: Theme.of(context).inputDecorationTheme.suffixIconColor,
                   ),
                 ),// Icon hinzufügen
                 enabledBorder: Theme.of(context).inputDecorationTheme.enabledBorder,
                 focusedBorder: Theme.of(context).inputDecorationTheme.focusedBorder,
                 filled: true,
-                fillColor: Theme.of(context).colorScheme.secondary,
+                fillColor: Theme.of(context).inputDecorationTheme.fillColor,
               ),
-              style: Theme.of(context).textTheme.bodyMedium,
+              style: Theme.of(context).inputDecorationTheme.floatingLabelStyle,
             ),
           ),
           Padding(
@@ -201,10 +202,7 @@ class _CreateStackFormState extends State<CreateStackForm> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(10)),
                   ),
-                  side: BorderSide(
-                    color: Theme.of(context).colorScheme.surface,
-                    width: 2.0,
-                  ),
+                  side: Theme.of(context).inputDecorationTheme.activeIndicatorBorder,
                   elevation: 0,
                 ),
                 onPressed: () => pickColor(context),
@@ -215,18 +213,14 @@ class _CreateStackFormState extends State<CreateStackForm> {
                       children: [
                         Icon(
                           Icons.colorize,
-                          color: Theme.of(context).inputDecorationTheme.iconColor,
+                          color: Theme.of(context).inputDecorationTheme.prefixIconColor,
                           size: 30,
                         ),
                         SizedBox(width: 8),
                         //TODO ggf noch in ThemeData auslagern
                         Text(
                           "#${color.value.toRadixString(16).substring(2)}",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
+                          style: Theme.of(context).textTheme.labelMedium,
                         ),
                         SizedBox(width: 8),
                       ],
@@ -244,7 +238,6 @@ class _CreateStackFormState extends State<CreateStackForm> {
               ),
             ),
           ),
-// Container Login or Google Login
           Padding(
             padding: const EdgeInsets.fromLTRB(0, 25, 0, 0),
             child: Container(

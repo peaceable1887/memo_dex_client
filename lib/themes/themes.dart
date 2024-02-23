@@ -3,49 +3,54 @@ class Themes
 {
   static final lightTheme = ThemeData(
       brightness: Brightness.light,
-      scaffoldBackgroundColor: Color(0xFFDDDDDD),
+      scaffoldBackgroundColor: Color(0xFF0083CD),
       //scaffoldBackgroundColor: Color(0xFF00324E),
       fontFamily: "Inter",
       textTheme: const TextTheme(
         headlineLarge: TextStyle(
-            color: Color(0xFF15171B),
+            color: Colors.white,
             fontSize: 36,
             fontWeight: FontWeight.w600
         ),
         headlineMedium: TextStyle(
-            color: Color(0xFF15171B),
+            color: Colors.white,
             fontSize: 20,
             fontWeight: FontWeight.w600
         ),
         headlineSmall: TextStyle(
-          color: Color(0xFF15171B),
+          color: Colors.white,
           fontSize: 17,
           fontWeight: FontWeight.w600,
         ),
         bodyLarge: TextStyle(
-          color: Color(0xFF15171B),
+          color: Colors.white,
           fontSize: 24,
           fontFamily: "Inter",
           fontWeight: FontWeight.w600,
         ),
         bodyMedium: TextStyle(
-            color: Color(0xFF15171B),
-            fontSize: 16,
-            fontWeight: FontWeight.w600
+          color: Colors.white,
+          fontSize: 16,
+          fontWeight: FontWeight.w600
         ),
         bodySmall: TextStyle(
-          color: Color(0xFF15171B),
+          color: Colors.white,
           fontSize: 12,
           fontWeight: FontWeight.w400,
         ),
+        labelLarge: TextStyle(
+            color: Color(0xFF15171B),
+            fontSize: 20,
+            fontWeight: FontWeight.w600
+        ),
         labelMedium: TextStyle(
-          color: Color(0xFF8597A1),
+          color: Color(0xFF15171B),
           fontSize: 16,
           fontWeight: FontWeight.w600,
         ),
         labelSmall: TextStyle(
-          color: Color(0xFF8597A1),
-          fontSize: 16,
+          color: Color(0xFF15171B),
+          fontSize: 12,
           fontWeight: FontWeight.w400,
         ),
         titleSmall: TextStyle(
@@ -55,6 +60,16 @@ class Themes
         ),
       ),
       inputDecorationTheme: InputDecorationTheme(
+        labelStyle: TextStyle(
+          color: Color(0xFF8597A1),
+          fontSize: 16,
+          fontWeight: FontWeight.w600,
+        ),
+        floatingLabelStyle: TextStyle(
+            color: Color(0xFF15171B),
+            fontSize: 16,
+            fontWeight: FontWeight.w600
+        ),
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(
             color: Color(0xFF8597A1),
@@ -69,7 +84,20 @@ class Themes
           ),
           borderRadius: BorderRadius.all(Radius.circular(10.0)),
         ),
-        iconColor: Color(0xFF15171B),
+        activeIndicatorBorder: BorderSide(
+          color: Color(0xFF15171B),
+          width: 2.0,
+        ),
+        iconColor: Colors.white,
+        prefixIconColor: Color(0xFF15171B),
+        suffixIconColor: Color(0xFF8597A1),
+        fillColor: Colors.white,
+      ),
+      popupMenuTheme: PopupMenuThemeData(
+        color: Colors.white,
+      ),
+      iconTheme: IconThemeData(
+        color: Colors.white,
       ),
       switchTheme: SwitchThemeData(
         thumbColor: MaterialStateProperty.resolveWith<Color?>((Set<MaterialState> states)
@@ -93,11 +121,11 @@ class Themes
       colorScheme: const ColorScheme.light(
         primary: Color(0xFFE59113),
         secondary: Colors.white,
-        tertiary: Color(0xFF33363F),
-        surface: Color(0xFF15171B),
+        tertiary: Color(0xFF8597A1),
+        surface: Colors.white,
         surfaceVariant: Colors.white,
-        onSurface: Colors.black,
-        shadow: Color(0xFF15171B),
+        onSurface: Color(0xFF15171B),
+        shadow:  Color(0xFF0083CD),
         errorContainer: Colors.red,
       )
   );
@@ -139,14 +167,19 @@ class Themes
            fontSize: 12,
            fontWeight: FontWeight.w400,
          ),
+         labelLarge: TextStyle(
+             color: Colors.white,
+             fontSize: 20,
+             fontWeight: FontWeight.w600
+         ),
          labelMedium: TextStyle(
-           color: Color(0xFF8597A1),
+           color: Colors.white,
            fontSize: 16,
            fontWeight: FontWeight.w600,
          ),
          labelSmall: TextStyle(
-           color: Color(0xFF8597A1),
-           fontSize: 16,
+           color: Colors.white,
+           fontSize: 12,
            fontWeight: FontWeight.w400,
          ),
          titleSmall: TextStyle(
@@ -156,6 +189,16 @@ class Themes
          ),
        ),
        inputDecorationTheme: InputDecorationTheme(
+         labelStyle: TextStyle(
+           color: Color(0xFF8597A1),
+           fontSize: 16,
+           fontWeight: FontWeight.w600,
+         ),
+         floatingLabelStyle: TextStyle(
+             color: Colors.white,
+             fontSize: 16,
+             fontWeight: FontWeight.w600
+         ),
          enabledBorder: OutlineInputBorder(
            borderSide: BorderSide(
              color: Color(0xFF8597A1),
@@ -170,7 +213,14 @@ class Themes
            ),
            borderRadius: BorderRadius.all(Radius.circular(10.0)),
          ),
+         activeIndicatorBorder: BorderSide(
+           color: Colors.white,
+           width: 2.0,
+         ),
+         prefixIconColor: Colors.white,
+         suffixIconColor: Color(0xFF8597A1),
          iconColor: Colors.white,
+         fillColor: Color(0xFF33363F),
        ),
        switchTheme: SwitchThemeData(
          thumbColor: MaterialStateProperty.resolveWith<Color?>((Set<MaterialState> states)
@@ -191,13 +241,16 @@ class Themes
 
          }),
        ),
+       popupMenuTheme: PopupMenuThemeData(
+         color: Color(0xFF282F45),
+       ),
        colorScheme: const ColorScheme.dark(
          primary: Color(0xFFE59113),
          secondary: Color(0xFF33363F),
          tertiary: Color(0xFF8597A1),
          surface: Colors.white,
          surfaceVariant: Color(0xFF282F45),
-         onSurface: Colors.black,
+         onSurface: Colors.white,
          shadow: Color(0xFF15171B),
          errorContainer: Colors.red,
        )

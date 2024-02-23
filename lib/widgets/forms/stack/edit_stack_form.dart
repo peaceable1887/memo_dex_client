@@ -104,7 +104,7 @@ class _EditStackFormState extends State<EditStackForm> {
       height: 330,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        color: Colors.white,
+        color: Theme.of(context).scaffoldBackgroundColor,
       ),
       padding: EdgeInsets.all(10),
       child: BlockPicker(
@@ -118,20 +118,26 @@ class _EditStackFormState extends State<EditStackForm> {
     showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          backgroundColor: Color(0xFF00324E),
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           shape: RoundedRectangleBorder(
-              side: BorderSide(color: Colors.white, width: 2),
+              side: BorderSide(color: Theme.of(context).colorScheme.tertiary, width: 2),
               borderRadius: BorderRadius.circular(10.0)),
+          elevation: 0,
           title: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Icon(
+                Icons.color_lens_rounded,
+                size: 30.0,
+                color: Theme.of(context).colorScheme.surface,
+              ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
                 child: Text(
                   "Select a Color",
                   style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 26,
+                    color: Theme.of(context).colorScheme.surface,
+                    fontSize: 24,
                     fontFamily: "Inter",
                     fontWeight: FontWeight.w600,
                   ),
@@ -142,9 +148,7 @@ class _EditStackFormState extends State<EditStackForm> {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-
               buildColorPicker(),
-
               Container(
                 padding: EdgeInsets.fromLTRB(0, 30, 0, 0),
                 child: TextButton(
@@ -160,7 +164,7 @@ class _EditStackFormState extends State<EditStackForm> {
                   child: Text(
                     "Select",
                     style: TextStyle(
-                      color: Color(0xFF00324E),
+                      color: Theme.of(context).scaffoldBackgroundColor,
                       fontSize: 20,
                       fontFamily: "Inter",
                       fontWeight: FontWeight.w600,
@@ -195,10 +199,10 @@ class _EditStackFormState extends State<EditStackForm> {
               decoration: InputDecoration(
                 labelText: "Stackname",
                 contentPadding: EdgeInsets.symmetric(vertical: 17, horizontal: 20),
-                labelStyle: Theme.of(context).textTheme.labelMedium,
+                labelStyle: Theme.of(context).inputDecorationTheme.labelStyle,
                 prefixIcon: Icon(
                   Icons.folder_outlined,
-                  color: Theme.of(context).inputDecorationTheme.iconColor,
+                  color: Theme.of(context).inputDecorationTheme.prefixIconColor,
                   size: 30,),
                 suffixIcon: GestureDetector(
                   onTap: () {
@@ -208,15 +212,15 @@ class _EditStackFormState extends State<EditStackForm> {
                   },
                   child: Icon(
                     _stackname.text.isNotEmpty ? Icons.cancel : null,
-                    color: Theme.of(context).colorScheme.tertiary,
+                    color: Theme.of(context).inputDecorationTheme.suffixIconColor,
                   ),
                 ),// Icon hinzufügen
                 enabledBorder: Theme.of(context).inputDecorationTheme.enabledBorder,
                 focusedBorder: Theme.of(context).inputDecorationTheme.focusedBorder,
                 filled: true,
-                fillColor: Theme.of(context).colorScheme.secondary,
+                fillColor: Theme.of(context).inputDecorationTheme.fillColor,
               ),
-              style: Theme.of(context).textTheme.bodyMedium,
+              style: Theme.of(context).inputDecorationTheme.floatingLabelStyle,
             ),
           ),
           Padding(
@@ -244,13 +248,13 @@ class _EditStackFormState extends State<EditStackForm> {
                       children: [
                         Icon(
                           Icons.colorize,
-                          color: Colors.white,
+                          color: Theme.of(context).inputDecorationTheme.prefixIconColor,
                           size: 30,
                         ),
                         SizedBox(width: 8),
                         Text(
                           "#${newColor.value.toRadixString(16).substring(2)}",
-                          style: Theme.of(context).textTheme.bodyMedium,
+                          style: Theme.of(context).textTheme.labelMedium,
                         ),
                         SizedBox(width: 8),
                       ],

@@ -167,7 +167,7 @@ class _EditCardScreenState extends State<EditCardScreen> {
       if (states.contains(MaterialState.selected)) {
         return const Icon(Icons.check, color: Color(0xFFE59113));
       }
-      return const Icon(Icons.close);
+      return const Icon(Icons.close, color: Color(0xFF8597A1));
     },
   );
 
@@ -246,10 +246,10 @@ class _EditCardScreenState extends State<EditCardScreen> {
                         labelText: "Question",
                         contentPadding: EdgeInsets.symmetric(vertical: 17, horizontal: 20),
                         counterText: "",
-                        labelStyle: Theme.of(context).textTheme.labelMedium,
+                        labelStyle: Theme.of(context).inputDecorationTheme.labelStyle,
                         prefixIcon: Icon(
                           Icons.question_mark_rounded,
-                          color: Theme.of(context).inputDecorationTheme.iconColor,
+                          color: Theme.of(context).inputDecorationTheme.prefixIconColor,
                           size: 28,),
                         suffixIcon: GestureDetector(
                           onTap: () {
@@ -259,15 +259,15 @@ class _EditCardScreenState extends State<EditCardScreen> {
                           },
                           child: Icon(
                             _question.text.isNotEmpty ? Icons.cancel : null,
-                            color: Theme.of(context).colorScheme.tertiary,
+                            color: Theme.of(context).inputDecorationTheme.suffixIconColor,
                           ),
                         ),// Icon hinzufügen
                         enabledBorder: Theme.of(context).inputDecorationTheme.enabledBorder,
                         focusedBorder: Theme.of(context).inputDecorationTheme.focusedBorder,
                         filled: true,
-                        fillColor: Theme.of(context).colorScheme.secondary,
+                        fillColor: Theme.of(context).inputDecorationTheme.fillColor,
                       ),
-                      style: Theme.of(context).textTheme.bodyMedium,
+                      style: Theme.of(context).inputDecorationTheme.floatingLabelStyle,
                     ),
                   ),
                   Padding(
@@ -281,10 +281,10 @@ class _EditCardScreenState extends State<EditCardScreen> {
                         labelText: "Answer",
                         contentPadding: EdgeInsets.symmetric(vertical: 17, horizontal: 20),
                         counterText: "",
-                        labelStyle: Theme.of(context).textTheme.labelMedium,
+                        labelStyle: Theme.of(context).inputDecorationTheme.labelStyle,
                         prefixIcon: Icon(
                           Icons.question_answer_outlined,
-                          color: Theme.of(context).inputDecorationTheme.iconColor,
+                          color: Theme.of(context).inputDecorationTheme.prefixIconColor,
                           size: 30,),
                         suffixIcon: GestureDetector(
                           onTap: () {
@@ -294,15 +294,15 @@ class _EditCardScreenState extends State<EditCardScreen> {
                           },
                           child: Icon(
                             _answer.text.isNotEmpty ? Icons.cancel : null,
-                            color: Theme.of(context).colorScheme.tertiary,
+                            color: Theme.of(context).inputDecorationTheme.suffixIconColor,
                           ),
                         ),// Icon hinzufügen
                         enabledBorder: Theme.of(context).inputDecorationTheme.enabledBorder,
                         focusedBorder: Theme.of(context).inputDecorationTheme.focusedBorder,
                         filled: true,
-                        fillColor: Theme.of(context).colorScheme.secondary,
+                        fillColor: Theme.of(context).inputDecorationTheme.fillColor,
                       ),
-                      style: Theme.of(context).textTheme.bodyMedium,
+                      style: Theme.of(context).inputDecorationTheme.floatingLabelStyle,
                     ),
                   ),
                   Padding(
@@ -320,12 +320,12 @@ class _EditCardScreenState extends State<EditCardScreen> {
                           children: [
                             Text(
                               "Memorized",
-                              style: Theme.of(context).textTheme.bodyMedium,
+                              style: Theme.of(context).textTheme.labelMedium,
                             ),
                             Switch(
                               thumbIcon: thumbIcon,
                               value: isNoticed,
-                              activeColor: Theme.of(context).colorScheme.surface,
+                              activeColor: Theme.of(context).colorScheme.onSurface,
                               activeTrackColor: Theme.of(context).colorScheme.primary,
                               inactiveTrackColor: Theme.of(context).colorScheme.tertiary,
                                 trackOutlineColor: MaterialStateProperty.resolveWith<Color?>((Set<MaterialState> states)

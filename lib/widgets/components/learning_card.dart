@@ -249,7 +249,7 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
         text,
         textAlign: TextAlign.center,
         style: TextStyle(
-          color: Theme.of(context).colorScheme.surface,
+          color: Theme.of(context).colorScheme.onSurface,
           fontSize: 14,
           fontWeight: FontWeight.w500,
         ),
@@ -260,7 +260,7 @@ class _LearningCardState extends State<LearningCard> with TickerProviderStateMix
         text,
         textAlign: TextAlign.center,
         style: TextStyle(
-          color: Theme.of(context).colorScheme.surface,
+          color: Theme.of(context).colorScheme.onSurface,
           fontSize: 17,
           fontWeight: FontWeight.w500,
           ),

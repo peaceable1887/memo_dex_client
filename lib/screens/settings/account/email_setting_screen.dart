@@ -196,8 +196,11 @@ class _EmailSettingScreenState extends State<EmailSettingScreen>
                         labelText: "E-Mail",
                         contentPadding: EdgeInsets.symmetric(vertical: 17, horizontal: 20),
                         counterText: "",
-                        labelStyle: Theme.of(context).textTheme.labelMedium,
-                        prefixIcon: Icon(Icons.mail, color: Theme.of(context).inputDecorationTheme.iconColor, size: 28,),
+                        labelStyle: Theme.of(context).inputDecorationTheme.labelStyle,
+                        prefixIcon: Icon(
+                          Icons.mail,
+                          color: Theme.of(context).inputDecorationTheme.prefixIconColor,
+                          size: 28,),
                         suffixIcon: GestureDetector(
                           onTap: () {
                             setState(() {
@@ -206,15 +209,15 @@ class _EmailSettingScreenState extends State<EmailSettingScreen>
                           },
                           child: Icon(
                             _eMail.text.isNotEmpty ? Icons.cancel : null,
-                            color: Theme.of(context).colorScheme.tertiary,
+                            color: Theme.of(context).inputDecorationTheme.suffixIconColor,
                           ),
                         ),// Icon hinzufügen
                         enabledBorder: Theme.of(context).inputDecorationTheme.enabledBorder,
                         focusedBorder: Theme.of(context).inputDecorationTheme.focusedBorder,
                         filled: true,
-                        fillColor: Theme.of(context).colorScheme.secondary,
+                        fillColor: Theme.of(context).inputDecorationTheme.fillColor,
                       ),
-                      style: Theme.of(context).textTheme.bodyMedium,
+                      style: Theme.of(context).inputDecorationTheme.floatingLabelStyle,
                     ),
                   ),
                   Padding(
@@ -228,8 +231,11 @@ class _EmailSettingScreenState extends State<EmailSettingScreen>
                         labelText: "E-Mail repeat",
                         contentPadding: EdgeInsets.symmetric(vertical: 17, horizontal: 20),
                         counterText: "",
-                        labelStyle: Theme.of(context).textTheme.labelMedium,
-                        prefixIcon: Icon(Icons.safety_check_rounded, color: Theme.of(context).inputDecorationTheme.iconColor, size: 30,),
+                        labelStyle: Theme.of(context).inputDecorationTheme.labelStyle,
+                        prefixIcon: Icon(
+                          Icons.safety_check_rounded,
+                          color: Theme.of(context).inputDecorationTheme.prefixIconColor,
+                          size: 30,),
                         suffixIcon: GestureDetector(
                           onTap: () {
                             setState(() {
@@ -238,15 +244,15 @@ class _EmailSettingScreenState extends State<EmailSettingScreen>
                           },
                           child: Icon(
                             _eMailRepeat.text.isNotEmpty ? Icons.cancel : null,
-                            color: Theme.of(context).colorScheme.tertiary,
+                            color: Theme.of(context).inputDecorationTheme.suffixIconColor,
                           ),
                         ),// Icon hinzufügen
                         enabledBorder: Theme.of(context).inputDecorationTheme.enabledBorder,
                         focusedBorder: Theme.of(context).inputDecorationTheme.focusedBorder,
                         filled: true,
-                        fillColor: Theme.of(context).colorScheme.secondary,
+                        fillColor: Theme.of(context).inputDecorationTheme.fillColor,
                       ),
-                      style: Theme.of(context).textTheme.bodyMedium,
+                      style: Theme.of(context).inputDecorationTheme.floatingLabelStyle,
                     ),
                   ),
                   Padding(

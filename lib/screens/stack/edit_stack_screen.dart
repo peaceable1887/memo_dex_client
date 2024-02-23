@@ -134,7 +134,7 @@ class _EditStackScreenState extends State<EditStackScreen> {
                         child: Icon(
                           Icons.delete_forever_rounded,
                           size: 35.0,
-                          color: Colors.white,
+                          color:Theme.of(context).colorScheme.surface,
                         ), // Icon als klickbares Element
                       ),
                 ),

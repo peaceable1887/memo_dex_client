@@ -117,8 +117,11 @@ class _SignUpFormState extends State<SignUpForm> {
               decoration: InputDecoration(
                 labelText: "E-Mail",
                 contentPadding: EdgeInsets.symmetric(vertical: 17, horizontal: 20),
-                labelStyle: Theme.of(context).textTheme.labelMedium,
-                prefixIcon: Icon(Icons.email, color: Theme.of(context).inputDecorationTheme.iconColor, size: 30),
+                labelStyle: Theme.of(context).inputDecorationTheme.labelStyle,
+                prefixIcon: Icon(
+                    Icons.email,
+                    color: Theme.of(context).inputDecorationTheme.prefixIconColor,
+                    size: 30),
                 suffixIcon: GestureDetector(
                   onTap: () {
                     setState(() {
@@ -127,15 +130,15 @@ class _SignUpFormState extends State<SignUpForm> {
                   },
                   child: Icon(
                     _eMail.text.isNotEmpty ? Icons.cancel : null,
-                    color: Theme.of(context).colorScheme.tertiary,
+                    color: Theme.of(context).inputDecorationTheme.suffixIconColor,
                   ),
                 ),
                 enabledBorder: Theme.of(context).inputDecorationTheme.enabledBorder,
                 focusedBorder: Theme.of(context).inputDecorationTheme.focusedBorder,
                 filled: true,
-                fillColor: Theme.of(context).colorScheme.secondary,
+                fillColor: Theme.of(context).inputDecorationTheme.fillColor,
               ),
-              style: Theme.of(context).textTheme.bodyMedium,
+              style: Theme.of(context).inputDecorationTheme.floatingLabelStyle,
             ),
           ),
           Padding(
@@ -146,8 +149,11 @@ class _SignUpFormState extends State<SignUpForm> {
               decoration: InputDecoration(
                 labelText: "Password",
                 contentPadding: EdgeInsets.symmetric(vertical: 17, horizontal: 20),
-                labelStyle: Theme.of(context).textTheme.labelMedium,
-                prefixIcon: Icon(Icons.lock, color: Theme.of(context).inputDecorationTheme.iconColor,size: 30),
+                labelStyle: Theme.of(context).inputDecorationTheme.labelStyle,
+                prefixIcon: Icon(
+                    Icons.lock,
+                    color: Theme.of(context).inputDecorationTheme.prefixIconColor,
+                    size: 30),
                 suffixIcon: GestureDetector(
                   onTap: () {
                     setState(() {
@@ -156,15 +162,15 @@ class _SignUpFormState extends State<SignUpForm> {
                   },
                   child: Icon(
                     _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
-                    color: Theme.of(context).colorScheme.tertiary,
+                    color: Theme.of(context).inputDecorationTheme.suffixIconColor,
                   ),
                 ),// Icon hinzufügen
                 enabledBorder: Theme.of(context).inputDecorationTheme.enabledBorder,
                 focusedBorder: Theme.of(context).inputDecorationTheme.focusedBorder,
                 filled: true,
-                fillColor: Theme.of(context).colorScheme.secondary,
+                fillColor: Theme.of(context).inputDecorationTheme.fillColor,
               ),
-              style: Theme.of(context).textTheme.bodyMedium,
+              style: Theme.of(context).inputDecorationTheme.floatingLabelStyle,
             ),
           ),
           Padding(
@@ -175,8 +181,11 @@ class _SignUpFormState extends State<SignUpForm> {
               decoration: InputDecoration(
                 labelText: "repeat Password",
                 contentPadding: EdgeInsets.symmetric(vertical: 17, horizontal: 20),
-                labelStyle: Theme.of(context).textTheme.labelMedium,
-                prefixIcon: Icon(Icons.safety_check, color: Theme.of(context).inputDecorationTheme.iconColor,size: 30),
+                labelStyle: Theme.of(context).inputDecorationTheme.labelStyle,
+                prefixIcon: Icon(
+                    Icons.safety_check,
+                    color: Theme.of(context).inputDecorationTheme.prefixIconColor,
+                    size: 30),
                 suffixIcon: GestureDetector(
                   onTap: () {
                     setState(() {
@@ -185,15 +194,15 @@ class _SignUpFormState extends State<SignUpForm> {
                   },
                   child: Icon(
                     _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
-                    color:Theme.of(context).colorScheme.tertiary,
+                    color: Theme.of(context).inputDecorationTheme.suffixIconColor,
                   ),
                 ),// Icon hinzufügen
                 enabledBorder: Theme.of(context).inputDecorationTheme.enabledBorder,
                 focusedBorder: Theme.of(context).inputDecorationTheme.focusedBorder,
                 filled: true,
-                fillColor: Theme.of(context).colorScheme.secondary,
+                fillColor: Theme.of(context).inputDecorationTheme.fillColor,
               ),
-              style: Theme.of(context).textTheme.bodyMedium,
+              style: Theme.of(context).inputDecorationTheme.floatingLabelStyle,
             ),
           ),
           Padding(
@@ -206,10 +215,11 @@ class _SignUpFormState extends State<SignUpForm> {
                   //TODO Style eventuell noch in ThemeData auslagern
                   Checkbox(
                     side: BorderSide(color: Colors.white, width: 2),
-                    activeColor: Color(int.parse("0xFFE59113")),
-                    checkColor: Color(int.parse("0xFF00324E")),
+                    activeColor: Theme.of(context).colorScheme.primary,
+                    checkColor: Theme.of(context).scaffoldBackgroundColor,
                     value: _isChecked,
-                    onChanged: (bool? value) {
+                    onChanged: (bool? value)
+                    {
                       setState(() {
                         _isChecked = value!;
                         updateButtonState(); // Hier rufe die updateButtonState-Methode auf

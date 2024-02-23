@@ -319,7 +319,7 @@ class _SingleCardScreenState extends State<SingleCardScreen> {
                             child: Icon(
                               Icons.edit_outlined,
                               size: 32.0,
-                              color: Colors.white,
+                              color: Theme.of(context).colorScheme.surface,
                             ), // Icon als klickbares Element
                           ),
                         ],
