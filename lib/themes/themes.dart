@@ -3,7 +3,7 @@ class Themes
 {
   static final lightTheme = ThemeData(
       brightness: Brightness.light,
-      scaffoldBackgroundColor: Color(0xFF0083CD),
+      scaffoldBackgroundColor: Color(0xFF00324E),
       //scaffoldBackgroundColor: Color(0xFF00324E),
       fontFamily: "Inter",
       textTheme: const TextTheme(
@@ -66,7 +66,7 @@ class Themes
           fontWeight: FontWeight.w600,
         ),
         floatingLabelStyle: TextStyle(
-            color: Color(0xFF15171B),
+            color: Colors.white,
             fontSize: 16,
             fontWeight: FontWeight.w600
         ),
@@ -79,7 +79,7 @@ class Themes
         ),
         focusedBorder: OutlineInputBorder(
           borderSide: BorderSide(
-            color: Color(0xFF15171B), // Ändern Sie hier die Farbe des Rahmens im Fokus
+            color: Colors.white, // Ändern Sie hier die Farbe des Rahmens im Fokus
             width: 2.0,
           ),
           borderRadius: BorderRadius.all(Radius.circular(10.0)),
@@ -89,9 +89,9 @@ class Themes
           width: 2.0,
         ),
         iconColor: Colors.white,
-        prefixIconColor: Color(0xFF15171B),
+        prefixIconColor: Colors.white,
         suffixIconColor: Color(0xFF8597A1),
-        fillColor: Colors.white,
+        fillColor:Color(0xFF33363F),
       ),
       popupMenuTheme: PopupMenuThemeData(
         color: Colors.white,

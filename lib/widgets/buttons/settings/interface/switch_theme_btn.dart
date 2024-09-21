@@ -3,21 +3,21 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class SwitchBtn extends StatefulWidget
+class SwitchThemeBtn extends StatefulWidget
 {
   final String buttonText;
   final List<double> buttonBorderRadius;
 
-  const SwitchBtn({
+  const SwitchThemeBtn({
     super.key,
     required this.buttonText,
     required this.buttonBorderRadius,});
 
   @override
-  State<SwitchBtn> createState() => _SwitchBtnState();
+  State<SwitchThemeBtn> createState() => _SwitchThemeBtnState();
 }
 
-class _SwitchBtnState extends State<SwitchBtn>
+class _SwitchThemeBtnState extends State<SwitchThemeBtn>
 {
   late SharedPreferences _prefs;
 

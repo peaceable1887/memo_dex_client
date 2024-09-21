@@ -92,7 +92,8 @@ class _SettingBtnState extends State<SettingBtn>
             ),
           ),
           padding: EdgeInsets.fromLTRB(15, 10, 10, 10),
-          elevation: 0
+          elevation: 0,
+          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -196,13 +196,16 @@ class _CreateStackFormState extends State<CreateStackForm> {
             child: Container(
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Theme.of(context).colorScheme.secondary, // Verwenden Sie die ausgewählte Farbe
+                  backgroundColor: Theme.of(context).inputDecorationTheme.fillColor,
                   minimumSize: Size(double.infinity, 55),
                   padding: EdgeInsets.fromLTRB(11, 0, 13, 0),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(10)),
                   ),
-                  side: Theme.of(context).inputDecorationTheme.activeIndicatorBorder,
+                  side: BorderSide(
+                    color: Theme.of(context).colorScheme.tertiary,
+                    width: 2.0,
+                  ),
                   elevation: 0,
                 ),
                 onPressed: () => pickColor(context),
@@ -220,7 +223,7 @@ class _CreateStackFormState extends State<CreateStackForm> {
                         //TODO ggf noch in ThemeData auslagern
                         Text(
                           "#${color.value.toRadixString(16).substring(2)}",
-                          style: Theme.of(context).textTheme.labelMedium,
+                          style:  Theme.of(context).inputDecorationTheme.floatingLabelStyle,
                         ),
                         SizedBox(width: 8),
                       ],

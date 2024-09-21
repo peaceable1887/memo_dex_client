@@ -228,7 +228,7 @@ class _EditStackFormState extends State<EditStackForm> {
             child: Container(
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Theme.of(context).colorScheme.secondary, // Verwenden Sie die ausgewählte Farbe
+                  backgroundColor: Theme.of(context).inputDecorationTheme.fillColor,
                   minimumSize: Size(double.infinity, 55),
                   padding: EdgeInsets.fromLTRB(11, 0, 13, 0),
                   shape: RoundedRectangleBorder(
@@ -254,7 +254,7 @@ class _EditStackFormState extends State<EditStackForm> {
                         SizedBox(width: 8),
                         Text(
                           "#${newColor.value.toRadixString(16).substring(2)}",
-                          style: Theme.of(context).textTheme.labelMedium,
+                          style: Theme.of(context).inputDecorationTheme.floatingLabelStyle,
                         ),
                         SizedBox(width: 8),
                       ],

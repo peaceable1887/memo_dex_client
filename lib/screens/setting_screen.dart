@@ -5,10 +5,12 @@ import 'package:memo_dex_prototyp/screens/settings/account/password_setting_scre
 import 'package:memo_dex_prototyp/screens/settings/configuration/language_setting_screen.dart';
 import 'package:memo_dex_prototyp/screens/settings/datamanagement/trash_setting_screen.dart';
 import 'package:memo_dex_prototyp/services/api/api_client.dart';
+import 'package:memo_dex_prototyp/widgets/buttons/settings/configuration/switch_disable_autocorrect_btn.dart';
 import 'package:memo_dex_prototyp/widgets/buttons/settings/setting_btn.dart';
 import 'package:memo_dex_prototyp/widgets/dialogs/decision_message_box.dart';
 
 import '../widgets/buttons/button.dart';
+import '../widgets/buttons/settings/interface/switch_button_color_btn.dart';
 import '../widgets/buttons/settings/interface/switch_theme_btn.dart';
 import '../widgets/dialogs/custom_snackbar.dart';
 import '../widgets/text/headlines/headline_large.dart';
@@ -152,11 +154,9 @@ class _SettingScreenState extends State<SettingScreen> {
                           buttonBorderRadius: [10,10,0,0],
                           pushToContent: LanguageSettingScreen(),
                       ),
-                      SettingBtn(
-                          buttonText: "Disable Autocorrect",
-                          buttonBorderRadius: [0,0,10,10],
-                          pushToContent: BottomNavigationScreen(),
-                          showSwitch: true,
+                      SwitchDisableAutocorrectBtn(
+                        buttonText: "Disable Autocorrect",
+                        buttonBorderRadius: [0,0,10,10],
                       ),
                       SizedBox(height: 15,),
                     ],
@@ -170,13 +170,12 @@ class _SettingScreenState extends State<SettingScreen> {
                         ],
                       ),
                       SizedBox(height: 15,),
-                      SettingBtn(
+                      SwitchButtonColorBtn
+                      (
                         buttonText: "Button Color",
                         buttonBorderRadius: [10,10,0,0],
-                        pushToContent: LanguageSettingScreen(),
-                        showSwitch: true,
                       ),
-                      SwitchBtn(
+                      SwitchThemeBtn(
                         buttonText: "Theme Mode",
                         buttonBorderRadius: [0,0,10,10],
                       ),
