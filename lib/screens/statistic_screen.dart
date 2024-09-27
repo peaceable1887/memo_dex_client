@@ -191,123 +191,70 @@ class _StatisticScreenState extends State<StatisticScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0,80,0,0),
-            child: Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const HeadlineLarge(text: "Statistic"),
-                ],
+      extendBodyBehindAppBar: true, //TODO nochmal gucken was es macht
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            elevation: 0,
+            centerTitle: true,
+            expandedHeight: 130,
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor.withOpacity(1),
+            floating: false,
+            pinned: true,
+            flexibleSpace: FlexibleSpaceBar(
+              background: Container(
+                color: Theme.of(context).scaffoldBackgroundColor,
               ),
+              expandedTitleScale: 2,
+              titlePadding: EdgeInsets.only(bottom: 15),
+              centerTitle: true,
+              title: const HeadlineLarge(text: "Statistic"),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(20, 50, 20, 0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    HeadlineMedium(text: selectedOption),
-                    InkWell(
-                      onTap: ()
-                      {
-                        setState(()
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      HeadlineMedium(text: selectedOption),
+                      InkWell(
+                        onTap: ()
                         {
-                          sortValue =! sortValue;
-                          loadStatisticCards();
-                        });
-                      },
-                      child: sortValue == false ? Icon(
-                        Icons.arrow_downward_rounded,
-                        size: selectedOption == "ALL STACKS" ? 0.0 : 28.0,
-                        color: Theme.of(context).colorScheme.primary,
-                      ) : Icon(
-                        Icons.arrow_upward_rounded,
-                        size: selectedOption == "ALL STACKS" ? 0.0 : 28.0,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                    ),
-                  ],
-                ),
-                InkWell(
-                  onTap: () {
-                    showMenu(
-                      color: Theme.of(context).popupMenuTheme.color,
-                      context: context,
-                      position: RelativeRect.fromLTRB(1, 220, 0, 0),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                      ),
-                      items: [
-                        PopupMenuItem(
-                          onTap: (){
-                            setState(() {
-                              selectedOption = "STACKNAME";
-                              loadStatisticCards();
-                            });
-                          },
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "Stackname",
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: selectedOption == "STACKNAME"
-                                      ? Theme.of(context).colorScheme.primary
-                                      : Theme.of(context).colorScheme.onSurface,
-                                  fontWeight: selectedOption == "STACKNAME"
-                                      ?  FontWeight.w600
-                                      :  FontWeight.w400,
-                                ),
-                              ),
-                              Icon(
-                                Icons.sort_by_alpha_rounded,
-                                size: 20.0,
-                                color: selectedOption == "STACKNAME"
-                                    ? Theme.of(context).colorScheme.primary
-                                    : Theme.of(context).colorScheme.onSurface,
-                              ),
-                            ],
-                          ),
-                          value: "STACKNAME",
+                          setState(()
+                          {
+                            sortValue =! sortValue;
+                            loadStatisticCards();
+                          });
+                        },
+                        child: sortValue == false ? Icon(
+                          Icons.arrow_downward_rounded,
+                          size: selectedOption == "ALL STACKS" ? 0.0 : 28.0,
+                          color: Theme.of(context).colorScheme.primary,
+                        ) : Icon(
+                          Icons.arrow_upward_rounded,
+                          size: selectedOption == "ALL STACKS" ? 0.0 : 28.0,
+                          color: Theme.of(context).colorScheme.primary,
                         ),
-                        PopupMenuItem(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "Creation Date",
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: selectedOption == "CREATION DATE"
-                                      ? Theme.of(context).colorScheme.primary
-                                      : Theme.of(context).colorScheme.onSurface,
-                                  fontWeight: selectedOption == "CREATION DATE"
-                                      ?  FontWeight.w600
-                                      :  FontWeight.w400,
-                                ),
-                              ),
-                              Icon(
-                                Icons.date_range_rounded,
-                                size: 20.0,
-                                color: selectedOption == "CREATION DATE"
-                                    ? Theme.of(context).colorScheme.primary
-                                    : Theme.of(context).colorScheme.onSurface,
-                              ),
-                            ],
-                          ),
-                          value: "CREATION DATE",
+                      ),
+                    ],
+                  ),
+                  InkWell(
+                    onTap: () {
+                      showMenu(
+                        color: Theme.of(context).popupMenuTheme.color,
+                        context: context,
+                        position: RelativeRect.fromLTRB(1, 220, 0, 0),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
                         ),
-                        if (selectedOption == "STACKNAME" || selectedOption == "CREATION DATE")
+                        items: [
                           PopupMenuItem(
                             onTap: (){
                               setState(() {
-                                selectedOption = "";
+                                selectedOption = "STACKNAME";
                                 loadStatisticCards();
                               });
                             },
@@ -315,50 +262,137 @@ class _StatisticScreenState extends State<StatisticScreen>
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  "Reset",
+                                  "Stackname",
                                   style: TextStyle(
                                     fontSize: 14,
-                                    color: Theme.of(context).colorScheme.tertiary,
-                                    fontFamily: "Inter",
-                                    fontWeight: FontWeight.w400,
+                                    color: selectedOption == "STACKNAME"
+                                        ? Theme.of(context).colorScheme.primary
+                                        : Theme.of(context).colorScheme.onSurface,
+                                    fontWeight: selectedOption == "STACKNAME"
+                                        ?  FontWeight.w600
+                                        :  FontWeight.w400,
                                   ),
                                 ),
                                 Icon(
-                                  Icons.refresh_rounded,
+                                  Icons.sort_by_alpha_rounded,
                                   size: 20.0,
-                                  color: Theme.of(context).colorScheme.tertiary,
+                                  color: selectedOption == "STACKNAME"
+                                      ? Theme.of(context).colorScheme.primary
+                                      : Theme.of(context).colorScheme.onSurface,
                                 ),
                               ],
                             ),
-                            value: "ALL STACKS",
+                            value: "STACKNAME",
                           ),
-                      ],
-                    ).then((value) {
-                      setState(() {
-                        selectedOption = value!;
+                          PopupMenuItem(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "Creation Date",
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: selectedOption == "CREATION DATE"
+                                        ? Theme.of(context).colorScheme.primary
+                                        : Theme.of(context).colorScheme.onSurface,
+                                    fontWeight: selectedOption == "CREATION DATE"
+                                        ?  FontWeight.w600
+                                        :  FontWeight.w400,
+                                  ),
+                                ),
+                                Icon(
+                                  Icons.date_range_rounded,
+                                  size: 20.0,
+                                  color: selectedOption == "CREATION DATE"
+                                      ? Theme.of(context).colorScheme.primary
+                                      : Theme.of(context).colorScheme.onSurface,
+                                ),
+                              ],
+                            ),
+                            value: "CREATION DATE",
+                          ),
+                          if (selectedOption == "STACKNAME" || selectedOption == "CREATION DATE")
+                            PopupMenuItem(
+                              onTap: (){
+                                setState(() {
+                                  selectedOption = "";
+                                  loadStatisticCards();
+                                });
+                              },
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "Reset",
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: Theme.of(context).colorScheme.tertiary,
+                                      fontFamily: "Inter",
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                  Icon(
+                                    Icons.refresh_rounded,
+                                    size: 20.0,
+                                    color: Theme.of(context).colorScheme.tertiary,
+                                  ),
+                                ],
+                              ),
+                              value: "ALL STACKS",
+                            ),
+                        ],
+                      ).then((value) {
+                        setState(() {
+                          selectedOption = value!;
+                        });
                       });
-                    });
-                  },
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.filter_alt,
+                    },
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.filter_alt,
+                          size: 32.0,
+                          color: selectedOption == "STACKNAME" || selectedOption == "CREATION DATE"
+                              ? Theme.of(context).colorScheme.primary
+                              : Theme.of(context).colorScheme.surface,
+                          /*selectedOption == "STACKNAME" || selectedOption == "CREATION DATE"
+                            ? Icons.filter_alt : Icons.filter_alt_outlined,
                         size: 32.0,
-                        color: selectedOption == "STACKNAME" || selectedOption == "CREATION DATE"
-                            ? Theme.of(context).colorScheme.primary
-                            : Theme.of(context).colorScheme.surface,
-                        /*selectedOption == "STACKNAME" || selectedOption == "CREATION DATE"
-                                ? Icons.filter_alt : Icons.filter_alt_outlined,
-                            size: 32.0,
-                            color: Colors.white,*/
-                      ),
-                    ],
+                        color: Colors.white,*/
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
-          Expanded(
+          showLoadingCircular ?
+          SliverToBoxAdapter(
+            child: Container(
+                height: MediaQuery.of(context).size.height/2,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: 50,
+                      height: 50,
+                      child: CircularProgressIndicator(
+                        color: Theme.of(context).colorScheme.surface,
+                      ),
+                    ),
+                  ],
+                )
+            ),
+          ):
+          SliverList(
+              delegate: SliverChildBuilderDelegate(
+              (BuildContext context, int index) {
+                return statisticCards[index];
+            },
+            childCount: statisticCards.length,
+          ))
+          /*Expanded(
             child: showLoadingCircular ?
             Container(
                 height: MediaQuery.of(context).size.height/2,
@@ -380,7 +414,7 @@ class _StatisticScreenState extends State<StatisticScreen>
                 return statisticCards[index];
               },
             ),
-          )
+          )*/
         ],
       ),
     );

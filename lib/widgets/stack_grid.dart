@@ -146,34 +146,40 @@ class _StackViewGridState extends State<StackGrid> {
   @override
   Widget build(BuildContext context) {
     return showLoadingCircular ?
-      Container(
-          height: MediaQuery.of(context).size.height/2,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                width: 50,
-                height: 50,
-                child: CircularProgressIndicator(
-                  color: Theme.of(context).colorScheme.surface,
+      SliverToBoxAdapter(
+        child: Container(
+            height: MediaQuery.of(context).size.height/2,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  width: 50,
+                  height: 50,
+                  child: CircularProgressIndicator(
+                    color: Theme.of(context).colorScheme.surface,
+                  ),
                 ),
-              ),
-            ],
-          )
+              ],
+            )
+        ),
       )
-      : GridView.builder(
-      padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        mainAxisSpacing: 20.0,
-        crossAxisSpacing: 20.0,
-        crossAxisCount: 2,
-        childAspectRatio: MediaQuery.of(context).size.width /
-            (MediaQuery.of(context).size.height / 2.3),
-      ),
-      itemBuilder: (context, index) {
-        return stackButtons[index];
-      },
-      itemCount: stackButtons.length,
-    );
+      : SliverPadding(
+        padding: EdgeInsets.fromLTRB(20,0, 20, 0),
+        sliver: SliverGrid(
+          delegate: SliverChildBuilderDelegate(
+                (BuildContext context, int index) {
+              return stackButtons[index];
+            },
+            childCount: stackButtons.length,
+          ),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2, // Anzahl der Spalten
+            mainAxisSpacing: 20.0,
+            crossAxisSpacing: 20.0,
+            childAspectRatio: MediaQuery.of(context).size.width /
+                (MediaQuery.of(context).size.height / 2.3),
+          ),
+        ),
+      );
   }
 }

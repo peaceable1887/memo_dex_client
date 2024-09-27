@@ -42,7 +42,7 @@ class _TopNavigationBarState extends State<TopNavigationBar> {
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
       child: InkWell(
-        onTap: widget.onPressed, // Füge hier die gewünschte Funktion hinzu
+        onTap: widget.onPressed,
         child: Container(
           width: countTextLength(widget.btnText),
           child: AppBar(

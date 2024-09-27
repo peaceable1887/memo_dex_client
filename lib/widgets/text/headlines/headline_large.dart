@@ -25,7 +25,7 @@ class _HeadlineLargeState extends State<HeadlineLarge> {
         child: Text(
           Trim().trimText(widget.text,30),
           textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.headlineLarge,
+          style: Theme.of(context).textTheme.headlineMedium,
         ),
       ),
     );

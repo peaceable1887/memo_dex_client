@@ -332,290 +332,192 @@ class _StackContentScreenState extends State<StackContentScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: showLoadingCircular ? Container(
-          height: MediaQuery.of(context).size.height,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                width: 50,
-                height: 50,
-                child: CircularProgressIndicator(
-                  color: Theme.of(context).colorScheme.surface,
-                ),
-              ),
-            ],
-          )
-      ): Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0,5,0,0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                WillPopScope(
-                  onWillPop: () async => false,
-                  child: Container(
-                    child: TopNavigationBar(
-                      btnText: "Home",
-                      onPressed: () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => BottomNavigationScreen(),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0,0,15,0),
-                  child: Container(
-                    width: 80,
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(0,0,0,10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          InkWell(
-                            onTap: pushToAddCard,
-                            child: Icon(
-                              Icons.add_rounded,
-                              size: 38.0,
-                              color: Theme.of(context).colorScheme.surface
-                            ), // Icon als klickbares Element
-                          ),
-                          InkWell(
-                            onTap: pushToEditStack,
-                            child: Icon(
-                              Icons.edit_outlined,
-                              size: 32.0,
-                              color: Theme.of(context).colorScheme.surface,
-                            ), // Icon als klickbares Element
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                )
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0,10,0,0),
-            child: HeadlineLarge(
-                text: stackname
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(20,40,22,0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const HeadlineMedium(text: "START LEARNING"),
-                InkWell(
-                  onTap: (){
-                    setState(() {
-                      isMixed =! isMixed;
-                      if(isMixed)
-                      {
-                        CustomSnackbar.showSnackbar(
-                            context,
-                            Icons.warning_amber_rounded,
-                            "The cards are being shuffled.",
-                            Theme.of(context).colorScheme.primary,
-                            Duration(seconds: 0),
-                            Duration(milliseconds: 1500)
-                        );
-                      }else{
-                        CustomSnackbar.showSnackbar(
-                            context,
-                            Icons.warning_amber_rounded,
-                            "The cards are no longer shuffled.",
-                            Theme.of(context).colorScheme.primary,
-                            Duration(seconds: 0),
-                            Duration(milliseconds: 1500)
-                        );
-                      }
-                    });
-                  },
-                  child: isMixed ? Icon(
-                    Icons.shuffle_rounded,
-                    size: 32.0,
-                    color: Theme.of(context).colorScheme.primary,
-                  ): Icon(
-                    Icons.shuffle_rounded,
-                    size: 32.0,
-                    color: Theme.of(context).colorScheme.surface,// Icon als klickbares Element
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Container(
-            height: 185, // Feste Höhe von 200
-            child: GridView.builder(
-              padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                mainAxisSpacing: 20.0,
-                crossAxisSpacing: 20.0,
-                crossAxisCount: 2,
-                childAspectRatio: MediaQuery.of(context).size.width /
-                    (MediaQuery.of(context).size.height / 2.3),
-              ),
-              itemBuilder: (context, index) {
-                return showButtons(deactivateBtn)[index];
-              },
-              itemCount: showButtons(deactivateBtn).length,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(20, 5, 20, 0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
+      extendBodyBehindAppBar: true,
+      body: showLoadingCircular ? CustomScrollView(
+        slivers:[
+          SliverToBoxAdapter(
+            child: Container(
+                height: MediaQuery.of(context).size.height,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    HeadlineMedium(text: selectedOption),
-                    InkWell(
-                      onTap: ()
-                      {
-                        setState(()
-                        {
-                          sortValue =! sortValue;
-                          loadCards();
-                        });
-                      },
-                      child: sortValue == false ? Icon(
-                        Icons.arrow_downward_rounded,
-                        size: selectedOption == "ALL CARDS" ? 0.0 : 28.0,
-                        color: Theme.of(context).colorScheme.primary
-                      ) : Icon(
-                        Icons.arrow_upward_rounded,
-                        size: selectedOption == "ALL CARDS" ? 0.0 : 28.0,
-                        color: Theme.of(context).colorScheme.primary,
+                    Container(
+                      width: 50,
+                      height: 50,
+                      child: CircularProgressIndicator(
+                        color: Theme.of(context).colorScheme.surface,
                       ),
                     ),
                   ],
+                )
+            ),
+          ),
+        ]
+      ): CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            elevation: 0,
+            centerTitle: true,
+            expandedHeight: 130,
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor.withOpacity(1),
+            floating: false,
+            pinned: true,
+            leading:
+              TopNavigationBar(
+                btnText: "Home",
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => BottomNavigationScreen(),
+                    ),
+                  );
+                },
+              ),
+
+            actions: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0,0,10,0),
+                child: InkWell(
+                  onTap: pushToAddCard,
+                  child: Icon(
+                      Icons.add_rounded,
+                      size: 38.0,
+                      color: Theme.of(context).colorScheme.surface
+                  ), // Icon als klickbares Element
                 ),
-                InkWell(
-                  onTap: () {
-                    showMenu(
-                      color: Theme.of(context).popupMenuTheme.color,
-                      context: context,
-                      position: RelativeRect.fromLTRB(1, 445, 0, 0),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0,0,20,0),
+                child: InkWell(
+                  onTap: pushToEditStack,
+                  child: Icon(
+                    Icons.edit_outlined,
+                    size: 32.0,
+                    color: Theme.of(context).colorScheme.surface,
+                  ), // Icon als klickbares Element
+                ),
+              ),
+            ],
+            flexibleSpace: FlexibleSpaceBar(
+              background: Container(
+                color: Theme.of(context).scaffoldBackgroundColor,
+              ),
+              expandedTitleScale: 2,
+              titlePadding: EdgeInsets.only(bottom: 15),
+              centerTitle: true,
+              title: HeadlineLarge(text: stackname),
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(20,20,20,0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const HeadlineMedium(text: "START LEARNING"),
+                  InkWell(
+                    onTap: (){
+                      setState(() {
+                        isMixed =! isMixed;
+                        if(isMixed)
+                        {
+                          CustomSnackbar.showSnackbar(
+                              context,
+                              Icons.warning_amber_rounded,
+                              "The cards are being shuffled.",
+                              Theme.of(context).colorScheme.primary,
+                              Duration(seconds: 0),
+                              Duration(milliseconds: 1500)
+                          );
+                        }else{
+                          CustomSnackbar.showSnackbar(
+                              context,
+                              Icons.warning_amber_rounded,
+                              "The cards are no longer shuffled.",
+                              Theme.of(context).colorScheme.primary,
+                              Duration(seconds: 0),
+                              Duration(milliseconds: 1500)
+                          );
+                        }
+                      });
+                    },
+                    child: isMixed ? Icon(
+                      Icons.shuffle_rounded,
+                      size: 32.0,
+                      color: Theme.of(context).colorScheme.primary,
+                    ): Icon(
+                      Icons.shuffle_rounded,
+                      size: 32.0,
+                      color: Theme.of(context).colorScheme.surface,// Icon als klickbares Element
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          SliverPadding(
+            padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
+            sliver: SliverGrid(
+              delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
+                  return showButtons(deactivateBtn)[index];
+                },
+                childCount: showButtons(deactivateBtn).length,
+              ),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2, // Anzahl der Spalten
+                mainAxisSpacing: 20.0,
+                crossAxisSpacing: 20.0,
+                childAspectRatio: MediaQuery.of(context).size.width /
+                    (MediaQuery.of(context).size.height / 2.3),
+              ),
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(20, 5, 20, 0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      HeadlineMedium(text: selectedOption),
+                      InkWell(
+                        onTap: ()
+                        {
+                          setState(()
+                          {
+                            sortValue =! sortValue;
+                            loadCards();
+                          });
+                        },
+                        child: sortValue == false ? Icon(
+                          Icons.arrow_downward_rounded,
+                          size: selectedOption == "ALL CARDS" ? 0.0 : 28.0,
+                          color: Theme.of(context).colorScheme.primary
+                        ) : Icon(
+                          Icons.arrow_upward_rounded,
+                          size: selectedOption == "ALL CARDS" ? 0.0 : 28.0,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
                       ),
-                      items: [
-                        PopupMenuItem(
-                          onTap: (){
-                            setState(() {
-                              selectedOption = "QUESTION";
-                              loadCards();
-                            });
-                          },
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "Question",
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: selectedOption == "QUESTION"
-                                      ? Theme.of(context).colorScheme.primary
-                                      : Theme.of(context).colorScheme.onSurface,
-                                  fontWeight: selectedOption == "QUESTION"
-                                      ?  FontWeight.w600
-                                      :  FontWeight.w400,
-                                ),
-                              ),
-                              Icon(
-                                Icons.sort_by_alpha_rounded,
-                                size: 20.0,
-                                color: selectedOption == "QUESTION"
-                                    ? Theme.of(context).colorScheme.primary
-                                    : Theme.of(context).colorScheme.onSurface,
-                              ),
-                            ],
-                          ),
-                          value: "QUESTION",
+                    ],
+                  ),
+                  InkWell(
+                    onTap: () {
+                      showMenu(
+                        color: Theme.of(context).popupMenuTheme.color,
+                        context: context,
+                        position: RelativeRect.fromLTRB(1, 445, 0, 0),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
                         ),
-                        PopupMenuItem(
-                          onTap: (){
-                            setState(() {
-                              selectedOption = "CREATION DATE";
-                              loadCards();
-                            });
-                          },
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "Creation Date",
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: selectedOption == "CREATION DATE"
-                                      ? Theme.of(context).colorScheme.primary
-                                      : Theme.of(context).colorScheme.onSurface,
-                                  fontWeight: selectedOption == "CREATION DATE"
-                                      ?  FontWeight.w600
-                                      :  FontWeight.w400,
-                                ),
-                              ),
-                              Icon(
-                                Icons.date_range_rounded,
-                                size: 20.0,
-                                color: selectedOption == "CREATION DATE"
-                                    ? Theme.of(context).colorScheme.primary
-                                    : Theme.of(context).colorScheme.onSurface,
-                              ),
-                            ],
-                          ),
-                          value: "CREATION DATE",
-                        ),
-                        PopupMenuItem(
-                          onTap: (){
-                            setState(() {
-                              selectedOption = "NOTICED";
-                              loadCards();
-                            });
-                          },
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "Noticed",
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: selectedOption == "NOTICED"
-                                      ? Theme.of(context).colorScheme.primary
-                                      : Theme.of(context).colorScheme.onSurface,
-                                  fontWeight: selectedOption == "NOTICED"
-                                      ?  FontWeight.w600
-                                      :  FontWeight.w400,
-                                ),
-                              ),
-                              Icon(
-                                Icons.lightbulb_outline,
-                                size: 20.0,
-                                color: selectedOption == "NOTICED"
-                                    ? Theme.of(context).colorScheme.primary
-                                    : Theme.of(context).colorScheme.onSurface,
-                              ),
-                            ],
-                          ),
-                          value: "NOTICED",
-                        ),
-                        if (selectedOption == "QUESTION" || selectedOption == "CREATION DATE" || selectedOption == "NOTICED")
+                        items: [
                           PopupMenuItem(
                             onTap: (){
                               setState(() {
-                                selectedOption = "ALL CARDS";
+                                selectedOption = "QUESTION";
                                 loadCards();
                               });
                             },
@@ -623,42 +525,143 @@ class _StackContentScreenState extends State<StackContentScreen> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  "Reset",
+                                  "Question",
                                   style: TextStyle(
                                     fontSize: 14,
-                                    color: Theme.of(context).colorScheme.tertiary,
-                                    fontFamily: "Inter",
-                                    fontWeight: FontWeight.w400,
+                                    color: selectedOption == "QUESTION"
+                                        ? Theme.of(context).colorScheme.primary
+                                        : Theme.of(context).colorScheme.onSurface,
+                                    fontWeight: selectedOption == "QUESTION"
+                                        ?  FontWeight.w600
+                                        :  FontWeight.w400,
                                   ),
                                 ),
                                 Icon(
-                                  Icons.refresh_rounded,
+                                  Icons.sort_by_alpha_rounded,
                                   size: 20.0,
-                                  color: Theme.of(context).colorScheme.tertiary,
+                                  color: selectedOption == "QUESTION"
+                                      ? Theme.of(context).colorScheme.primary
+                                      : Theme.of(context).colorScheme.onSurface,
                                 ),
                               ],
                             ),
-                            value: "ALL CARDS",
+                            value: "QUESTION",
                           ),
-                      ],
-                    ).then((value) {
-                      setState(() {
-                        selectedOption = value!;
+                          PopupMenuItem(
+                            onTap: (){
+                              setState(() {
+                                selectedOption = "CREATION DATE";
+                                loadCards();
+                              });
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "Creation Date",
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: selectedOption == "CREATION DATE"
+                                        ? Theme.of(context).colorScheme.primary
+                                        : Theme.of(context).colorScheme.onSurface,
+                                    fontWeight: selectedOption == "CREATION DATE"
+                                        ?  FontWeight.w600
+                                        :  FontWeight.w400,
+                                  ),
+                                ),
+                                Icon(
+                                  Icons.date_range_rounded,
+                                  size: 20.0,
+                                  color: selectedOption == "CREATION DATE"
+                                      ? Theme.of(context).colorScheme.primary
+                                      : Theme.of(context).colorScheme.onSurface,
+                                ),
+                              ],
+                            ),
+                            value: "CREATION DATE",
+                          ),
+                          PopupMenuItem(
+                            onTap: (){
+                              setState(() {
+                                selectedOption = "NOTICED";
+                                loadCards();
+                              });
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "Noticed",
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: selectedOption == "NOTICED"
+                                        ? Theme.of(context).colorScheme.primary
+                                        : Theme.of(context).colorScheme.onSurface,
+                                    fontWeight: selectedOption == "NOTICED"
+                                        ?  FontWeight.w600
+                                        :  FontWeight.w400,
+                                  ),
+                                ),
+                                Icon(
+                                  Icons.lightbulb_outline,
+                                  size: 20.0,
+                                  color: selectedOption == "NOTICED"
+                                      ? Theme.of(context).colorScheme.primary
+                                      : Theme.of(context).colorScheme.onSurface,
+                                ),
+                              ],
+                            ),
+                            value: "NOTICED",
+                          ),
+                          if (selectedOption == "QUESTION" || selectedOption == "CREATION DATE" || selectedOption == "NOTICED")
+                            PopupMenuItem(
+                              onTap: (){
+                                setState(() {
+                                  selectedOption = "ALL CARDS";
+                                  loadCards();
+                                });
+                              },
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "Reset",
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: Theme.of(context).colorScheme.tertiary,
+                                      fontFamily: "Inter",
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                  Icon(
+                                    Icons.refresh_rounded,
+                                    size: 20.0,
+                                    color: Theme.of(context).colorScheme.tertiary,
+                                  ),
+                                ],
+                              ),
+                              value: "ALL CARDS",
+                            ),
+                        ],
+                      ).then((value) {
+                        setState(() {
+                          selectedOption = value!;
+                        });
                       });
-                    });
-                  },
-                  child: Icon(
-                    Icons.filter_alt,
-                    size: 32.0,
-                    color: selectedOption == "QUESTION" || selectedOption == "CREATION DATE" || selectedOption == "NOTICED"
-                        ? Theme.of(context).colorScheme.primary
-                        : Theme.of(context).colorScheme.surface,
+                    },
+                    child: Icon(
+                      Icons.filter_alt,
+                      size: 32.0,
+                      color: selectedOption == "QUESTION" || selectedOption == "CREATION DATE" || selectedOption == "NOTICED"
+                          ? Theme.of(context).colorScheme.primary
+                          : Theme.of(context).colorScheme.surface,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
-          showText == true ? Expanded(
+          showText == true ? SliverToBoxAdapter(
             child: Container(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -672,15 +675,16 @@ class _StackContentScreenState extends State<StackContentScreen> {
               ),
             ),
           ) :
-          Expanded(
-            child: ListView.builder(
-              padding: snackbarIsDisplayed ? EdgeInsets.fromLTRB(20, 20, 20, 60) : EdgeInsets.fromLTRB(20, 20, 20, 20),
-              itemCount: cards.length,
-              itemBuilder: (context, index) {
-                return cards[index];
-              },
-            ),
-          ),
+          SliverPadding(
+            padding: snackbarIsDisplayed ? EdgeInsets.fromLTRB(20, 20, 20, 60) : EdgeInsets.fromLTRB(20, 20, 20, 20),
+            sliver: SliverList(
+                delegate: SliverChildBuilderDelegate(
+                      (BuildContext context, int index) {
+                    return cards[index];
+                  },
+                  childCount: cards.length,
+                )),
+          )
         ],
       ),
     );

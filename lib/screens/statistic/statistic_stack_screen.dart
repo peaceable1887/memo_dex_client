@@ -562,46 +562,40 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0,5,0,0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                WillPopScope(
-                  onWillPop: () async => false,
-                  child: Container(
-                    child: TopNavigationBar(
-                      btnText: "Statistic",
-                      onPressed: () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => BottomNavigationScreen(index: 1),
-                          ),
-                        );
-                      },
+      extendBodyBehindAppBar: true,
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            elevation: 0,
+            leading: TopNavigationBar(
+                btnText: "Statistic",
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => BottomNavigationScreen(index: 1),
                     ),
-                  ),
-                ),
-              ],
+                  );
+                },
+              ),
+            centerTitle: true,
+            expandedHeight: 130,
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor.withOpacity(1),
+            floating: false,
+            pinned: true,
+            flexibleSpace: FlexibleSpaceBar(
+              background: Container(
+                color: Theme.of(context).scaffoldBackgroundColor,
+              ),
+              expandedTitleScale: 2,
+              titlePadding: EdgeInsets.only(bottom: 15),
+              centerTitle: true,
+              title: HeadlineLarge(text: widget.stackname),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0,10,0,0),
-            child: HeadlineLarge(
-                text: widget.stackname
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0,25,0,0),
-            child: Container(
-              decoration: showShadow ? BoxDecoration(
-                color: Colors.white.withOpacity(0.2),
-              ) : null,
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(0,25,0,0),
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(20,5,0,5),
                 child: Row(
@@ -613,574 +607,567 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
               ),
             ),
           ),
-          Expanded(
-            child: NotificationListener<ScrollNotification>(
-              onNotification: (scrollNotification) {
-                if (scrollNotification is ScrollUpdateNotification)
-                {
-                  setState(() {
-                    showShadow = scrollNotification.metrics.pixels > scrollThreshold;
-                  });
-                }
-                return false;
-              },
-              child: ListView(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 40, 0, 20),
-                    child: Container(
-                      padding:  const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                      child: Column(
-                        children: [
-                          Container(
-                            height: 137,
-                            width: 137,
-                            child: SfCircularChart(
-                              annotations:  <CircularChartAnnotation>[
-                                CircularChartAnnotation(
-                                    widget: Container(
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            '${progressValue.toInt()}',
-                                            style: Theme.of(context).textTheme.headlineLarge,
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
-                                            child: Text(
-                                              '%',
-                                              style: Theme.of(context).textTheme.headlineSmall,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                ),
-                              ],
-                              series: <CircularSeries>[
-                                DoughnutSeries<StackStatisticData, String>(
-                                  radius: "110",
-                                  dataSource: _stackStatisticData,
-                                  pointColorMapper:(StackStatisticData data,  _) => data.color,
-                                  xValueMapper: (StackStatisticData data, _) => data.stackName,
-                                  yValueMapper: (StackStatisticData data, _) => data.memorized,
-                                  innerRadius: '70%',
-                                )
-                              ],
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 45, 0, 0),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Theme.of(context).scaffoldBackgroundColor,
-                                borderRadius: BorderRadius.only(
-                                    topRight: Radius.circular(10),
-                                    topLeft: Radius.circular(10),
-                                    bottomRight: Radius.circular(10),
-                                    bottomLeft: Radius.circular(10)
-                                ),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Color.fromRGBO(0, 0, 0, 0.15),
-                                    blurRadius: 8.0,
-                                    offset: Offset(0, 8),
-                                  ),
-                                ],
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.fromLTRB(0, 30, 0, 10),
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(0, 40, 0, 20),
+              child: Container(
+                padding:  const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                child: Column(
+                  children: [
+                    Container(
+                      height: 137,
+                      width: 137,
+                      child: SfCircularChart(
+                        annotations:  <CircularChartAnnotation>[
+                          CircularChartAnnotation(
+                              widget: Container(
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              "TOTAL CARDS",
-                                              style: Theme.of(context).textTheme.bodySmall,
-                                            )
-                                          ],
-                                        ),
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: [
-                                            Padding(
-                                              padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
-                                              child: Text(
-                                                '${widget.noticed.toInt() + widget.notNoticed.toInt()}',
-                                                style: Theme.of(context).textTheme.bodyLarge,
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                      ],
+                                    Text(
+                                      '${progressValue.toInt()}',
+                                      style: Theme.of(context).textTheme.headlineLarge,
                                     ),
-                                    Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              "NOTICED",
-                                              style: Theme.of(context).textTheme.bodySmall,
-                                            )
-                                          ],
-                                        ),
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: [
-                                            Padding(
-                                              padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
-                                              child: Text(
-                                                '${widget.noticed.toInt()}',
-                                                style: Theme.of(context).textTheme.bodyLarge,
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                    Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              "NOT NOTICED",
-                                              style: Theme.of(context).textTheme.bodySmall,
-                                            )
-                                          ],
-                                        ),
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: [
-                                            Padding(
-                                              padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
-                                              child: Text(
-                                                '${widget.notNoticed.toInt()}',
-                                                style: Theme.of(context).textTheme.bodyLarge,
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                      ],
+                                    Padding(
+                                      padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
+                                      child: Text(
+                                        '%',
+                                        style: Theme.of(context).textTheme.headlineSmall,
+                                      ),
                                     ),
                                   ],
                                 ),
                               ),
-                            ),
                           ),
+                        ],
+                        series: <CircularSeries>[
+                          DoughnutSeries<StackStatisticData, String>(
+                            radius: "110",
+                            dataSource: _stackStatisticData,
+                            pointColorMapper:(StackStatisticData data,  _) => data.color,
+                            xValueMapper: (StackStatisticData data, _) => data.stackName,
+                            yValueMapper: (StackStatisticData data, _) => data.memorized,
+                            innerRadius: '70%',
+                          )
                         ],
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                    child: Row(
-                      children: [
-                        const HeadlineSmall(text: "RUN DETAILS"),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                          child: Container(
-                            height: MediaQuery.of(context).size.height /6.7,
-                            width:  MediaQuery.of(context).size.width /3.6,
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).colorScheme.secondary,
-                              borderRadius: BorderRadius.circular(10),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Color.fromRGBO(0, 0, 0, 0.15),
-                                  blurRadius: 15.0,
-                                  offset: Offset(4, 10),
-                                ),
-                              ],
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Icon(
-                                        Icons.fast_forward_rounded,
-                                        size: 22.0,
-                                        color: Colors.green,
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        '${fastestRun}',
-                                        style: Theme.of(context).textTheme.labelMedium,
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        "FASTEST RUN",
-                                        style: Theme.of(context).textTheme.titleSmall,
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 45, 0, 0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).scaffoldBackgroundColor,
+                          borderRadius: BorderRadius.only(
+                              topRight: Radius.circular(10),
+                              topLeft: Radius.circular(10),
+                              bottomRight: Radius.circular(10),
+                              bottomLeft: Radius.circular(10)
                           ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Color.fromRGBO(0, 0, 0, 0.15),
+                              blurRadius: 8.0,
+                              offset: Offset(0, 8),
+                            ),
+                          ],
                         ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                          child: Container(
-                            height: MediaQuery.of(context).size.height /6.7,
-                            width:  MediaQuery.of(context).size.width /3.6,
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).colorScheme.secondary,
-                              borderRadius: BorderRadius.circular(10),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Color.fromRGBO(0, 0, 0, 0.15),
-                                  blurRadius: 15.0,
-                                  offset: Offset(4, 10),
-                                ),
-                              ],
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Icon(
-                                        Icons.av_timer_rounded,
-                                        size: 22.0,
-                                        color: Theme.of(context).colorScheme.primary,
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        '${latestRun}',
-                                        style: Theme.of(context).textTheme.labelMedium,
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        "LATEST RUN",
-                                        style: Theme.of(context).textTheme.titleSmall,
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                          child: Container(
-                            height: MediaQuery.of(context).size.height /6.7,
-                            width:  MediaQuery.of(context).size.width /3.6,
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).colorScheme.secondary,
-                              borderRadius: BorderRadius.circular(10),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Color.fromRGBO(0, 0, 0, 0.15),
-                                  blurRadius: 15.0,
-                                  offset: Offset(4, 10),
-                                ),
-                              ],
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Icon(
-                                        Icons.bar_chart,
-                                        size: 22.0,
-                                        color: Colors.red,
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        averageTime,
-                                        style: Theme.of(context).textTheme.labelMedium,
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        "AVERAGE",
-                                        style: Theme.of(context).textTheme.titleSmall,
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 10, 0, 20),
-                    child: Container(
-                      padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            child: Padding(
-                              padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 30, 0, 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Container(
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Text(
-                                                "TOTAL RUNS",
-                                                style: Theme.of(context).textTheme.bodySmall,
-                                              )
-                                            ],
-                                          ),
-                                          Row(
-                                            children: [
-                                              Padding(
-                                                padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                                child: Text(
-                                                  '$_totalRuns',
-                                                  style:  Theme.of(context).textTheme.bodyLarge,
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                        ],
-                                      ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        "TOTAL CARDS",
+                                        style: Theme.of(context).textTheme.bodySmall,
+                                      )
+                                    ],
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                    child: DatePickerBtn(onDateSelected: (year, month)
-                                    {
-                                      updateSelectedValues(year, month);
-                                    },),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
+                                        child: Text(
+                                          '${widget.noticed.toInt() + widget.notNoticed.toInt()}',
+                                          style: Theme.of(context).textTheme.bodyLarge,
+                                        ),
+                                      )
+                                    ],
                                   ),
                                 ],
                               ),
-                            ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        "NOTICED",
+                                        style: Theme.of(context).textTheme.bodySmall,
+                                      )
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
+                                        child: Text(
+                                          '${widget.noticed.toInt()}',
+                                          style: Theme.of(context).textTheme.bodyLarge,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        "NOT NOTICED",
+                                        style: Theme.of(context).textTheme.bodySmall,
+                                      )
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
+                                        child: Text(
+                                          '${widget.notNoticed.toInt()}',
+                                          style: Theme.of(context).textTheme.bodyLarge,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
-                            child: CustomPaint(
-                              size: Size(MediaQuery.of(context).size.width, 2),
-                              painter: DividePainter(),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(20, 10, 30, 0),
-                            child: StatisticLineChart(
-                              year: selectedYear,
-                              month: selectedMonth,
-                              runInformation: runInformation,
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
                     ),
-                  ),
-              
+                  ],
+                ),
+              ),
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+              child: Row(
+                children: [
+                  const HeadlineSmall(text: "RUN DETAILS"),
+                ],
+              ),
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
                   Padding(
-                    padding: snackbarIsDisplayed ? EdgeInsets.fromLTRB(0, 5, 0, 70) : EdgeInsets.fromLTRB(0, 5, 0, 20),
+                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                     child: Container(
-                      padding:  const EdgeInsets.fromLTRB(20, 5, 20, 5),
+                      height: MediaQuery.of(context).size.height /6.7,
+                      width:  MediaQuery.of(context).size.width /3.6,
                       decoration: BoxDecoration(
-                        color: Theme.of(context).scaffoldBackgroundColor,
+                        color: Theme.of(context).colorScheme.secondary,
                         borderRadius: BorderRadius.circular(10),
                         boxShadow: [
                           BoxShadow(
                             color: Color.fromRGBO(0, 0, 0, 0.15),
                             blurRadius: 15.0,
-                            offset: Offset(0, -15),
+                            offset: Offset(4, 10),
                           ),
                         ],
                       ),
                       child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 15, 0, 15),
+                            padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
                             child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                const HeadlineSmall(text: "COMMONLY ANSWERED WRONG"),
+                                Icon(
+                                  Icons.fast_forward_rounded,
+                                  size: 22.0,
+                                  color: Colors.green,
+                                )
                               ],
                             ),
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.format_list_numbered,
-                                    size: 22.0,
-                                    color: Theme.of(context).colorScheme.primary,
-                                  ),
-                                  SizedBox(height: 5),
-                                  Padding(
-                                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
-                                    child: Text(
-                                      "Place",
-                                      style: Theme.of(context).textTheme.bodyMedium,
-                                    ),
-                                  ),
-                                  Text(
-                                    "1.",
-                                    style: Theme.of(context).textTheme.bodySmall,
-                                  ),
-                                  SizedBox(height: 10),
-                                  Text(
-                                    "2.",
-                                    style: Theme.of(context).textTheme.bodySmall,
-                                  ),
-                                  SizedBox(height: 10),
-                                  Text(
-                                    "3.",
-                                    style: Theme.of(context).textTheme.bodySmall,
-                                  ),
-                                ],
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.question_answer_rounded,
-                                    size: 22.0,
-                                    color: Theme.of(context).colorScheme.primary,
-                                  ),
-                                  SizedBox(height: 5),
-                                  Padding(
-                                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
-                                    child: Text(
-                                      "Question",
-                                      style: Theme.of(context).textTheme.bodyMedium,
-                                    ),
-                                  ),
-                                  Text(
-                                    '${Trim().trimText(combinedData[0]['question'], 15)}',
-                                    style: Theme.of(context).textTheme.bodySmall,
-                                  ),
-                                  SizedBox(height: 10),
-                                  Text(
-                                    '${Trim().trimText(combinedData[1]['question'], 15)}',
-                                    style: Theme.of(context).textTheme.bodySmall,
-                                  ),
-                                  SizedBox(height: 10),
-                                  Text(
-                                    '${Trim().trimText(combinedData[2]['question'], 15)}',
-                                    style: Theme.of(context).textTheme.bodySmall,
-                                  ),
-                                ],
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.error_outline_rounded,
-                                    size: 22.0,
-                                    color: Theme.of(context).colorScheme.primary,
-                                  ),
-                                  SizedBox(height: 5),
-                                  Padding(
-                                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
-                                    child: Text(
-                                      "Number",
-                                      style: Theme.of(context).textTheme.bodyMedium,
-                                    ),
-                                  ),
-                                  Text(
-                                    '${combinedData[0]['answered_incorrectly'].toInt()}',
-                                    style: Theme.of(context).textTheme.bodySmall,
-                                  ),
-                                  SizedBox(height: 10),
-                                  Text(
-                                    '${combinedData[1]['answered_incorrectly'].toInt()}',
-                                    style: Theme.of(context).textTheme.bodySmall,
-                                  ),
-                                  SizedBox(height: 10),
-                                  Text(
-                                    '${combinedData[2]['answered_incorrectly'].toInt()}',
-                                    style: Theme.of(context).textTheme.bodySmall,
-                                  ),
-                                ],
-                              ),
-                            ],
-                          )
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  '${fastestRun}',
+                                  style: Theme.of(context).textTheme.labelMedium,
+                                )
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "FASTEST RUN",
+                                  style: Theme.of(context).textTheme.titleSmall,
+                                )
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                    child: Container(
+                      height: MediaQuery.of(context).size.height /6.7,
+                      width:  MediaQuery.of(context).size.width /3.6,
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.secondary,
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Color.fromRGBO(0, 0, 0, 0.15),
+                            blurRadius: 15.0,
+                            offset: Offset(4, 10),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.av_timer_rounded,
+                                  size: 22.0,
+                                  color: Theme.of(context).colorScheme.primary,
+                                )
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  '${latestRun}',
+                                  style: Theme.of(context).textTheme.labelMedium,
+                                )
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "LATEST RUN",
+                                  style: Theme.of(context).textTheme.titleSmall,
+                                )
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                    child: Container(
+                      height: MediaQuery.of(context).size.height /6.7,
+                      width:  MediaQuery.of(context).size.width /3.6,
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.secondary,
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Color.fromRGBO(0, 0, 0, 0.15),
+                            blurRadius: 15.0,
+                            offset: Offset(4, 10),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.bar_chart,
+                                  size: 22.0,
+                                  color: Colors.red,
+                                )
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  averageTime,
+                                  style: Theme.of(context).textTheme.labelMedium,
+                                )
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "AVERAGE",
+                                  style: Theme.of(context).textTheme.titleSmall,
+                                )
+                              ],
+                            ),
+                          ),
                         ],
                       ),
                     ),
                   ),
                 ],
               ),
-            )
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(0, 10, 0, 20),
+              child: Container(
+                padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Text(
+                                          "TOTAL RUNS",
+                                          style: Theme.of(context).textTheme.bodySmall,
+                                        )
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                          child: Text(
+                                            '$_totalRuns',
+                                            style:  Theme.of(context).textTheme.bodyLarge,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                              child: DatePickerBtn(onDateSelected: (year, month)
+                              {
+                                updateSelectedValues(year, month);
+                              },),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
+                      child: CustomPaint(
+                        size: Size(MediaQuery.of(context).size.width, 2),
+                        painter: DividePainter(),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 10, 30, 0),
+                      child: StatisticLineChart(
+                        year: selectedYear,
+                        month: selectedMonth,
+                        runInformation: runInformation,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+                    
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: snackbarIsDisplayed ? EdgeInsets.fromLTRB(0, 5, 0, 70) : EdgeInsets.fromLTRB(0, 5, 0, 20),
+              child: Container(
+                padding:  const EdgeInsets.fromLTRB(20, 5, 20, 5),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).scaffoldBackgroundColor,
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Color.fromRGBO(0, 0, 0, 0.15),
+                      blurRadius: 15.0,
+                      offset: Offset(0, -15),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 15, 0, 15),
+                      child: Row(
+                        children: [
+                          const HeadlineSmall(text: "COMMONLY ANSWERED WRONG"),
+                        ],
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.format_list_numbered,
+                              size: 22.0,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                            SizedBox(height: 5),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+                              child: Text(
+                                "Place",
+                                style: Theme.of(context).textTheme.bodyMedium,
+                              ),
+                            ),
+                            Text(
+                              "1.",
+                              style: Theme.of(context).textTheme.bodySmall,
+                            ),
+                            SizedBox(height: 10),
+                            Text(
+                              "2.",
+                              style: Theme.of(context).textTheme.bodySmall,
+                            ),
+                            SizedBox(height: 10),
+                            Text(
+                              "3.",
+                              style: Theme.of(context).textTheme.bodySmall,
+                            ),
+                          ],
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.question_answer_rounded,
+                              size: 22.0,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                            SizedBox(height: 5),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+                              child: Text(
+                                "Question",
+                                style: Theme.of(context).textTheme.bodyMedium,
+                              ),
+                            ),
+                            Text(
+                              '${Trim().trimText(combinedData[0]['question'], 15)}',
+                              style: Theme.of(context).textTheme.bodySmall,
+                            ),
+                            SizedBox(height: 10),
+                            Text(
+                              '${Trim().trimText(combinedData[1]['question'], 15)}',
+                              style: Theme.of(context).textTheme.bodySmall,
+                            ),
+                            SizedBox(height: 10),
+                            Text(
+                              '${Trim().trimText(combinedData[2]['question'], 15)}',
+                              style: Theme.of(context).textTheme.bodySmall,
+                            ),
+                          ],
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.error_outline_rounded,
+                              size: 22.0,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                            SizedBox(height: 5),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+                              child: Text(
+                                "Number",
+                                style: Theme.of(context).textTheme.bodyMedium,
+                              ),
+                            ),
+                            Text(
+                              '${combinedData[0]['answered_incorrectly'].toInt()}',
+                              style: Theme.of(context).textTheme.bodySmall,
+                            ),
+                            SizedBox(height: 10),
+                            Text(
+                              '${combinedData[1]['answered_incorrectly'].toInt()}',
+                              style: Theme.of(context).textTheme.bodySmall,
+                            ),
+                            SizedBox(height: 10),
+                            Text(
+                              '${combinedData[2]['answered_incorrectly'].toInt()}',
+                              style: Theme.of(context).textTheme.bodySmall,
+                            ),
+                          ],
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ),
           ),
         ],
       ),
