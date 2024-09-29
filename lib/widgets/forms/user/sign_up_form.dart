@@ -292,7 +292,7 @@ class _SignUpFormState extends State<SignUpForm> {
                       children: [
                         CustomPaint(
                           size: Size(MediaQuery.of(context).size.width/2.75, 2),
-                          painter: DividePainter(),
+                          painter: DividePainter(Colors.white),
                         ),
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 20.0), // Füge horizontalen Abstand hinzu
@@ -303,7 +303,7 @@ class _SignUpFormState extends State<SignUpForm> {
                         ),
                         CustomPaint(
                           size: Size(MediaQuery.of(context).size.width/2.75, 2),
-                          painter: DividePainter(),
+                          painter: DividePainter(Colors.white),
                         ),
                       ],
                     ),

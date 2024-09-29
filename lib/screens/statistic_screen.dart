@@ -7,6 +7,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:memo_dex_prototyp/services/api/api_client.dart';
 import 'package:memo_dex_prototyp/widgets/buttons/statistic_card_btn.dart';
 import 'package:memo_dex_prototyp/widgets/text/headlines/headline_medium.dart';
+import '../utils/divide_painter.dart';
 import '../utils/filters.dart';
 import '../services/local/file_handler.dart';
 import '../widgets/text/headlines/headline_large.dart';
@@ -243,106 +244,140 @@ class _StatisticScreenState extends State<StatisticScreen>
                   ),
                   InkWell(
                     onTap: () {
-                      showMenu(
-                        color: Theme.of(context).popupMenuTheme.color,
-                        context: context,
-                        position: RelativeRect.fromLTRB(1, 220, 0, 0),
+                      showModalBottomSheet(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(10)),
                         ),
-                        items: [
-                          PopupMenuItem(
-                            onTap: (){
-                              setState(() {
-                                selectedOption = "STACKNAME";
-                                loadStatisticCards();
-                              });
-                            },
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  "Stackname",
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: selectedOption == "STACKNAME"
-                                        ? Theme.of(context).colorScheme.primary
-                                        : Theme.of(context).colorScheme.onSurface,
-                                    fontWeight: selectedOption == "STACKNAME"
-                                        ?  FontWeight.w600
-                                        :  FontWeight.w400,
-                                  ),
-                                ),
-                                Icon(
-                                  Icons.sort_by_alpha_rounded,
-                                  size: 20.0,
-                                  color: selectedOption == "STACKNAME"
-                                      ? Theme.of(context).colorScheme.primary
-                                      : Theme.of(context).colorScheme.onSurface,
-                                ),
-                              ],
-                            ),
-                            value: "STACKNAME",
-                          ),
-                          PopupMenuItem(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  "Creation Date",
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: selectedOption == "CREATION DATE"
-                                        ? Theme.of(context).colorScheme.primary
-                                        : Theme.of(context).colorScheme.onSurface,
-                                    fontWeight: selectedOption == "CREATION DATE"
-                                        ?  FontWeight.w600
-                                        :  FontWeight.w400,
-                                  ),
-                                ),
-                                Icon(
-                                  Icons.date_range_rounded,
-                                  size: 20.0,
-                                  color: selectedOption == "CREATION DATE"
-                                      ? Theme.of(context).colorScheme.primary
-                                      : Theme.of(context).colorScheme.onSurface,
-                                ),
-                              ],
-                            ),
-                            value: "CREATION DATE",
-                          ),
-                          if (selectedOption == "STACKNAME" || selectedOption == "CREATION DATE")
-                            PopupMenuItem(
-                              onTap: (){
-                                setState(() {
-                                  selectedOption = "";
-                                  loadStatisticCards();
-                                });
-                              },
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        backgroundColor: Theme.of(context).colorScheme.secondary,
+                        context: context,
+                        builder: (BuildContext context){
+                          return SizedBox(
+                              height: 250,
+                              child: Column(
                                 children: [
-                                  Text(
-                                    "Reset",
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: Theme.of(context).colorScheme.tertiary,
-                                      fontFamily: "Inter",
-                                      fontWeight: FontWeight.w400,
+                                  Center(
+                                    child: Padding(
+                                      padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                                      child: Container(
+                                        height: 7,
+                                        width: 60,
+                                        decoration: BoxDecoration(
+                                          color: Theme.of(context).scaffoldBackgroundColor,
+                                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                                        ),
+                                      ),
                                     ),
                                   ),
-                                  Icon(
-                                    Icons.refresh_rounded,
-                                    size: 20.0,
-                                    color: Theme.of(context).colorScheme.tertiary,
+                                  SizedBox(height: 45),
+                                  CustomPaint(
+                                    size: Size(MediaQuery.of(context).size.width, 0.2),
+                                    painter: DividePainter(Theme.of(context).scaffoldBackgroundColor),
+                                  ),
+                                  SizedBox(height: 15),
+                                  PopupMenuItem(
+                                    onTap: (){
+                                      setState(() {
+                                        selectedOption = "STACKNAME";
+                                      });
+                                    },
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                                          child: Icon(
+                                            Icons.sort_by_alpha_rounded,
+                                            size: 30.0,
+                                            color: selectedOption == "STACKNAME"
+                                                ? Theme.of(context).colorScheme.primary
+                                                : Theme.of(context).colorScheme.onSurface,
+                                          ),
+                                        ),
+                                        Text(
+                                          "Stackname",
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            color: selectedOption == "STACKNAME"
+                                                ? Theme.of(context).colorScheme.primary
+                                                : Theme.of(context).colorScheme.onSurface,
+                                            fontWeight: selectedOption == "STACKNAME"
+                                                ?  FontWeight.w600
+                                                :  FontWeight.w400,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    value: "STACKNAME",
+                                  ),
+                                  SizedBox(height: 5),
+                                  PopupMenuItem(
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                                          child: Icon(
+                                            Icons.date_range_rounded,
+                                            size: 30.0,
+                                            color: selectedOption == "CREATION DATE"
+                                                ? Theme.of(context).colorScheme.primary
+                                                : Theme.of(context).colorScheme.onSurface,
+                                          ),
+                                        ),
+                                        Text(
+                                          "Creation Date",
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            color: selectedOption == "CREATION DATE"
+                                                ? Theme.of(context).colorScheme.primary
+                                                : Theme.of(context).colorScheme.onSurface,
+                                            fontWeight: selectedOption == "CREATION DATE"
+                                                ?  FontWeight.w600
+                                                :  FontWeight.w400,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    value: "CREATION DATE",
+                                  ),
+                                  SizedBox(height: 5),
+                                  PopupMenuItem(
+                                    onTap: (selectedOption == "STACKNAME" || selectedOption == "CREATION DATE") ? (){
+                                      setState(() {
+                                        selectedOption = "";
+                                        loadStatisticCards();
+                                      });
+                                    } : (){},
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                                          child: Icon(
+                                            Icons.refresh_rounded,
+                                            size: 30.0,
+                                            color: (selectedOption == "STACKNAME" || selectedOption == "CREATION DATE") ? Colors.white : Theme.of(context).colorScheme.tertiary,
+                                          ),
+                                        ),
+                                        Text(
+                                          "Reset",
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            color: (selectedOption == "STACKNAME" || selectedOption == "CREATION DATE") ? Colors.white : Theme.of(context).colorScheme.tertiary,
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    value: "ALL STACKS",
                                   ),
                                 ],
-                              ),
-                              value: "ALL STACKS",
-                            ),
-                        ],
+                              )
+                          );
+                        },
                       ).then((value) {
                         setState(() {
+                          print(selectedOption);
                           selectedOption = value!;
                         });
                       });

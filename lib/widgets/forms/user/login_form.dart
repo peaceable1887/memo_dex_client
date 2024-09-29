@@ -212,7 +212,7 @@ class _LoginFormState extends State<LoginForm> {
                       children: [
                         CustomPaint(
                           size: Size(MediaQuery.of(context).size.width/2.75, 2),
-                          painter: DividePainter(),
+                          painter: DividePainter(Colors.white),
                         ),
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 20.0), // Füge horizontalen Abstand hinzu
@@ -223,7 +223,7 @@ class _LoginFormState extends State<LoginForm> {
                         ),
                         CustomPaint(
                           size: Size(MediaQuery.of(context).size.width/2.75, 2),
-                          painter: DividePainter(),
+                          painter: DividePainter(Colors.white),
                         ),
                       ],
                     ),

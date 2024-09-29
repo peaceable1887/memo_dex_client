@@ -2,10 +2,14 @@ import 'package:flutter/material.dart';
 
 class DividePainter extends CustomPainter {
 
+  Color color;
+
+  DividePainter(this.color);
+
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint();
-    paint.color = Colors.white;
+    paint.color = color;
     paint.strokeWidth = 1.5;
 
     final start = Offset(0, size.height / 2);

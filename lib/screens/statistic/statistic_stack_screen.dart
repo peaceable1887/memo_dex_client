@@ -1020,7 +1020,7 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
                       padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
                       child: CustomPaint(
                         size: Size(MediaQuery.of(context).size.width, 2),
-                        painter: DividePainter(),
+                        painter: DividePainter(Colors.white),
                       ),
                     ),
                     Padding(
