@@ -507,186 +507,186 @@ class _StackContentScreenState extends State<StackContentScreen> {
                   ),
                   InkWell(
                     onTap: () {
-                      showModalBottomSheet(
-                        shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                        ),
-                      backgroundColor: Theme.of(context).colorScheme.secondary,
-                      context: context,
-                      builder: (BuildContext context){
-                        return SizedBox(
-                        height: 300,
-                        child: Column(
-                          children: [
-                            Center(
-                              child: Padding(
-                                padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                                child: Container(
-                                  height: 7,
-                                  width: 60,
-                                  decoration: BoxDecoration(
-                                    color: Theme.of(context).scaffoldBackgroundColor,
-                                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                                  ),
+                    showModalBottomSheet(
+                      shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      ),
+                    backgroundColor: Theme.of(context).colorScheme.secondary,
+                    context: context,
+                    builder: (BuildContext context){
+                      return SizedBox(
+                      height: 300,
+                      child: Column(
+                        children: [
+                          Center(
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                              child: Container(
+                                height: 7,
+                                width: 60,
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context).scaffoldBackgroundColor,
+                                  borderRadius: BorderRadius.all(Radius.circular(10)),
                                 ),
                               ),
                             ),
-                            SizedBox(height: 45),
-                            CustomPaint(
-                              size: Size(MediaQuery.of(context).size.width, 0.2),
-                              painter: DividePainter(Theme.of(context).scaffoldBackgroundColor),
+                          ),
+                          SizedBox(height: 45),
+                          CustomPaint(
+                            size: Size(MediaQuery.of(context).size.width, 0.2),
+                            painter: DividePainter(Theme.of(context).scaffoldBackgroundColor),
+                          ),
+                          SizedBox(height: 15),
+                          PopupMenuItem(
+                            onTap: (){
+                              setState(() {
+                                selectedOption = "QUESTION";
+                                loadCards();
+                              });
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                                  child: Icon(
+                                    Icons.sort_by_alpha_rounded,
+                                    size: 30.0,
+                                    color: selectedOption == "QUESTION"
+                                        ? Theme.of(context).colorScheme.primary
+                                        : Theme.of(context).colorScheme.onSurface,
+                                  ),
+                                ),
+                                Text(
+                                  "Question",
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    color: selectedOption == "QUESTION"
+                                        ? Theme.of(context).colorScheme.primary
+                                        : Theme.of(context).colorScheme.onSurface,
+                                    fontWeight: selectedOption == "QUESTION"
+                                        ?  FontWeight.w600
+                                        :  FontWeight.w400,
+                                  ),
+                                ),
+                              ],
                             ),
-                            SizedBox(height: 15),
-                            PopupMenuItem(
-                              onTap: (){
-                                setState(() {
-                                  selectedOption = "QUESTION";
-                                  loadCards();
-                                });
-                              },
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-                                    child: Icon(
-                                      Icons.sort_by_alpha_rounded,
-                                      size: 30.0,
-                                      color: selectedOption == "QUESTION"
-                                          ? Theme.of(context).colorScheme.primary
-                                          : Theme.of(context).colorScheme.onSurface,
-                                    ),
+                            value: "QUESTION",
+                          ),
+                          SizedBox(height: 5),
+                          PopupMenuItem(
+                            onTap: (){
+                              setState(() {
+                                selectedOption = "CREATION DATE";
+                                loadCards();
+                              });
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                                  child: Icon(
+                                    Icons.date_range_rounded,
+                                    size: 30.0,
+                                    color: selectedOption == "CREATION DATE"
+                                        ? Theme.of(context).colorScheme.primary
+                                        : Theme.of(context).colorScheme.onSurface,
                                   ),
-                                  Text(
-                                    "Question",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: selectedOption == "QUESTION"
-                                          ? Theme.of(context).colorScheme.primary
-                                          : Theme.of(context).colorScheme.onSurface,
-                                      fontWeight: selectedOption == "QUESTION"
-                                          ?  FontWeight.w600
-                                          :  FontWeight.w400,
-                                    ),
+                                ),
+                                Text(
+                                  "Creation Date",
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    color: selectedOption == "CREATION DATE"
+                                        ? Theme.of(context).colorScheme.primary
+                                        : Theme.of(context).colorScheme.onSurface,
+                                    fontWeight: selectedOption == "CREATION DATE"
+                                        ?  FontWeight.w600
+                                        :  FontWeight.w400,
                                   ),
-                                ],
-                              ),
-                              value: "QUESTION",
+                                ),
+                              ],
                             ),
-                            SizedBox(height: 5),
-                            PopupMenuItem(
-                              onTap: (){
-                                setState(() {
-                                  selectedOption = "CREATION DATE";
-                                  loadCards();
-                                });
-                              },
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-                                    child: Icon(
-                                      Icons.date_range_rounded,
-                                      size: 30.0,
-                                      color: selectedOption == "CREATION DATE"
-                                          ? Theme.of(context).colorScheme.primary
-                                          : Theme.of(context).colorScheme.onSurface,
-                                    ),
+                            value: "CREATION DATE",
+                          ),
+                          SizedBox(height: 5),
+                          PopupMenuItem(
+                            onTap: (){
+                              setState(() {
+                                selectedOption = "NOTICED";
+                                loadCards();
+                              });
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                                  child: Icon(
+                                    Icons.lightbulb_outline,
+                                    size: 30.0,
+                                    color: selectedOption == "NOTICED"
+                                        ? Theme.of(context).colorScheme.primary
+                                        : Theme.of(context).colorScheme.onSurface,
                                   ),
-                                  Text(
-                                    "Creation Date",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: selectedOption == "CREATION DATE"
-                                          ? Theme.of(context).colorScheme.primary
-                                          : Theme.of(context).colorScheme.onSurface,
-                                      fontWeight: selectedOption == "CREATION DATE"
-                                          ?  FontWeight.w600
-                                          :  FontWeight.w400,
-                                    ),
+                                ),
+                                Text(
+                                  "Noticed",
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    color: selectedOption == "NOTICED"
+                                        ? Theme.of(context).colorScheme.primary
+                                        : Theme.of(context).colorScheme.onSurface,
+                                    fontWeight: selectedOption == "NOTICED"
+                                        ?  FontWeight.w600
+                                        :  FontWeight.w400,
                                   ),
-                                ],
-                              ),
-                              value: "CREATION DATE",
+                                ),
+                              ],
                             ),
-                            SizedBox(height: 5),
-                            PopupMenuItem(
-                              onTap: (){
-                                setState(() {
-                                  selectedOption = "NOTICED";
-                                  loadCards();
-                                });
-                              },
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-                                    child: Icon(
-                                      Icons.lightbulb_outline,
-                                      size: 30.0,
-                                      color: selectedOption == "NOTICED"
-                                          ? Theme.of(context).colorScheme.primary
-                                          : Theme.of(context).colorScheme.onSurface,
-                                    ),
+                            value: "NOTICED",
+                          ),
+                          SizedBox(height: 5),
+                          PopupMenuItem(
+                            onTap: (selectedOption == "QUESTION" || selectedOption == "CREATION DATE" || selectedOption == "NOTICED") ? (){
+                              setState(() {
+                                selectedOption = "ALL CARDS";
+                                loadCards();
+                              });
+                            } : (){},
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                                  child: Icon(
+                                    Icons.refresh_rounded,
+                                    size: 30.0,
+                                    color: Theme.of(context).colorScheme.tertiary,
                                   ),
-                                  Text(
-                                    "Noticed",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: selectedOption == "NOTICED"
-                                          ? Theme.of(context).colorScheme.primary
-                                          : Theme.of(context).colorScheme.onSurface,
-                                      fontWeight: selectedOption == "NOTICED"
-                                          ?  FontWeight.w600
-                                          :  FontWeight.w400,
-                                    ),
+                                ),
+                                Text(
+                                  "Reset",
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    color: Theme.of(context).colorScheme.tertiary,
+                                    fontFamily: "Inter",
+                                    fontWeight: FontWeight.w400,
                                   ),
-                                ],
-                              ),
-                              value: "NOTICED",
+                                ),
+                              ],
                             ),
-                            SizedBox(height: 5),
-                            PopupMenuItem(
-                              onTap: (selectedOption == "QUESTION" || selectedOption == "CREATION DATE" || selectedOption == "NOTICED") ? (){
-                                setState(() {
-                                  selectedOption = "ALL CARDS";
-                                  loadCards();
-                                });
-                              } : (){},
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-                                    child: Icon(
-                                      Icons.refresh_rounded,
-                                      size: 30.0,
-                                      color: Theme.of(context).colorScheme.tertiary,
-                                    ),
-                                  ),
-                                  Text(
-                                    "Reset",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: Theme.of(context).colorScheme.tertiary,
-                                      fontFamily: "Inter",
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              value: "ALL CARDS",
-                            ),
-                          ]
-                        )
-                      );
-                      }).then((value) {
-                        setState(() {
-                          selectedOption = value!;
-                        });
+                            value: "ALL CARDS",
+                          ),
+                        ]
+                      )
+                    );
+                    }).then((value) {
+                      setState(() {
+                        selectedOption = value!;
                       });
+                    });
                     },
                     child: Icon(
                       Icons.filter_alt,
