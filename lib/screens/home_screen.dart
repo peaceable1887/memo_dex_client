@@ -6,7 +6,6 @@ import '../utils/divide_painter.dart';
 import '../widgets/dialogs/custom_snackbar.dart';
 import '../widgets/custom_search_delegate.dart';
 import '../widgets/text/headlines/headline_large.dart';
-import '../widgets/header/top_search_bar.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);

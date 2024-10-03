@@ -42,6 +42,7 @@ class CustomSearchDelegate extends SearchDelegate
       appBarTheme: AppBarTheme(
         color: Theme.of(context).scaffoldBackgroundColor,
         elevation: 0,
+        scrolledUnderElevation: 0
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
@@ -130,22 +131,25 @@ class CustomSearchDelegate extends SearchDelegate
         matchQuery.add(stackBtn);
       }
     }
-    return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: GridView.builder(
-        padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          mainAxisSpacing: 20.0,
-          crossAxisSpacing: 20.0,
-          crossAxisCount: 2,
-          childAspectRatio: MediaQuery.of(context).size.width /
-              (MediaQuery.of(context).size.height / 2.3),
+    return Theme(
+      data: Theme.of(context),
+      child: Scaffold(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        body: GridView.builder(
+          padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            mainAxisSpacing: 20.0,
+            crossAxisSpacing: 20.0,
+            crossAxisCount: 2,
+            childAspectRatio: MediaQuery.of(context).size.width /
+                (MediaQuery.of(context).size.height / 2.3),
+          ),
+          itemBuilder: (context, index)
+          {
+            return matchQuery[index];
+          },
+          itemCount: matchQuery.length,
         ),
-        itemBuilder: (context, index)
-        {
-          return matchQuery[index];
-        },
-        itemCount: matchQuery.length,
       ),
     );
   }

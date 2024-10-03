@@ -47,7 +47,6 @@ class _StackBtnState extends State<StackBtn>
       child: ElevatedButton(
         onPressed: pushToStackContent,
         style: ElevatedButton.styleFrom(
-          //backgroundColor: Color(int.parse("0xFF${widget.iconColor}")),
           backgroundColor: Theme.of(context).colorScheme.secondary,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(10)),
