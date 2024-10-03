@@ -46,6 +46,7 @@ class _TopNavigationBarState extends State<TopNavigationBar> {
         child: Container(
           width: countTextLength(widget.btnText),
           child: AppBar(
+            scrolledUnderElevation: 0,
             leadingWidth: 15,
             title: Text(
               widget.btnText,

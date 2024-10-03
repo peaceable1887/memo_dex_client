@@ -105,10 +105,11 @@ class _SettingScreenState extends State<SettingScreen> {
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
+            scrolledUnderElevation: 0,
             elevation: 0,
             centerTitle: true,
             expandedHeight: 130,
-            backgroundColor: Theme.of(context).scaffoldBackgroundColor.withOpacity(1),
+            backgroundColor: Theme.of(context).colorScheme.secondary,
             floating: false,
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(

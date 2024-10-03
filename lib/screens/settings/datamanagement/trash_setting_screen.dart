@@ -150,6 +150,7 @@ class _TrashSettingScreenState extends State<TrashSettingScreen>
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
+            scrolledUnderElevation: 0,
             elevation: 0,
             leading: TopNavigationBar(
               btnText: "Settings",
@@ -164,7 +165,7 @@ class _TrashSettingScreenState extends State<TrashSettingScreen>
             ),
             centerTitle: true,
             expandedHeight: 130,
-            backgroundColor: Theme.of(context).scaffoldBackgroundColor.withOpacity(1),
+            backgroundColor: Theme.of(context).colorScheme.secondary,
             floating: false,
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
@@ -191,6 +192,7 @@ class _TrashSettingScreenState extends State<TrashSettingScreen>
                   InkWell(
                     onTap: () {
                       showModalBottomSheet(
+                        elevation: 0,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(10)),
                         ),

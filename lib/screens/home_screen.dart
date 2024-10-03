@@ -62,9 +62,10 @@ class _HomeScreenState extends State<HomeScreen> {
             slivers: [
               SliverAppBar(
                 elevation: 0,
+                scrolledUnderElevation: 0,
                 centerTitle: true,
                 expandedHeight: 130,
-                backgroundColor: Theme.of(context).scaffoldBackgroundColor.withOpacity(1),
+                backgroundColor: Theme.of(context).colorScheme.secondary,
                 floating: false,
                 pinned: true,
                 actions: [
@@ -124,6 +125,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       InkWell(
                         onTap: () {
                           showModalBottomSheet(
+                            elevation: 0,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.all(Radius.circular(10)),
                             ),

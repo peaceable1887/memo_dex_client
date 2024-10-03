@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class DatePickerBtn extends StatefulWidget
@@ -16,73 +17,6 @@ class _DatePickerBtnState extends State<DatePickerBtn>
   late int selectedYear;
   late int selectedMonth;
 
-  Widget showMonthAsText(int monthValue)
-  {
-    if(monthValue == 1)
-    {
-      return Text("January");
-    }
-    if(monthValue == 2)
-    {
-
-      return Text("February");
-    }
-    if(monthValue == 3)
-    {
-
-      return Text("March");
-    }
-    if(monthValue == 4)
-    {
-
-      return Text("April");
-    }
-    if(monthValue == 5)
-    {
-
-      return Text("May");
-    }
-    if(monthValue == 6)
-    {
-
-      return Text("June");
-    }
-    if(monthValue == 7)
-    {
-
-      return Text("July");
-    }
-    if(monthValue == 8)
-    {
-
-      return Text("August");
-    }
-    if(monthValue == 9)
-    {
-
-      return Text("September");
-    }
-    if(monthValue == 10)
-    {
-
-      return Text("October");
-    }
-    if(monthValue == 11)
-    {
-
-      return Text("Novemeber");
-    }
-    if(monthValue == 12)
-    {
-
-      return Text("December");
-    }
-    else
-    {
-      return Text("");
-    }
-  }
-
   @override
   void initState()
   {
@@ -93,79 +27,59 @@ class _DatePickerBtnState extends State<DatePickerBtn>
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.fromLTRB(0, 0, 5, 0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text("MONTH",
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
-              DropdownButton<int>(
-                underline: Container(
-                  height: 0,
-                ),
-                isDense: true,
-                dropdownColor: Theme.of(context).scaffoldBackgroundColor,
-                iconEnabledColor: Theme.of(context).inputDecorationTheme.iconColor,
-                style: Theme.of(context).textTheme.bodyMedium,
-                value: selectedMonth,
-                items: List.generate(
-                  12, (index) => DropdownMenuItem<int>(
-                    value: index + 1,
-                    child: showMonthAsText(index +1),
-                  ),
-                ),
-                onChanged: (value)
-                {
-                  setState(()
-                  {
-                    selectedMonth = value!;
-                    widget.onDateSelected(selectedYear, selectedMonth);
-                  });
-                },
-              ),
-            ],
+    return CupertinoButton(
+      child: Icon(
+        Icons.calendar_month_rounded,
+        size: 22.0,
+        color: Colors.white,
+      ),
+      onPressed: (){
+        showModalBottomSheet(
+          elevation: 0,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
-          child: Container(
+          backgroundColor: Theme.of(context).colorScheme.secondary,
+          context: context,
+          builder: (BuildContext context) => SizedBox(
+            height: 300,
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("YEAR",
-                  style:  Theme.of(context).textTheme.bodySmall,
-                ),
-                DropdownButton<int>(
-                  underline: Container(
-                    height: 0,
-                  ),
-                  isDense: true,
-                  dropdownColor: Theme.of(context).scaffoldBackgroundColor,
-                  iconEnabledColor: Theme.of(context).inputDecorationTheme.iconColor,
-                  style: Theme.of(context).textTheme.bodyMedium,
-                  value: selectedYear,
-                  items: List.generate(
-                    101, (index) => DropdownMenuItem<int>(
-                      value: 2000 + index,
-                      child: Text((2000 + index).toString()),
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                    child: Container(
+                      height: 7,
+                      width: 60,
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).scaffoldBackgroundColor,
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                      ),
                     ),
                   ),
-                  onChanged: (value) {
-                    setState(() {
-                      selectedYear = value!;
-                      widget.onDateSelected(selectedYear, selectedMonth);
-                    });
-                  },
+                ),
+                SizedBox(height: 45),
+                SizedBox(
+                  height: 200, // Set a bounded height here
+                  child: CupertinoDatePicker(
+                    backgroundColor: Theme.of(context).colorScheme.secondary,
+                    initialDateTime: selectedDate,
+                    onDateTimeChanged: (DateTime newTime) {
+                      setState(() {
+                        selectedDate = newTime;
+                        selectedMonth = newTime.month;
+                        selectedYear = newTime.year;
+                        widget.onDateSelected(selectedYear, selectedMonth);
+                      });
+                    },
+                    mode: CupertinoDatePickerMode.monthYear,
+                  ),
                 ),
               ],
             ),
           ),
-        ),
-      ],
+        );
+      },
     );
   }
 }

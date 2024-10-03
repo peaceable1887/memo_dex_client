@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:memo_dex_prototyp/models/stack_statistic_data.dart';
 import 'package:memo_dex_prototyp/services/api/api_client.dart';
+import 'package:memo_dex_prototyp/utils/converter.dart';
 import 'package:memo_dex_prototyp/widgets/buttons/date_picker_btn.dart';
 import 'package:memo_dex_prototyp/widgets/components/statistic/statistic_line_chart.dart';
 import 'package:memo_dex_prototyp/widgets/text/headlines/headline_small.dart';
@@ -53,9 +54,9 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
     },
   ];
   late double progressValue;
-  late String fastestRun = "keine Zeit";
-  late String latestRun = "keine Zeit";
-  String averageTime = "keine Zeit";
+  late String fastestRun = "No Time";
+  late String latestRun = "No Time";
+  String averageTime = "No Time";
   final storage = FlutterSecureStorage();
   FileHandler fileHandler = FileHandler();
   bool showLoadingCircular = true;
@@ -566,6 +567,7 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
+            scrolledUnderElevation: 0,
             elevation: 0,
             leading: TopNavigationBar(
                 btnText: "Statistic",
@@ -580,7 +582,7 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
               ),
             centerTitle: true,
             expandedHeight: 130,
-            backgroundColor: Theme.of(context).scaffoldBackgroundColor.withOpacity(1),
+            backgroundColor: Theme.of(context).colorScheme.secondary,
             floating: false,
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
@@ -967,72 +969,71 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(0, 10, 0, 20),
-              child: Container(
-                padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.start,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
+                    child: Text(
+                      "TOTAL RUNS",
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                    child: CustomPaint(
+                      size: Size(MediaQuery.of(context).size.width, 2),
+                      painter: DividePainter(Colors.white),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 0, 10, 0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                       Text(
+                         '$_totalRuns',
+                         style: Theme.of(context).textTheme.bodyLarge,
+                       ),
+                        Row(
                           children: [
-                            Container(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Text(
-                                          "TOTAL RUNS",
-                                          style: Theme.of(context).textTheme.bodySmall,
-                                        )
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                          child: Text(
-                                            '$_totalRuns',
-                                            style:  Theme.of(context).textTheme.bodyLarge,
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ],
-                                ),
+                            Text(
+                              Converter().showMonthAsText(selectedMonth),
+                              style: Theme.of(context).textTheme.bodyMedium,
                             ),
                             Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                              child: DatePickerBtn(onDateSelected: (year, month)
-                              {
-                                updateSelectedValues(year, month);
-                              },),
+                              padding: const EdgeInsets.fromLTRB(10.0, 0, 0, 0),
+                              child: Text(
+                                '${selectedYear}',
+                                style: Theme.of(context).textTheme.bodyMedium,
+                              ),
+                            ),
+                            DatePickerBtn(onDateSelected: (year, month) {
+                              updateSelectedValues(year, month);
+                            },
                             ),
                           ],
                         ),
-                      ),
+                      ],
                     ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
-                      child: CustomPaint(
-                        size: Size(MediaQuery.of(context).size.width, 2),
-                        painter: DividePainter(Colors.white),
-                      ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
+                    child: CustomPaint(
+                      size: Size(MediaQuery.of(context).size.width, 2),
+                      painter: DividePainter(Colors.white),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 10, 30, 0),
-                      child: StatisticLineChart(
-                        year: selectedYear,
-                        month: selectedMonth,
-                        runInformation: runInformation,
-                      ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 10, 30, 0),
+                    child: StatisticLineChart(
+                      year: selectedYear,
+                      month: selectedMonth,
+                      runInformation: runInformation,
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),

@@ -358,9 +358,10 @@ class _StackContentScreenState extends State<StackContentScreen> {
         slivers: [
           SliverAppBar(
             elevation: 0,
+            scrolledUnderElevation: 0,
             centerTitle: true,
             expandedHeight: 130,
-            backgroundColor: Theme.of(context).scaffoldBackgroundColor.withOpacity(1),
+            backgroundColor: Theme.of(context).colorScheme.secondary,
             floating: false,
             pinned: true,
             leading:
@@ -508,6 +509,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
                   InkWell(
                     onTap: () {
                     showModalBottomSheet(
+                      elevation: 0,
                       shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(10)),
                       ),
@@ -663,14 +665,14 @@ class _StackContentScreenState extends State<StackContentScreen> {
                                   child: Icon(
                                     Icons.refresh_rounded,
                                     size: 30.0,
-                                    color: Theme.of(context).colorScheme.tertiary,
+                                    color: (selectedOption == "QUESTION" || selectedOption == "CREATION DATE" || selectedOption == "NOTICED") ? Colors.white : Theme.of(context).colorScheme.tertiary,
                                   ),
                                 ),
                                 Text(
                                   "Reset",
                                   style: TextStyle(
                                     fontSize: 18,
-                                    color: Theme.of(context).colorScheme.tertiary,
+                                    color: (selectedOption == "QUESTION" || selectedOption == "CREATION DATE" || selectedOption == "NOTICED") ? Colors.white : Theme.of(context).colorScheme.tertiary,
                                     fontFamily: "Inter",
                                     fontWeight: FontWeight.w400,
                                   ),
