@@ -2,6 +2,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:memo_dex_prototyp/screens/user/forgot_passwort_screen.dart';
 import 'package:memo_dex_prototyp/services/api/api_client.dart';
 import 'package:memo_dex_prototyp/utils/divide_painter.dart';
 import 'package:memo_dex_prototyp/widgets/dialogs/validation_message_box.dart';
@@ -153,13 +154,24 @@ class _LoginFormState extends State<LoginForm> {
                 style: Theme.of(context).inputDecorationTheme.floatingLabelStyle,
               ),
             ),
-            Container(
-              padding: EdgeInsets.fromLTRB(0, 10, 0, 30),
-              width: double.infinity,
-              child: Text(
-                "Forgot password?",
-                textAlign: TextAlign.right,
-                style: Theme.of(context).textTheme.bodyMedium,
+            InkWell(
+              onTap: ()
+              {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ForgotPasswordScreen(),
+                  ),
+                );
+              },
+              child: Container(
+                padding: EdgeInsets.fromLTRB(0, 10, 0, 30),
+                width: double.infinity,
+                child: Text(
+                  "Forgot password?",
+                  textAlign: TextAlign.right,
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
               ),
             ),// Container Forgort password
             Container(

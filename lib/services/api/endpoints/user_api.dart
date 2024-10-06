@@ -334,4 +334,44 @@ class UserApi
       return null;
     }
   }
+
+  Future<dynamic> forgotPassword(String eMail) async
+  {
+    try{
+
+      print(eMail);
+        final response = await http.post(
+          Uri.parse('http://10.0.2.2:3000/forgotPassword'),
+          headers: <String, String>
+          {
+            'Content-Type': 'application/json',
+          },
+          body: jsonEncode(<String, dynamic>
+          {
+            "e_mail": eMail,
+          }),
+        ).timeout(Duration(seconds: 10));
+        if (response.statusCode == 200)
+        {
+          print("New Password was successfully send!");
+
+        }else
+        {
+          throw http.ClientException('Can not sent new Password. ERROR: ${response.statusCode}');
+        }
+    }on TimeoutException catch (e)
+    {
+      print('Zeitüberschreitung: $e');
+      //var auf grad kein netz einbauen
+      return null;
+    }on http.ClientException catch (e)
+    {
+      print('Clientfehler: $e');
+      return null;
+    }catch (e)
+    {
+      print('Allgemeiner Fehler: $e');
+      return null;
+    }
+  }
 }
