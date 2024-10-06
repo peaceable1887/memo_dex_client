@@ -5,8 +5,9 @@ import '../../../utils/trim.dart';
 class HeadlineLarge extends StatefulWidget {
 
   final String text;
+  final bool? isInSliverAppBar;
 
-  const HeadlineLarge({Key? key, required this.text}) : super(key: key);
+  const HeadlineLarge({Key? key, required this.text, this.isInSliverAppBar}) : super(key: key);
 
   @override
   State<HeadlineLarge> createState() => _HeadlineLargeState();
@@ -16,7 +17,6 @@ class _HeadlineLargeState extends State<HeadlineLarge> {
 
   bool textIsTooLong = false;
 
-
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -25,7 +25,9 @@ class _HeadlineLargeState extends State<HeadlineLarge> {
         child: Text(
           Trim().trimText(widget.text,30),
           textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.headlineMedium,
+          style: (widget.isInSliverAppBar ?? false) ?
+            Theme.of(context).textTheme.headlineMedium :
+            Theme.of(context).textTheme.headlineLarge,
         ),
       ),
     );

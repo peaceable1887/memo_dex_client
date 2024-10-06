@@ -226,7 +226,7 @@ class _EditCardScreenState extends State<EditCardScreen> {
           ),
           Padding(
             padding: const EdgeInsets.fromLTRB(0,10,0,0),
-            child: const HeadlineLarge(
+            child: HeadlineLarge(
                 text: "Edit Card"
             ),
           ),

@@ -56,7 +56,7 @@ class _LanguageSettingScreenState extends State<LanguageSettingScreen>
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const HeadlineLarge(text: "Language"),
+                  HeadlineLarge(text: "Language"),
                 ],
               ),
             ),

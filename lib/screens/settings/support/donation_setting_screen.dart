@@ -68,7 +68,7 @@ class _DonationSettingScreenState extends State<DonationSettingScreen>
               ),
               titlePadding: EdgeInsets.only(bottom: 5),
               centerTitle: true,
-              title: const HeadlineLarge(text: "Donation"),
+              title: HeadlineLarge(text: "Donation"),
             ),
           ),
           SliverToBoxAdapter(

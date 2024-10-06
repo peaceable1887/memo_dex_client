@@ -87,62 +87,31 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-        padding: const EdgeInsets.fromLTRB(20, 0, 20,0),
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 0, 0, 8),
-              child: TextFormField(
-                controller: _eMail,
-                decoration: InputDecoration(
-                  labelText: "E-Mail",
-                  contentPadding: EdgeInsets.symmetric(vertical: 17, horizontal: 20),
-                  labelStyle: Theme.of(context).inputDecorationTheme.labelStyle,
-                  prefixIcon: Icon(
-                    Icons.email,
-                    color: Theme.of(context).inputDecorationTheme.prefixIconColor,
-                    size: 30,),
-                  suffixIcon: GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        _eMail.text = "";
-                      });
-                    },
-                    child: Icon(
-                      _eMail.text.isNotEmpty ? Icons.cancel : null,
-                      color: Theme.of(context).inputDecorationTheme.suffixIconColor,
-                    ),
-                  ),// Icon hinzufügen
-                  enabledBorder: Theme.of(context).inputDecorationTheme.enabledBorder,
-                  focusedBorder: Theme.of(context).inputDecorationTheme.focusedBorder,
-                  filled: true,
-                  fillColor: Theme.of(context).inputDecorationTheme.fillColor,
-                ),
-                style: Theme.of(context).inputDecorationTheme.floatingLabelStyle,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-              child: TextFormField(
-                controller: _password,
-                obscureText: !_isPasswordVisible, // Passwort verschleiern
+    return Expanded(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(20, 15, 20, 0),
+          child: ListView(
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 0, 0, 8),
+                child: TextFormField(
+                  controller: _eMail,
                   decoration: InputDecoration(
-                    labelText: "Password",
+                    labelText: "E-Mail",
                     contentPadding: EdgeInsets.symmetric(vertical: 17, horizontal: 20),
                     labelStyle: Theme.of(context).inputDecorationTheme.labelStyle,
                     prefixIcon: Icon(
-                        Icons.lock,
-                        color: Theme.of(context).inputDecorationTheme.prefixIconColor,
-                        size: 30),
+                      Icons.email,
+                      color: Theme.of(context).inputDecorationTheme.prefixIconColor,
+                      size: 30,),
                     suffixIcon: GestureDetector(
                       onTap: () {
                         setState(() {
-                          _isPasswordVisible = !_isPasswordVisible;
+                          _eMail.text = "";
                         });
                       },
                       child: Icon(
-                        _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                        _eMail.text.isNotEmpty ? Icons.cancel : null,
                         color: Theme.of(context).inputDecorationTheme.suffixIconColor,
                       ),
                     ),// Icon hinzufügen
@@ -150,116 +119,149 @@ class _LoginFormState extends State<LoginForm> {
                     focusedBorder: Theme.of(context).inputDecorationTheme.focusedBorder,
                     filled: true,
                     fillColor: Theme.of(context).inputDecorationTheme.fillColor,
-                ),
-                style: Theme.of(context).inputDecorationTheme.floatingLabelStyle,
-              ),
-            ),
-            InkWell(
-              onTap: ()
-              {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ForgotPasswordScreen(),
                   ),
-                );
-              },
-              child: Container(
-                padding: EdgeInsets.fromLTRB(0, 10, 0, 30),
-                width: double.infinity,
-                child: Text(
-                  "Forgot password?",
-                  textAlign: TextAlign.right,
-                  style: Theme.of(context).textTheme.bodyMedium,
+                  style: Theme.of(context).inputDecorationTheme.floatingLabelStyle,
                 ),
               ),
-            ),// Container Forgort password
-            Container(
-              child: Column(
-                children: [
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: _isButtonEnabled
-                          ? Theme.of(context).colorScheme.primary
-                          : Theme.of(context).colorScheme.tertiary,
-                      minimumSize: Size(double.infinity, 55),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                      ),
-                      side: BorderSide(
-                        color: _isButtonEnabled
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+                child: TextFormField(
+                  controller: _password,
+                  obscureText: !_isPasswordVisible, // Passwort verschleiern
+                    decoration: InputDecoration(
+                      labelText: "Password",
+                      contentPadding: EdgeInsets.symmetric(vertical: 17, horizontal: 20),
+                      labelStyle: Theme.of(context).inputDecorationTheme.labelStyle,
+                      prefixIcon: Icon(
+                          Icons.lock,
+                          color: Theme.of(context).inputDecorationTheme.prefixIconColor,
+                          size: 30),
+                      suffixIcon: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _isPasswordVisible = !_isPasswordVisible;
+                          });
+                        },
+                        child: Icon(
+                          _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                          color: Theme.of(context).inputDecorationTheme.suffixIconColor,
+                        ),
+                      ),// Icon hinzufügen
+                      enabledBorder: Theme.of(context).inputDecorationTheme.enabledBorder,
+                      focusedBorder: Theme.of(context).inputDecorationTheme.focusedBorder,
+                      filled: true,
+                      fillColor: Theme.of(context).inputDecorationTheme.fillColor,
+                  ),
+                  style: Theme.of(context).inputDecorationTheme.floatingLabelStyle,
+                ),
+              ),
+              InkWell(
+                onTap: ()
+                {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ForgotPasswordScreen(),
+                    ),
+                  );
+                },
+                child: Container(
+                  padding: EdgeInsets.fromLTRB(0, 10, 0, 30),
+                  width: double.infinity,
+                  child: Text(
+                    "Forgot password?",
+                    textAlign: TextAlign.right,
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                ),
+              ),// Container Forgort password
+              Container(
+                child: Column(
+                  children: [
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: _isButtonEnabled
                             ? Theme.of(context).colorScheme.primary
                             : Theme.of(context).colorScheme.tertiary,
-                        width: 2.0,
+                        minimumSize: Size(double.infinity, 55),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                        ),
+                        side: BorderSide(
+                          color: _isButtonEnabled
+                              ? Theme.of(context).colorScheme.primary
+                              : Theme.of(context).colorScheme.tertiary,
+                          width: 2.0,
+                        ),
+                        elevation: 0,
                       ),
-                      elevation: 0,
-                    ),
-                    onPressed: _isButtonEnabled
-                        ? () {
-                          setState(() {
-                            validateForm(_eMail.text, _password.text);
-                          });
-                        }
-                      : null, // Deaktivieren Sie den Button, wenn nicht aktiviert
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Login",
-                          style: TextStyle(
-                            color: _isButtonEnabled
-                                ? Theme.of(context).scaffoldBackgroundColor
-                                : Theme.of(context).colorScheme.tertiary, // Textfarbe ändern, wenn nicht aktiviert
-                            fontSize: 20,
-                            fontWeight: FontWeight.w600,
+                      onPressed: _isButtonEnabled
+                          ? () {
+                            setState(() {
+                              validateForm(_eMail.text, _password.text);
+                            });
+                          }
+                        : null, // Deaktivieren Sie den Button, wenn nicht aktiviert
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Login",
+                            style: TextStyle(
+                              color: _isButtonEnabled
+                                  ? Theme.of(context).scaffoldBackgroundColor
+                                  : Theme.of(context).colorScheme.tertiary, // Textfarbe ändern, wenn nicht aktiviert
+                              fontSize: 20,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        CustomPaint(
-                          size: Size(MediaQuery.of(context).size.width/2.75, 2),
-                          painter: DividePainter(Colors.white),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 20.0), // Füge horizontalen Abstand hinzu
-                          child: Text(
-                            "or",
-                            style: Theme.of(context).textTheme.bodyMedium,
+                    Container(
+                      padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          CustomPaint(
+                            size: Size(MediaQuery.of(context).size.width/2.75, 2),
+                            painter: DividePainter(Colors.white),
                           ),
-                        ),
-                        CustomPaint(
-                          size: Size(MediaQuery.of(context).size.width/2.75, 2),
-                          painter: DividePainter(Colors.white),
-                        ),
-                      ],
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 20.0), // Füge horizontalen Abstand hinzu
+                            child: Text(
+                              "or",
+                              style: Theme.of(context).textTheme.bodyMedium,
+                            ),
+                          ),
+                          CustomPaint(
+                            size: Size(MediaQuery.of(context).size.width/2.75, 2),
+                            painter: DividePainter(Colors.white),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  Button(
-                    text: "Continue with Google",
-                    backgroundColor: Theme.of(context).colorScheme.surface,
-                    borderColor: Theme.of(context).colorScheme.surface,
-                    textColor: Theme.of(context).colorScheme.tertiary,
-                    onPressed: ()
-                    {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => WelcomeScreen(),
-                        ),
-                      );
-                    },
-                    iconPath: "assets/images/google_icon.png",
-                  ),
-                ],
-              ),
-            ),// Container Login or Google Login
-          ],
+                    Button(
+                      text: "Continue with Google",
+                      backgroundColor: Theme.of(context).colorScheme.surface,
+                      borderColor: Theme.of(context).colorScheme.surface,
+                      textColor: Theme.of(context).colorScheme.tertiary,
+                      onPressed: ()
+                      {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => WelcomeScreen(),
+                          ),
+                        );
+                      },
+                      iconPath: "assets/images/google_icon.png",
+                    ),
+                  ],
+                ),
+              ),// Container Login or Google Login
+            ],
+          ),
         ),
     );
   }

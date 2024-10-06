@@ -62,7 +62,7 @@ class _ContactSettingScreenState extends State<ContactSettingScreen>
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const HeadlineLarge(text: "Contact"),
+                  HeadlineLarge(text: "Contact"),
                 ],
               ),
             ),

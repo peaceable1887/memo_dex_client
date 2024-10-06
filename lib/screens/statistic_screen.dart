@@ -210,7 +210,7 @@ class _StatisticScreenState extends State<StatisticScreen>
               expandedTitleScale: 2,
               titlePadding: EdgeInsets.only(bottom: 15),
               centerTitle: true,
-              title: const HeadlineLarge(text: "Statistic"),
+              title: const HeadlineLarge(text: "Statistic", isInSliverAppBar: true,),
             ),
           ),
           SliverToBoxAdapter(

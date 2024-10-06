@@ -408,7 +408,7 @@ class _StackContentScreenState extends State<StackContentScreen> {
               expandedTitleScale: 2,
               titlePadding: EdgeInsets.only(bottom: 15),
               centerTitle: true,
-              title: HeadlineLarge(text: stackname),
+              title: HeadlineLarge(text: stackname, isInSliverAppBar: true,),
             ),
           ),
           SliverToBoxAdapter(

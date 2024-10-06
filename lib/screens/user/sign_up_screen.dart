@@ -12,53 +12,46 @@ class SignUpScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-        body: Stack(
+        body: Column(
           children: [
-            Container(
-              color: Theme.of(context).scaffoldBackgroundColor,
-              child: ListView(
-                physics: NeverScrollableScrollPhysics(),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0,5,0,0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Container(
-                    height: 150,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const HeadlineLarge(
-                            text: "Sign up"
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    child: SignUpForm(),
-                  ),
-                  Container(
-                    padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-                    height: MediaQuery.of(context).size.height/6.5,
-                    child: Align(
-                      alignment: Alignment.bottomCenter,
-                      child: Text(
-                        "Indem Sie fortfahren, stimmen Sie den Nutzerbedinungen und der Datenschutzrichtlinie zu.",
-                        style: Theme.of(context).textTheme.bodySmall,
-                        textAlign: TextAlign.center,
+                  WillPopScope(
+                    onWillPop: () async => false,
+                    child: Container(
+                      child: TopNavigationBar(
+                        btnText: "",
+                        onPressed: () {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => WelcomeScreen(),
+                            ),
+                          );
+                        },
                       ),
                     ),
-                  ),// Container Lo// Conta
+                  ),
                 ],
               ),
             ),
-            TopNavigationBar(
-              btnText: "",
-              onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => WelcomeScreen(),
-                  ),
-                );
-              },
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0,10,0,0),
+              child: Container(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    HeadlineLarge(text: "Sign up"),
+                  ],
+                ),
+              ),
+            ),
+            Container(
+              child: SignUpForm(),
             ),
           ],
         ),

@@ -175,7 +175,7 @@ class _EmailSettingScreenState extends State<EmailSettingScreen>
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const HeadlineLarge(text: "E-Mail"),
+                  HeadlineLarge(text: "E-Mail"),
                 ],
               ),
             ),

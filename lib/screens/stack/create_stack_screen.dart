@@ -31,7 +31,7 @@ class _CreateStackScreenState extends State<CreateStackScreen> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.fromLTRB(0,20,0,0),
-                        child: const HeadlineLarge(
+                        child: HeadlineLarge(
                             text: "Create Stack"
                         ),
                       ),

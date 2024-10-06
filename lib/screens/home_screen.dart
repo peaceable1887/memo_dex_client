@@ -89,7 +89,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   expandedTitleScale: 2,
                   titlePadding: EdgeInsets.only(bottom: 15),
                   centerTitle: true,
-                  title: const HeadlineLarge(text: "Home"),
+                  title: const HeadlineLarge(text: "Home", isInSliverAppBar: true,),
                 ),
               ),
               SliverToBoxAdapter(

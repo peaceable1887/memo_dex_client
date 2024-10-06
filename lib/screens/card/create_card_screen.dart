@@ -51,7 +51,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
           ),
           Padding(
             padding: const EdgeInsets.fromLTRB(0,10,0,0),
-            child: const HeadlineLarge(
+            child: HeadlineLarge(
                 text: "Create Card"
             ),
           ),

@@ -119,7 +119,7 @@ class _SettingScreenState extends State<SettingScreen> {
               expandedTitleScale: 2,
               titlePadding: EdgeInsets.only(bottom: 15),
               centerTitle: true,
-              title: const HeadlineLarge(text: "Settings"),
+              title: const HeadlineLarge(text: "Settings", isInSliverAppBar: true,),
             ),
           ),
           SliverList(

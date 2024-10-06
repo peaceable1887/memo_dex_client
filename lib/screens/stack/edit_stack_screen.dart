@@ -149,7 +149,7 @@ class _EditStackScreenState extends State<EditStackScreen> {
                   child:
                     Padding(
                       padding: const EdgeInsets.fromLTRB(0,15,0,50),
-                      child: const HeadlineLarge(
+                      child: HeadlineLarge(
                           text: "Edit Stack"
                       ),
                     ),

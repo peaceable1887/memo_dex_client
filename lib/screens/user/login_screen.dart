@@ -26,8 +26,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void showSnackbarInformation() async
   {
-    String? stackCreated = await storage.read(key: 'addUser');
-    if(stackCreated == "true")
+    String? userCreated = await storage.read(key: 'addUser');
+    if(userCreated == "true")
     {
       CustomSnackbar.showSnackbar(
           context,
@@ -52,42 +52,45 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-        body: Stack(
+        body: Column(
           children: [
-            Container(
-              color: Theme.of(context).scaffoldBackgroundColor,
-              child: ListView(
-                physics: NeverScrollableScrollPhysics(),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0,5,0,0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Container(
-                    height: 150,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const HeadlineLarge(
-                            text: "Login"
-                        ),
-                      ],
+                  WillPopScope(
+                    onWillPop: () async => false,
+                    child: Container(
+                      child: TopNavigationBar(
+                        btnText: "",
+                        onPressed: () {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => WelcomeScreen(),
+                            ),
+                          );
+                        },
+                      ),
                     ),
                   ),
-                  Container(
-                    child: LoginForm(),
-                  ),// Container LoginForm
                 ],
               ),
             ),
-            TopNavigationBar(
-              btnText: "",
-              onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => WelcomeScreen(),
-                  ),
-                );
-              },
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0,10,0,0),
+              child: Container(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    HeadlineLarge(text: "Login"),
+                  ],
+                ),
+              ),
             ),
+            LoginForm(),
           ],
         ),
     );

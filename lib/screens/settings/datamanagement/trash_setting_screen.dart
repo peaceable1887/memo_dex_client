@@ -175,7 +175,7 @@ class _TrashSettingScreenState extends State<TrashSettingScreen>
               expandedTitleScale: 2,
               titlePadding: EdgeInsets.only(bottom: 15),
               centerTitle: true,
-              title: HeadlineLarge(text: "Trash"),
+              title: const HeadlineLarge(text: "Trash", isInSliverAppBar: true,),
             ),
           ),
           SliverToBoxAdapter(

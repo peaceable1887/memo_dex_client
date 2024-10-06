@@ -138,7 +138,7 @@ class _PasswordSettingScreenState extends State<PasswordSettingScreen>
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const HeadlineLarge(text: "Password"),
+                  HeadlineLarge(text: "Password"),
                 ],
               ),
             ),

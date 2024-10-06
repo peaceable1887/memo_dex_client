@@ -354,6 +354,7 @@ class UserApi
         if (response.statusCode == 200)
         {
           print("New Password was successfully send!");
+          storage.write(key: 'newPasswordSent', value: "true");
 
         }else
         {

@@ -592,7 +592,7 @@ class _StatisticStackScreenState extends State<StatisticStackScreen>
               expandedTitleScale: 2,
               titlePadding: EdgeInsets.only(bottom: 15),
               centerTitle: true,
-              title: HeadlineLarge(text: widget.stackname),
+              title: HeadlineLarge(text: widget.stackname, isInSliverAppBar: true,),
             ),
           ),
           SliverToBoxAdapter(

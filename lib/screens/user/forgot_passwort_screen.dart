@@ -35,41 +35,46 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: Stack(
+      body: Column(
         children: [
-          Container(
-            color: Theme.of(context).scaffoldBackgroundColor,
-            child: ListView(
-              physics: NeverScrollableScrollPhysics(),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0,5,0,0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Container(
-                  height: 150,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      const HeadlineLarge(
-                          text: "Forgot Password?"
-                      ),
-                    ],
+                WillPopScope(
+                  onWillPop: () async => false,
+                  child: Container(
+                    child: TopNavigationBar(
+                      btnText: "",
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => LoginScreen(),
+                          ),
+                        );
+                      },
+                    ),
                   ),
                 ),
-                Container(
-                  child: ForgotPasswordForm(),
-                ),// Container LoginForm
               ],
             ),
           ),
-          TopNavigationBar(
-            btnText: "",
-            onPressed: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => LoginScreen(),
-                ),
-              );
-            },
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0,10,0,0),
+            child: Container(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  HeadlineLarge(text: "Forgot Password?"),
+                ],
+              ),
+            ),
+          ),
+          Container(
+            child: ForgotPasswordForm(),
           ),
         ],
       ),
